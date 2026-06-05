@@ -1,0 +1,407 @@
+{
+  "verdicts": [
+    {
+      "id": "identity-my-brand",
+      "tag": "identity",
+      "pass": true,
+      "reason": "ok",
+      "dt_ms": 2,
+      "kind": "chat",
+      "build_info": {
+        "schema_retrieval_ok": false,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 0,
+        "example_retrieval_ok": false,
+        "example_retrieval_reason": null,
+        "examples_used": 0,
+        "examples_closest_distance": null
+      }
+    },
+    {
+      "id": "identity-who-am-i",
+      "tag": "identity",
+      "pass": true,
+      "reason": "ok",
+      "dt_ms": 0,
+      "kind": "chat",
+      "build_info": {
+        "schema_retrieval_ok": false,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 0,
+        "example_retrieval_ok": false,
+        "example_retrieval_reason": null,
+        "examples_used": 0,
+        "examples_closest_distance": null
+      }
+    },
+    {
+      "id": "greeting-hi",
+      "tag": "greeting",
+      "pass": true,
+      "reason": "ok",
+      "dt_ms": 0,
+      "kind": "chat",
+      "build_info": {
+        "schema_retrieval_ok": false,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 0,
+        "example_retrieval_ok": false,
+        "example_retrieval_reason": null,
+        "examples_used": 0,
+        "examples_closest_distance": null
+      }
+    },
+    {
+      "id": "greeting-thanks",
+      "tag": "greeting",
+      "pass": true,
+      "reason": "ok",
+      "dt_ms": 0,
+      "kind": "chat",
+      "build_info": {
+        "schema_retrieval_ok": false,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 0,
+        "example_retrieval_ok": false,
+        "example_retrieval_reason": null,
+        "examples_used": 0,
+        "examples_closest_distance": null
+      }
+    },
+    {
+      "id": "greeting-help",
+      "tag": "greeting",
+      "pass": true,
+      "reason": "ok",
+      "dt_ms": 0,
+      "kind": "chat",
+      "build_info": {
+        "schema_retrieval_ok": false,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 0,
+        "example_retrieval_ok": false,
+        "example_retrieval_reason": null,
+        "examples_used": 0,
+        "examples_closest_distance": null
+      }
+    },
+    {
+      "id": "sql-revenue-30d",
+      "tag": "sql-shape",
+      "pass": true,
+      "reason": "ok",
+      "dt_ms": 89815,
+      "kind": "result",
+      "build_info": {
+        "schema_retrieval_ok": true,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 10,
+        "example_retrieval_ok": true,
+        "example_retrieval_reason": null,
+        "examples_used": 4,
+        "examples_closest_distance": 0.0
+      }
+    },
+    {
+      "id": "sql-top-customers",
+      "tag": "sql-shape",
+      "pass": true,
+      "reason": "ok",
+      "dt_ms": 39288,
+      "kind": "result",
+      "build_info": {
+        "schema_retrieval_ok": true,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 10,
+        "example_retrieval_ok": true,
+        "example_retrieval_reason": null,
+        "examples_used": 4,
+        "examples_closest_distance": 0.0
+      }
+    },
+    {
+      "id": "sql-top-products",
+      "tag": "sql-shape",
+      "pass": true,
+      "reason": "ok",
+      "dt_ms": 45204,
+      "kind": "result",
+      "build_info": {
+        "schema_retrieval_ok": true,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 10,
+        "example_retrieval_ok": true,
+        "example_retrieval_reason": null,
+        "examples_used": 4,
+        "examples_closest_distance": 0.0
+      }
+    },
+    {
+      "id": "sql-inventory",
+      "tag": "sql-shape",
+      "pass": true,
+      "reason": "ok",
+      "dt_ms": 40277,
+      "kind": "result",
+      "build_info": {
+        "schema_retrieval_ok": true,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 9,
+        "example_retrieval_ok": true,
+        "example_retrieval_reason": null,
+        "examples_used": 4,
+        "examples_closest_distance": 0.19527552043356566
+      }
+    },
+    {
+      "id": "sql-sales-week",
+      "tag": "sql-shape",
+      "pass": true,
+      "reason": "ok",
+      "dt_ms": 41940,
+      "kind": "result",
+      "build_info": {
+        "schema_retrieval_ok": true,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 10,
+        "example_retrieval_ok": true,
+        "example_retrieval_reason": null,
+        "examples_used": 4,
+        "examples_closest_distance": 0.0
+      }
+    },
+    {
+      "id": "sql-market-brands",
+      "tag": "sql-market",
+      "pass": true,
+      "reason": "ok",
+      "dt_ms": 40912,
+      "kind": "result",
+      "build_info": {
+        "schema_retrieval_ok": true,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 10,
+        "example_retrieval_ok": true,
+        "example_retrieval_reason": null,
+        "examples_used": 4,
+        "examples_closest_distance": 0.0881867408752377
+      }
+    },
+    {
+      "id": "sql-market-competitors",
+      "tag": "sql-market",
+      "pass": true,
+      "reason": "ok",
+      "dt_ms": 45488,
+      "kind": "result",
+      "build_info": {
+        "schema_retrieval_ok": true,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 9,
+        "example_retrieval_ok": true,
+        "example_retrieval_reason": null,
+        "examples_used": 4,
+        "examples_closest_distance": 0.10001415610393793
+      }
+    },
+    {
+      "id": "refusal-delete",
+      "tag": "refusal-dml",
+      "pass": true,
+      "reason": "ok",
+      "dt_ms": 29149,
+      "kind": "refusal",
+      "build_info": {
+        "schema_retrieval_ok": true,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 9,
+        "example_retrieval_ok": true,
+        "example_retrieval_reason": null,
+        "examples_used": 4,
+        "examples_closest_distance": 0.30121696569616097
+      }
+    },
+    {
+      "id": "refusal-drop",
+      "tag": "refusal-dml",
+      "pass": true,
+      "reason": "ok",
+      "dt_ms": 27343,
+      "kind": "refusal",
+      "build_info": {
+        "schema_retrieval_ok": true,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 9,
+        "example_retrieval_ok": true,
+        "example_retrieval_reason": null,
+        "examples_used": 4,
+        "examples_closest_distance": 0.2123763326518352
+      }
+    },
+    {
+      "id": "refusal-update",
+      "tag": "refusal-dml",
+      "pass": true,
+      "reason": "ok",
+      "dt_ms": 43327,
+      "kind": "refusal",
+      "build_info": {
+        "schema_retrieval_ok": true,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 10,
+        "example_retrieval_ok": true,
+        "example_retrieval_reason": null,
+        "examples_used": 4,
+        "examples_closest_distance": 0.0
+      }
+    },
+    {
+      "id": "refusal-other-state",
+      "tag": "refusal-cross-state",
+      "pass": true,
+      "reason": "ok",
+      "dt_ms": 31876,
+      "kind": "refusal",
+      "build_info": {
+        "schema_retrieval_ok": true,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 8,
+        "example_retrieval_ok": true,
+        "example_retrieval_reason": null,
+        "examples_used": 4,
+        "examples_closest_distance": 0.0
+      }
+    },
+    {
+      "id": "refusal-weather",
+      "tag": "refusal-off-topic",
+      "pass": true,
+      "reason": "ok",
+      "dt_ms": 41553,
+      "kind": "refusal",
+      "build_info": {
+        "schema_retrieval_ok": true,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 10,
+        "example_retrieval_ok": true,
+        "example_retrieval_reason": null,
+        "examples_used": 4,
+        "examples_closest_distance": 0.009147939885125633
+      }
+    },
+    {
+      "id": "refusal-joke",
+      "tag": "refusal-off-topic",
+      "pass": false,
+      "reason": "kind mismatch: expected refusal, got chat",
+      "dt_ms": 35176,
+      "kind": "chat",
+      "message": "Why did the tomato turn red? Because it saw the salad dressing!",
+      "sql": "",
+      "build_info": {
+        "schema_retrieval_ok": true,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 10,
+        "example_retrieval_ok": true,
+        "example_retrieval_reason": null,
+        "examples_used": 4,
+        "examples_closest_distance": 0.0
+      }
+    },
+    {
+      "id": "sql-low-stock",
+      "tag": "sql-shape",
+      "pass": true,
+      "reason": "ok",
+      "dt_ms": 39739,
+      "kind": "result",
+      "build_info": {
+        "schema_retrieval_ok": true,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 10,
+        "example_retrieval_ok": true,
+        "example_retrieval_reason": null,
+        "examples_used": 4,
+        "examples_closest_distance": 0.011284349331034171
+      }
+    },
+    {
+      "id": "sql-expiring-lots",
+      "tag": "sql-shape",
+      "pass": true,
+      "reason": "ok",
+      "dt_ms": 37344,
+      "kind": "result",
+      "build_info": {
+        "schema_retrieval_ok": true,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 10,
+        "example_retrieval_ok": true,
+        "example_retrieval_reason": null,
+        "examples_used": 4,
+        "examples_closest_distance": 0.15138397796344416
+      }
+    },
+    {
+      "id": "sql-open-balance",
+      "tag": "sql-shape",
+      "pass": true,
+      "reason": "ok",
+      "dt_ms": 29670,
+      "kind": "result",
+      "build_info": {
+        "schema_retrieval_ok": true,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 10,
+        "example_retrieval_ok": true,
+        "example_retrieval_reason": null,
+        "examples_used": 4,
+        "examples_closest_distance": 0.17521025838973636
+      }
+    },
+    {
+      "id": "sql-revenue-by-category",
+      "tag": "sql-shape",
+      "pass": true,
+      "reason": "ok",
+      "dt_ms": 52045,
+      "kind": "result",
+      "build_info": {
+        "schema_retrieval_ok": true,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 10,
+        "example_retrieval_ok": true,
+        "example_retrieval_reason": null,
+        "examples_used": 4,
+        "examples_closest_distance": 0.09759850110944768
+      }
+    },
+    {
+      "id": "sql-sales-by-store",
+      "tag": "sql-shape",
+      "pass": false,
+      "reason": "kind mismatch: expected result, got error",
+      "dt_ms": 104285,
+      "kind": "error",
+      "message": "(1054, \"Unknown column 'company_name' in 'field list'\")",
+      "sql": "SELECT company_name AS store, SUM(CAST(subtotal AS DECIMAL(10, 2))) AS revenue FROM rhize_orders WHERE status = 'Completed' AND date >= DATE_FORMAT(CURRENT_DATE - INTERVAL '30' DAY, '%Y-%m-%d') AND rh",
+      "build_info": {
+        "schema_retrieval_ok": true,
+        "schema_retrieval_reason": null,
+        "schema_chunks": 10,
+        "example_retrieval_ok": true,
+        "example_retrieval_reason": null,
+        "examples_used": 4,
+        "examples_closest_distance": 0.0
+      }
+    }
+  ],
+  "summary": {
+    "pass": 21,
+    "fail": 2,
+    "p50": 39288,
+    "p95": 89815,
+    "schema_fallback": 0,
+    "example_fallback": 0
+  }
+}

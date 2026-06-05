@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+
+# Per-turn JSONL written by app/chatbot/turn_logger.py
+logs/

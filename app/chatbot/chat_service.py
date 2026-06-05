@@ -1,0 +1,392 @@
+"""Orchestrator for the NL->SQL chatbot.
+
+Flow: question -> model -> parse -> Gate C guard -> Gate D limit ->
+      readonly run (Gate A/B) -> on DB error, feed it back and retry (<=2).
+"""
+
+from __future__ import annotations
+
+import logging
+import re
+from dataclasses import dataclass, field
+from typing import Any, Literal
+
+from app.chatbot.llm_client import ChatMessage, LLMError, chat_complete
+from app.chatbot.normalize_question import normalize_question
+from app.chatbot.prompt_builder import build_messages, build_retry_message
+from app.chatbot.engine_router import route_engine
+from app.chatbot.readonly_db import RunContext, run_readonly
+from app.chatbot.readonly_db_mysql import RunMysqlContext, run_readonly_mysql
+from app.chatbot.sql_guard import enforce_limit, validate_sql
+from app.chatbot.sql_guard_mysql import enforce_limit_mysql, validate_mysql_sql
+from app.chatbot.turn_logger import TurnRecord, log_turn
+from app.config import get_settings
+import datetime as _dt
+import time as _time
+
+log = logging.getLogger(__name__)
+
+MAX_ATTEMPTS = 3  # 1 initial + 2 execution-feedback retries.
+
+_GREETING_PATTERNS: list[tuple[re.Pattern[str], str]] = [
+    (
+        re.compile(r"^\s*(hi|hello|hey|yo|hiya|howdy|good (morning|afternoon|evening))[\s!.?]*$", re.I),
+        "Hi! I can help you explore your cannabis market data — competitor brands, prices, categories, and trends. What would you like to know?",
+    ),
+    (
+        re.compile(r"^\s*(thanks|thank you|thx|ty|cheers|appreciate it)[\s!.?]*$", re.I),
+        "You're welcome! Ask me anything about your market data.",
+    ),
+    (
+        re.compile(r"^\s*(help|what can you do|what do you do|how does this work|capabilities)[\s!.?]*$", re.I),
+        "I answer questions about your competitor/market data — top brands, pricing, categories, what's newly listed or removed, and trends over time.",
+    ),
+    (
+        re.compile(r"^\s*(bye|goodbye|see ya|see you|later)[\s!.?]*$", re.I),
+        "Bye! Come back any time for more market data.",
+    ),
+]
+
+_BRAND_NAME_RX = re.compile(
+    r"^\s*(what(?:'s| is)?\s+|tell\s+(?:me\s+)?)?(my\s+(brand|company|business)\s*(name)?|who\s+am\s+i)[\s!.?]*$",
+    re.I,
+)
+_DISPLAY_NAME_RX = re.compile(
+    r"^\s*(what(?:'s| is)?\s+|tell\s+(?:me\s+)?)?my\s+(account|display|tenant)\s*(name)?[\s!.?]*$",
+    re.I,
+)
+
+_INFRA_ERROR_RX = re.compile(
+    r"DATABASE_URL_RO|CHATBOT_MYSQL_RO_URL|ECONNREFUSED|ENOTFOUND|getaddrinfo"
+    r"|connect ETIMEDOUT|password authentication|too many connections"
+    r"|terminating connection|access denied|er_access_denied|er_dbaccess_denied"
+    r"|can't connect to mysql|lost connection",
+    re.I,
+)
+
+_SQL_FENCE_RX = re.compile(r"```(?:sql)?\s*([\s\S]*?)```", re.I)
+_CHAT_PREFIX_RX = re.compile(r"^CHAT:\s*([\s\S]*)", re.I)
+_REFUSE_PREFIX_RX = re.compile(r"REFUSE:\s*([\s\S]*)", re.I)
+_SQL_START_RX = re.compile(r"^\s*\(*\s*(select|with)\b", re.I)
+_TABLE_TYPO_RX = re.compile(r"complete_market_scrap+er_dataset", re.I)
+
+
+def _match_greeting(question: str) -> str | None:
+    for rx, reply in _GREETING_PATTERNS:
+        if rx.search(question):
+            return reply
+    return None
+
+
+def _match_identity(question: str, brand_name: str | None, display_name: str | None) -> str | None:
+    if _BRAND_NAME_RX.search(question) and brand_name:
+        return f"Your brand is **{brand_name}**."
+    if _DISPLAY_NAME_RX.search(question) and display_name:
+        return f"Your account is **{display_name}**."
+    return None
+
+
+def canonicalize_sql(sql: str) -> str:
+    """Fix common model misspellings of the (oddly-named) market table before
+    the guard sees them."""
+    return _TABLE_TYPO_RX.sub("complete_market_scrapper_dataset", sql)
+
+
+@dataclass
+class ChatInput:
+    tenant_id: int
+    states: list[str]
+    question: str
+    brand_name: str | None = None
+    display_name: str | None = None
+
+
+ResultKind = Literal["result", "chat", "refusal", "clarify", "error"]
+
+
+@dataclass
+class ClarifyOption:
+    kind: str
+    value: str
+
+
+@dataclass
+class ChatResult:
+    kind: ResultKind
+    message: str = ""
+    sql: str | None = None
+    rows: list[dict[str, Any]] = field(default_factory=list)
+    row_count: int = 0
+    options: list[ClarifyOption] = field(default_factory=list)
+
+
+@dataclass
+class ExtractedReply:
+    chat: str | None = None
+    refusal: str | None = None
+    clarify_message: str | None = None
+    clarify_options: list[ClarifyOption] = field(default_factory=list)
+    sql: str | None = None
+
+
+_CLARIFY_PREFIX_RX = re.compile(r"^CLARIFY:\s*([\s\S]*)", re.I)
+# Matches `- KIND: value`, `KIND: value`, `* KIND: value`. KIND must be an
+# uppercase identifier so we don't pick up a SQL `WHERE x = 'y':` line by
+# mistake.
+_CLARIFY_OPTION_RX = re.compile(r"^\s*[-•*]?\s*([A-Z][A-Z0-9_]*)\s*:\s*(.+?)\s*$")
+
+
+def extract_sql(reply: str) -> ExtractedReply:
+    """Classify a model reply.
+
+    Returns an ``ExtractedReply`` with at most one of ``chat`` / ``refusal`` /
+    ``clarify_*`` / ``sql`` populated. Prose without a known prefix is treated
+    as chat so the user sees something rather than the generic error.
+    """
+    trimmed = reply.strip()
+
+    m = _CHAT_PREFIX_RX.match(trimmed)
+    if m:
+        msg = m.group(1).strip() or "Hi! How can I help with your market data?"
+        return ExtractedReply(chat=msg)
+
+    m = _REFUSE_PREFIX_RX.search(trimmed)
+    if m:
+        msg = m.group(1).strip() or "I can't help with that one."
+        return ExtractedReply(refusal=msg)
+
+    m = _CLARIFY_PREFIX_RX.match(trimmed)
+    if m:
+        body = m.group(1).strip()
+        lines = body.splitlines()
+        options: list[ClarifyOption] = []
+        leading: list[str] = []
+        for line in lines:
+            opt = _CLARIFY_OPTION_RX.match(line)
+            if opt:
+                options.append(ClarifyOption(kind=opt.group(1), value=opt.group(2).strip()))
+            elif not options:
+                leading.append(line.strip())
+            # Lines after the first option are option-only; drop stray text.
+        message = " ".join(s for s in leading if s).strip() or "Which did you mean?"
+        return ExtractedReply(clarify_message=message, clarify_options=options)
+
+    sql = trimmed
+    fence = _SQL_FENCE_RX.search(sql)
+    if fence:
+        sql = fence.group(1).strip()
+    sql = sql.strip()
+
+    if sql and not _SQL_START_RX.search(sql):
+        return ExtractedReply(chat=sql)  # treat prose as chat
+
+    return ExtractedReply(sql=sql or None)
+
+
+def _drop_blank_dimension_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Drop rows whose leading text dimension is null/blank. Numeric-first rows
+    are returned untouched."""
+    if not rows:
+        return rows
+    first_key = next(iter(rows[0].keys()), None)
+    if not first_key:
+        return rows
+    sample = None
+    for r in rows:
+        v = r.get(first_key)
+        if v is not None:
+            sample = v
+            break
+    if isinstance(sample, (int, float)):
+        return rows
+    return [r for r in rows if r.get(first_key) is not None and str(r.get(first_key)).strip() != ""]
+
+
+async def run_chat(input: ChatInput) -> ChatResult:
+    settings = get_settings()
+    started_at = _time.perf_counter()
+    started_iso = _dt.datetime.now().isoformat()
+    question = normalize_question(input.question)
+
+    def _log(
+        result: ChatResult,
+        fast_path: str,
+        *,
+        engine: str | None = None,
+        sql_llm: str | None = None,
+        sql_final: str | None = None,
+        attempts: int | None = None,
+        guard_reason: str | None = None,
+        error_message: str | None = None,
+    ) -> ChatResult:
+        try:
+            log_turn(TurnRecord(
+                ts=started_iso,
+                tenant_id=input.tenant_id,
+                question_raw=input.question,
+                question_norm=question if question != input.question else None,
+                fast_path=fast_path,
+                kind=result.kind,
+                latency_ms=int((_time.perf_counter() - started_at) * 1000),
+                engine=engine,
+                sql_llm=sql_llm,
+                sql_final=sql_final or result.sql,
+                row_count=result.row_count if result.kind == "result" else None,
+                attempts=attempts,
+                guard_reason=guard_reason,
+                clarify_option_count=len(result.options) if result.kind == "clarify" else None,
+                error_message=error_message or (result.message if result.kind == "error" else None),
+            ))
+        except Exception as exc:  # never block chat
+            log.warning("[chat] turn log failed: %s", exc)
+        return result
+
+    greeting = _match_greeting(question)
+    if greeting:
+        return _log(ChatResult(kind="chat", message=greeting), "greeting")
+
+    identity = _match_identity(question, input.brand_name, input.display_name)
+    if identity:
+        return _log(ChatResult(kind="chat", message=identity), "identity")
+
+    messages: list[ChatMessage] = await build_messages(
+        question,
+        brand_name=input.brand_name,
+        display_name=input.display_name,
+        tenant_id=input.tenant_id,
+        states=input.states,
+    )
+    last_sql: str | None = None
+    last_error = "The query could not be generated or executed."
+
+    for attempt in range(1, MAX_ATTEMPTS + 1):
+        try:
+            reply = await chat_complete(messages)
+        except LLMError as exc:
+            log.error("[chat] LLM error: %s", exc)
+            return _log(
+                ChatResult(
+                    kind="error",
+                    message="The assistant is temporarily unavailable. Please try again shortly.",
+                ),
+                "none",
+                attempts=attempt,
+                error_message=str(exc),
+            )
+
+        parsed = extract_sql(reply)
+        if parsed.chat:
+            return _log(ChatResult(kind="chat", message=parsed.chat), "none", attempts=attempt)
+        if parsed.refusal:
+            return _log(ChatResult(kind="refusal", message=parsed.refusal), "none", attempts=attempt)
+        if parsed.clarify_message:
+            return _log(
+                ChatResult(
+                    kind="clarify",
+                    message=parsed.clarify_message,
+                    options=parsed.clarify_options,
+                ),
+                "none",
+                attempts=attempt,
+            )
+
+        sql = parsed.sql
+        if sql:
+            sql = canonicalize_sql(sql)
+        if not sql:
+            last_error = "The model returned no SQL."
+            messages.append(ChatMessage(role="assistant", content=reply))
+            messages.append(build_retry_message("(no SQL produced)", last_error))
+            continue
+
+        route = route_engine(sql)
+        if not route.ok:
+            last_sql = sql
+            last_error = route.reason
+            messages.append(ChatMessage(role="assistant", content=sql))
+            messages.append(build_retry_message(sql, f"Rejected by safety check: {route.reason}"))
+            continue
+
+        if route.engine == "pg":
+            verdict = validate_sql(sql)
+            if not verdict.ok:
+                last_sql = sql
+                last_error = verdict.reason
+                messages.append(ChatMessage(role="assistant", content=sql))
+                messages.append(build_retry_message(sql, f"Rejected by safety check: {verdict.reason}"))
+                continue
+            final_sql = enforce_limit(verdict.sql, max_rows=settings.row_limit)
+        else:
+            verdict = validate_mysql_sql(sql, input.tenant_id)
+            if not verdict.ok:
+                last_sql = sql
+                last_error = verdict.reason
+                messages.append(ChatMessage(role="assistant", content=sql))
+                messages.append(build_retry_message(sql, f"Rejected by safety check: {verdict.reason}"))
+                continue
+            final_sql = enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
+
+        last_sql = final_sql
+
+        log.info("[chat] question: %s", input.question)
+        log.info("[chat] engine:   %s", route.engine)
+        log.info("[chat] SQL: %s", re.sub(r"\s+", " ", final_sql)[:500])
+
+        try:
+            if route.engine == "pg":
+                result = await run_readonly(
+                    final_sql,
+                    RunContext(
+                        tenant_id=input.tenant_id,
+                        states=input.states,
+                        timeout_ms=settings.statement_timeout_ms,
+                    ),
+                )
+            else:
+                result = await run_readonly_mysql(
+                    final_sql,
+                    RunMysqlContext(timeout_ms=settings.statement_timeout_ms),
+                )
+        except Exception as exc:
+            msg = str(exc)
+            if _INFRA_ERROR_RX.search(msg):
+                log.error("[chat] infra error (not shown to user): %s", msg)
+                return _log(
+                    ChatResult(
+                        kind="error",
+                        message="The assistant is temporarily unavailable. Please try again shortly.",
+                    ),
+                    "none",
+                    engine=route.engine,
+                    sql_llm=sql,
+                    sql_final=final_sql,
+                    attempts=attempt,
+                    error_message=msg,
+                )
+            last_error = msg
+            messages.append(ChatMessage(role="assistant", content=final_sql))
+            messages.append(build_retry_message(final_sql, last_error))
+            continue
+
+        clean = _drop_blank_dimension_rows(result.rows)
+        log.info("[chat] rows: %d returned", len(clean))
+        return _log(
+            ChatResult(
+                kind="result",
+                sql=final_sql,
+                rows=clean,
+                row_count=len(clean),
+            ),
+            "none",
+            engine=route.engine,
+            sql_llm=sql,
+            sql_final=final_sql,
+            attempts=attempt,
+        )
+
+    return _log(
+        ChatResult(kind="error", message=last_error, sql=last_sql),
+        "none",
+        attempts=MAX_ATTEMPTS,
+        error_message=last_error,
+    )
