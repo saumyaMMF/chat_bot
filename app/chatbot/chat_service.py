@@ -92,6 +92,145 @@ def canonicalize_sql(sql: str) -> str:
     return _TABLE_TYPO_RX.sub("complete_market_scrapper_dataset", sql)
 
 
+# ── Free-text equality → ILIKE rewrite ───────────────────────────────────────
+#
+# Source data for `brand` and `company` columns has mixed casing
+# (`ZIZZLE` vs `Zizzle`). The model is told to use case-insensitive
+# partial match in the prompt, but small models keep emitting exact
+# `WHERE brand = 'X'` which returns 0 rows. Rewrite the AST-validated
+# SELECT to swap exact equality for `lower(col) LIKE lower('%X%')`.
+#
+# Deliberately string-level (not AST) because validateSql is the parser
+# path — this runs AFTER the guard accepts the query, narrowing the
+# rewrite surface to known-safe SELECTs. Single-quote escaping is
+# preserved: `''` inside the literal stays `''`.
+_FREE_TEXT_COLS = ("brand", "company")
+
+
+def rewrite_eq_to_ilike_on_text_cols(sql: str) -> str:
+    """Rewrite ``<col> = '<lit>'`` to ``lower(<col>) LIKE lower('%<lit>%')``
+    for the columns in ``_FREE_TEXT_COLS``. Numeric/date equality is
+    unaffected (only quoted-string literals match)."""
+    out = sql
+    for col in _FREE_TEXT_COLS:
+        # `<alias?.>col = '<value-with-''-escape>'`, case-insensitive on col,
+        # whitespace tolerant around `=`.
+        rx = re.compile(
+            rf"(\b(?:[A-Za-z_][A-Za-z0-9_]*\.)?)({col})(\s*=\s*)'((?:''|[^'])*)'",
+            re.I,
+        )
+
+        def _sub(m: re.Match[str]) -> str:
+            alias, c, _eq, value = m.group(1), m.group(2), m.group(3), m.group(4)
+            stripped = re.sub(r"^%+|%+$", "", value)  # drop pre-escaped wildcards
+            return f"lower({alias}{c}) LIKE lower('%{stripped}%')"
+
+        out = rx.sub(_sub, out)
+    return out
+
+
+# ── Disambiguated-entity fast-path ───────────────────────────────────────────
+#
+# When the user (or a CLARIFY chip click) sends a message that explicitly
+# names the column type alongside the entity ("brand X", "company X",
+# "store X", "category X"), bypass the LLM and generate SQL deterministically.
+# Small models loop CLARIFY even after explicit disambiguation; this fast-path
+# sidesteps that and avoids a 40s round-trip.
+
+_ENTITY_PATTERN = re.compile(
+    r"\b(brand|company|store|retailer|dispensary|category)\s+[\"']?([A-Za-z][A-Za-z0-9_'-]*)",
+    re.I,
+)
+
+_CATEGORY_ENUM = frozenset(
+    {"flower", "preroll", "vape", "concentrate", "edible", "other"}
+)
+
+# Words that look like an entity to the regex but are NOT entity names. Without
+# this list, "which brand performing well" gets parsed as
+# (kind=brand, entity=performing) and the bot emits SQL filtering on a verb.
+# False negatives (one extra LLM round-trip) are cheaper than false positives
+# (wrong-column SQL).
+_ENTITY_STOPWORDS = frozenset({
+    # verb-ish
+    "performing", "doing", "going", "selling", "showing", "making", "getting",
+    "looking", "working", "running", "leading", "winning", "losing", "growing",
+    "trending", "falling", "rising", "driving", "beating", "topping",
+    # time / determiners
+    "today", "yesterday", "tomorrow", "this", "last", "next", "now",
+    "currently", "recently", "lately", "previously",
+    # generic
+    "data", "info", "information", "name", "names", "list", "all", "any",
+    "some", "one", "two", "three", "each", "every", "most", "least",
+    # evaluative adjectives
+    "good", "bad", "well", "better", "best", "worst", "top", "bottom",
+    "high", "low", "big", "small", "large", "tiny",
+    # question / aux words
+    "which", "what", "who", "where", "when", "how", "why",
+    "is", "are", "was", "were", "be", "been", "has", "have", "had",
+})
+
+
+@dataclass
+class DisambiguatedEntity:
+    column: str  # 'brand' | 'company' | 'category_norm'
+    value: str
+    is_category: bool
+
+
+def detect_disambiguated_entity(question: str) -> DisambiguatedEntity | None:
+    """Return a disambiguated entity hit if the question explicitly names
+    column-type + value, else None (LLM path handles the question)."""
+    m = _ENTITY_PATTERN.search(question)
+    if not m:
+        return None
+    kind = m.group(1).lower()
+    raw = m.group(2).strip()
+    if not raw or raw.lower() in _ENTITY_STOPWORDS:
+        return None
+    if kind == "brand":
+        return DisambiguatedEntity(column="brand", value=raw, is_category=False)
+    if kind in ("company", "store", "retailer", "dispensary"):
+        return DisambiguatedEntity(column="company", value=raw, is_category=False)
+    if kind == "category":
+        v = raw.lower()
+        if v not in _CATEGORY_ENUM:
+            return None  # unknown category → let LLM / CLARIFY handle
+        canonical = "PreRoll" if v == "preroll" else v.capitalize()
+        return DisambiguatedEntity(column="category_norm", value=canonical, is_category=True)
+    return None
+
+
+def build_disambiguated_sql(entity: DisambiguatedEntity) -> str:
+    """Generate the deterministic SQL for a disambiguated entity. Hits the
+    pre-aggregated daily view so a fast-path response stays under 1s even
+    on the local CPU LLM (no LLM call) + a single MV scan."""
+    safe = entity.value.replace("'", "''")
+    if entity.is_category:
+        return (
+            "SELECT category_norm, "
+            "SUM(revenue) AS total_revenue, "
+            "SUM(quantity) AS total_quantity "
+            "FROM chatbot_mv_market_daily "
+            f"WHERE category_norm = '{safe}' "
+            "AND date >= CURRENT_DATE - INTERVAL '7 days' "
+            "GROUP BY category_norm "
+            "ORDER BY total_revenue DESC LIMIT 10"
+        )
+    col = entity.column
+    return (
+        f"SELECT {col}, "
+        "SUM(revenue) AS total_revenue, "
+        "SUM(quantity) AS total_quantity "
+        "FROM chatbot_mv_market_daily "
+        f"WHERE lower({col}) LIKE lower('%{safe}%') "
+        "AND date >= CURRENT_DATE - INTERVAL '30 days' "
+        f"AND {col} <> '' "
+        f"GROUP BY {col} "
+        "ORDER BY total_revenue DESC LIMIT 10"
+    )
+
+
 @dataclass
 class ChatInput:
     tenant_id: int
@@ -249,6 +388,49 @@ async def run_chat(input: ChatInput) -> ChatResult:
     if identity:
         return _log(ChatResult(kind="chat", message=identity), "identity")
 
+    # Disambiguated-entity fast-path. "brand X" / "company X" / "store X" /
+    # "category X" → deterministic SQL, no LLM round-trip. Saves ~40s/turn
+    # on the local CPU model and prevents small models from looping CLARIFY
+    # after explicit disambiguation.
+    entity = detect_disambiguated_entity(question)
+    if entity:
+        sql_template = build_disambiguated_sql(entity)
+        # Goes through the same Gate C → Gate D path the LLM SQL does so we
+        # never bypass the guard / limit cap.
+        verdict = validate_sql(sql_template)
+        if verdict.ok:
+            final_sql = rewrite_eq_to_ilike_on_text_cols(
+                enforce_limit(verdict.sql, max_rows=settings.row_limit)
+            )
+            log.info("[chat] fast-path (%s=%s): %s",
+                     entity.column, entity.value,
+                     re.sub(r"\s+", " ", final_sql)[:300])
+            try:
+                result = await run_readonly(
+                    final_sql,
+                    RunContext(
+                        tenant_id=input.tenant_id,
+                        states=input.states,
+                        timeout_ms=settings.statement_timeout_ms,
+                    ),
+                )
+                clean = _drop_blank_dimension_rows(result.rows)
+                return _log(
+                    ChatResult(
+                        kind="result",
+                        sql=final_sql,
+                        rows=clean,
+                        row_count=len(clean),
+                    ),
+                    "disambig",
+                    engine="pg",
+                    sql_final=final_sql,
+                )
+            except Exception as exc:
+                # Fast-path execution failed — fall through to the LLM path
+                # so the user still gets an answer attempt.
+                log.warning("[chat] fast-path execution failed, falling through: %s", exc)
+
     messages: list[ChatMessage] = await build_messages(
         question,
         brand_name=input.brand_name,
@@ -315,7 +497,9 @@ async def run_chat(input: ChatInput) -> ChatResult:
                 messages.append(ChatMessage(role="assistant", content=sql))
                 messages.append(build_retry_message(sql, f"Rejected by safety check: {verdict.reason}"))
                 continue
-            final_sql = enforce_limit(verdict.sql, max_rows=settings.row_limit)
+            final_sql = rewrite_eq_to_ilike_on_text_cols(
+                enforce_limit(verdict.sql, max_rows=settings.row_limit)
+            )
         else:
             verdict = validate_mysql_sql(sql, input.tenant_id)
             if not verdict.ok:
