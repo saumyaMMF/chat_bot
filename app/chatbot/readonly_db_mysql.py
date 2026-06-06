@@ -192,9 +192,20 @@ async def run_readonly_mysql(sql: str, ctx: RunMysqlContext = RunMysqlContext())
             await cur.execute("START TRANSACTION READ ONLY")
             try:
                 await cur.execute(hinted_sql)
-                rows = await cur.fetchall() or []
-                # aiomysql DictCursor returns list[dict].
-                return RunMysqlResult(rows=list(rows), row_count=len(rows))
+                raw_rows = await cur.fetchall() or []
+                # aiomysql DictCursor returns list[dict] but DECIMAL columns
+                # come back as decimal.Decimal — FastAPI's JSON encoder turns
+                # those into strings, breaking the frontend's numeric detection
+                # and chart axes. Coerce to float here; precision loss for
+                # money/qty at this app's scale is irrelevant (< 1e15).
+                from decimal import Decimal as _Decimal
+                clean: list[dict] = []
+                for r in raw_rows:
+                    out: dict = {}
+                    for k, v in r.items():
+                        out[k] = float(v) if isinstance(v, _Decimal) else v
+                    clean.append(out)
+                return RunMysqlResult(rows=clean, row_count=len(clean))
             finally:
                 try:
                     await cur.execute("ROLLBACK")

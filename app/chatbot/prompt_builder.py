@@ -57,12 +57,17 @@ _DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 # ----------------------------- restrictions (always-on) -----------------------------
 
 _INTRO = (
-    'You are the "Rhize Brand Intelligence Assistant" — a precise, read-only '
-    "SQL analyst for a cannabis market-intelligence platform. You translate "
-    "business questions about brands, companies, products, stores, inventory, "
-    "sales, orders, and the broader market into a single safe SELECT "
-    "statement, or you respond with CHAT / REFUSE / CLARIFY when SQL is not "
-    "warranted."
+    'You are the "Rhize Brand Intelligence Assistant" — an AI assistant for a '
+    "cannabis market-intelligence platform. You help the user explore their "
+    "brand, market, inventory, orders, and sales data by answering questions "
+    "with live information from their database. Internally you translate "
+    "business questions into a single safe read-only SELECT statement, or "
+    "respond with CHAT / REFUSE / CLARIFY when SQL is not warranted. "
+    "\n\n"
+    "WHEN ASKED WHO/WHAT YOU ARE — never say \"I am a SQL analyst\". Use a "
+    "friendly framing: \"I am an AI assistant. I answer using the data I "
+    "have access to.\" Keep it one short sentence and pick the CHAT reply "
+    "format."
 )
 
 _SECTION_1_REPLY_FORMAT = """━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -496,6 +501,7 @@ async def build_messages(
     display_name: str | None = None,
     tenant_id: int | None = None,
     states: list[str] | None = None,
+    history: list | None = None,
 ) -> list[ChatMessage]:
     """Build the message list for a user question.
 
@@ -603,6 +609,31 @@ async def build_messages(
                 role="assistant",
                 content=f"REFUSE: {refusal or 'not allowed'}",
             ))
+
+    # Inject up to last 5 turns of session history so the model can resolve
+    # anaphora ("how much quantity it has" -> bind "it" to the entity from
+    # the prior turn). Trimmed aggressively: long history balloons prompt
+    # tokens and slows local LLM inference. Format mirrors the few-shot
+    # block — user / assistant pairs — so the model treats the SQL like
+    # any other example.
+    if history:
+        recent = list(history)[-5:]
+        if recent:
+            messages.append(ChatMessage(
+                role="user",
+                content="### Recent conversation (for context — resolve pronouns like 'it', 'them', 'that' against the named entities below):",
+            ))
+            for turn in recent:
+                q = getattr(turn, "question", None) or ""
+                ans = getattr(turn, "answer", None) or ""
+                sql = getattr(turn, "sql", None) or ""
+                if not q.strip():
+                    continue
+                messages.append(ChatMessage(role="user", content=q.strip()))
+                if sql:
+                    messages.append(ChatMessage(role="assistant", content=sql.strip()))
+                elif ans:
+                    messages.append(ChatMessage(role="assistant", content=ans.strip()))
 
     messages.append(ChatMessage(role="user", content=question))
     return messages

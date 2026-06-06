@@ -68,15 +68,27 @@ async def chat_complete_full(
     base_url = settings.llm_base_url.rstrip("/")
     timeout_s = settings.llm_timeout_ms / 1000.0
 
-    payload = {
+    # Hosted OpenAI-compat providers (Gemini, OpenAI, Groq, etc) reject
+    # unknown fields with HTTP 400. Ollama needs `keep_alive` + nested
+    # `options` for prefix cache + sampling. Detect provider by URL.
+    base_lower = base_url.lower()
+    is_ollama = (
+        "11434" in base_lower
+        or "localhost" in base_lower
+        or "127.0.0.1" in base_lower
+        or "ollama" in base_lower
+    )
+
+    payload: dict = {
         "model": settings.llm_model,
         "messages": [m.to_dict() for m in messages],
         "temperature": temperature if temperature is not None else 0.0,
         "max_tokens": max_tokens if max_tokens is not None else settings.llm_num_predict,
         "stream": False,
-        # Ollama-specific — hosted providers ignore. See module docstring.
-        "keep_alive": settings.llm_keep_alive,
-        "options": {
+    }
+    if is_ollama:
+        payload["keep_alive"] = settings.llm_keep_alive
+        payload["options"] = {
             "num_ctx": settings.llm_num_ctx,
             "num_predict": max_tokens if max_tokens is not None else settings.llm_num_predict,
             "temperature": temperature if temperature is not None else 0.0,
@@ -86,8 +98,7 @@ async def chat_complete_full(
             # Ollama prefix cache — keep the first N tokens (the system prompt)
             # cached across requests. Skips re-prompt-eval on every turn.
             "num_keep": settings.llm_num_keep,
-        },
-    }
+        }
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {settings.llm_api_key}",

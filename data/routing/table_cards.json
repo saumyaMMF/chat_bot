@@ -1,0 +1,114 @@
+{
+  "_comment": "One-line cards per allow-listed table. Embed each `card` field, retrieve top-k vs user question, feed only those tables to SQL-gen prompt. Cuts prompt size + sharpens routing. `engine` drives which DB pool executes.",
+  "version": 1,
+  "cards": [
+    {
+      "table": "chatbot_mv_market_daily",
+      "engine": "postgres",
+      "grain": "one row per (date, brand, company, category_norm, state)",
+      "card": "Market daily aggregates. Competitor / market-wide brand, company, category rankings, totals, trends. Pre-aggregated revenue and quantity by day. Use for any 'top', 'best', 'rank', 'share', 'total', 'trend' question that names brand, company, or category without naming individual products.",
+      "signals_positive": ["top brands", "top stores", "market", "competitors", "rivals", "share", "ranking", "trend", "by category", "best categories", "category revenue", "competitor brands"],
+      "signals_negative": ["my orders", "my inventory", "my catalog", "lot", "THC of lot", "open balance", "product name", "SKU detail", "added today (my)", "individual product"],
+      "key_columns": ["date", "brand", "company", "category_norm", "revenue", "quantity", "sku_count", "state"]
+    },
+    {
+      "table": "chatbot_market",
+      "engine": "postgres",
+      "grain": "one row per (date_d, state, company, product_name, unit)",
+      "card": "Market SKU-level snapshot. Individual competitor products: prices, THC%, unit/pack size, added/removed today, days on shelf. Use when the user wants product names, price filters, potency, or catalog churn IN THE MARKET (not their own).",
+      "signals_positive": ["which products", "what SKUs", "price under", "high THC", "premium", "cheap", "added to the market", "removed from the market", "days on shelf", "sitting on shelves", "fastest moving"],
+      "signals_negative": ["my", "mine", "our", "wholesale", "open balance", "low stock"],
+      "key_columns": ["date_d", "product_name", "brand", "company", "category_norm", "unit", "price_n", "thc_num", "quantity", "change", "revenue", "flag", "days_on_shelf"]
+    },
+    {
+      "table": "rhize_orders",
+      "engine": "mysql",
+      "grain": "one row per order line",
+      "card": "Tenant's own wholesale orders. Customer purchases, line items, quantities sold, subtotals, open balances, order status (Completed/Pending/Cancelled). Use for 'my orders', 'what did I sell', 'top customers', 'open balance', 'pending orders'.",
+      "signals_positive": ["my orders", "wholesale", "sold to", "customers", "customer name", "open balance", "pending", "completed", "unitPrice", "subtotal", "what did I sell", "top customers", "deliveryDate"],
+      "signals_negative": ["market", "competitor", "rival", "scrape", "listed today", "added to catalog"],
+      "key_columns": ["date", "orderNumber", "customerName", "productName", "qty", "unitPrice", "subtotal", "status", "openBalance"]
+    },
+    {
+      "table": "rhize_live_inventory",
+      "engine": "mysql",
+      "grain": "one row per (productName, tenant) — latest snapshot only",
+      "card": "Current on-hand inventory. Tenant's stock right now: current_qty, pending, remaining, lbs. No history. Use for 'in stock', 'low stock', 'what do I have', 'remaining units of X'.",
+      "signals_positive": ["my inventory", "stock", "in stock", "low stock", "on hand", "remaining", "current_qty", "pending units", "what do I have"],
+      "signals_negative": ["sold", "orders", "market", "competitor", "history", "trend"],
+      "key_columns": ["productName", "strain", "lotNumber", "current_qty", "pending", "remaining", "lbs", "updatedAt"]
+    },
+    {
+      "table": "rhize_product_lots",
+      "engine": "mysql",
+      "grain": "one row per (lotNumber, tenant)",
+      "card": "Lot tracking + lab results. THC%, TAC, terpene %, expiration date, compliance lot id. Use for 'my lots', 'lot THC', 'expiring lots', 'lab results'.",
+      "signals_positive": ["lot", "lotNumber", "ccb", "expir", "THC of lot", "potency of lot", "tac", "terps", "compliance"],
+      "signals_negative": ["market THC", "competitor potency", "orders", "inventory level"],
+      "key_columns": ["strain", "lotNumber", "thc", "tac", "terps", "expirationDate"]
+    },
+    {
+      "table": "rhize_brands",
+      "engine": "mysql",
+      "grain": "one row per (tenantid, brand name)",
+      "card": "Tenant's brand registry. isRhize=1 marks the tenant's own brand vs tracked competitor brand. Use for 'my brand', 'is X my brand', 'how many brands do I track'. NEVER scope by brand_id across tables — IDs collide cross-tenant.",
+      "signals_positive": ["my brand", "is rhize", "brand list", "brand registry", "my own brand", "isRhize"],
+      "signals_negative": ["top market brand", "competitor brand revenue", "brand sales"],
+      "key_columns": ["name", "isRhize"]
+    },
+    {
+      "table": "rhize_stores",
+      "engine": "mysql",
+      "grain": "one row per retail store",
+      "card": "Retail stores the tenant sells to. Name, slug, license number, city, phone, contact, isPartner flag, tier. Use for 'my retail accounts', 'partner stores', 'stores I sell to', 'store tier'.",
+      "signals_positive": ["my stores", "retail accounts", "partner stores", "isPartner", "tier", "store contact", "license number", "stores I sell"],
+      "signals_negative": ["market store", "competitor company", "scraped dispensary"],
+      "key_columns": ["name", "slug", "city", "isPartner", "tier", "licenseNumber"]
+    },
+    {
+      "table": "rhize_partner_stores",
+      "engine": "mysql",
+      "grain": "one row per partner customer",
+      "card": "Minimal partner customer roster (customer_name only). Use ONLY for canonical partner count helper (see project_active_partner_stores). Do not COUNT DISTINCT Company_Name on dataset_store — that field is a comma-joined list.",
+      "signals_positive": ["partner count", "how many partners", "partner roster"],
+      "signals_negative": ["store details", "address", "tier"],
+      "key_columns": ["customer_name"]
+    },
+    {
+      "table": "rhize_strain_info",
+      "engine": "mysql",
+      "grain": "one row per strain",
+      "card": "Strain metadata: effect tag, genetics parents, breeder, flavor notes. Use for 'genetics of X', 'flavor of strain', 'breeder of X', 'what effect is X'.",
+      "signals_positive": ["genetics", "breeder", "flavor", "effect tag", "parent strain", "what is strain"],
+      "signals_negative": ["THC", "lot", "inventory", "price"],
+      "key_columns": ["strain", "effectTag", "genetics1", "genetics2", "breeder", "flavor1"]
+    },
+    {
+      "table": "rhize_sales_actions",
+      "engine": "mysql",
+      "grain": "one row per CRM action",
+      "card": "CRM action queue. Outreach tasks per customer with priority, category (MARKET/OUTREACH), status (New/In Progress/Done), offerSent flag. Use for 'follow-ups', 'open actions', 'sales tasks', 'CRM'.",
+      "signals_positive": ["follow up", "sales action", "CRM", "outreach", "priority", "offerSent", "open tasks", "to do"],
+      "signals_negative": ["orders", "inventory", "lots"],
+      "key_columns": ["customerName", "category", "priority", "status", "offerSent", "description"]
+    },
+    {
+      "table": "rhize_dataset_main",
+      "engine": "mysql",
+      "grain": "one row per scraped product listing per day (tenant's own catalog scrape)",
+      "card": "Tenant's OWN catalog scrape with daily flag (Added/Removed/No Change). Dirty TEXT money/qty fields — always REGEXP_REPLACE then CAST. Use for 'my catalog', 'products added today (mine)', 'products removed today (mine)', 'my revenue', 'avg price by category', 'today's quantity total'. DEFAULT for 'added/removed today' unless user explicitly said 'market' or 'competitor'.",
+      "signals_positive": ["my catalog", "products I added", "what I removed", "my revenue", "my daily totals", "avg price by category (mine)", "today's quantity", "1d 3d 7d 14d trend", "Flag Added Removed"],
+      "signals_negative": ["market", "competitor", "rival", "other brands", "scraper market"],
+      "key_columns": ["Company_Name", "Product_Name", "Category", "Flag", "Price", "Revenue", "`Today's_Quantity_Total`", "`1d`", "`3d`", "`7d`", "`14d`", "date"]
+    },
+    {
+      "table": "rhize_dataset_store",
+      "engine": "mysql",
+      "grain": "one row per (date, Product_Name, Company_Name) — tenant's own per-store scrape",
+      "card": "Slimmer per-store cut of the tenant's own scrape. Product, Category, Type, Company_Name (single store), SKU, date. Use for 'per store breakdown of my products', 'which of my products at store X'.",
+      "signals_positive": ["per store", "by store breakdown", "which store carries my product", "my product at store"],
+      "signals_negative": ["market competitor", "live inventory", "orders"],
+      "key_columns": ["date", "Product_Name", "Category", "Company_Name", "SKU"]
+    }
+  ]
+}

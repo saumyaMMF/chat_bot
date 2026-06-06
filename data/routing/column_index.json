@@ -1,0 +1,83 @@
+{
+  "_comment": "Inverted index: column token → unique table (or table list when shared). If user question contains a token whose value-list has length 1, pin that table and skip LLM router. Tokens are case-insensitive substring match against the question after lowercasing. Backtick-only MySQL columns included as plain text token here.",
+  "version": 1,
+  "unique_to_table": {
+    "openbalance":              "rhize_orders",
+    "ordernumber":              "rhize_orders",
+    "unitprice":                "rhize_orders",
+    "subtotal":                 "rhize_orders",
+    "deliverydate":             "rhize_orders",
+    "paymenttype":              "rhize_orders",
+    "current_qty":              "rhize_live_inventory",
+    "pending units":            "rhize_live_inventory",
+    "remaining units":          "rhize_live_inventory",
+    "on hand":                  "rhize_live_inventory",
+    "ccblotnumber":             "rhize_product_lots",
+    "internallotid":            "rhize_product_lots",
+    "expirationdate":           "rhize_product_lots",
+    "tac":                      "rhize_product_lots",
+    "terps":                    "rhize_product_lots",
+    "isrhize":                  "rhize_brands",
+    "ispartner":                "rhize_stores",
+    "licensenumber":            "rhize_stores",
+    "store tier":               "rhize_stores",
+    "offersent":                "rhize_sales_actions",
+    "effecttag":                "rhize_strain_info",
+    "genetics1":                "rhize_strain_info",
+    "genetics2":                "rhize_strain_info",
+    "breeder":                  "rhize_strain_info",
+    "flavor1":                  "rhize_strain_info",
+    "today's_quantity_total":   "rhize_dataset_main",
+    "todays quantity total":    "rhize_dataset_main",
+    "1d trend":                 "rhize_dataset_main",
+    "3d trend":                 "rhize_dataset_main",
+    "7d trend":                 "rhize_dataset_main",
+    "14d trend":                "rhize_dataset_main",
+    "discount_price_data":      "rhize_dataset_main",
+    "days_on_shelf":            "chatbot_market",
+    "price_n":                  "chatbot_market",
+    "thc_num":                  "chatbot_market",
+    "first_seen":               "chatbot_market",
+    "category_norm":            "chatbot_market_OR_chatbot_mv_market_daily",
+    "sku_count":                "chatbot_mv_market_daily"
+  },
+  "shared_columns_disambiguation": {
+    "_comment": "Columns present on >1 table. Use surrounding signal words to choose.",
+    "brand": {
+      "tables": ["chatbot_mv_market_daily", "chatbot_market", "rhize_brands"],
+      "rule": "if 'my' / 'isRhize' / 'registry' → rhize_brands; if 'product' / 'SKU' / 'price' / 'THC' → chatbot_market; else → chatbot_mv_market_daily."
+    },
+    "company": {
+      "tables": ["chatbot_mv_market_daily", "chatbot_market"],
+      "rule": "aggregate/rank → chatbot_mv_market_daily; per-SKU detail → chatbot_market."
+    },
+    "customerName": {
+      "tables": ["rhize_orders", "rhize_sales_actions"],
+      "rule": "if 'order' / 'sold' / 'qty' / 'revenue' → rhize_orders; if 'follow up' / 'priority' / 'CRM' → rhize_sales_actions."
+    },
+    "strain": {
+      "tables": ["rhize_product_lots", "rhize_live_inventory", "rhize_strain_info"],
+      "rule": "if 'genetics' / 'flavor' / 'breeder' → rhize_strain_info; if 'THC' / 'expir' / 'lot' → rhize_product_lots; if 'in stock' / 'on hand' → rhize_live_inventory."
+    },
+    "productName": {
+      "tables": ["rhize_orders", "rhize_live_inventory"],
+      "rule": "if 'sold' / 'order' → rhize_orders; if 'in stock' / 'remaining' → rhize_live_inventory."
+    },
+    "Company_Name": {
+      "tables": ["rhize_dataset_main", "rhize_dataset_store"],
+      "rule": "dataset_store.Company_Name is comma-joined list — never COUNT DISTINCT. Aggregations → dataset_main. Per-store row → dataset_store."
+    },
+    "Flag": {
+      "tables": ["rhize_dataset_main"],
+      "rule": "MySQL only. Capitalized 'Added'/'Removed'/'No Change'. Distinct from PG chatbot_market.flag (lowercase)."
+    },
+    "flag": {
+      "tables": ["chatbot_market"],
+      "rule": "PG only. Lowercase 'added'/'removed'/'no change'."
+    },
+    "date": {
+      "tables": ["rhize_orders", "rhize_dataset_main", "rhize_dataset_store", "chatbot_mv_market_daily"],
+      "rule": "rhize_orders.date = DATETIME. dataset_main/store.date = TEXT 'YYYY-MM-DD'. chatbot_mv_market_daily.date = DATE. Engine chosen by table; date type follows."
+    }
+  }
+}

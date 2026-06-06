@@ -1,0 +1,111 @@
+{
+  "_comment": "Negative few-shots that teach the bot WHY the wrong table is wrong. Embed `question` + `wrong` + `right` + `because`. Feed top-k into SQL-gen prompt alongside the positive examples. Each item explicitly contrasts the two candidate tables the router could confuse.",
+  "version": 1,
+  "examples": [
+    {
+      "question": "Products added today.",
+      "wrong_table": "chatbot_market",
+      "right_table": "rhize_dataset_main",
+      "right_sql": "SELECT COUNT(*) AS added_count FROM rhize_dataset_main WHERE Flag = 'Added' AND date = (SELECT MAX(date) FROM rhize_dataset_main)",
+      "because": "No 'market' / 'competitor' qualifier → defaults to tenant's OWN catalog. PG chatbot_market is market-wide scrape; using it would answer a different question."
+    },
+    {
+      "question": "Products added to the market today.",
+      "wrong_table": "rhize_dataset_main",
+      "right_table": "chatbot_market",
+      "right_sql": "SELECT COUNT(*) AS added_count FROM chatbot_market WHERE flag = 'added' AND date_d = (SELECT MAX(date_d) FROM chatbot_market)",
+      "because": "Explicit 'to the market' → competitor catalog churn. Flag casing differs: MySQL 'Added' vs PG 'added'."
+    },
+    {
+      "question": "Top customers by revenue last 30 days.",
+      "wrong_table": "chatbot_mv_market_daily",
+      "right_table": "rhize_orders",
+      "right_sql": "SELECT customerName, SUM(subtotal) AS rev FROM rhize_orders WHERE date >= DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY) AND status = 'Completed' GROUP BY customerName ORDER BY rev DESC LIMIT 10",
+      "because": "'Customers' = wholesale buyers the tenant sold to → rhize_orders.customerName. Market table has 'company' (retail dispensary) not customer."
+    },
+    {
+      "question": "Top stores by revenue.",
+      "wrong_table": "rhize_stores",
+      "right_table": "chatbot_mv_market_daily",
+      "right_sql": "SELECT company, SUM(revenue) FROM chatbot_mv_market_daily WHERE date = (SELECT MAX(date) FROM chatbot_mv_market_daily) AND company <> '' GROUP BY company ORDER BY 2 DESC LIMIT 5",
+      "because": "rhize_stores is a registry (name, city, tier) with NO revenue column. Ranking by revenue needs aggregates → chatbot_mv_market_daily."
+    },
+    {
+      "question": "How much do I have in stock?",
+      "wrong_table": "rhize_dataset_main",
+      "right_table": "rhize_live_inventory",
+      "right_sql": "SELECT SUM(current_qty) AS on_hand FROM rhize_live_inventory",
+      "because": "'In stock' / 'on hand' = current inventory snapshot. dataset_main tracks listed quantity in market scrape, not on-hand stock. Use current_qty, NOT `Today's_Quantity_Total`."
+    },
+    {
+      "question": "THC of lot HL-20.",
+      "wrong_table": "chatbot_market",
+      "right_table": "rhize_product_lots",
+      "right_sql": "SELECT thc, tac, terps FROM rhize_product_lots WHERE lotNumber = 'HL-20' LIMIT 1",
+      "because": "'Lot' identifier → internal lab record. chatbot_market.thc_num is market scrape's stated %, not the actual lab COA for tenant's lot."
+    },
+    {
+      "question": "Is First Frost my brand?",
+      "wrong_table": "chatbot_mv_market_daily",
+      "right_table": "rhize_brands",
+      "right_sql": "SELECT name, isRhize FROM rhize_brands WHERE name = 'First Frost'",
+      "because": "Ownership question → isRhize flag on registry. Market table has no isRhize concept."
+    },
+    {
+      "question": "Genetics of Donkey Butter.",
+      "wrong_table": "rhize_product_lots",
+      "right_table": "rhize_strain_info",
+      "right_sql": "SELECT strain, genetics1, genetics2, breeder, effectTag FROM rhize_strain_info WHERE strain = 'Donkey Butter' LIMIT 1",
+      "because": "Genetics live on strain_info. product_lots has THC/TAC but no genetics columns."
+    },
+    {
+      "question": "Open follow-ups for 31 North.",
+      "wrong_table": "rhize_orders",
+      "right_table": "rhize_sales_actions",
+      "right_sql": "SELECT category, priority, description, status FROM rhize_sales_actions WHERE customerName = '31 North' AND status <> 'Done' ORDER BY priority ASC LIMIT 50",
+      "because": "'Follow-up' = CRM action queue. rhize_orders has status (Completed/Pending) but not CRM-style priority/category/description."
+    },
+    {
+      "question": "Average price by category in my catalog.",
+      "wrong_table": "chatbot_market",
+      "right_table": "rhize_dataset_main",
+      "right_sql": "SELECT Category, AVG(CAST(REGEXP_REPLACE(Price, '[^0-9.]', '') AS DECIMAL(10,2))) AS avg_price FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND Price IS NOT NULL AND Price <> '' GROUP BY Category",
+      "because": "'My catalog' → MySQL. Price is dirty TEXT — strip with REGEXP_REPLACE before CAST or plain CAST returns 0 silently."
+    },
+    {
+      "question": "Top brand of the market today.",
+      "wrong_table": "rhize_brands",
+      "right_table": "chatbot_mv_market_daily",
+      "right_sql": "SELECT brand, SUM(revenue) AS rev FROM chatbot_mv_market_daily WHERE date = (SELECT MAX(date) FROM chatbot_mv_market_daily) AND brand <> '' GROUP BY brand ORDER BY rev DESC LIMIT 1",
+      "because": "Market ranking needs revenue aggregate. rhize_brands is just a name registry with no sales metric."
+    },
+    {
+      "question": "How many partner stores do I have?",
+      "wrong_table": "rhize_dataset_store",
+      "right_table": "rhize_partner_stores",
+      "right_sql": "SELECT COUNT(*) AS n FROM rhize_partner_stores",
+      "because": "dataset_store.Company_Name is a comma-joined list, COUNT DISTINCT lies. Canonical helper = rhize_partner_stores (one row per partner). Reference project_active_partner_stores."
+    },
+    {
+      "question": "Per store breakdown of my products.",
+      "wrong_table": "rhize_dataset_main",
+      "right_table": "rhize_dataset_store",
+      "right_sql": "SELECT Company_Name, Product_Name, Category, date FROM rhize_dataset_store WHERE date = (SELECT MAX(date) FROM rhize_dataset_store) ORDER BY Company_Name, Product_Name LIMIT 500",
+      "because": "dataset_main aggregates across stores; dataset_store is the per-store row. Need single-store rows → dataset_store."
+    },
+    {
+      "question": "Show me Berry Fizz price in the market.",
+      "wrong_table": "rhize_dataset_main",
+      "right_table": "chatbot_market",
+      "right_sql": "SELECT product_name, brand, company, price_n FROM chatbot_market WHERE lower(product_name) LIKE lower('%Berry Fizz%') AND date_d = (SELECT MAX(date_d) FROM chatbot_market) ORDER BY price_n ASC LIMIT 50",
+      "because": "'In the market' → PG scrape. Use price_n (numeric), not dataset_main.Price (dirty TEXT)."
+    },
+    {
+      "question": "What's been sitting on my shelves the longest?",
+      "wrong_table": "chatbot_market",
+      "right_table": "rhize_live_inventory",
+      "right_sql": "SELECT productName, lotNumber, current_qty, updatedAt FROM rhize_live_inventory ORDER BY updatedAt ASC LIMIT 20",
+      "because": "'My shelves' → tenant inventory. chatbot_market.days_on_shelf is competitor SKU listing age, unrelated to tenant's physical stock."
+    }
+  ]
+}

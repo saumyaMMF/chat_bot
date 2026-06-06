@@ -1,0 +1,56 @@
+{
+  "_comment": "When router cannot pick a table confidently, emit CLARIFY with one of these chip sets. Adds 3 new dimensions beyond the existing brand-vs-company clarify already documented in schema_context.md.",
+  "version": 1,
+  "dimensions": [
+    {
+      "id": "scope:own-vs-market",
+      "trigger": [
+        "Question names a metric (top, best, average, share, total) on brand/company/category WITHOUT 'my', 'mine', 'our', 'market', 'competitor', 'rival', 'other'.",
+        "Example: 'top brands', 'average price by category', 'best categories'."
+      ],
+      "clarify_text": "Are you asking about your own data or the broader market?",
+      "options": [
+        {"label": "MY CATALOG",   "route": {"engine": "mysql",    "table_hint": ["rhize_dataset_main", "rhize_orders", "rhize_brands"]}},
+        {"label": "MARKET (COMPETITORS)", "route": {"engine": "postgres", "table_hint": ["chatbot_mv_market_daily", "chatbot_market"]}}
+      ]
+    },
+    {
+      "id": "scope:own-product-vs-market-product",
+      "trigger": [
+        "User names a specific product/SKU without scope qualifier.",
+        "Example: 'Show me Berry Fizz', 'How is Animal Face doing?'"
+      ],
+      "clarify_text": "Do you mean your own product or a competitor product in the market?",
+      "options": [
+        {"label": "MY PRODUCT",     "route": {"engine": "mysql",    "table_hint": ["rhize_live_inventory", "rhize_orders", "rhize_dataset_main"]}},
+        {"label": "MARKET PRODUCT", "route": {"engine": "postgres", "table_hint": ["chatbot_market"]}}
+      ]
+    },
+    {
+      "id": "metric:sold-vs-listed",
+      "trigger": [
+        "User says 'revenue' / 'sales' without saying 'order' or 'market'.",
+        "Could mean: wholesale revenue (rhize_orders.subtotal) OR inferred market sell-through (chatbot_mv_market_daily.revenue) OR tenant's scraped revenue (rhize_dataset_main.Revenue)."
+      ],
+      "clarify_text": "Which revenue do you mean?",
+      "options": [
+        {"label": "WHOLESALE ORDERS",   "route": {"engine": "mysql",    "table_hint": ["rhize_orders"], "metric": "SUM(subtotal) where status='Completed'"}},
+        {"label": "MY CATALOG SELL-THROUGH", "route": {"engine": "mysql", "table_hint": ["rhize_dataset_main"], "metric": "SUM(CAST(REGEXP_REPLACE(Revenue,'[^0-9.]','') AS DECIMAL(12,2)))"}},
+        {"label": "MARKET REVENUE",     "route": {"engine": "postgres", "table_hint": ["chatbot_mv_market_daily"], "metric": "SUM(revenue)"}}
+      ]
+    },
+    {
+      "id": "metric:quantity-stock-vs-listed",
+      "trigger": [
+        "User says 'how much quantity' / 'how many units' without scope.",
+        "Could mean: on-hand (rhize_live_inventory.current_qty) OR scraped listed total (rhize_dataset_main.`Today's_Quantity_Total`) OR market quantity (chatbot_mv_market_daily.quantity)."
+      ],
+      "clarify_text": "Which quantity?",
+      "options": [
+        {"label": "ON-HAND (MY STOCK)",  "route": {"engine": "mysql",    "table_hint": ["rhize_live_inventory"], "metric": "SUM(current_qty)"}},
+        {"label": "LISTED IN MY CATALOG","route": {"engine": "mysql",    "table_hint": ["rhize_dataset_main"], "metric": "SUM(CAST(REGEXP_REPLACE(`Today's_Quantity_Total`,'[^0-9.]','') AS DECIMAL(10,2)))"}},
+        {"label": "MARKET QUANTITY",     "route": {"engine": "postgres", "table_hint": ["chatbot_mv_market_daily"], "metric": "SUM(quantity)"}}
+      ]
+    }
+  ]
+}

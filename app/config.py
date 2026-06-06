@@ -50,6 +50,11 @@ class Settings(BaseSettings):
     embed_model: str = Field(default="nomic-embed-text", alias="CHATBOT_EMBED_MODEL")
     embed_timeout_ms: int = Field(default=8_000, alias="CHATBOT_EMBED_TIMEOUT_MS")
     embed_keep_alive: str = Field(default="30m", alias="CHATBOT_EMBED_KEEP_ALIVE")
+    # Optional split — when CHATBOT_LLM_BASE_URL points at a hosted provider
+    # (Gemini/Groq/etc) the embeddings must stay on local Ollama because
+    # our pgvector rows are nomic-embed-text 768-dim. Empty = fall back to LLM url.
+    embed_base_url: str = Field(default="", alias="CHATBOT_EMBED_BASE_URL")
+    embed_api_key: str = Field(default="", alias="CHATBOT_EMBED_API_KEY")
     schema_top_k: int = Field(default=8, alias="CHATBOT_SCHEMA_TOP_K")
 
     # Cosine-distance threshold for retrieval. pgvector cosine ∈ [0, 2]:

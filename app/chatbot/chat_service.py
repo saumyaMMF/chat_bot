@@ -16,6 +16,7 @@ from app.chatbot.normalize_question import normalize_question
 from app.chatbot.prompt_builder import build_messages, build_retry_message
 from app.chatbot.answer_formatter import format_answer, is_terminal_answer
 from app.chatbot.engine_router import route_engine
+from app.chatbot.router import column_pin, route_signal
 from app.chatbot.fast_path_store import retrieve_match as fast_path_match
 from app.chatbot.readonly_db import RunContext, run_readonly
 from app.chatbot.readonly_db_mysql import RunMysqlContext, run_readonly_mysql
@@ -28,7 +29,10 @@ import time as _time
 
 log = logging.getLogger(__name__)
 
-MAX_ATTEMPTS = 3  # 1 initial + 2 execution-feedback retries.
+MAX_ATTEMPTS = 2  # 1 initial + 1 execution-feedback retry. On CPU 7B each
+# attempt costs 60-90s — 3 attempts blow past tolerable latency. With
+# execution-feedback the second attempt usually self-corrects; if it still
+# fails it's almost always a prompt/schema gap, not a stochastic error.
 
 _GREETING_PATTERNS: list[tuple[re.Pattern[str], str]] = [
     (
@@ -48,6 +52,24 @@ _GREETING_PATTERNS: list[tuple[re.Pattern[str], str]] = [
         "Bye! Come back any time for more market data.",
     ),
 ]
+
+# Bot self-identity catcher. Without this the LLM sometimes leaks the
+# system-prompt phrasing ("I am a SQL analyst…") into a CHAT reply. Match
+# here first and return a friendly canned line.
+_BOT_IDENTITY_RX = re.compile(
+    r"^\s*(?:hey|hi|hello|ok|so)?\s*"
+    r"(?:what(?:'s| is)?\s+(?:your\s+name|this|that)|"
+    r"who\s+(?:are\s+you|is\s+this)|"
+    r"are\s+you\s+(?:a\s+)?(?:bot|ai|human|assistant|chatbot|llm|model|gpt|gemini)|"
+    r"what\s+can\s+you\s+do|what\s+do\s+you\s+do|tell\s+me\s+about\s+yourself|introduce\s+yourself)"
+    r"[\s!.?]*$",
+    re.I,
+)
+_BOT_IDENTITY_REPLY = (
+    "I am an AI assistant. I answer using the data I have access to — "
+    "ask me about your brand, market, inventory, orders, or sales."
+)
+
 
 _BRAND_NAME_RX = re.compile(
     r"^\s*(what(?:'s| is)?\s+|tell\s+(?:me\s+)?)?(my\s+(brand|company|business)\s*(name)?|who\s+am\s+i)[\s!.?]*$",
@@ -253,12 +275,28 @@ def build_disambiguated_sql(entity: DisambiguatedEntity) -> str:
 
 
 @dataclass
+class PrevTurn:
+    """One past turn from the same session, sent by the client.
+
+    The frontend keeps the last N turns in React state and POSTs them in
+    each request — server is stateless, so multi-worker uvicorn deploys are
+    safe without Redis. ``question`` is the user message; ``answer`` is
+    either the bot's natural-language summary, the executed SQL, or both.
+    """
+    question: str
+    answer: str = ""
+    sql: str | None = None
+
+
+@dataclass
 class ChatInput:
     tenant_id: int
     states: list[str]
     question: str
     brand_name: str | None = None
     display_name: str | None = None
+    session_id: str | None = None
+    history: list[PrevTurn] = field(default_factory=list)
 
 
 ResultKind = Literal["result", "chat", "refusal", "clarify", "error"]
@@ -405,6 +443,9 @@ async def run_chat(input: ChatInput) -> ChatResult:
     if greeting:
         return _log(ChatResult(kind="chat", message=greeting), "greeting")
 
+    if _BOT_IDENTITY_RX.search(question):
+        return _log(ChatResult(kind="chat", message=_BOT_IDENTITY_REPLY), "identity-bot")
+
     identity = _match_identity(question, input.brand_name, input.display_name)
     if identity:
         return _log(ChatResult(kind="chat", message=identity), "identity")
@@ -463,8 +504,34 @@ async def run_chat(input: ChatInput) -> ChatResult:
     # neighbours, but they fall through to the LLM until a slot-filler
     # is wired up. Same Gate C (validate_sql) + Gate D (limit/timeout)
     # apply to cached SQL, plus RLS (PG) / tenantid scope (MySQL).
+    # Stage-1 router: deterministic table/engine choice from the routing pack.
+    # column_pin (unique column token → table) is the strongest signal — beats
+    # everything that follows. route_signal tags ownership via synonyms; used
+    # only when column_pin misses. Both are pure-Python regex, sub-millisecond.
+    pin = column_pin(question)
+    sig = route_signal(question) if pin is None else None
+    if pin is not None:
+        log.info("[router] column_pin token=%r → table=%s engine=%s",
+                 pin.token, pin.table, pin.engine)
+    elif sig is not None and sig.matched_tokens:
+        log.info("[router] route_signal ownership=%s engine_hint=%s tokens=%s tables=%s",
+                 sig.ownership, sig.engine_hint, sig.matched_tokens[:5],
+                 sig.candidate_tables[:3])
+
+    def _resolve_dialect() -> str:
+        # column_pin is authoritative when present.
+        if pin is not None:
+            return pin.engine
+        # synonyms next.
+        if sig is not None and sig.ownership == "own":
+            return "mysql"
+        if sig is not None and sig.ownership == "market":
+            return "postgres"
+        # Legacy fallback.
+        return "postgres" if _has_market_signal(question) else "mysql"
+
     if settings.fast_path_enabled:
-        fp_dialect = "postgres" if _has_market_signal(question) else "mysql"
+        fp_dialect = _resolve_dialect()
         log.info("[chat] ▶ stage=fast-path-lookup dialect=%s threshold=%.3f",
                  fp_dialect, settings.fast_path_distance_threshold)
         t_fp = _time.perf_counter()
@@ -549,6 +616,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
         display_name=input.display_name,
         tenant_id=input.tenant_id,
         states=input.states,
+        history=input.history,
     )
     log.info("[chat] ✔ stage=rag-retrieval done in %.2fs (messages=%d)",
              _time.perf_counter() - t0, len(messages))
@@ -609,7 +677,18 @@ async def run_chat(input: ChatInput) -> ChatResult:
 
         # HARD ROUTING GUARD — block PG when the question carries no market
         # signal. Feed the failure back so the model re-emits using rhize_*.
-        if route.engine == "pg" and not _has_market_signal(input.question):
+        # Stage-1 router signals override the legacy heuristic: a column_pin
+        # to a postgres table is authoritative ("does this lot have THC" hits
+        # MySQL even without a market keyword); a route_signal=='market'
+        # tag licenses PG even when the regex misses.
+        _market_ok = _has_market_signal(input.question)
+        _pin = column_pin(input.question)
+        _sig = route_signal(input.question) if _pin is None else None
+        if _pin is not None and _pin.engine == "postgres":
+            _market_ok = True
+        elif _sig is not None and _sig.ownership == "market":
+            _market_ok = True
+        if route.engine == "pg" and not _market_ok:
             last_sql = sql
             last_error = (
                 "Routed to PostgreSQL market tables, but the question carries no "

@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import sys
+import time as _time
 
 # Windows + Python 3.12 + asyncio ProactorEventLoop + SSL = WinError 87
 # crash during MySQL TLS handshake. Force SelectorEventLoop on Windows so
@@ -19,7 +20,7 @@ from typing import Any
 from fastapi import Depends, FastAPI, Header, HTTPException
 from pydantic import BaseModel, Field, field_validator
 
-from app.chatbot.chat_service import ChatInput, run_chat
+from app.chatbot.chat_service import ChatInput, PrevTurn, run_chat
 from app.chatbot.readonly_db import close_pool
 from app.chatbot.readonly_db_mysql import close_pool as close_pool_mysql
 from app.config import get_settings
@@ -57,12 +58,21 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="rhize-chatbot", version="0.1.0", lifespan=lifespan)
 
 
+class HistoryTurn(BaseModel):
+    question: str = Field(..., min_length=1, max_length=MAX_QUESTION_LEN)
+    answer: str = ""
+    sql: str | None = None
+
+
 class ChatRequest(BaseModel):
     question: str = Field(..., min_length=1, max_length=MAX_QUESTION_LEN)
     tenant_id: int = Field(..., ge=0)
     states: list[str] = Field(default_factory=list)
     brand_name: str | None = None
     display_name: str | None = None
+    session_id: str | None = None
+    # Cap at 10 to bound prompt growth — chat_service trims to last 5 anyway.
+    history: list[HistoryTurn] = Field(default_factory=list, max_length=10)
 
     @field_validator("question")
     @classmethod
@@ -102,6 +112,67 @@ async def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
+@app.post("/warmup", dependencies=[Depends(require_service_token)])
+async def warmup() -> dict[str, Any]:
+    """Pre-load the LLM, embed model, and snapshots so the first user-facing
+    request does NOT pay cold-load tax (~17s + first-token latency).
+
+    Triggered by the Next.js login route via ``after()`` — runs in the
+    background, response not blocked. Idempotent + cheap if already warm.
+
+    Steps:
+      1. embed_text("warmup") -> loads nomic-embed-text into Ollama + warms
+         our TTLCache. Forces fast_path/schema/example snapshots to load
+         since each calls _maybe_refresh() on first knn().
+      2. LLM ping with min tokens -> loads qwen2.5-coder model into Ollama.
+         keep_alive in our payload already keeps it resident across calls;
+         this just primes it.
+    """
+    import asyncio as _aio
+    from app.chatbot.embed_client import embed_text
+    from app.chatbot.fast_path_store import _SNAPSHOT as _FP_SNAP
+    from app.chatbot.example_store import _SNAPSHOT as _EX_SNAP
+    from app.chatbot.schema_store import _SNAPSHOT as _SC_SNAP
+    from app.chatbot.llm_client import chat_complete, ChatMessage
+
+    t0 = _time.perf_counter()
+    errors: list[str] = []
+
+    async def _warm_embed_and_snaps() -> None:
+        try:
+            vec = await embed_text("warmup")
+            # Force snapshot loads by issuing a 1-NN query against each.
+            await _aio.gather(
+                _FP_SNAP.knn(vec, k=1),
+                _EX_SNAP.knn(vec, k=1),
+                _SC_SNAP.knn(vec, k=1),
+                return_exceptions=True,
+            )
+        except Exception as exc:
+            errors.append(f"embed/snapshot: {exc}")
+
+    async def _warm_llm() -> None:
+        try:
+            await chat_complete(
+                [ChatMessage(role="user", content="ok")],
+                max_tokens=1,
+                temperature=0.0,
+            )
+        except Exception as exc:
+            errors.append(f"llm: {exc}")
+
+    await _aio.gather(_warm_embed_and_snaps(), _warm_llm())
+    elapsed_ms = int((_time.perf_counter() - t0) * 1000)
+    return {
+        "ok": not errors,
+        "elapsed_ms": elapsed_ms,
+        "fast_path_rows": _FP_SNAP.size(),
+        "example_rows": _EX_SNAP.size(),
+        "schema_rows": _SC_SNAP.size(),
+        "errors": errors,
+    }
+
+
 @app.post("/chat", response_model=ChatResponse, dependencies=[Depends(require_service_token)])
 async def chat(req: ChatRequest) -> ChatResponse:
     try:
@@ -112,6 +183,11 @@ async def chat(req: ChatRequest) -> ChatResponse:
                 question=req.question,
                 brand_name=req.brand_name,
                 display_name=req.display_name,
+                session_id=req.session_id,
+                history=[
+                    PrevTurn(question=h.question, answer=h.answer, sql=h.sql)
+                    for h in req.history
+                ],
             )
         )
     except Exception as exc:

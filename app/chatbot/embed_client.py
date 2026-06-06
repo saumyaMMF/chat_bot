@@ -28,15 +28,27 @@ class EmbedError(RuntimeError):
 
 def _headers() -> dict[str, str]:
     settings = get_settings()
+    # Prefer embed-specific key (lets you keep embeds on Ollama while LLM
+    # is on a hosted provider). Fall back to LLM key.
+    key = settings.embed_api_key or settings.llm_api_key
     return {
         "Content-Type": "application/json",
-        "Authorization": f"Bearer {settings.llm_api_key}",
+        "Authorization": f"Bearer {key}",
     }
 
 
 def _embed_url() -> str:
     settings = get_settings()
-    return f"{settings.llm_base_url.rstrip('/')}/embeddings"
+    base = settings.embed_base_url or settings.llm_base_url
+    return f"{base.rstrip('/')}/embeddings"
+
+
+def _is_ollama_embed() -> bool:
+    """Ollama accepts (and benefits from) `keep_alive`. Hosted OpenAI-compat
+    providers reject unknown fields with 400. Detect by base URL."""
+    settings = get_settings()
+    url = (settings.embed_base_url or settings.llm_base_url).lower()
+    return "11434" in url or "localhost" in url or "127.0.0.1" in url or "ollama" in url
 
 
 # Module-level TTL LRU for embed_text. nomic-embed-text is deterministic per
@@ -56,12 +68,13 @@ def _embed_cache_key(text: str) -> str:
 async def _embed_text_uncached(text: str) -> list[float]:
     settings = get_settings()
     timeout_s = settings.embed_timeout_ms / 1000.0
-    payload = {
+    payload: dict = {
         "model": settings.embed_model,
         "input": text,
-        # Hosted providers ignore; Ollama uses this to extend the model's TTL.
-        "keep_alive": settings.embed_keep_alive,
     }
+    # keep_alive is Ollama-specific. OpenAI / Gemini / Groq reject it with 400.
+    if _is_ollama_embed():
+        payload["keep_alive"] = settings.embed_keep_alive
     try:
         async with httpx.AsyncClient(timeout=timeout_s) as client:
             res = await client.post(_embed_url(), json=payload, headers=_headers())
@@ -110,11 +123,12 @@ async def embed_batch(texts: Iterable[str], *, timeout_s: float = 120.0) -> list
         return []
 
     settings = get_settings()
-    payload = {
+    payload: dict = {
         "model": settings.embed_model,
         "input": items,
-        "keep_alive": settings.embed_keep_alive,
     }
+    if _is_ollama_embed():
+        payload["keep_alive"] = settings.embed_keep_alive
 
     async with httpx.AsyncClient(timeout=timeout_s) as client:
         res = await client.post(_embed_url(), json=payload, headers=_headers())
