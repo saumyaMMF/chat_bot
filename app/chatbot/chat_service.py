@@ -14,7 +14,9 @@ from typing import Any, Literal
 from app.chatbot.llm_client import ChatMessage, LLMError, chat_complete
 from app.chatbot.normalize_question import normalize_question
 from app.chatbot.prompt_builder import build_messages, build_retry_message
+from app.chatbot.answer_formatter import format_answer, is_terminal_answer
 from app.chatbot.engine_router import route_engine
+from app.chatbot.fast_path_store import retrieve_match as fast_path_match
 from app.chatbot.readonly_db import RunContext, run_readonly
 from app.chatbot.readonly_db_mysql import RunMysqlContext, run_readonly_mysql
 from app.chatbot.sql_guard import enforce_limit, validate_sql
@@ -69,6 +71,25 @@ _CHAT_PREFIX_RX = re.compile(r"^CHAT:\s*([\s\S]*)", re.I)
 _REFUSE_PREFIX_RX = re.compile(r"REFUSE:\s*([\s\S]*)", re.I)
 _SQL_START_RX = re.compile(r"^\s*\(*\s*(select|with)\b", re.I)
 _TABLE_TYPO_RX = re.compile(r"complete_market_scrap+er_dataset", re.I)
+
+# Explicit market-signal detection. If NONE of these appear in the question,
+# the router MUST keep the query on MySQL (`rhize_*`). PG routing for an
+# own-data question silently shows the user competitor data — a correctness bug.
+_MARKET_SIGNAL_RX = re.compile(
+    r"\b("
+    r"market|markets|in the market|across the market|"
+    r"competitor|competitors|competing|rival|rivals|"
+    r"industry|industry-wide|industry trend|"
+    r"compared to others|vs others|vs\.? others|versus others|"
+    r"scrape|scraped|scraping|"
+    r"other brands|other companies|other stores|other products"
+    r")\b",
+    re.I,
+)
+
+
+def _has_market_signal(question: str) -> bool:
+    return bool(_MARKET_SIGNAL_RX.search(question or ""))
 
 
 def _match_greeting(question: str) -> str | None:
@@ -415,12 +436,15 @@ async def run_chat(input: ChatInput) -> ChatResult:
                     ),
                 )
                 clean = _drop_blank_dimension_rows(result.rows)
+                ans = format_answer(input.question, final_sql, clean)
+                terminal = is_terminal_answer(input.question, clean)
                 return _log(
                     ChatResult(
-                        kind="result",
-                        sql=final_sql,
-                        rows=clean,
-                        row_count=len(clean),
+                        kind="chat" if terminal else "result",
+                        message=ans,
+                        sql=None if terminal else final_sql,
+                        rows=[] if terminal else clean,
+                        row_count=0 if terminal else len(clean),
                     ),
                     "disambig",
                     engine="pg",
@@ -431,6 +455,94 @@ async def run_chat(input: ChatInput) -> ChatResult:
                 # so the user still gets an answer attempt.
                 log.warning("[chat] fast-path execution failed, falling through: %s", exc)
 
+    # Fuzzy fast-path. Embed the user question, KNN against the curated
+    # Q->SQL catalog (chatbot_fast_path_embeddings). If we hit a literal
+    # pair (no template placeholders) within the distance threshold, run
+    # the cached SQL directly — LLM is skipped. Templated pairs (params
+    # like {N}/{WINDOW}/{BRAND}) still embed and may surface as nearest
+    # neighbours, but they fall through to the LLM until a slot-filler
+    # is wired up. Same Gate C (validate_sql) + Gate D (limit/timeout)
+    # apply to cached SQL, plus RLS (PG) / tenantid scope (MySQL).
+    if settings.fast_path_enabled:
+        fp_dialect = "postgres" if _has_market_signal(question) else "mysql"
+        log.info("[chat] ▶ stage=fast-path-lookup dialect=%s threshold=%.3f",
+                 fp_dialect, settings.fast_path_distance_threshold)
+        t_fp = _time.perf_counter()
+        try:
+            hit = await fast_path_match(
+                question,
+                distance_threshold=settings.fast_path_distance_threshold,
+                dialect=fp_dialect,
+            )
+        except Exception as exc:
+            log.warning("[chat] fast-path lookup error, falling through: %s", exc)
+            hit = None
+        log.info("[chat] ✔ stage=fast-path-lookup done in %.2fs hit=%s",
+                 _time.perf_counter() - t_fp,
+                 f"{hit.id}@d={hit.distance:.4f}" if hit else "MISS")
+        if hit is not None and hit.is_literal:
+            log.info(
+                "[chat] fast-path hit: id=%s distance=%.4f dialect=%s",
+                hit.id, hit.distance, hit.dialect,
+            )
+            if hit.refusal:
+                return _log(
+                    ChatResult(kind="refusal", message=hit.refusal),
+                    f"cache:{hit.id}",
+                )
+            cached_sql = hit.sql or ""
+            try:
+                if hit.dialect == "mysql":
+                    verdict = validate_mysql_sql(cached_sql, input.tenant_id)
+                    if not verdict.ok:
+                        raise RuntimeError(f"cached SQL rejected: {verdict.reason}")
+                    final_sql = enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
+                    result = await run_readonly_mysql(
+                        final_sql,
+                        RunMysqlContext(timeout_ms=settings.statement_timeout_ms),
+                    )
+                    engine = "mysql"
+                else:
+                    verdict = validate_sql(cached_sql)
+                    if not verdict.ok:
+                        raise RuntimeError(f"cached SQL rejected: {verdict.reason}")
+                    final_sql = rewrite_eq_to_ilike_on_text_cols(
+                        enforce_limit(verdict.sql, max_rows=settings.row_limit)
+                    )
+                    result = await run_readonly(
+                        final_sql,
+                        RunContext(
+                            tenant_id=input.tenant_id,
+                            states=input.states,
+                            timeout_ms=settings.statement_timeout_ms,
+                        ),
+                    )
+                    engine = "pg"
+                clean = _drop_blank_dimension_rows(result.rows)
+                ans = format_answer(input.question, final_sql, clean)
+                terminal = is_terminal_answer(input.question, clean)
+                return _log(
+                    ChatResult(
+                        kind="chat" if terminal else "result",
+                        message=ans,
+                        sql=None if terminal else final_sql,
+                        rows=[] if terminal else clean,
+                        row_count=0 if terminal else len(clean),
+                    ),
+                    f"cache:{hit.id}",
+                    engine=engine,
+                    sql_final=final_sql,
+                )
+            except Exception as exc:
+                log.warning("[chat] fast-path execution failed, falling through: %s", exc)
+        elif hit is not None:
+            log.info(
+                "[chat] fast-path nearest=%s d=%.4f is templated — falling through",
+                hit.id, hit.distance,
+            )
+
+    log.info("[chat] ▶ stage=rag-retrieval start")
+    t0 = _time.perf_counter()
     messages: list[ChatMessage] = await build_messages(
         question,
         brand_name=input.brand_name,
@@ -438,12 +550,18 @@ async def run_chat(input: ChatInput) -> ChatResult:
         tenant_id=input.tenant_id,
         states=input.states,
     )
+    log.info("[chat] ✔ stage=rag-retrieval done in %.2fs (messages=%d)",
+             _time.perf_counter() - t0, len(messages))
     last_sql: str | None = None
     last_error = "The query could not be generated or executed."
 
     for attempt in range(1, MAX_ATTEMPTS + 1):
+        log.info("[chat] ▶ stage=llm-call attempt=%d start", attempt)
+        t_llm = _time.perf_counter()
         try:
             reply = await chat_complete(messages)
+            log.info("[chat] ✔ stage=llm-call attempt=%d done in %.2fs (chars=%d)",
+                     attempt, _time.perf_counter() - t_llm, len(reply or ""))
         except LLMError as exc:
             log.error("[chat] LLM error: %s", exc)
             return _log(
@@ -489,6 +607,20 @@ async def run_chat(input: ChatInput) -> ChatResult:
             messages.append(build_retry_message(sql, f"Rejected by safety check: {route.reason}"))
             continue
 
+        # HARD ROUTING GUARD — block PG when the question carries no market
+        # signal. Feed the failure back so the model re-emits using rhize_*.
+        if route.engine == "pg" and not _has_market_signal(input.question):
+            last_sql = sql
+            last_error = (
+                "Routed to PostgreSQL market tables, but the question carries no "
+                "market/competitor/industry signal. Re-emit using the user's own "
+                "MySQL `rhize_*` tables only."
+            )
+            log.info("[chat] rejecting PG route — no market signal in question")
+            messages.append(ChatMessage(role="assistant", content=sql))
+            messages.append(build_retry_message(sql, last_error))
+            continue
+
         if route.engine == "pg":
             verdict = validate_sql(sql)
             if not verdict.ok:
@@ -516,6 +648,8 @@ async def run_chat(input: ChatInput) -> ChatResult:
         log.info("[chat] engine:   %s", route.engine)
         log.info("[chat] SQL: %s", re.sub(r"\s+", " ", final_sql)[:500])
 
+        log.info("[chat] ▶ stage=db-exec engine=%s start", route.engine)
+        t_db = _time.perf_counter()
         try:
             if route.engine == "pg":
                 result = await run_readonly(
@@ -531,6 +665,8 @@ async def run_chat(input: ChatInput) -> ChatResult:
                     final_sql,
                     RunMysqlContext(timeout_ms=settings.statement_timeout_ms),
                 )
+            log.info("[chat] ✔ stage=db-exec engine=%s done in %.2fs (rows=%d)",
+                     route.engine, _time.perf_counter() - t_db, result.row_count)
         except Exception as exc:
             msg = str(exc)
             if _INFRA_ERROR_RX.search(msg):
@@ -554,12 +690,15 @@ async def run_chat(input: ChatInput) -> ChatResult:
 
         clean = _drop_blank_dimension_rows(result.rows)
         log.info("[chat] rows: %d returned", len(clean))
+        ans = format_answer(input.question, final_sql, clean)
+        terminal = is_terminal_answer(input.question, clean)
         return _log(
             ChatResult(
-                kind="result",
-                sql=final_sql,
-                rows=clean,
-                row_count=len(clean),
+                kind="chat" if terminal else "result",
+                message=ans,
+                sql=None if terminal else final_sql,
+                rows=[] if terminal else clean,
+                row_count=0 if terminal else len(clean),
             ),
             "none",
             engine=route.engine,

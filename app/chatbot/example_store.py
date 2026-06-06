@@ -25,6 +25,7 @@ import re
 
 from app.chatbot.embed_client import embed_text, to_pgvector_literal
 from app.chatbot.readonly_db import get_pool
+from app.chatbot._perf_cache import VectorSnapshot
 from app.config import get_settings
 
 log = logging.getLogger(__name__)
@@ -62,6 +63,30 @@ class ExampleRetrievalError(RuntimeError):
     pass
 
 
+# ── In-memory snapshot of chatbot_example_embeddings ────────────────────────
+
+
+class _ExampleSnapshot(VectorSnapshot):
+    def _row_to_payload(self, raw):  # type: ignore[override]
+        return {
+            "id": raw["id"],
+            "question": raw["question"],
+            "sql": raw["sql"],
+            "refusal": raw["refusal"],
+            "expected_kind": raw["expected_kind"],
+        }
+
+
+_SNAPSHOT = _ExampleSnapshot(
+    table_name="chatbot_example_embeddings",
+    select_sql=(
+        "SELECT id, question, sql, refusal, expected_kind, embedding "
+        "FROM chatbot_example_embeddings"
+    ),
+    watermark_column="created_at",
+)
+
+
 async def retrieve_examples(question: str, k: int) -> list[ExampleHit]:
     """Return the top-k examples nearest the question, filtered by the cosine
     distance threshold in config. Raises if zero pass the threshold so the
@@ -71,37 +96,22 @@ async def retrieve_examples(question: str, k: int) -> list[ExampleHit]:
     threshold = settings.embed_distance_threshold
 
     vec = await embed_text(question)
-    lit = to_pgvector_literal(vec)
-
-    pool = await get_pool()
-    async with pool.acquire() as conn:
-        rows = await conn.fetch(
-            """
-            SELECT id, question, sql, refusal, expected_kind,
-                   (embedding <=> $1::vector)::float8 AS distance
-              FROM chatbot_example_embeddings
-             ORDER BY embedding <=> $1::vector
-             LIMIT $2
-            """,
-            lit,
-            k * 2,  # oversample, then filter
-        )
-
-    if not rows:
+    knn_hits = await _SNAPSHOT.knn(vec, k=k * 2)  # oversample, then filter
+    if not knn_hits:
         raise ExampleRetrievalError(
             "chatbot_example_embeddings is empty — run scripts/embed_examples.py"
         )
 
     hits = [
         ExampleHit(
-            id=r["id"],
-            question=r["question"],
-            sql=r["sql"],
-            refusal=r["refusal"],
-            expected_kind=r["expected_kind"],
-            distance=r["distance"],
+            id=p["id"],
+            question=p["question"],
+            sql=p["sql"],
+            refusal=p["refusal"],
+            expected_kind=p["expected_kind"],
+            distance=d,
         )
-        for r in rows
+        for (p, d) in knn_hits
     ]
 
     filtered = [h for h in hits if h.distance <= threshold]

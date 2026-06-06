@@ -1,20 +1,13 @@
 {
-  "_comment": "Curated schema docs for the chatbot's schema-RAG. Each entry is embedded once at ingest, then retrieved by KNN at request time and injected into the prompt. `restrictions` are merged into the always-on rules block AND surfaced alongside the retrieved chunk so the model sees them in context.",
+  "_comment": "Auto-generated from data/llm_optimized_schema_spec.md by scripts/build_schema_definitions.py. Do not hand-edit — edit the spec md and regenerate.",
   "dialect": "mixed",
   "items": [
     {
       "id": "table:complete_market_scrapper_dataset",
       "kind": "table",
       "table_name": "complete_market_scrapper_dataset",
-      "definition": "Base fact table: one row per (date, state, company, product, unit). Scraped market/competitor listings. RLS-filtered by state. Use this table only for SKU-level detail (product_name, price, THC, flag, days_on_shelf). For brand/company/category aggregates, use chatbot_mv_market_daily — it's ~480x smaller per day.",
-      "restrictions": "Never filter by state manually — RLS does it. Never write to this table. SCOPE: market/competitor data only, NOT own-business data."
-    },
-    {
-      "id": "table:chatbot_mv_market_daily",
-      "kind": "view",
-      "table_name": "chatbot_mv_market_daily",
-      "definition": "Security-barrier view over the daily materialized view. Pre-aggregated per (date, brand, company, category, state). Columns: date (DATE), category, brand, company, revenue (NUMERIC), quantity, sku_count, state. Use this for top brands/companies/categories, market share, category mix, multi-day trends.",
-      "restrictions": "Prefer this view over the base table whenever the answer aggregates by brand/company/category. No SKU-level fields here."
+      "definition": "Purpose: Raw scraped competitor/market listings Data grain: One row per (date, state, company, product, unit) per scrape run Use when: SKU-level detail needed: `product_name`, `price`, `thc`, `flag`, `days_on_shelf` Avoid when: Aggregating by brand/company/category — use `chatbot_mv_market_daily` (~480x smaller)",
+      "restrictions": "RLS: State is auto-filtered. Never add `WHERE state = ...`"
     },
     {
       "id": "col:complete_market_scrapper_dataset.date",
@@ -22,8 +15,8 @@
       "table_name": "complete_market_scrapper_dataset",
       "column_name": "date",
       "data_type": "TEXT",
-      "definition": "ISO YYYY-MM-DD string. Sorts chronologically as text. Latest snapshot: WHERE date = (SELECT MAX(date) FROM complete_market_scrapper_dataset). Last N days: WHERE date >= to_char(CURRENT_DATE - INTERVAL 'N days', 'YYYY-MM-DD').",
-      "restrictions": "Text not DATE — don't pass directly to date arithmetic; use to_char or cast."
+      "definition": "ISO `YYYY-MM-DD` string",
+      "restrictions": "Text, not DATE. Use `to_char()` for date arithmetic. Latest: `WHERE date = (SELECT MAX(date) FROM complete_market_scrapper_dataset)`. Last N days: `WHERE date >= to_char(CURRENT_DATE - INTERVAL 'N days', 'YYYY-MM-DD')`"
     },
     {
       "id": "col:complete_market_scrapper_dataset.state",
@@ -31,8 +24,8 @@
       "table_name": "complete_market_scrapper_dataset",
       "column_name": "state",
       "data_type": "VARCHAR",
-      "definition": "US state code (VT, MA, etc).",
-      "restrictions": "RLS-scoped automatically. Never add WHERE state = ... manually."
+      "definition": "US state code (VT, MA, etc.)",
+      "restrictions": "RLS-scoped. Never filter manually"
     },
     {
       "id": "col:complete_market_scrapper_dataset.brand",
@@ -40,8 +33,8 @@
       "table_name": "complete_market_scrapper_dataset",
       "column_name": "brand",
       "data_type": "TEXT",
-      "definition": "Brand name (free-text). Use AND brand IS NOT NULL AND brand <> '' when grouping by brand to avoid blank buckets.",
-      "restrictions": "Exclude blanks for any GROUP BY brand."
+      "definition": "Brand name (free-text)",
+      "restrictions": "Always filter: `brand IS NOT NULL AND brand <> ''` when grouping"
     },
     {
       "id": "col:complete_market_scrapper_dataset.company",
@@ -49,8 +42,8 @@
       "table_name": "complete_market_scrapper_dataset",
       "column_name": "company",
       "data_type": "TEXT",
-      "definition": "Retailer/dispensary name (free-text). Same blank-filter rule as brand.",
-      "restrictions": "Exclude blanks for any GROUP BY company."
+      "definition": "Retailer/dispensary name",
+      "restrictions": "Always filter: `company IS NOT NULL AND company <> ''` when grouping"
     },
     {
       "id": "col:complete_market_scrapper_dataset.category",
@@ -58,8 +51,8 @@
       "table_name": "complete_market_scrapper_dataset",
       "column_name": "category",
       "data_type": "TEXT",
-      "definition": "58 raw variants. Always normalize with the CASE block: WHEN lower(category) LIKE '%flower%' OR lower(category) IN ('pre-packed flowers','pre-packed-flower') THEN 'Flower' WHEN lower(category) LIKE '%pre%roll%' OR lower(category) IN ('preroll','prerolls') THEN 'PreRoll' WHEN lower(category) LIKE '%vape%' OR lower(category) IN ('cartridge','carts','vapecarts','vape-carts','vape pens') THEN 'Vape' WHEN lower(category) LIKE '%concentrate%' THEN 'Concentrate' WHEN lower(category) LIKE '%edible%' THEN 'Edible' ELSE 'Other' END AS category_norm",
-      "restrictions": "NEVER write category = 'Flower'. Always normalize via the CASE above."
+      "definition": "Raw product category — 58 variants",
+      "restrictions": "ALWAYS normalize. Preferred: `JOIN category_map ON lower(category) = raw_lower`. Fallback: inline CASE block (see §4). NEVER write `category = 'Flower'`"
     },
     {
       "id": "col:complete_market_scrapper_dataset.product_name",
@@ -67,8 +60,8 @@
       "table_name": "complete_market_scrapper_dataset",
       "column_name": "product_name",
       "data_type": "TEXT",
-      "definition": "SKU display name. Use the base table (not the view) when product_name is needed.",
-      "restrictions": "Exclude blanks when ranking."
+      "definition": "SKU display name",
+      "restrictions": "Filter blanks when ranking. Only available in base table (not in view)"
     },
     {
       "id": "col:complete_market_scrapper_dataset.unit",
@@ -76,8 +69,8 @@
       "table_name": "complete_market_scrapper_dataset",
       "column_name": "unit",
       "data_type": "TEXT",
-      "definition": "Pack size token: 1g, 3.5g (eighth), 7g, 28g, 1pk.",
-      "restrictions": ""
+      "definition": "Pack size: `1g`, `3.5g`, `7g`, `28g`, `1pk`",
+      "restrictions": "Use for weight/size filtering"
     },
     {
       "id": "col:complete_market_scrapper_dataset.price",
@@ -85,8 +78,8 @@
       "table_name": "complete_market_scrapper_dataset",
       "column_name": "price",
       "data_type": "TEXT",
-      "definition": "Raw displayed price ($63.00 or 45). Inconsistent — prefer price_num.",
-      "restrictions": "Use COALESCE(price_num, NULLIF(regexp_replace(price,'[^0-9.]','','g'),'')::numeric) AS price_n for numeric work."
+      "definition": "Raw displayed price (`$63.00` or `45`)",
+      "restrictions": "Inconsistent format. Never use directly for math"
     },
     {
       "id": "col:complete_market_scrapper_dataset.price_num",
@@ -94,8 +87,8 @@
       "table_name": "complete_market_scrapper_dataset",
       "column_name": "price_num",
       "data_type": "DOUBLE PRECISION",
-      "definition": "Numeric price. ~15% NULL — always wrap in COALESCE(price_num, NULLIF(regexp_replace(price,'[^0-9.]','','g'),'')::numeric).",
-      "restrictions": "Filter > 0 before averaging."
+      "definition": "Cleaned numeric price",
+      "restrictions": "Always use: `COALESCE(price_num, NULLIF(regexp_replace(price,'[^0-9.]','','g'),'')::numeric)`. Filter `> 0` before averaging"
     },
     {
       "id": "col:complete_market_scrapper_dataset.thc",
@@ -103,8 +96,8 @@
       "table_name": "complete_market_scrapper_dataset",
       "column_name": "thc",
       "data_type": "TEXT",
-      "definition": "Noisy: 24%, 100mg, 'THC -', ''. Cast: CASE WHEN thc ~ '^[0-9]+(\\.[0-9]+)?%?$' THEN regexp_replace(thc,'[^0-9.]','','g')::numeric END AS thc_num, then filter thc_num BETWEEN 0 AND 100.",
-      "restrictions": "Always cast + range-filter before averaging."
+      "definition": "THC content — noisy (`24%`, `100mg`, `THC -`, `''`)",
+      "restrictions": "Must cast: `CASE WHEN thc ~ '^[0-9]+(\\.[0-9]+)?%?$' THEN regexp_replace(thc,'[^0-9.]','','g')::numeric END AS thc_num` then filter `thc_num BETWEEN 0 AND 100`"
     },
     {
       "id": "col:complete_market_scrapper_dataset.quantity",
@@ -112,8 +105,8 @@
       "table_name": "complete_market_scrapper_dataset",
       "column_name": "quantity",
       "data_type": "INTEGER",
-      "definition": "Units listed on the scrape day.",
-      "restrictions": ""
+      "definition": "Units listed on scrape day",
+      "restrictions": "Used in sell-through calculations"
     },
     {
       "id": "col:complete_market_scrapper_dataset.previous_quantity",
@@ -121,8 +114,8 @@
       "table_name": "complete_market_scrapper_dataset",
       "column_name": "previous_quantity",
       "data_type": "INTEGER",
-      "definition": "quantity from the previous scrape. Used to derive sell-through.",
-      "restrictions": ""
+      "definition": "Quantity from previous scrape",
+      "restrictions": "Used to derive sell-through delta"
     },
     {
       "id": "col:complete_market_scrapper_dataset.change",
@@ -130,8 +123,8 @@
       "table_name": "complete_market_scrapper_dataset",
       "column_name": "change",
       "data_type": "DOUBLE PRECISION",
-      "definition": "Pre-baked units sold (pack-size normalized). Use for sell-through.",
-      "restrictions": ""
+      "definition": "Pre-baked units sold (pack-size normalized)",
+      "restrictions": "Use for sell-through. Represents `quantity - previous_quantity`"
     },
     {
       "id": "col:complete_market_scrapper_dataset.revenue",
@@ -139,8 +132,8 @@
       "table_name": "complete_market_scrapper_dataset",
       "column_name": "revenue",
       "data_type": "DOUBLE PRECISION",
-      "definition": "price_num * |change|. Inferred market sell-through, NOT POS revenue.",
-      "restrictions": "Default ranking metric for top/best/biggest."
+      "definition": "`price_num ×",
+      "restrictions": "change"
     },
     {
       "id": "col:complete_market_scrapper_dataset.flag",
@@ -148,8 +141,8 @@
       "table_name": "complete_market_scrapper_dataset",
       "column_name": "flag",
       "data_type": "TEXT",
-      "definition": "added | no change | removed | NULL (15%). Use flag = 'added' / flag = 'removed' for new/dropped products.",
-      "restrictions": ""
+      "definition": "`added` / `no change` / `removed`",
+      "restrictions": "Use `flag = 'added'` for new products, `flag = 'removed'` for dropped"
     },
     {
       "id": "col:complete_market_scrapper_dataset.days_on_shelf",
@@ -157,8 +150,8 @@
       "table_name": "complete_market_scrapper_dataset",
       "column_name": "days_on_shelf",
       "data_type": "INTEGER",
-      "definition": "Days since first seen. 38% NULL — filter IS NOT NULL when sorting/aggregating. ASC = fastest moving; DESC = stale.",
-      "restrictions": "Always WHERE days_on_shelf IS NOT NULL when sorted/aggregated."
+      "definition": "Days since first seen",
+      "restrictions": "Always `WHERE days_on_shelf IS NOT NULL` when sorting/aggregating. ASC = fastest moving; DESC = stale"
     },
     {
       "id": "col:complete_market_scrapper_dataset.first_seen",
@@ -166,8 +159,8 @@
       "table_name": "complete_market_scrapper_dataset",
       "column_name": "first_seen",
       "data_type": "TIMESTAMP",
-      "definition": "First scrape timestamp for the SKU.",
-      "restrictions": ""
+      "definition": "First scrape timestamp for the SKU",
+      "restrictions": "Use for new product analysis"
     },
     {
       "id": "col:complete_market_scrapper_dataset.created_at",
@@ -175,8 +168,15 @@
       "table_name": "complete_market_scrapper_dataset",
       "column_name": "created_at",
       "data_type": "TIMESTAMP",
-      "definition": "Row ingestion timestamp.",
-      "restrictions": ""
+      "definition": "Row ingestion timestamp",
+      "restrictions": "Not the business date — use `date` for business logic"
+    },
+    {
+      "id": "table:chatbot_mv_market_daily",
+      "kind": "view",
+      "table_name": "chatbot_mv_market_daily",
+      "definition": "Purpose: Pre-aggregated market data — compressed daily snapshot Data grain: One row per (date, brand, company, category, state) per day Use when: Top brands, top companies, category mix, market share, multi-day trends, any GROUP BY brand/company/category Avoid when: SKU-level detail needed (`product_name`, individual `thc`, `flag`, `days_on_shelf`)",
+      "restrictions": "RLS: State is auto-filtered. Never add `WHERE state = ...`"
     },
     {
       "id": "col:chatbot_mv_market_daily.date",
@@ -184,8 +184,8 @@
       "table_name": "chatbot_mv_market_daily",
       "column_name": "date",
       "data_type": "DATE",
-      "definition": "Real DATE — date arithmetic works directly. WHERE date >= CURRENT_DATE - INTERVAL '14 days'.",
-      "restrictions": ""
+      "definition": "Real DATE type — arithmetic works directly",
+      "restrictions": "`WHERE date >= CURRENT_DATE - INTERVAL '14 days'`"
     },
     {
       "id": "col:chatbot_mv_market_daily.brand",
@@ -193,8 +193,8 @@
       "table_name": "chatbot_mv_market_daily",
       "column_name": "brand",
       "data_type": "TEXT",
-      "definition": "Brand grouping key. Exclude blanks: brand IS NOT NULL AND brand <> ''.",
-      "restrictions": "Exclude blanks for any GROUP BY brand."
+      "definition": "Brand grouping key",
+      "restrictions": "Filter: `brand IS NOT NULL AND brand <> ''`"
     },
     {
       "id": "col:chatbot_mv_market_daily.company",
@@ -202,8 +202,8 @@
       "table_name": "chatbot_mv_market_daily",
       "column_name": "company",
       "data_type": "TEXT",
-      "definition": "Retailer grouping key.",
-      "restrictions": "Exclude blanks for any GROUP BY company."
+      "definition": "Retailer grouping key",
+      "restrictions": "Filter: `company IS NOT NULL AND company <> ''`"
     },
     {
       "id": "col:chatbot_mv_market_daily.category",
@@ -211,8 +211,8 @@
       "table_name": "chatbot_mv_market_daily",
       "column_name": "category",
       "data_type": "TEXT",
-      "definition": "Same 58 raw variants — normalize via the standard CASE block.",
-      "restrictions": "NEVER write category = 'Flower'. Always normalize."
+      "definition": "Same 58 raw variants as base table",
+      "restrictions": "ALWAYS normalize via `category_map` join or CASE block"
     },
     {
       "id": "col:chatbot_mv_market_daily.revenue",
@@ -220,8 +220,8 @@
       "table_name": "chatbot_mv_market_daily",
       "column_name": "revenue",
       "data_type": "NUMERIC",
-      "definition": "Daily sum of base-table revenue per (brand, company, category, state).",
-      "restrictions": "Default ranking metric."
+      "definition": "Daily sum of base revenue per grouping",
+      "restrictions": "Default ranking metric for market aggregates"
     },
     {
       "id": "col:chatbot_mv_market_daily.quantity",
@@ -229,7 +229,7 @@
       "table_name": "chatbot_mv_market_daily",
       "column_name": "quantity",
       "data_type": "NUMERIC",
-      "definition": "Daily sum of base-table quantity.",
+      "definition": "Daily sum of base quantity",
       "restrictions": ""
     },
     {
@@ -237,9 +237,9 @@
       "kind": "column",
       "table_name": "chatbot_mv_market_daily",
       "column_name": "sku_count",
-      "data_type": "INTEGER",
-      "definition": "Distinct SKUs per grouping. Use SUM(sku_count) when grouping by brand for 'most products listed'.",
-      "restrictions": ""
+      "data_type": "SMALLINT",
+      "definition": "Distinct SKUs per grouping",
+      "restrictions": "Use `SUM(sku_count)` when grouping by brand for \"most products listed\""
     },
     {
       "id": "col:chatbot_mv_market_daily.state",
@@ -247,86 +247,48 @@
       "table_name": "chatbot_mv_market_daily",
       "column_name": "state",
       "data_type": "TEXT",
-      "definition": "US state code. RLS-scoped.",
-      "restrictions": "Never filter by state manually."
+      "definition": "US state code",
+      "restrictions": "RLS-scoped. Never filter manually"
+    },
+    {
+      "id": "table:category_map",
+      "kind": "table",
+      "table_name": "category_map",
+      "definition": "Purpose: Maps raw category strings to normalized category labels Data grain: One row per raw category variant Use when: Normalizing `category` in market tables — preferred over inline CASE block",
+      "restrictions": ""
+    },
+    {
+      "id": "col:category_map.raw_lower",
+      "kind": "column",
+      "table_name": "category_map",
+      "column_name": "raw_lower",
+      "data_type": "TEXT",
+      "definition": "Lowercased raw category string",
+      "restrictions": "Join: `lower(category) = raw_lower`"
+    },
+    {
+      "id": "col:category_map.category_norm",
+      "kind": "column",
+      "table_name": "category_map",
+      "column_name": "category_norm",
+      "data_type": "TEXT",
+      "definition": "Normalized label: `Flower`, `PreRoll`, `Vape`, `Concentrate`, `Edible`, `Other`",
+      "restrictions": "Use this as the display/group-by value"
     },
     {
       "id": "table:rhize_orders",
       "kind": "table",
       "table_name": "rhize_orders",
-      "definition": "MySQL tenant ops table — one row per order line item. Columns include date (DATETIME), customerName, productName, qty, unitPrice, subtotal, status ('Completed'|'Pending'|'Cancelled'), openBalance, brand_id, tenantid. Use for: open orders, completed orders, customer revenue, sales by product. The user's OWN orders.",
-      "restrictions": "Tenant predicate is auto-injected — never write tenantid yourself. Do NOT scope by brand_id (collides cross-tenant). Use ANSI single-quotes for strings."
+      "definition": "Purpose: User's own product order history Data grain: One row per order line item Use when: Own orders, customer revenue, sales by product, open balances, AR",
+      "restrictions": "`tenantid` (INT) auto-injected by middleware"
     },
     {
-      "id": "table:rhize_live_inventory",
-      "kind": "table",
-      "table_name": "rhize_live_inventory",
-      "definition": "MySQL tenant ops table — current on-hand inventory snapshot. One row per (productName, tenant). Columns: productName, strain, productType, lotNumber, current_qty, pending, remaining, lbs, updatedAt, tenantid. Use for: low stock, what's in stock, on-hand units by product.",
-      "restrictions": "Tenant predicate is auto-injected. Latest snapshot only — no history."
-    },
-    {
-      "id": "table:rhize_product_lots",
-      "kind": "table",
-      "table_name": "rhize_product_lots",
-      "definition": "MySQL tenant ops table — lot tracking. One row per (lotNumber, tenant). Columns: strain, lotNumber, thc, tac, terps, expirationDate, internalLotId, ccbLotNumber, tenantid. Use for: THC by strain, expiring lots, lot metadata.",
-      "restrictions": "Tenant predicate is auto-injected."
-    },
-    {
-      "id": "table:rhize_brands",
-      "kind": "table",
-      "table_name": "rhize_brands",
-      "definition": "MySQL tenant brand registry. Columns: id (cuid), name, isRhize (tinyint — 1 = the user's OWN brand, 0 = competitor brand in their catalog), createdAt, tenantid. Use for: the tenant's own brand (isRhize=1), brand catalog list. Unique on (tenantid, name).",
-      "restrictions": "Tenant predicate is auto-injected. For the user's OWN brand identity filter `WHERE isRhize = 1`."
-    },
-    {
-      "id": "table:rhize_stores",
-      "kind": "table",
-      "table_name": "rhize_stores",
-      "definition": "MySQL tenant store registry — retail stores the tenant sells to. Columns: name, slug, licenseNumber, address, city, phone, contactName, isPartner (tinyint — 1 = partner agreement), tier, tenantid. Use for: partner stores, retail accounts, store directory.",
-      "restrictions": "Tenant predicate is auto-injected."
-    },
-    {
-      "id": "table:rhize_partner_stores",
-      "kind": "table",
-      "table_name": "rhize_partner_stores",
-      "definition": "MySQL tenant partner store roster (minimal). Columns: customer_name, created_at, updated_at, tenantid. Use for: partner customer list.",
-      "restrictions": "Tenant predicate is auto-injected."
-    },
-    {
-      "id": "table:rhize_strain_info",
-      "kind": "table",
-      "table_name": "rhize_strain_info",
-      "definition": "MySQL tenant strain metadata. Columns: strain, effectTag (RELAX, ENERGIZE, etc), genetics1, genetics2, breeder, flavor1/2/3, tenantid. Use for: strain genetics, flavor profile, effect tags.",
-      "restrictions": "Tenant predicate is auto-injected."
-    },
-    {
-      "id": "table:rhize_sales_actions",
-      "kind": "table",
-      "table_name": "rhize_sales_actions",
-      "definition": "MySQL tenant CRM action queue. Columns: customerName, category (MARKET, OUTREACH, etc), priority (int, 1=highest), description, status (New, In Progress, Done), notes, offerSent, lastUpdated, tenantid. Use for: open sales actions, follow-ups, CRM queue.",
-      "restrictions": "Tenant predicate is auto-injected."
-    },
-    {
-      "id": "table:rhize_dataset_main",
-      "kind": "table",
-      "table_name": "rhize_dataset_main",
-      "definition": "MySQL tenant sales aggregate table — the tenant's OWN sales / revenue data. Legacy: all numeric columns stored as TEXT — must CAST(col AS DECIMAL(10,2)) for math. Columns: Company_Name, Product_Name, Category, Type, Days, Flag (Added/Removed/No Change), Unit, Price, Discount_Price_Data, `Today's_Quantity_Total`, `1d`, `3d`, `7d`, `14d`, THC, SKU, Change, Revenue, date (TEXT YYYY-MM-DD), tenantid, brand_id. Use for: 'my revenue', 'my sales', daily totals, top products by tenant.",
-      "restrictions": "Tenant predicate is auto-injected. Backtick digit-leading columns (`1d`, `3d`, `7d`, `14d`, `Today's_Quantity_Total`). Cast Price / Revenue to DECIMAL for math. `date` is TEXT — compare lexicographically or DATE_FORMAT a date-arithmetic expression."
-    },
-    {
-      "id": "table:rhize_dataset_store",
-      "kind": "table",
-      "table_name": "rhize_dataset_store",
-      "definition": "MySQL tenant per-store data (slimmer than dataset_main). Columns: date (TEXT), Product_Name, Category, Type, Company_Name (store), SKU, tenantid, brand_id. Use for: per-store breakdown of the tenant's products.",
-      "restrictions": "Tenant predicate is auto-injected. `date` is TEXT YYYY-MM-DD."
-    },
-    {
-      "id": "col:rhize_orders.status",
+      "id": "col:rhize_orders.id",
       "kind": "column",
       "table_name": "rhize_orders",
-      "column_name": "status",
-      "data_type": "VARCHAR",
-      "definition": "Order status: 'Completed', 'Pending', 'Cancelled'. Common filters: WHERE status = 'Completed' (revenue), WHERE status <> 'Completed' (open).",
+      "column_name": "id",
+      "data_type": "VARCHAR(36)",
+      "definition": "Order line primary key (cuid)",
       "restrictions": ""
     },
     {
@@ -335,34 +297,52 @@
       "table_name": "rhize_orders",
       "column_name": "date",
       "data_type": "DATETIME",
-      "definition": "Order date. Compare directly to CURRENT_DATE / DATE_SUB(...). Last 30 days: WHERE date >= DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY).",
-      "restrictions": ""
+      "definition": "Order date",
+      "restrictions": "Direct MySQL date arithmetic: `WHERE date >= DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY)`"
+    },
+    {
+      "id": "col:rhize_orders.orderNumber",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "orderNumber",
+      "data_type": "INT",
+      "definition": "Sequential order number",
+      "restrictions": "Use for grouping all lines of one order"
+    },
+    {
+      "id": "col:rhize_orders.storeId",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "storeId",
+      "data_type": "VARCHAR(36)",
+      "definition": "Store reference ID",
+      "restrictions": "Join to `rhize_stores.id` if needed"
     },
     {
       "id": "col:rhize_orders.customerName",
       "kind": "column",
       "table_name": "rhize_orders",
       "column_name": "customerName",
-      "data_type": "VARCHAR",
-      "definition": "Retail store name on the order. Use lower(customerName) LIKE lower('%X%') for case-insensitive partial match. Group by customerName for top-customers-by-revenue queries.",
+      "data_type": "VARCHAR(255)",
+      "definition": "Retail store name on the order",
+      "restrictions": "Use `lower(customerName) LIKE lower('%X%')` for partial match. Group by for top customers"
+    },
+    {
+      "id": "col:rhize_orders.productName",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "productName",
+      "data_type": "VARCHAR(500)",
+      "definition": "Product ordered",
       "restrictions": ""
     },
     {
-      "id": "col:rhize_orders.subtotal",
+      "id": "col:rhize_orders.productType",
       "kind": "column",
       "table_name": "rhize_orders",
-      "column_name": "subtotal",
-      "data_type": "DOUBLE",
-      "definition": "Line revenue (qty × unitPrice). SUM(subtotal) for total revenue. Combine with WHERE status = 'Completed' for realized revenue.",
-      "restrictions": ""
-    },
-    {
-      "id": "col:rhize_orders.openBalance",
-      "kind": "column",
-      "table_name": "rhize_orders",
-      "column_name": "openBalance",
-      "data_type": "DOUBLE",
-      "definition": "Unpaid balance per line. SUM(openBalance) for total AR. Usually filter status <> 'Completed' for outstanding.",
+      "column_name": "productType",
+      "data_type": "VARCHAR(255)",
+      "definition": "Product category type (Cart, Preroll, etc.)",
       "restrictions": ""
     },
     {
@@ -371,16 +351,140 @@
       "table_name": "rhize_orders",
       "column_name": "qty",
       "data_type": "DOUBLE",
-      "definition": "Units sold on this line.",
+      "definition": "Units sold on this line",
       "restrictions": ""
     },
     {
-      "id": "col:rhize_live_inventory.current_qty",
+      "id": "col:rhize_orders.variant",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "variant",
+      "data_type": "VARCHAR(100)",
+      "definition": "Pack size variant (e.g. `0.5g`, `1g`)",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_orders.lotNumber",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "lotNumber",
+      "data_type": "VARCHAR(100)",
+      "definition": "Lot reference",
+      "restrictions": "Can join to `rhize_product_lots.lotNumber`"
+    },
+    {
+      "id": "col:rhize_orders.unitPrice",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "unitPrice",
+      "data_type": "DOUBLE",
+      "definition": "Per-unit price",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_orders.subtotal",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "subtotal",
+      "data_type": "DOUBLE",
+      "definition": "Line revenue (`qty × unitPrice`)",
+      "restrictions": "`SUM(subtotal)` for total revenue. Combine `WHERE status = 'Completed'` for realized revenue"
+    },
+    {
+      "id": "col:rhize_orders.status",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "status",
+      "data_type": "VARCHAR(50)",
+      "definition": "`'Completed'` / `'Pending'` / `'Cancelled'`",
+      "restrictions": "Always filter status for revenue vs. open orders"
+    },
+    {
+      "id": "col:rhize_orders.deliveryDate",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "deliveryDate",
+      "data_type": "DATETIME",
+      "definition": "Delivery date",
+      "restrictions": "Filter for delivery timeline queries"
+    },
+    {
+      "id": "col:rhize_orders.paymentType",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "paymentType",
+      "data_type": "VARCHAR(100)",
+      "definition": "Payment method",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_orders.openBalance",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "openBalance",
+      "data_type": "DOUBLE",
+      "definition": "Unpaid balance per line",
+      "restrictions": "`SUM(openBalance)` for total AR. Filter `status <> 'Completed'` for outstanding"
+    },
+    {
+      "id": "col:rhize_orders.updatedAt",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "updatedAt",
+      "data_type": "TIMESTAMP",
+      "definition": "Last update timestamp",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_orders.uid",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "uid",
+      "data_type": "VARCHAR(100)",
+      "definition": "Short unique display ID (e.g. `C6OEGT`)",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_orders.createdAt",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "createdAt",
+      "data_type": "DATETIME",
+      "definition": "Record creation timestamp",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_orders.tenantid",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "tenantid",
+      "data_type": "INT",
+      "definition": "Tenant identifier",
+      "restrictions": "Auto-injected. Never write in query"
+    },
+    {
+      "id": "col:rhize_orders.brand_id",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "brand_id",
+      "data_type": "VARCHAR(36)",
+      "definition": "Brand reference",
+      "restrictions": "Do NOT scope by `brand_id` — collides cross-tenant"
+    },
+    {
+      "id": "table:rhize_live_inventory",
+      "kind": "table",
+      "table_name": "rhize_live_inventory",
+      "definition": "Purpose: Current on-hand inventory snapshot Data grain: One row per (productName, tenant) Use when: Low stock queries, what's in stock, on-hand units by product",
+      "restrictions": "`tenantid` (INT) auto-injected"
+    },
+    {
+      "id": "col:rhize_live_inventory.id",
       "kind": "column",
       "table_name": "rhize_live_inventory",
-      "column_name": "current_qty",
-      "data_type": "DOUBLE",
-      "definition": "On-hand units. Low stock: WHERE current_qty < N. ORDER BY current_qty ASC.",
+      "column_name": "id",
+      "data_type": "VARCHAR(36)",
+      "definition": "Inventory row primary key",
       "restrictions": ""
     },
     {
@@ -388,8 +492,53 @@
       "kind": "column",
       "table_name": "rhize_live_inventory",
       "column_name": "productName",
-      "data_type": "VARCHAR",
-      "definition": "Product name. Unique per (productName, tenant).",
+      "data_type": "VARCHAR(500)",
+      "definition": "Product name",
+      "restrictions": "Unique per (productName, tenant)"
+    },
+    {
+      "id": "col:rhize_live_inventory.strain",
+      "kind": "column",
+      "table_name": "rhize_live_inventory",
+      "column_name": "strain",
+      "data_type": "VARCHAR(255)",
+      "definition": "Strain name",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_live_inventory.productType",
+      "kind": "column",
+      "table_name": "rhize_live_inventory",
+      "column_name": "productType",
+      "data_type": "VARCHAR(255)",
+      "definition": "Product type (Trim, Flower Bulk, Waste, etc.)",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_live_inventory.lotNumber",
+      "kind": "column",
+      "table_name": "rhize_live_inventory",
+      "column_name": "lotNumber",
+      "data_type": "VARCHAR(100)",
+      "definition": "Lot number reference",
+      "restrictions": "Join to `rhize_product_lots.lotNumber`"
+    },
+    {
+      "id": "col:rhize_live_inventory.current_qty",
+      "kind": "column",
+      "table_name": "rhize_live_inventory",
+      "column_name": "current_qty",
+      "data_type": "DOUBLE",
+      "definition": "On-hand units",
+      "restrictions": "Low stock: `WHERE current_qty < N`. Order `ASC` for lowest first"
+    },
+    {
+      "id": "col:rhize_live_inventory.pending",
+      "kind": "column",
+      "table_name": "rhize_live_inventory",
+      "column_name": "pending",
+      "data_type": "DOUBLE",
+      "definition": "Reserved/pending units",
       "restrictions": ""
     },
     {
@@ -398,7 +547,104 @@
       "table_name": "rhize_live_inventory",
       "column_name": "remaining",
       "data_type": "DOUBLE",
-      "definition": "current_qty - pending. Available-to-sell units.",
+      "definition": "Available-to-sell (`current_qty - pending`)",
+      "restrictions": "Always use `remaining` not `current_qty` for sellable stock"
+    },
+    {
+      "id": "col:rhize_live_inventory.lbs",
+      "kind": "column",
+      "table_name": "rhize_live_inventory",
+      "column_name": "lbs",
+      "data_type": "DOUBLE",
+      "definition": "Weight in pounds",
+      "restrictions": "Often NULL — check before using"
+    },
+    {
+      "id": "col:rhize_live_inventory.updatedAt",
+      "kind": "column",
+      "table_name": "rhize_live_inventory",
+      "column_name": "updatedAt",
+      "data_type": "DATETIME",
+      "definition": "Last snapshot update",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_live_inventory.tenantid",
+      "kind": "column",
+      "table_name": "rhize_live_inventory",
+      "column_name": "tenantid",
+      "data_type": "INT",
+      "definition": "Tenant identifier",
+      "restrictions": "Auto-injected"
+    },
+    {
+      "id": "col:rhize_live_inventory.brand_id",
+      "kind": "column",
+      "table_name": "rhize_live_inventory",
+      "column_name": "brand_id",
+      "data_type": "VARCHAR(36)",
+      "definition": "Brand reference",
+      "restrictions": ""
+    },
+    {
+      "id": "table:rhize_product_lots",
+      "kind": "table",
+      "table_name": "rhize_product_lots",
+      "definition": "Purpose: Lot tracking and lab result metadata Data grain: One row per (lotNumber, tenant) Use when: THC by strain, expiring lots, lot metadata, lab results",
+      "restrictions": "`tenantid` (INT) auto-injected"
+    },
+    {
+      "id": "col:rhize_product_lots.id",
+      "kind": "column",
+      "table_name": "rhize_product_lots",
+      "column_name": "id",
+      "data_type": "VARCHAR(36)",
+      "definition": "Lot primary key",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_product_lots.strain",
+      "kind": "column",
+      "table_name": "rhize_product_lots",
+      "column_name": "strain",
+      "data_type": "VARCHAR(255)",
+      "definition": "Strain name",
+      "restrictions": "Join to `rhize_strain_info.strain`. Group by for `AVG(thc)`"
+    },
+    {
+      "id": "col:rhize_product_lots.lotNumber",
+      "kind": "column",
+      "table_name": "rhize_product_lots",
+      "column_name": "lotNumber",
+      "data_type": "VARCHAR(255)",
+      "definition": "Lot identifier",
+      "restrictions": "Join key to `rhize_live_inventory.lotNumber`"
+    },
+    {
+      "id": "col:rhize_product_lots.productType",
+      "kind": "column",
+      "table_name": "rhize_product_lots",
+      "column_name": "productType",
+      "data_type": "VARCHAR(255)",
+      "definition": "Product type",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_product_lots.internalLotId",
+      "kind": "column",
+      "table_name": "rhize_product_lots",
+      "column_name": "internalLotId",
+      "data_type": "VARCHAR(100)",
+      "definition": "Internal lot reference",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_product_lots.ccbLotNumber",
+      "kind": "column",
+      "table_name": "rhize_product_lots",
+      "column_name": "ccbLotNumber",
+      "data_type": "VARCHAR(100)",
+      "definition": "Regulatory lot number",
       "restrictions": ""
     },
     {
@@ -407,7 +653,25 @@
       "table_name": "rhize_product_lots",
       "column_name": "thc",
       "data_type": "DOUBLE",
-      "definition": "THC percentage. Already numeric (no cast needed). NULL-safe: WHERE thc IS NOT NULL when averaging.",
+      "definition": "THC percentage — already numeric",
+      "restrictions": "Different from market `thc` (TEXT). Always `WHERE thc IS NOT NULL` when averaging. No cast needed"
+    },
+    {
+      "id": "col:rhize_product_lots.tac",
+      "kind": "column",
+      "table_name": "rhize_product_lots",
+      "column_name": "tac",
+      "data_type": "DOUBLE",
+      "definition": "Total active cannabinoids",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_product_lots.terps",
+      "kind": "column",
+      "table_name": "rhize_product_lots",
+      "column_name": "terps",
+      "data_type": "DOUBLE",
+      "definition": "Terpene percentage",
       "restrictions": ""
     },
     {
@@ -416,25 +680,59 @@
       "table_name": "rhize_product_lots",
       "column_name": "expirationDate",
       "data_type": "DATETIME",
-      "definition": "Lot expiry. Expiring soon: WHERE expirationDate BETWEEN CURRENT_DATE AND DATE_ADD(CURRENT_DATE, INTERVAL 30 DAY).",
-      "restrictions": ""
+      "definition": "Lot expiry date",
+      "restrictions": "Expiring soon: `WHERE expirationDate BETWEEN CURRENT_DATE AND DATE_ADD(CURRENT_DATE, INTERVAL 30 DAY)`"
     },
     {
-      "id": "col:rhize_product_lots.strain",
+      "id": "col:rhize_product_lots.createdAt",
       "kind": "column",
       "table_name": "rhize_product_lots",
-      "column_name": "strain",
-      "data_type": "VARCHAR",
-      "definition": "Strain name. Aggregates: AVG(thc) GROUP BY strain.",
+      "column_name": "createdAt",
+      "data_type": "DATETIME",
+      "definition": "Record creation timestamp",
       "restrictions": ""
     },
     {
-      "id": "col:rhize_brands.isRhize",
+      "id": "col:rhize_product_lots.updatedAt",
+      "kind": "column",
+      "table_name": "rhize_product_lots",
+      "column_name": "updatedAt",
+      "data_type": "DATETIME",
+      "definition": "Last update timestamp",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_product_lots.tenantid",
+      "kind": "column",
+      "table_name": "rhize_product_lots",
+      "column_name": "tenantid",
+      "data_type": "INT",
+      "definition": "Tenant identifier",
+      "restrictions": "Auto-injected"
+    },
+    {
+      "id": "col:rhize_product_lots.brand_id",
+      "kind": "column",
+      "table_name": "rhize_product_lots",
+      "column_name": "brand_id",
+      "data_type": "VARCHAR(36)",
+      "definition": "Brand reference",
+      "restrictions": ""
+    },
+    {
+      "id": "table:rhize_brands",
+      "kind": "table",
+      "table_name": "rhize_brands",
+      "definition": "Purpose: Brand registry — own brand + competitor catalog Data grain: One row per (tenantid, name) — unique Use when: Identifying own brand, listing brand catalog",
+      "restrictions": "`tenantid` (INT) auto-injected"
+    },
+    {
+      "id": "col:rhize_brands.id",
       "kind": "column",
       "table_name": "rhize_brands",
-      "column_name": "isRhize",
-      "data_type": "TINYINT",
-      "definition": "Flag: 1 = the user's OWN brand, 0 = competitor in their catalog. For 'my brand' / 'my own brand' questions filter WHERE isRhize = 1.",
+      "column_name": "id",
+      "data_type": "VARCHAR(36)",
+      "definition": "Brand primary key (cuid)",
       "restrictions": ""
     },
     {
@@ -442,35 +740,387 @@
       "kind": "column",
       "table_name": "rhize_brands",
       "column_name": "name",
-      "data_type": "VARCHAR",
-      "definition": "Brand name. Unique per (tenantid, name).",
+      "data_type": "VARCHAR(255)",
+      "definition": "Brand name",
+      "restrictions": "Unique per (tenantid, name)"
+    },
+    {
+      "id": "col:rhize_brands.isRhize",
+      "kind": "column",
+      "table_name": "rhize_brands",
+      "column_name": "isRhize",
+      "data_type": "TINYINT(1)",
+      "definition": "`1` = user's OWN brand, `0` = competitor brand in catalog",
+      "restrictions": "For \"my brand\" / \"own brand\" queries: `WHERE isRhize = 1`"
+    },
+    {
+      "id": "col:rhize_brands.createdAt",
+      "kind": "column",
+      "table_name": "rhize_brands",
+      "column_name": "createdAt",
+      "data_type": "DATETIME",
+      "definition": "Brand creation timestamp",
       "restrictions": ""
     },
     {
-      "id": "col:rhize_stores.isPartner",
+      "id": "col:rhize_brands.tenantid",
+      "kind": "column",
+      "table_name": "rhize_brands",
+      "column_name": "tenantid",
+      "data_type": "INT",
+      "definition": "Tenant identifier",
+      "restrictions": "Auto-injected"
+    },
+    {
+      "id": "table:rhize_stores",
+      "kind": "table",
+      "table_name": "rhize_stores",
+      "definition": "Purpose: Retail store / account registry Data grain: One row per store per tenant Use when: Partner stores, retail accounts, store directory",
+      "restrictions": "`tenantid` (INT) auto-injected"
+    },
+    {
+      "id": "col:rhize_stores.id",
       "kind": "column",
       "table_name": "rhize_stores",
-      "column_name": "isPartner",
-      "data_type": "TINYINT",
-      "definition": "Flag: 1 = partner store. For 'my partner stores' filter WHERE isPartner = 1.",
+      "column_name": "id",
+      "data_type": "VARCHAR(36)",
+      "definition": "Store primary key",
       "restrictions": ""
+    },
+    {
+      "id": "col:rhize_stores.slug",
+      "kind": "column",
+      "table_name": "rhize_stores",
+      "column_name": "slug",
+      "data_type": "VARCHAR(255)",
+      "definition": "URL slug",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_stores.name",
+      "kind": "column",
+      "table_name": "rhize_stores",
+      "column_name": "name",
+      "data_type": "VARCHAR(255)",
+      "definition": "Store name",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_stores.licenseNumber",
+      "kind": "column",
+      "table_name": "rhize_stores",
+      "column_name": "licenseNumber",
+      "data_type": "VARCHAR(255)",
+      "definition": "Regulatory license",
+      "restrictions": "Often NULL in data"
+    },
+    {
+      "id": "col:rhize_stores.address",
+      "kind": "column",
+      "table_name": "rhize_stores",
+      "column_name": "address",
+      "data_type": "VARCHAR(500)",
+      "definition": "Street address",
+      "restrictions": "Often NULL in data"
     },
     {
       "id": "col:rhize_stores.city",
       "kind": "column",
       "table_name": "rhize_stores",
       "column_name": "city",
-      "data_type": "VARCHAR",
-      "definition": "Store city.",
+      "data_type": "VARCHAR(255)",
+      "definition": "Store city",
       "restrictions": ""
     },
     {
-      "id": "col:rhize_sales_actions.status",
+      "id": "col:rhize_stores.phone",
+      "kind": "column",
+      "table_name": "rhize_stores",
+      "column_name": "phone",
+      "data_type": "VARCHAR(100)",
+      "definition": "Contact phone",
+      "restrictions": "Often NULL in data"
+    },
+    {
+      "id": "col:rhize_stores.contactName",
+      "kind": "column",
+      "table_name": "rhize_stores",
+      "column_name": "contactName",
+      "data_type": "VARCHAR(255)",
+      "definition": "Contact person",
+      "restrictions": "Often NULL in data"
+    },
+    {
+      "id": "col:rhize_stores.isPartner",
+      "kind": "column",
+      "table_name": "rhize_stores",
+      "column_name": "isPartner",
+      "data_type": "TINYINT(1)",
+      "definition": "`1` = partner store",
+      "restrictions": "For \"partner stores\": `WHERE isPartner = 1`"
+    },
+    {
+      "id": "col:rhize_stores.tier",
+      "kind": "column",
+      "table_name": "rhize_stores",
+      "column_name": "tier",
+      "data_type": "VARCHAR(10)",
+      "definition": "Account tier/level",
+      "restrictions": "Often NULL in data"
+    },
+    {
+      "id": "col:rhize_stores.createdAt",
+      "kind": "column",
+      "table_name": "rhize_stores",
+      "column_name": "createdAt",
+      "data_type": "DATETIME",
+      "definition": "Record creation timestamp",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_stores.updatedAt",
+      "kind": "column",
+      "table_name": "rhize_stores",
+      "column_name": "updatedAt",
+      "data_type": "DATETIME",
+      "definition": "Last update timestamp",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_stores.tenantid",
+      "kind": "column",
+      "table_name": "rhize_stores",
+      "column_name": "tenantid",
+      "data_type": "INT",
+      "definition": "Tenant identifier",
+      "restrictions": "Auto-injected"
+    },
+    {
+      "id": "col:rhize_stores.brand_id",
+      "kind": "column",
+      "table_name": "rhize_stores",
+      "column_name": "brand_id",
+      "data_type": "VARCHAR(36)",
+      "definition": "Brand reference",
+      "restrictions": ""
+    },
+    {
+      "id": "table:rhize_partner_stores",
+      "kind": "table",
+      "table_name": "rhize_partner_stores",
+      "definition": "Purpose: Partner store roster (minimal version) Data grain: One row per partner customer per tenant Use when: Simple partner customer name list only. For richer data use `rhize_stores WHERE isPartner = 1`",
+      "restrictions": "`tenantid` (INT) auto-injected"
+    },
+    {
+      "id": "col:rhize_partner_stores.id",
+      "kind": "column",
+      "table_name": "rhize_partner_stores",
+      "column_name": "id",
+      "data_type": "BIGINT UNSIGNED",
+      "definition": "Auto-increment primary key",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_partner_stores.customer_name",
+      "kind": "column",
+      "table_name": "rhize_partner_stores",
+      "column_name": "customer_name",
+      "data_type": "TEXT",
+      "definition": "Partner store name",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_partner_stores.created_at",
+      "kind": "column",
+      "table_name": "rhize_partner_stores",
+      "column_name": "created_at",
+      "data_type": "TIMESTAMP",
+      "definition": "Record creation",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_partner_stores.updated_at",
+      "kind": "column",
+      "table_name": "rhize_partner_stores",
+      "column_name": "updated_at",
+      "data_type": "TIMESTAMP",
+      "definition": "Last update",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_partner_stores.tenantid",
+      "kind": "column",
+      "table_name": "rhize_partner_stores",
+      "column_name": "tenantid",
+      "data_type": "INT",
+      "definition": "Tenant identifier",
+      "restrictions": "Auto-injected"
+    },
+    {
+      "id": "col:rhize_partner_stores.brand_id",
+      "kind": "column",
+      "table_name": "rhize_partner_stores",
+      "column_name": "brand_id",
+      "data_type": "VARCHAR(36)",
+      "definition": "Brand reference",
+      "restrictions": ""
+    },
+    {
+      "id": "table:rhize_strain_info",
+      "kind": "table",
+      "table_name": "rhize_strain_info",
+      "definition": "Purpose: Strain genetics and flavor metadata Data grain: One row per strain per tenant Use when: Strain genetics, flavor profiles, effect tags",
+      "restrictions": "`tenantid` (INT) auto-injected"
+    },
+    {
+      "id": "col:rhize_strain_info.id",
+      "kind": "column",
+      "table_name": "rhize_strain_info",
+      "column_name": "id",
+      "data_type": "VARCHAR(36)",
+      "definition": "Primary key",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_strain_info.strain",
+      "kind": "column",
+      "table_name": "rhize_strain_info",
+      "column_name": "strain",
+      "data_type": "VARCHAR(255)",
+      "definition": "Strain name — join key",
+      "restrictions": "Join to `rhize_product_lots.strain`, `rhize_live_inventory.strain`"
+    },
+    {
+      "id": "col:rhize_strain_info.effectTag",
+      "kind": "column",
+      "table_name": "rhize_strain_info",
+      "column_name": "effectTag",
+      "data_type": "VARCHAR(100)",
+      "definition": "Effect: `RELAX`, `ENERGIZE`, `HYBRID`, `HYBRID-Energy`",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_strain_info.genetics1",
+      "kind": "column",
+      "table_name": "rhize_strain_info",
+      "column_name": "genetics1",
+      "data_type": "VARCHAR(255)",
+      "definition": "Parent genetics 1",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_strain_info.genetics2",
+      "kind": "column",
+      "table_name": "rhize_strain_info",
+      "column_name": "genetics2",
+      "data_type": "VARCHAR(255)",
+      "definition": "Parent genetics 2",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_strain_info.breeder",
+      "kind": "column",
+      "table_name": "rhize_strain_info",
+      "column_name": "breeder",
+      "data_type": "VARCHAR(255)",
+      "definition": "Breeder name",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_strain_info.flavor1",
+      "kind": "column",
+      "table_name": "rhize_strain_info",
+      "column_name": "flavor1",
+      "data_type": "VARCHAR(100)",
+      "definition": "Primary flavor",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_strain_info.flavor2",
+      "kind": "column",
+      "table_name": "rhize_strain_info",
+      "column_name": "flavor2",
+      "data_type": "VARCHAR(100)",
+      "definition": "Secondary flavor",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_strain_info.flavor3",
+      "kind": "column",
+      "table_name": "rhize_strain_info",
+      "column_name": "flavor3",
+      "data_type": "VARCHAR(100)",
+      "definition": "Tertiary flavor",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_strain_info.createdAt",
+      "kind": "column",
+      "table_name": "rhize_strain_info",
+      "column_name": "createdAt",
+      "data_type": "DATETIME",
+      "definition": "Record creation timestamp",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_strain_info.updatedAt",
+      "kind": "column",
+      "table_name": "rhize_strain_info",
+      "column_name": "updatedAt",
+      "data_type": "DATETIME",
+      "definition": "Last update timestamp",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_strain_info.tenantid",
+      "kind": "column",
+      "table_name": "rhize_strain_info",
+      "column_name": "tenantid",
+      "data_type": "INT",
+      "definition": "Tenant identifier",
+      "restrictions": "Auto-injected"
+    },
+    {
+      "id": "col:rhize_strain_info.brand_id",
+      "kind": "column",
+      "table_name": "rhize_strain_info",
+      "column_name": "brand_id",
+      "data_type": "VARCHAR(36)",
+      "definition": "Brand reference",
+      "restrictions": ""
+    },
+    {
+      "id": "table:rhize_sales_actions",
+      "kind": "table",
+      "table_name": "rhize_sales_actions",
+      "definition": "Purpose: Sales action queue / CRM follow-up tasks Data grain: One row per sales action per tenant Use when: Open tasks, CRM queue, follow-ups, sales pipeline",
+      "restrictions": "`tenantid` (INT) auto-injected"
+    },
+    {
+      "id": "col:rhize_sales_actions.id",
       "kind": "column",
       "table_name": "rhize_sales_actions",
-      "column_name": "status",
-      "data_type": "VARCHAR",
-      "definition": "'New', 'In Progress', 'Done'. Open queue: WHERE status <> 'Done'.",
+      "column_name": "id",
+      "data_type": "VARCHAR(36)",
+      "definition": "Primary key",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_sales_actions.customerName",
+      "kind": "column",
+      "table_name": "rhize_sales_actions",
+      "column_name": "customerName",
+      "data_type": "VARCHAR(255)",
+      "definition": "Target customer/store name",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_sales_actions.category",
+      "kind": "column",
+      "table_name": "rhize_sales_actions",
+      "column_name": "category",
+      "data_type": "VARCHAR(100)",
+      "definition": "Action category: `MARKET`, `OUTREACH`, etc.",
       "restrictions": ""
     },
     {
@@ -479,35 +1129,141 @@
       "table_name": "rhize_sales_actions",
       "column_name": "priority",
       "data_type": "INT",
-      "definition": "1 = highest. ORDER BY priority ASC.",
+      "definition": "`1` = highest priority",
+      "restrictions": "`ORDER BY priority ASC` for most urgent first"
+    },
+    {
+      "id": "col:rhize_sales_actions.description",
+      "kind": "column",
+      "table_name": "rhize_sales_actions",
+      "column_name": "description",
+      "data_type": "TEXT",
+      "definition": "Action description",
       "restrictions": ""
     },
     {
-      "id": "col:rhize_dataset_main.Revenue",
+      "id": "col:rhize_sales_actions.status",
       "kind": "column",
-      "table_name": "rhize_dataset_main",
-      "column_name": "Revenue",
-      "data_type": "TEXT",
-      "definition": "Daily revenue, stored as TEXT. ALWAYS cast: CAST(Revenue AS DECIMAL(10,2)). SUM(CAST(Revenue AS DECIMAL(10,2))) for totals. This is the tenant's OWN revenue.",
-      "restrictions": "Cast to DECIMAL(10,2) for any math."
+      "table_name": "rhize_sales_actions",
+      "column_name": "status",
+      "data_type": "VARCHAR(50)",
+      "definition": "`'New'` / `'In Progress'` / `'Done'`",
+      "restrictions": "Open queue: `WHERE status <> 'Done'`"
     },
     {
-      "id": "col:rhize_dataset_main.Price",
+      "id": "col:rhize_sales_actions.notes",
       "kind": "column",
-      "table_name": "rhize_dataset_main",
-      "column_name": "Price",
+      "table_name": "rhize_sales_actions",
+      "column_name": "notes",
       "data_type": "TEXT",
-      "definition": "Unit price, stored as TEXT. Cast: CAST(Price AS DECIMAL(10,2)).",
-      "restrictions": "Cast to DECIMAL(10,2) for any math."
+      "definition": "Free-text notes",
+      "restrictions": ""
     },
     {
-      "id": "col:rhize_dataset_main.date",
+      "id": "col:rhize_sales_actions.offerSent",
+      "kind": "column",
+      "table_name": "rhize_sales_actions",
+      "column_name": "offerSent",
+      "data_type": "TINYINT(1)",
+      "definition": "Whether offer was sent (`0` = no)",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_sales_actions.lastUpdated",
+      "kind": "column",
+      "table_name": "rhize_sales_actions",
+      "column_name": "lastUpdated",
+      "data_type": "DATETIME",
+      "definition": "Last status update",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_sales_actions.createdAt",
+      "kind": "column",
+      "table_name": "rhize_sales_actions",
+      "column_name": "createdAt",
+      "data_type": "DATETIME",
+      "definition": "Record creation timestamp",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_sales_actions.tenantid",
+      "kind": "column",
+      "table_name": "rhize_sales_actions",
+      "column_name": "tenantid",
+      "data_type": "INT",
+      "definition": "Tenant identifier",
+      "restrictions": "Auto-injected"
+    },
+    {
+      "id": "col:rhize_sales_actions.brand_id",
+      "kind": "column",
+      "table_name": "rhize_sales_actions",
+      "column_name": "brand_id",
+      "data_type": "VARCHAR(36)",
+      "definition": "Brand reference",
+      "restrictions": ""
+    },
+    {
+      "id": "table:rhize_dataset_main",
+      "kind": "table",
+      "table_name": "rhize_dataset_main",
+      "definition": "Purpose: Tenant's OWN daily sales/revenue summary Data grain: One row per (Product_Name, date, tenant) approx. Use when: \"My revenue\", \"my sales\", daily totals, own top products, own product flags",
+      "restrictions": "`tenantid` (INT) auto-injected"
+    },
+    {
+      "id": "col:rhize_dataset_main.id",
       "kind": "column",
       "table_name": "rhize_dataset_main",
-      "column_name": "date",
+      "column_name": "id",
+      "data_type": "BIGINT",
+      "definition": "Row primary key",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_dataset_main.Company_Name",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "Company_Name",
       "data_type": "TEXT",
-      "definition": "YYYY-MM-DD string. Compare as text (sorts chronologically). Last 7 days: WHERE date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 7 DAY, '%Y-%m-%d'). Latest: WHERE date = (SELECT MAX(date) FROM rhize_dataset_main).",
-      "restrictions": "Text not DATE — use DATE_FORMAT for date arithmetic comparisons."
+      "definition": "Store/company name",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_dataset_main.Product_Name",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "Product_Name",
+      "data_type": "TEXT",
+      "definition": "Product name",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_dataset_main.Category",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "Category",
+      "data_type": "TEXT",
+      "definition": "Product category",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_dataset_main.Type",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "Type",
+      "data_type": "TEXT",
+      "definition": "Product type",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_dataset_main.Days",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "Days",
+      "data_type": "TEXT",
+      "definition": "Days metric",
+      "restrictions": "Cast before math"
     },
     {
       "id": "col:rhize_dataset_main.Flag",
@@ -515,7 +1271,555 @@
       "table_name": "rhize_dataset_main",
       "column_name": "Flag",
       "data_type": "TEXT",
-      "definition": "'Added', 'Removed', 'No Change'. Today's new SKUs: WHERE Flag = 'Added' AND date = (SELECT MAX(date)…).",
+      "definition": "`'Added'` / `'Removed'` / `'No Change'`",
+      "restrictions": "Today's new SKUs: `WHERE Flag = 'Added' AND date = (SELECT MAX(date)...)`"
+    },
+    {
+      "id": "col:rhize_dataset_main.Unit",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "Unit",
+      "data_type": "TEXT",
+      "definition": "Pack size",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_dataset_main.Price",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "Price",
+      "data_type": "TEXT",
+      "definition": "Unit price — stored as TEXT",
+      "restrictions": "Always `CAST(Price AS DECIMAL(10,2))` for math"
+    },
+    {
+      "id": "col:rhize_dataset_main.Discount_Price_Data",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "Discount_Price_Data",
+      "data_type": "TEXT",
+      "definition": "Discount price",
+      "restrictions": "Cast before math"
+    },
+    {
+      "id": "col:rhize_dataset_main.`Today's_Quantity_Total`",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "`Today's_Quantity_Total`",
+      "data_type": "TEXT",
+      "definition": "Today's quantity",
+      "restrictions": "Backtick required. Cast before math"
+    },
+    {
+      "id": "col:rhize_dataset_main.`1d`",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "`1d`",
+      "data_type": "TEXT",
+      "definition": "1-day quantity change",
+      "restrictions": "Backtick required. Cast before math"
+    },
+    {
+      "id": "col:rhize_dataset_main.`3d`",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "`3d`",
+      "data_type": "TEXT",
+      "definition": "3-day quantity change",
+      "restrictions": "Backtick required. Cast before math"
+    },
+    {
+      "id": "col:rhize_dataset_main.`7d`",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "`7d`",
+      "data_type": "TEXT",
+      "definition": "7-day quantity change",
+      "restrictions": "Backtick required. Cast before math"
+    },
+    {
+      "id": "col:rhize_dataset_main.`14d`",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "`14d`",
+      "data_type": "TEXT",
+      "definition": "14-day quantity change",
+      "restrictions": "Backtick required. Cast before math"
+    },
+    {
+      "id": "col:rhize_dataset_main.THC",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "THC",
+      "data_type": "TEXT",
+      "definition": "THC percentage as text",
+      "restrictions": "Cast before math"
+    },
+    {
+      "id": "col:rhize_dataset_main.SKU",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "SKU",
+      "data_type": "TEXT",
+      "definition": "SKU identifier",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_dataset_main.Change",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "Change",
+      "data_type": "TEXT",
+      "definition": "Units change",
+      "restrictions": "Cast before math"
+    },
+    {
+      "id": "col:rhize_dataset_main.Revenue",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "Revenue",
+      "data_type": "TEXT",
+      "definition": "Daily revenue — OWN business ONLY",
+      "restrictions": "Always `CAST(Revenue AS DECIMAL(10,2))`. This is tenant's OWN revenue — NOT market revenue"
+    },
+    {
+      "id": "col:rhize_dataset_main.date",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "date",
+      "data_type": "TEXT",
+      "definition": "`YYYY-MM-DD` — text not DATE",
+      "restrictions": "Last 7d: `WHERE date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 7 DAY, '%Y-%m-%d')`. Latest: `WHERE date = (SELECT MAX(date) FROM rhize_dataset_main)`"
+    },
+    {
+      "id": "col:rhize_dataset_main.created_at",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "created_at",
+      "data_type": "TIMESTAMP",
+      "definition": "Row ingestion timestamp",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_dataset_main.tenantid",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "tenantid",
+      "data_type": "INT",
+      "definition": "Tenant identifier",
+      "restrictions": "Auto-injected"
+    },
+    {
+      "id": "col:rhize_dataset_main.brand_id",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "brand_id",
+      "data_type": "VARCHAR(36)",
+      "definition": "Brand reference",
+      "restrictions": ""
+    },
+    {
+      "id": "table:rhize_dataset_store",
+      "kind": "table",
+      "table_name": "rhize_dataset_store",
+      "definition": "Purpose: Per-store breakdown of tenant's products Data grain: One row per (date, Product_Name, Company_Name) per tenant Use when: Store-level product breakdown",
+      "restrictions": "`tenantid` (INT) auto-injected"
+    },
+    {
+      "id": "col:rhize_dataset_store.id",
+      "kind": "column",
+      "table_name": "rhize_dataset_store",
+      "column_name": "id",
+      "data_type": "INT",
+      "definition": "Row primary key",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_dataset_store.date",
+      "kind": "column",
+      "table_name": "rhize_dataset_store",
+      "column_name": "date",
+      "data_type": "TEXT",
+      "definition": "`YYYY-MM-DD` text",
+      "restrictions": "Same date rules as `rhize_dataset_main`: use `DATE_FORMAT` for arithmetic"
+    },
+    {
+      "id": "col:rhize_dataset_store.Product_Name",
+      "kind": "column",
+      "table_name": "rhize_dataset_store",
+      "column_name": "Product_Name",
+      "data_type": "TEXT",
+      "definition": "Product name",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_dataset_store.Category",
+      "kind": "column",
+      "table_name": "rhize_dataset_store",
+      "column_name": "Category",
+      "data_type": "TEXT",
+      "definition": "Product category",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_dataset_store.Type",
+      "kind": "column",
+      "table_name": "rhize_dataset_store",
+      "column_name": "Type",
+      "data_type": "TEXT",
+      "definition": "Product type",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_dataset_store.Company_Name",
+      "kind": "column",
+      "table_name": "rhize_dataset_store",
+      "column_name": "Company_Name",
+      "data_type": "TEXT",
+      "definition": "Store name",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_dataset_store.SKU",
+      "kind": "column",
+      "table_name": "rhize_dataset_store",
+      "column_name": "SKU",
+      "data_type": "TEXT",
+      "definition": "SKU identifier",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_dataset_store.created_at",
+      "kind": "column",
+      "table_name": "rhize_dataset_store",
+      "column_name": "created_at",
+      "data_type": "TIMESTAMP",
+      "definition": "Row ingestion timestamp",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_dataset_store.tenantid",
+      "kind": "column",
+      "table_name": "rhize_dataset_store",
+      "column_name": "tenantid",
+      "data_type": "INT",
+      "definition": "Tenant identifier",
+      "restrictions": "Auto-injected"
+    },
+    {
+      "id": "col:rhize_dataset_store.brand_id",
+      "kind": "column",
+      "table_name": "rhize_dataset_store",
+      "column_name": "brand_id",
+      "data_type": "VARCHAR(36)",
+      "definition": "Brand reference",
+      "restrictions": ""
+    },
+    {
+      "id": "table:Rhize_sales_data",
+      "kind": "table",
+      "table_name": "Rhize_sales_data",
+      "definition": "Purpose: Flat export/snapshot of sales data synced from Google Sheets via `rhize_sync_log` Data grain: One row per order line item (similar to `rhize_orders` but all TEXT) Use when: Only when `rhize_orders` does not have the required data. Prefer `rhize_orders` for order queries Avoid when: General order queries — use `rhize_orders` (proper types, tenant-scoped)",
+      "restrictions": "No visible `tenantid` — scope may be implied by sync source"
+    },
+    {
+      "id": "col:Rhize_sales_data.id",
+      "kind": "column",
+      "table_name": "Rhize_sales_data",
+      "column_name": "id",
+      "data_type": "INT",
+      "definition": "Row primary key",
+      "restrictions": ""
+    },
+    {
+      "id": "col:Rhize_sales_data.date",
+      "kind": "column",
+      "table_name": "Rhize_sales_data",
+      "column_name": "date",
+      "data_type": "TEXT",
+      "definition": "Order date as text",
+      "restrictions": "Cast: `STR_TO_DATE(date, '%Y-%m-%d')` for arithmetic"
+    },
+    {
+      "id": "col:Rhize_sales_data.order_id",
+      "kind": "column",
+      "table_name": "Rhize_sales_data",
+      "column_name": "order_id",
+      "data_type": "TEXT",
+      "definition": "Order identifier",
+      "restrictions": ""
+    },
+    {
+      "id": "col:Rhize_sales_data.customer",
+      "kind": "column",
+      "table_name": "Rhize_sales_data",
+      "column_name": "customer",
+      "data_type": "TEXT",
+      "definition": "Customer/store name",
+      "restrictions": "Note: column name is `customer` not `customerName` — different from `rhize_orders`"
+    },
+    {
+      "id": "col:Rhize_sales_data.product_name",
+      "kind": "column",
+      "table_name": "Rhize_sales_data",
+      "column_name": "product_name",
+      "data_type": "TEXT",
+      "definition": "Product name",
+      "restrictions": "Note: snake_case unlike `rhize_orders.productName`"
+    },
+    {
+      "id": "col:Rhize_sales_data.product_type",
+      "kind": "column",
+      "table_name": "Rhize_sales_data",
+      "column_name": "product_type",
+      "data_type": "TEXT",
+      "definition": "Product type",
+      "restrictions": ""
+    },
+    {
+      "id": "col:Rhize_sales_data.qty",
+      "kind": "column",
+      "table_name": "Rhize_sales_data",
+      "column_name": "qty",
+      "data_type": "TEXT",
+      "definition": "Units sold — stored as TEXT",
+      "restrictions": "Cast: `CAST(qty AS DECIMAL(10,2))`"
+    },
+    {
+      "id": "col:Rhize_sales_data.variant",
+      "kind": "column",
+      "table_name": "Rhize_sales_data",
+      "column_name": "variant",
+      "data_type": "TEXT",
+      "definition": "Pack size variant",
+      "restrictions": ""
+    },
+    {
+      "id": "col:Rhize_sales_data.lot_id",
+      "kind": "column",
+      "table_name": "Rhize_sales_data",
+      "column_name": "lot_id",
+      "data_type": "TEXT",
+      "definition": "Lot reference",
+      "restrictions": "Note: `lot_id` not `lotNumber` — different from `rhize_orders`"
+    },
+    {
+      "id": "col:Rhize_sales_data.unit_price",
+      "kind": "column",
+      "table_name": "Rhize_sales_data",
+      "column_name": "unit_price",
+      "data_type": "TEXT",
+      "definition": "Per-unit price as TEXT",
+      "restrictions": "Cast: `CAST(unit_price AS DECIMAL(10,2))`"
+    },
+    {
+      "id": "col:Rhize_sales_data.subtotal",
+      "kind": "column",
+      "table_name": "Rhize_sales_data",
+      "column_name": "subtotal",
+      "data_type": "TEXT",
+      "definition": "Line revenue as TEXT",
+      "restrictions": "Cast: `CAST(subtotal AS DECIMAL(10,2))`"
+    },
+    {
+      "id": "col:Rhize_sales_data.status",
+      "kind": "column",
+      "table_name": "Rhize_sales_data",
+      "column_name": "status",
+      "data_type": "TEXT",
+      "definition": "Order status",
+      "restrictions": ""
+    },
+    {
+      "id": "col:Rhize_sales_data.delivery_date",
+      "kind": "column",
+      "table_name": "Rhize_sales_data",
+      "column_name": "delivery_date",
+      "data_type": "TEXT",
+      "definition": "Delivery date as text",
+      "restrictions": ""
+    },
+    {
+      "id": "col:Rhize_sales_data.payment_date",
+      "kind": "column",
+      "table_name": "Rhize_sales_data",
+      "column_name": "payment_date",
+      "data_type": "TEXT",
+      "definition": "Payment date as text",
+      "restrictions": ""
+    },
+    {
+      "id": "col:Rhize_sales_data.payment_type",
+      "kind": "column",
+      "table_name": "Rhize_sales_data",
+      "column_name": "payment_type",
+      "data_type": "TEXT",
+      "definition": "Payment method",
+      "restrictions": ""
+    },
+    {
+      "id": "col:Rhize_sales_data.open_balance",
+      "kind": "column",
+      "table_name": "Rhize_sales_data",
+      "column_name": "open_balance",
+      "data_type": "TEXT",
+      "definition": "Unpaid balance as text",
+      "restrictions": "Cast before math"
+    },
+    {
+      "id": "col:Rhize_sales_data.uid",
+      "kind": "column",
+      "table_name": "Rhize_sales_data",
+      "column_name": "uid",
+      "data_type": "TEXT",
+      "definition": "Short display ID",
+      "restrictions": ""
+    },
+    {
+      "id": "col:Rhize_sales_data.created_at",
+      "kind": "column",
+      "table_name": "Rhize_sales_data",
+      "column_name": "created_at",
+      "data_type": "TIMESTAMP",
+      "definition": "Row ingestion timestamp",
+      "restrictions": ""
+    },
+    {
+      "id": "table:rhize_user_states",
+      "kind": "table",
+      "table_name": "rhize_user_states",
+      "definition": "Purpose: Maps tenants to their US state(s) — drives RLS on PostgreSQL market tables Data grain: One row per (tenantid, state_key) Use when: Understanding which state(s) a tenant operates in. Not typically queried directly in business queries",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_user_states.id",
+      "kind": "column",
+      "table_name": "rhize_user_states",
+      "column_name": "id",
+      "data_type": "BIGINT",
+      "definition": "Primary key",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_user_states.tenantid",
+      "kind": "column",
+      "table_name": "rhize_user_states",
+      "column_name": "tenantid",
+      "data_type": "INTEGER",
+      "definition": "Tenant identifier",
+      "restrictions": "References tenant"
+    },
+    {
+      "id": "col:rhize_user_states.state_key",
+      "kind": "column",
+      "table_name": "rhize_user_states",
+      "column_name": "state_key",
+      "data_type": "TEXT",
+      "definition": "US state code (VT, MA, etc.)",
+      "restrictions": "Maps tenant to state for RLS"
+    },
+    {
+      "id": "table:rhize_sync_log",
+      "kind": "table",
+      "table_name": "rhize_sync_log",
+      "definition": "Purpose: Tracks Google Sheets → `Rhize_sales_data` sync job results Use when: Debugging sync failures only. Never use for business analytics",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_sync_log.id",
+      "kind": "column",
+      "table_name": "rhize_sync_log",
+      "column_name": "id",
+      "data_type": "INT",
+      "definition": "Primary key",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_sync_log.synced_at",
+      "kind": "column",
+      "table_name": "rhize_sync_log",
+      "column_name": "synced_at",
+      "data_type": "DATETIME",
+      "definition": "When the sync ran",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_sync_log.source",
+      "kind": "column",
+      "table_name": "rhize_sync_log",
+      "column_name": "source",
+      "data_type": "VARCHAR(50)",
+      "definition": "Source system (e.g. `google_sheets`)",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_sync_log.rows_inserted",
+      "kind": "column",
+      "table_name": "rhize_sync_log",
+      "column_name": "rows_inserted",
+      "data_type": "INT",
+      "definition": "Rows added",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_sync_log.rows_updated",
+      "kind": "column",
+      "table_name": "rhize_sync_log",
+      "column_name": "rows_updated",
+      "data_type": "INT",
+      "definition": "Rows updated",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_sync_log.rows_unchanged",
+      "kind": "column",
+      "table_name": "rhize_sync_log",
+      "column_name": "rows_unchanged",
+      "data_type": "INT",
+      "definition": "Rows with no change",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_sync_log.status",
+      "kind": "column",
+      "table_name": "rhize_sync_log",
+      "column_name": "status",
+      "data_type": "VARCHAR(20)",
+      "definition": "`success` / `error`",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_sync_log.error_message",
+      "kind": "column",
+      "table_name": "rhize_sync_log",
+      "column_name": "error_message",
+      "data_type": "TEXT",
+      "definition": "Error details if failed",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_sync_log.trigger_type",
+      "kind": "column",
+      "table_name": "rhize_sync_log",
+      "column_name": "trigger_type",
+      "data_type": "VARCHAR(20)",
+      "definition": "`manual` / automated",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_sync_log.tenantid",
+      "kind": "column",
+      "table_name": "rhize_sync_log",
+      "column_name": "tenantid",
+      "data_type": "INT",
+      "definition": "Tenant identifier",
+      "restrictions": ""
+    },
+    {
+      "id": "table:chatbot_example_embeddings",
+      "kind": "table",
+      "table_name": "chatbot_example_embeddings",
+      "definition": "Table chatbot_example_embeddings.",
       "restrictions": ""
     }
   ]

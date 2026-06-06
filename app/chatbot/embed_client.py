@@ -39,37 +39,63 @@ def _embed_url() -> str:
     return f"{settings.llm_base_url.rstrip('/')}/embeddings"
 
 
-async def embed_text(text: str) -> list[float]:
-    """Embed a single string. Returns the raw vector. Used on the hot path so
-    keep_alive matters — without it the model unloads every 5 min."""
+# Module-level TTL LRU for embed_text. nomic-embed-text is deterministic per
+# (model, input), so caching is sound until model changes. Default 1024 entries
+# × 768 floats ≈ 6 MB resident — negligible.
+from app.chatbot._perf_cache import TTLCache  # noqa: E402
+
+_EMBED_CACHE: TTLCache[list[float]] = TTLCache(maxsize=2048, ttl_secs=900.0)
+
+
+def _embed_cache_key(text: str) -> str:
+    settings = get_settings()
+    # Key on (model, text) so model swaps don't return stale vectors.
+    return f"{settings.embed_model}::{text}"
+
+
+async def _embed_text_uncached(text: str) -> list[float]:
     settings = get_settings()
     timeout_s = settings.embed_timeout_ms / 1000.0
-
     payload = {
         "model": settings.embed_model,
         "input": text,
         # Hosted providers ignore; Ollama uses this to extend the model's TTL.
         "keep_alive": settings.embed_keep_alive,
     }
-
     try:
         async with httpx.AsyncClient(timeout=timeout_s) as client:
             res = await client.post(_embed_url(), json=payload, headers=_headers())
     except httpx.TimeoutException as exc:
         raise EmbedError(f"embed timed out after {settings.embed_timeout_ms}ms") from exc
-
     if res.status_code >= 400:
         raise EmbedError(f"embed failed ({res.status_code}): {res.text[:200]}")
-
     data = res.json()
     try:
         vec = data["data"][0]["embedding"]
     except (KeyError, IndexError, TypeError) as exc:
         raise EmbedError("embed response missing embedding array") from exc
-
     if not isinstance(vec, list) or not vec:
         raise EmbedError("embed response missing embedding array")
     return [float(x) for x in vec]
+
+
+async def embed_text(text: str) -> list[float]:
+    """Embed a single string. Returns the raw vector.
+
+    Cached by ``(model, text)`` for ``TTLCache.ttl_secs`` (15 min). Hot path
+    inside chat — repeated/duplicate questions skip the HTTP round-trip to
+    Ollama (~500 ms on CPU). The cache is in-process; multi-worker deploys
+    pay per-worker fill cost but never share stale.
+
+    ``keep_alive`` still matters on the cold path: without it the model
+    unloads every 5 min and the next miss pays a ~4s cold-load tax.
+    """
+    return await _EMBED_CACHE.get_or_set(_embed_cache_key(text),
+                                         lambda: _embed_text_uncached(text))
+
+
+def embed_cache_stats() -> dict[str, int]:
+    return _EMBED_CACHE.stats()
 
 
 async def embed_batch(texts: Iterable[str], *, timeout_s: float = 120.0) -> list[list[float]]:

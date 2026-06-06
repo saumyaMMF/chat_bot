@@ -3,6 +3,10 @@
   "dialect": "dual",
   "examples": [
     {
+      "question": "new products this week",
+      "sql": "SELECT productName, MIN(date) AS first_seen FROM rhize_dataset_main GROUP BY productName HAVING MIN(date) >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY) ORDER BY first_seen DESC LIMIT 10"
+    },
+    {
       "question": "revenue last 30 days",
       "sql": "SELECT date, SUM(CAST(Revenue AS DECIMAL(10,2))) AS revenue FROM rhize_dataset_main WHERE date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 30 DAY, '%Y-%m-%d') GROUP BY date ORDER BY date DESC"
     },

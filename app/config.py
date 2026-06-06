@@ -57,6 +57,12 @@ class Settings(BaseSettings):
     # noise for nomic-embed-text. Tuned conservatively to keep recall high.
     embed_distance_threshold: float = Field(default=0.65, alias="CHATBOT_EMBED_DISTANCE_THRESHOLD")
 
+    # Fast-path cache (chatbot_fast_path_embeddings). Stricter than the schema /
+    # example RAG threshold — a hit triggers SKIPPING the LLM entirely, so we
+    # want near-paraphrase matches only. cosine in [0, 2]; 0.18 ≈ similarity 0.91.
+    fast_path_distance_threshold: float = Field(default=0.18, alias="CHATBOT_FAST_PATH_DISTANCE_THRESHOLD")
+    fast_path_enabled: bool = Field(default=True, alias="CHATBOT_FAST_PATH_ENABLED")
+
     # ── Server ────────────────────────────────────────────────────────────────
     host: str = Field(default="0.0.0.0", alias="HOST")
     port: int = Field(default=8000, alias="PORT")

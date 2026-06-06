@@ -23,6 +23,7 @@ from pathlib import Path
 
 from app.chatbot.embed_client import embed_text, to_pgvector_literal
 from app.chatbot.readonly_db import get_pool
+from app.chatbot._perf_cache import VectorSnapshot
 from app.config import get_settings
 
 # Market-scope signals (mirrors prompt_builder DEFAULT SCOPE).
@@ -150,6 +151,34 @@ async def analyze_table(conn: "object | None" = None) -> None:
         await ro_conn.execute("ANALYZE chatbot_schema_embeddings")
 
 
+# ── In-memory snapshot of chatbot_schema_embeddings ─────────────────────────
+# Reference data (~50-200 rows). Loaded once at startup, refreshed on
+# updated_at watermark change (every 60s peek). Saves a per-request KNN round
+# trip to Postgres (~30 ms) and removes the embedding-payload transit cost.
+
+
+class _SchemaSnapshot(VectorSnapshot):
+    def _row_to_payload(self, raw):  # type: ignore[override]
+        return {
+            "id": raw["id"],
+            "kind": raw["kind"],
+            "table_name": raw["table_name"],
+            "column_name": raw["column_name"],
+            "data_type": raw["data_type"],
+            "definition": raw["definition"],
+            "restrictions": raw["restrictions"] or "",
+        }
+
+
+_SNAPSHOT = _SchemaSnapshot(
+    table_name="chatbot_schema_embeddings",
+    select_sql=(
+        "SELECT id, kind, table_name, column_name, data_type, definition, "
+        "restrictions, embedding FROM chatbot_schema_embeddings"
+    ),
+)
+
+
 async def retrieve_top_k(question: str, k: int | None = None) -> list[SchemaChunk]:
     """Embed the question and return the top-k nearest schema chunks by cosine
     distance. Always pins the parent table row for any retrieved column so the
@@ -163,78 +192,65 @@ async def retrieve_top_k(question: str, k: int | None = None) -> list[SchemaChun
     has_market_signal = bool(_MARKET_SIGNALS.search(question))
 
     vec = await embed_text(question)
-    lit = to_pgvector_literal(vec)
 
-    pool = await get_pool()
-    async with pool.acquire() as conn:
-        # Oversample so the diversity / parent-table guard has headroom.
-        oversample = max(k + 4, 12)
-        rows = await conn.fetch(
-            """
-            SELECT id, kind, table_name, column_name, data_type, definition,
-                   restrictions,
-                   (embedding <=> $1::vector)::float8 AS distance
-              FROM chatbot_schema_embeddings
-             ORDER BY embedding <=> $1::vector
-             LIMIT $2
-            """,
-            lit,
-            oversample,
+    # In-process KNN. Oversample so the diversity / parent-table guard has
+    # headroom (matches the prior +4 / floor=12 behaviour).
+    oversample = max(k + 4, 12)
+    hits = await _SNAPSHOT.knn(vec, k=oversample)
+
+    chunks = [
+        SchemaChunk(
+            id=p["id"],
+            kind=p["kind"],
+            table_name=p["table_name"],
+            column_name=p["column_name"],
+            data_type=p["data_type"],
+            definition=p["definition"],
+            restrictions=p["restrictions"],
+            distance=d,
         )
+        for (p, d) in hits
+    ]
 
-        chunks = [
-            SchemaChunk(
-                id=r["id"],
-                kind=r["kind"],
-                table_name=r["table_name"],
-                column_name=r["column_name"],
-                data_type=r["data_type"],
-                definition=r["definition"],
-                restrictions=r["restrictions"] or "",
-                distance=r["distance"],
-            )
-            for r in rows
-        ]
+    # Engine-aware re-rank. If question lacks market signal, demote market
+    # table chunks by +0.2 cosine so own-data (rhize_*) wins ties.
+    if not has_market_signal:
+        for c in chunks:
+            if c.table_name in _MARKET_TABLES:
+                c.distance += 0.2
+        chunks.sort(key=lambda c: c.distance)
 
-        # Engine-aware re-rank. If question lacks market signal, demote market
-        # table chunks by +0.2 cosine so own-data (rhize_*) wins ties.
-        # Without this, "revenue" matches market+own equally on the embedding,
-        # but the prompt's DEFAULT SCOPE says own data → bias retrieval too.
-        if not has_market_signal:
-            for c in chunks:
-                if c.table_name in _MARKET_TABLES:
-                    c.distance += 0.2
-            chunks.sort(key=lambda c: c.distance)
+    top = chunks[:k]
 
-        top = chunks[:k]
-
-        # Parent-table guard: if any retrieved column's table is NOT in top,
-        # promote the parent table row (best-effort, capped at +2 extras).
-        present_tables = {c.table_name for c in top if c.kind in {"table", "view"}}
-        needed_tables = {c.table_name for c in top if c.kind == "column"} - present_tables
-        if needed_tables:
-            extra = await conn.fetch(
-                """
-                SELECT id, kind, table_name, column_name, data_type, definition,
-                       restrictions, 0::float8 AS distance
-                  FROM chatbot_schema_embeddings
-                 WHERE table_name = ANY($1::text[])
-                   AND kind IN ('table','view')
-                 LIMIT 2
-                """,
-                list(needed_tables),
-            )
-            for r in extra:
-                top.append(SchemaChunk(
-                    id=r["id"],
-                    kind=r["kind"],
-                    table_name=r["table_name"],
-                    column_name=r["column_name"],
-                    data_type=r["data_type"],
-                    definition=r["definition"],
-                    restrictions=r["restrictions"] or "",
-                    distance=r["distance"],
-                ))
+    # Parent-table guard: if any retrieved column's table is NOT in top,
+    # promote the parent table row (best-effort, capped at +2 extras). Pull
+    # from the in-memory snapshot — no DB round-trip.
+    present_tables = {c.table_name for c in top if c.kind in {"table", "view"}}
+    needed_tables = {c.table_name for c in top if c.kind == "column"} - present_tables
+    if needed_tables:
+        extras_seen = 0
+        for c in chunks:
+            if extras_seen >= 2:
+                break
+            if c.table_name in needed_tables and c.kind in {"table", "view"} and c not in top:
+                top.append(c)
+                extras_seen += 1
+        if extras_seen < 2:
+            # snapshot may have a parent row that didn't make oversample top.
+            # Do one targeted scan over all rows (still in-memory).
+            for row in _SNAPSHOT._rows:  # noqa: SLF001 — same module family
+                if extras_seen >= 2:
+                    break
+                p = row.payload
+                if p["table_name"] in needed_tables and p["kind"] in {"table", "view"}:
+                    if not any(c.id == p["id"] for c in top):
+                        top.append(SchemaChunk(
+                            id=p["id"], kind=p["kind"], table_name=p["table_name"],
+                            column_name=p["column_name"], data_type=p["data_type"],
+                            definition=p["definition"], restrictions=p["restrictions"],
+                            distance=0.0,
+                        ))
+                        extras_seen += 1
 
     return top
 

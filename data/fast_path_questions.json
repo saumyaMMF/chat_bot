@@ -1,0 +1,401 @@
+{
+  "_comment": "Templated fast-path catalog. Placeholders: {N}=integer (LIMIT), {WINDOW_SQL}=date predicate (PG), {WINDOW_SQL_MYSQL}=date predicate (MySQL), {BRAND}=brand entity, {COMPANY}=company/store entity, {CATEGORY}=one of Flower|PreRoll|Vape|Concentrate|Edible|Other. The Python service normalizes the user question by replacing matched tokens with these placeholders before embedding, then splices the user's actual values into the cached SQL post-match. Pairs with empty `params` are literal (no substitution). Engine adds state RLS (PG) / tenantid AST (MySQL) — do NOT add those filters here.",
+  "version": 2,
+  "placeholders": {
+    "N":                 "positive int 1..500 (LIMIT). Default 5 if absent.",
+    "WINDOW_SQL":        "PG date predicate. e.g. date = (SELECT MAX(date)...) OR date >= CURRENT_DATE - INTERVAL 'N days'",
+    "WINDOW_SQL_MYSQL":  "MySQL date predicate. e.g. DATE(date) = CURRENT_DATE OR date >= DATE_SUB(CURRENT_DATE, INTERVAL N DAY)",
+    "BRAND":             "user-supplied brand string, sanitized to [A-Za-z0-9 _-]{1,64}",
+    "COMPANY":           "user-supplied company/store string, sanitized to [A-Za-z0-9 _-]{1,64}",
+    "CATEGORY":          "exactly one of Flower|PreRoll|Vape|Concentrate|Edible|Other"
+  },
+  "groups": [
+    {
+      "group": "market_competitors_brands",
+      "dialect": "postgres",
+      "pairs": [
+        {
+          "q": "top {N} brands {WINDOW}",
+          "params": ["N", "WINDOW"],
+          "sql": "SELECT brand, SUM(revenue) AS total_revenue FROM chatbot_mv_market_daily WHERE {WINDOW_SQL} AND brand <> '' AND brand IS NOT NULL GROUP BY brand ORDER BY total_revenue DESC LIMIT {N}"
+        },
+        {
+          "q": "top {N} brands by units {WINDOW}",
+          "params": ["N", "WINDOW"],
+          "sql": "SELECT brand, SUM(quantity) AS total_qty FROM chatbot_mv_market_daily WHERE {WINDOW_SQL} AND brand <> '' AND brand IS NOT NULL GROUP BY brand ORDER BY total_qty DESC LIMIT {N}"
+        },
+        {
+          "q": "brands with most skus listed",
+          "params": [],
+          "sql": "SELECT brand, SUM(sku_count) AS skus FROM chatbot_mv_market_daily WHERE date = (SELECT MAX(date) FROM chatbot_mv_market_daily) AND brand <> '' AND brand IS NOT NULL GROUP BY brand ORDER BY skus DESC LIMIT 20"
+        },
+        {
+          "q": "market share by brand today",
+          "params": [],
+          "sql": "SELECT brand, SUM(revenue) AS rev, ROUND(100.0 * SUM(revenue) / NULLIF(SUM(SUM(revenue)) OVER (), 0), 2) AS pct FROM chatbot_mv_market_daily WHERE date = (SELECT MAX(date) FROM chatbot_mv_market_daily) AND brand <> '' AND brand IS NOT NULL GROUP BY brand ORDER BY rev DESC LIMIT 20"
+        },
+        {
+          "q": "how is brand {BRAND} doing",
+          "params": ["BRAND"],
+          "sql": "SELECT date, SUM(revenue) AS rev, SUM(quantity) AS qty FROM chatbot_mv_market_daily WHERE lower(brand) LIKE lower('%{BRAND}%') AND date >= CURRENT_DATE - INTERVAL '30 days' GROUP BY date ORDER BY date ASC"
+        },
+        {
+          "q": "revenue for brand {BRAND} {WINDOW}",
+          "params": ["BRAND", "WINDOW"],
+          "sql": "SELECT SUM(revenue) AS rev FROM chatbot_mv_market_daily WHERE lower(brand) LIKE lower('%{BRAND}%') AND {WINDOW_SQL}"
+        }
+      ]
+    },
+    {
+      "group": "market_companies_stores",
+      "dialect": "postgres",
+      "pairs": [
+        {
+          "q": "top {N} stores {WINDOW}",
+          "params": ["N", "WINDOW"],
+          "sql": "SELECT company, SUM(revenue) AS total_revenue FROM chatbot_mv_market_daily WHERE {WINDOW_SQL} AND company <> '' AND company IS NOT NULL GROUP BY company ORDER BY total_revenue DESC LIMIT {N}"
+        },
+        {
+          "q": "stores with widest brand assortment",
+          "params": [],
+          "sql": "SELECT company, COUNT(DISTINCT brand) AS brands FROM chatbot_mv_market_daily WHERE date = (SELECT MAX(date) FROM chatbot_mv_market_daily) AND company <> '' AND company IS NOT NULL GROUP BY company ORDER BY brands DESC LIMIT 20"
+        },
+        {
+          "q": "which stores carry brand {BRAND}",
+          "params": ["BRAND"],
+          "sql": "SELECT company, SUM(revenue) AS rev FROM chatbot_mv_market_daily WHERE lower(brand) LIKE lower('%{BRAND}%') AND date = (SELECT MAX(date) FROM chatbot_mv_market_daily) GROUP BY company ORDER BY rev DESC LIMIT 50"
+        },
+        {
+          "q": "top brands in store {COMPANY}",
+          "params": ["COMPANY"],
+          "sql": "SELECT brand, SUM(revenue) AS rev FROM chatbot_mv_market_daily WHERE lower(company) LIKE lower('%{COMPANY}%') AND date = (SELECT MAX(date) FROM chatbot_mv_market_daily) AND brand <> '' AND brand IS NOT NULL GROUP BY brand ORDER BY rev DESC LIMIT 10"
+        }
+      ]
+    },
+    {
+      "group": "market_categories",
+      "dialect": "postgres",
+      "pairs": [
+        {
+          "q": "best categories by revenue {WINDOW}",
+          "params": ["WINDOW"],
+          "sql": "SELECT category_norm, SUM(revenue) AS rev FROM chatbot_mv_market_daily WHERE {WINDOW_SQL} GROUP BY category_norm ORDER BY rev DESC"
+        },
+        {
+          "q": "category revenue share today",
+          "params": [],
+          "sql": "SELECT category_norm, SUM(revenue) AS rev, ROUND(100.0 * SUM(revenue) / NULLIF(SUM(SUM(revenue)) OVER (), 0), 2) AS pct FROM chatbot_mv_market_daily WHERE date = (SELECT MAX(date) FROM chatbot_mv_market_daily) GROUP BY category_norm ORDER BY rev DESC"
+        },
+        {
+          "q": "average market price per category today",
+          "params": [],
+          "sql": "SELECT category_norm, AVG(price_n) AS avg_price FROM chatbot_market WHERE date_d = (SELECT MAX(date_d) FROM chatbot_market) AND price_n > 0 GROUP BY category_norm ORDER BY avg_price DESC"
+        },
+        {
+          "q": "average thc by category today",
+          "params": [],
+          "sql": "SELECT category_norm, AVG(thc_num) AS avg_thc FROM chatbot_market WHERE date_d = (SELECT MAX(date_d) FROM chatbot_market) AND thc_num IS NOT NULL GROUP BY category_norm ORDER BY avg_thc DESC"
+        },
+        {
+          "q": "sku count per category today",
+          "params": [],
+          "sql": "SELECT category_norm, SUM(sku_count) AS skus FROM chatbot_mv_market_daily WHERE date = (SELECT MAX(date) FROM chatbot_mv_market_daily) GROUP BY category_norm ORDER BY skus DESC"
+        },
+        {
+          "q": "top {N} {CATEGORY} brands {WINDOW}",
+          "params": ["N", "CATEGORY", "WINDOW"],
+          "sql": "SELECT brand, SUM(revenue) AS rev FROM chatbot_mv_market_daily WHERE category_norm = '{CATEGORY}' AND {WINDOW_SQL} AND brand <> '' AND brand IS NOT NULL GROUP BY brand ORDER BY rev DESC LIMIT {N}"
+        }
+      ]
+    },
+    {
+      "group": "market_trends",
+      "dialect": "postgres",
+      "pairs": [
+        {
+          "q": "revenue trend {WINDOW}",
+          "params": ["WINDOW"],
+          "sql": "SELECT date, SUM(revenue) AS rev FROM chatbot_mv_market_daily WHERE {WINDOW_SQL} GROUP BY date ORDER BY date ASC"
+        },
+        {
+          "q": "{CATEGORY} quantity trend {WINDOW}",
+          "params": ["CATEGORY", "WINDOW"],
+          "sql": "SELECT date, SUM(quantity) AS qty FROM chatbot_mv_market_daily WHERE category_norm = '{CATEGORY}' AND {WINDOW_SQL} GROUP BY date ORDER BY date ASC"
+        },
+        {
+          "q": "weekly revenue by category last 4 weeks",
+          "params": [],
+          "sql": "SELECT date_trunc('week', date)::date AS wk, category_norm, SUM(revenue) AS rev FROM chatbot_mv_market_daily WHERE date >= CURRENT_DATE - INTERVAL '28 days' GROUP BY wk, category_norm ORDER BY wk ASC, rev DESC"
+        },
+        {
+          "q": "new brands entering market last 30 days",
+          "params": [],
+          "sql": "SELECT brand, MIN(date) AS first_seen FROM chatbot_mv_market_daily WHERE brand <> '' AND brand IS NOT NULL GROUP BY brand HAVING MIN(date) >= CURRENT_DATE - INTERVAL '30 days' ORDER BY first_seen ASC LIMIT 100"
+        }
+      ]
+    },
+    {
+      "group": "market_skus",
+      "dialect": "postgres",
+      "pairs": [
+        {
+          "q": "how many products added today",
+          "params": [],
+          "sql": "SELECT COUNT(*) AS added_count FROM chatbot_market WHERE flag = 'added' AND date_d = (SELECT MAX(date_d) FROM chatbot_market)"
+        },
+        {
+          "q": "what products were added today",
+          "params": [],
+          "sql": "SELECT product_name, brand, company, category_norm, price_n FROM chatbot_market WHERE flag = 'added' AND date_d = (SELECT MAX(date_d) FROM chatbot_market) ORDER BY brand LIMIT 500"
+        },
+        {
+          "q": "what products were removed today",
+          "params": [],
+          "sql": "SELECT product_name, brand, company, category_norm FROM chatbot_market WHERE flag = 'removed' AND date_d = (SELECT MAX(date_d) FROM chatbot_market) ORDER BY brand LIMIT 500"
+        },
+        {
+          "q": "top {N} highest revenue products today",
+          "params": ["N"],
+          "sql": "SELECT product_name, brand, SUM(revenue) AS rev FROM chatbot_market WHERE date_d = (SELECT MAX(date_d) FROM chatbot_market) AND product_name <> '' AND product_name IS NOT NULL GROUP BY product_name, brand ORDER BY rev DESC LIMIT {N}"
+        },
+        {
+          "q": "highest thc {CATEGORY} products",
+          "params": ["CATEGORY"],
+          "sql": "SELECT product_name, brand, company, thc_num, price_n FROM chatbot_market WHERE category_norm = '{CATEGORY}' AND thc_num IS NOT NULL AND date_d = (SELECT MAX(date_d) FROM chatbot_market) ORDER BY thc_num DESC LIMIT 25"
+        },
+        {
+          "q": "cheapest eighth on shelf today",
+          "params": [],
+          "sql": "SELECT product_name, brand, company, price_n FROM chatbot_market WHERE unit = '3.5g' AND date_d = (SELECT MAX(date_d) FROM chatbot_market) AND price_n > 0 ORDER BY price_n ASC LIMIT 25"
+        },
+        {
+          "q": "average price of eighth",
+          "params": [],
+          "sql": "SELECT AVG(price_n) AS avg_price FROM chatbot_market WHERE unit = '3.5g' AND date_d = (SELECT MAX(date_d) FROM chatbot_market) AND price_n > 0"
+        },
+        {
+          "q": "average price of 1g vape",
+          "params": [],
+          "sql": "SELECT AVG(price_n) AS avg_price FROM chatbot_market WHERE category_norm = 'Vape' AND unit = '1g' AND date_d = (SELECT MAX(date_d) FROM chatbot_market) AND price_n > 0"
+        },
+        {
+          "q": "what has been sitting on shelves longest",
+          "params": [],
+          "sql": "SELECT product_name, brand, company, days_on_shelf FROM chatbot_market WHERE date_d = (SELECT MAX(date_d) FROM chatbot_market) AND days_on_shelf IS NOT NULL ORDER BY days_on_shelf DESC LIMIT 20"
+        },
+        {
+          "q": "fastest moving skus right now",
+          "params": [],
+          "sql": "SELECT product_name, brand, company, days_on_shelf FROM chatbot_market WHERE date_d = (SELECT MAX(date_d) FROM chatbot_market) AND days_on_shelf IS NOT NULL ORDER BY days_on_shelf ASC LIMIT 20"
+        }
+      ]
+    },
+    {
+      "group": "market_totals",
+      "dialect": "postgres",
+      "pairs": [
+        {
+          "q": "total market revenue today",
+          "params": [],
+          "sql": "SELECT SUM(revenue) AS total_sales_today FROM chatbot_mv_market_daily WHERE date = (SELECT MAX(date) FROM chatbot_mv_market_daily)"
+        },
+        {
+          "q": "total market revenue {WINDOW}",
+          "params": ["WINDOW"],
+          "sql": "SELECT SUM(revenue) AS rev FROM chatbot_mv_market_daily WHERE {WINDOW_SQL}"
+        },
+        {
+          "q": "how many products listed today",
+          "params": [],
+          "sql": "SELECT COUNT(*) AS n FROM chatbot_market WHERE date_d = (SELECT MAX(date_d) FROM chatbot_market)"
+        },
+        {
+          "q": "how many distinct brands today",
+          "params": [],
+          "sql": "SELECT COUNT(DISTINCT brand) AS brands FROM chatbot_market WHERE date_d = (SELECT MAX(date_d) FROM chatbot_market) AND brand <> '' AND brand IS NOT NULL"
+        },
+        {
+          "q": "how many distinct stores today",
+          "params": [],
+          "sql": "SELECT COUNT(DISTINCT company) AS stores FROM chatbot_market WHERE date_d = (SELECT MAX(date_d) FROM chatbot_market) AND company <> '' AND company IS NOT NULL"
+        }
+      ]
+    },
+    {
+      "group": "ops_orders",
+      "dialect": "mysql",
+      "pairs": [
+        {
+          "q": "list pending wholesale orders",
+          "params": [],
+          "sql": "SELECT date, customerName, productName, qty, subtotal, status FROM rhize_orders WHERE status <> 'Completed' ORDER BY date DESC LIMIT 50"
+        },
+        {
+          "q": "total orders today",
+          "params": [],
+          "sql": "SELECT COUNT(*) AS n FROM rhize_orders WHERE DATE(date) = CURRENT_DATE"
+        },
+        {
+          "q": "revenue from completed orders {WINDOW}",
+          "params": ["WINDOW"],
+          "sql": "SELECT SUM(subtotal) AS rev FROM rhize_orders WHERE {WINDOW_SQL_MYSQL} AND status = 'Completed'"
+        },
+        {
+          "q": "top {N} customers by revenue {WINDOW}",
+          "params": ["N", "WINDOW"],
+          "sql": "SELECT customerName, SUM(subtotal) AS rev FROM rhize_orders WHERE {WINDOW_SQL_MYSQL} AND status = 'Completed' GROUP BY customerName ORDER BY rev DESC LIMIT {N}"
+        },
+        {
+          "q": "open balance total",
+          "params": [],
+          "sql": "SELECT SUM(openBalance) AS open_total FROM rhize_orders WHERE status <> 'Completed'"
+        },
+        {
+          "q": "orders by status this month",
+          "params": [],
+          "sql": "SELECT status, COUNT(*) AS n, SUM(subtotal) AS rev FROM rhize_orders WHERE date >= DATE_FORMAT(CURRENT_DATE, '%Y-%m-01') GROUP BY status ORDER BY rev DESC"
+        },
+        {
+          "q": "best selling products by quantity {WINDOW}",
+          "params": ["WINDOW"],
+          "sql": "SELECT productName, SUM(qty) AS qty, SUM(subtotal) AS rev FROM rhize_orders WHERE {WINDOW_SQL_MYSQL} AND status = 'Completed' GROUP BY productName ORDER BY qty DESC LIMIT 25"
+        },
+        {
+          "q": "customers with open balance over 1000",
+          "params": [],
+          "sql": "SELECT customerName, SUM(openBalance) AS open_total FROM rhize_orders WHERE status <> 'Completed' GROUP BY customerName HAVING open_total > 1000 ORDER BY open_total DESC LIMIT 50"
+        }
+      ]
+    },
+    {
+      "group": "ops_inventory",
+      "dialect": "mysql",
+      "pairs": [
+        {
+          "q": "live inventory for product {BRAND}",
+          "params": ["BRAND"],
+          "sql": "SELECT productName, lotNumber, current_qty, remaining, updatedAt FROM rhize_live_inventory WHERE productName LIKE '%{BRAND}%' ORDER BY updatedAt DESC LIMIT 50"
+        },
+        {
+          "q": "low stock items",
+          "params": [],
+          "sql": "SELECT productName, lotNumber, current_qty FROM rhize_live_inventory WHERE current_qty < 10 ORDER BY current_qty ASC LIMIT 50"
+        },
+        {
+          "q": "out of stock items",
+          "params": [],
+          "sql": "SELECT productName, lotNumber, current_qty FROM rhize_live_inventory WHERE current_qty <= 0 ORDER BY productName LIMIT 100"
+        },
+        {
+          "q": "total inventory on hand by product",
+          "params": [],
+          "sql": "SELECT productName, SUM(current_qty) AS qty FROM rhize_live_inventory GROUP BY productName ORDER BY qty DESC LIMIT 100"
+        }
+      ]
+    },
+    {
+      "group": "ops_lots",
+      "dialect": "mysql",
+      "pairs": [
+        {
+          "q": "lots expiring next 30 days",
+          "params": [],
+          "sql": "SELECT strain, lotNumber, expirationDate FROM rhize_product_lots WHERE expirationDate BETWEEN CURRENT_DATE AND DATE_ADD(CURRENT_DATE, INTERVAL 30 DAY) ORDER BY expirationDate ASC LIMIT 100"
+        },
+        {
+          "q": "already expired lots",
+          "params": [],
+          "sql": "SELECT strain, lotNumber, expirationDate FROM rhize_product_lots WHERE expirationDate < CURRENT_DATE ORDER BY expirationDate DESC LIMIT 100"
+        },
+        {
+          "q": "average thc by strain in lots",
+          "params": [],
+          "sql": "SELECT strain, AVG(thc) AS avg_thc, COUNT(*) AS n_lots FROM rhize_product_lots WHERE thc IS NOT NULL GROUP BY strain ORDER BY avg_thc DESC LIMIT 25"
+        },
+        {
+          "q": "highest thc strains in inventory",
+          "params": [],
+          "sql": "SELECT strain, lotNumber, thc FROM rhize_product_lots WHERE thc IS NOT NULL ORDER BY thc DESC LIMIT 25"
+        }
+      ]
+    },
+    {
+      "group": "ops_sales_actions",
+      "dialect": "mysql",
+      "pairs": [
+        {
+          "q": "open sales actions by priority",
+          "params": [],
+          "sql": "SELECT customerName, category, priority, description, status FROM rhize_sales_actions WHERE status <> 'Done' ORDER BY priority ASC, createdAt DESC LIMIT 50"
+        },
+        {
+          "q": "sales actions due this week",
+          "params": [],
+          "sql": "SELECT customerName, category, priority, description, dueDate FROM rhize_sales_actions WHERE status <> 'Done' AND dueDate BETWEEN CURRENT_DATE AND DATE_ADD(CURRENT_DATE, INTERVAL 7 DAY) ORDER BY dueDate ASC LIMIT 50"
+        },
+        {
+          "q": "sales actions completed last 30 days",
+          "params": [],
+          "sql": "SELECT COUNT(*) AS n FROM rhize_sales_actions WHERE status = 'Done' AND updatedAt >= DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY)"
+        }
+      ]
+    },
+    {
+      "group": "ops_stores",
+      "dialect": "mysql",
+      "pairs": [
+        {
+          "q": "my partner stores",
+          "params": [],
+          "sql": "SELECT name, city, tier FROM rhize_stores WHERE isPartner = 1 ORDER BY name LIMIT 200"
+        },
+        {
+          "q": "count of partner stores",
+          "params": [],
+          "sql": "SELECT COUNT(*) AS n FROM rhize_stores WHERE isPartner = 1"
+        },
+        {
+          "q": "partner stores by city",
+          "params": [],
+          "sql": "SELECT city, COUNT(*) AS n FROM rhize_stores WHERE isPartner = 1 GROUP BY city ORDER BY n DESC LIMIT 50"
+        }
+      ]
+    },
+    {
+      "group": "refusals",
+      "dialect": "any",
+      "pairs": [
+        {
+          "q": "delete all rows from market table",
+          "params": [],
+          "sql": null,
+          "refusal": "Read-only access. Can't delete or change data. Can run a SELECT instead."
+        },
+        {
+          "q": "update order status",
+          "params": [],
+          "sql": null,
+          "refusal": "Read-only access. Can't modify orders. Can list them instead."
+        },
+        {
+          "q": "show market data for every state",
+          "params": [],
+          "sql": null,
+          "refusal": "Only licensed state(s) are accessible. Other states are blocked."
+        },
+        {
+          "q": "show another tenants orders",
+          "params": [],
+          "sql": null,
+          "refusal": "Cross-tenant access is blocked. Can only show your own data."
+        },
+        {
+          "q": "drop the rhize orders table",
+          "params": [],
+          "sql": null,
+          "refusal": "Read-only access. No DDL allowed."
+        }
+      ]
+    }
+  ]
+}
