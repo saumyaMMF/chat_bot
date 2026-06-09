@@ -52,16 +52,23 @@ _DANGEROUS_FN = re.compile(
     re.IGNORECASE,
 )
 
+# REPLACE is overloaded in MySQL: REPLACE INTO ... is DML (forbidden);
+# REPLACE(str, from, to) is a string function (allowed). Same shape for
+# any keyword that could also be a built-in function. The negative
+# lookahead `(?!\s*\()` keeps the function form passing while still
+# blocking the statement form. Other DML keywords (insert/update/delete)
+# are NEVER functions, so they stay unconditional.
 _FORBIDDEN_KEYWORD = re.compile(
     r"\b("
     + "|".join([
-        "insert", "update", "delete", "replace", "drop", "alter", "truncate",
-        "create", "grant", "revoke", "merge", "call", "do", "set", "reset",
+        "insert", "update", "delete", "drop", "alter", "truncate",
+        "create", "grant", "revoke", "merge", "do", "reset",
         "use", "load", "lock", "unlock", "handler", "rename", "optimize",
-        "repair", "analyze", "check", "flush", "kill", "shutdown", "prepare",
-        "execute", "deallocate",
+        "repair", "check", "flush", "kill", "shutdown", "prepare",
+        "deallocate",
     ])
-    + r")\b",
+    + r")\b"
+    + r"|\b(replace|call|set|analyze|execute)\b(?!\s*\()",
     re.IGNORECASE,
 )
 

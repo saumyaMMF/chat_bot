@@ -76,6 +76,14 @@ class Settings(BaseSettings):
     # ── Service auth (when called from rhize-intel) ───────────────────────────
     service_token: str | None = Field(default=None, alias="CHATBOT_SERVICE_TOKEN")
 
+    # ── Privacy ───────────────────────────────────────────────────────────────
+    # When true, the prompt builder swaps brand/display names for opaque tokens
+    # and drops executed-row text from history. Designed for the day someone
+    # points CHATBOT_LLM_BASE_URL at a hosted LLM (Gemini/OpenAI/etc) without
+    # also remembering to redact PII. Default false because the local Ollama
+    # path keeps everything on-box.
+    redact_pii: bool = Field(default=False, alias="CHATBOT_REDACT_PII")
+
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:

@@ -13,10 +13,13 @@ from typing import Any, Literal
 
 from app.chatbot.llm_client import ChatMessage, LLMError, chat_complete
 from app.chatbot.normalize_question import normalize_question
+from app.chatbot.pronoun_anchor import try_pronoun_anchor
+from app.chatbot.sanitize import sanitize_question, scrub_llm_prose
 from app.chatbot.prompt_builder import build_messages, build_retry_message
 from app.chatbot.answer_formatter import format_answer, is_terminal_answer
 from app.chatbot.engine_router import route_engine
 from app.chatbot.router import column_pin, route_signal
+from app.chatbot.column_check import real_columns_for, validate_columns
 from app.chatbot.fast_path_store import retrieve_match as fast_path_match
 from app.chatbot.readonly_db import RunContext, run_readonly
 from app.chatbot.readonly_db_mysql import RunMysqlContext, run_readonly_mysql
@@ -51,7 +54,54 @@ _GREETING_PATTERNS: list[tuple[re.Pattern[str], str]] = [
         re.compile(r"^\s*(bye|goodbye|see ya|see you|later)[\s!.?]*$", re.I),
         "Bye! Come back any time for more market data.",
     ),
+    (
+        re.compile(r"^\s*(yes|yeah|yep|yup|ok|okay|sure|y)[\s!.?]*$", re.I),
+        "Got it. What would you like to know about your data?",
+    ),
+    (
+        re.compile(r"^\s*(no|nope|nah|n)[\s!.?]*$", re.I),
+        "No problem. Ask me anything about your market data when you're ready.",
+    ),
+    (
+        re.compile(r"^\s*(cool|nice|great|awesome|👍|👌)[\s!.?]*$", re.I),
+        "Glad it helped. Anything else you'd like to dig into?",
+    ),
 ]
+
+# Meta / explainer questions — the user is asking the bot to teach or
+# self-describe, not pull data. Without this short-circuit, a 3B model
+# burns 40-90s trying to write SQL and either invents columns or returns
+# a confused REFUSE. Match conservatively: only when the verb signals
+# explanation AND no data-words follow. False negative (one wasted LLM
+# round-trip) is cheaper than false positive (real data query short-
+# circuited to canned reply). Numeric / "how many"/"how much" stay LLM.
+_META_QUESTION_RX = re.compile(
+    r"^\s*("
+    # "how do I/you/we ...", "how to ..."
+    r"how\s+(do|can|should|would|to)\s+(i|you|we|one)?"
+    r"|how\s+to\b"
+    # "what does X mean", "what is meant by", "explain ..."
+    r"|what\s+does\s+\S+\s+mean"
+    r"|what\s+is\s+meant\s+by"
+    r"|what\s+do\s+you\s+mean"
+    r"|explain\s+(this|that|it|to me)?"
+    r"|tell\s+me\s+(about\s+)?(how|why)"
+    # "why is/are/do/did ..."
+    r"|why\s+(is|are|do|does|did|should|would)\b"
+    # Bare meta words
+    r"|meaning\b"
+    r"|definition\b"
+    r"|define\b"
+    r"|clarify\b"
+    r")",
+    re.I,
+)
+_META_REPLY = (
+    "I answer data questions about your brand, market, inventory, orders, "
+    "and sales. Try asking something like \"how many active dispensaries\" "
+    "or \"top brands last 30 days\"."
+)
+
 
 # Bot self-identity catcher. Without this the LLM sometimes leaks the
 # system-prompt phrasing ("I am a SQL analyst…") into a CHAT reply. Match
@@ -123,9 +173,9 @@ def _match_greeting(question: str) -> str | None:
 
 def _match_identity(question: str, brand_name: str | None, display_name: str | None) -> str | None:
     if _BRAND_NAME_RX.search(question) and brand_name:
-        return f"Your brand is **{brand_name}**."
+        return f"Your brand is {brand_name}."
     if _DISPLAY_NAME_RX.search(question) and display_name:
-        return f"Your account is **{display_name}**."
+        return f"Your account is {display_name}."
     return None
 
 
@@ -404,7 +454,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
     settings = get_settings()
     started_at = _time.perf_counter()
     started_iso = _dt.datetime.now().isoformat()
-    question = normalize_question(input.question)
+    question = normalize_question(sanitize_question(input.question))
 
     def _log(
         result: ChatResult,
@@ -426,6 +476,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
                 fast_path=fast_path,
                 kind=result.kind,
                 latency_ms=int((_time.perf_counter() - started_at) * 1000),
+                session_id=input.session_id,
                 engine=engine,
                 sql_llm=sql_llm,
                 sql_final=sql_final or result.sql,
@@ -446,9 +497,68 @@ async def run_chat(input: ChatInput) -> ChatResult:
     if _BOT_IDENTITY_RX.search(question):
         return _log(ChatResult(kind="chat", message=_BOT_IDENTITY_REPLY), "identity-bot")
 
+    # Meta question short-circuit (#1). Must run AFTER greeting/identity so
+    # "how does this work" still gets the help canned line, BEFORE the
+    # disambig fast-path so "how to detect it" doesn't fall into LLM hell.
+    if _META_QUESTION_RX.search(question):
+        return _log(ChatResult(kind="chat", message=_META_REPLY), "meta")
+
     identity = _match_identity(question, input.brand_name, input.display_name)
     if identity:
         return _log(ChatResult(kind="chat", message=identity), "identity")
+
+    # Pronoun-anchor fast-path. "how many of them", "show 5 of those" —
+    # 3B model can't bind anaphora reliably. Reuse last turn's SQL FROM/
+    # WHERE deterministically. Runs the same Gate C/D as everything else.
+    anchor = try_pronoun_anchor(question, input.history)
+    if anchor is not None:
+        try:
+            if anchor.dialect == "mysql":
+                verdict = validate_mysql_sql(anchor.sql, input.tenant_id)
+                if verdict.ok:
+                    final_sql = enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
+                    res = await run_readonly_mysql(
+                        final_sql,
+                        RunMysqlContext(timeout_ms=settings.statement_timeout_ms),
+                    )
+                    engine = "mysql"
+                else:
+                    raise RuntimeError(f"anchor SQL rejected: {verdict.reason}")
+            else:
+                verdict = validate_sql(anchor.sql)
+                if verdict.ok:
+                    final_sql = rewrite_eq_to_ilike_on_text_cols(
+                        enforce_limit(verdict.sql, max_rows=settings.row_limit)
+                    )
+                    res = await run_readonly(
+                        final_sql,
+                        RunContext(
+                            tenant_id=input.tenant_id,
+                            states=input.states,
+                            timeout_ms=settings.statement_timeout_ms,
+                        ),
+                    )
+                    engine = "pg"
+                else:
+                    raise RuntimeError(f"anchor SQL rejected: {verdict.reason}")
+            log.info("[chat] pronoun-anchor hit: %s", anchor.explanation)
+            clean = _drop_blank_dimension_rows(res.rows)
+            ans = format_answer(input.question, final_sql, clean)
+            terminal = is_terminal_answer(input.question, clean)
+            return _log(
+                ChatResult(
+                    kind="chat" if terminal else "result",
+                    message=ans,
+                    sql=None if terminal else final_sql,
+                    rows=[] if terminal else clean,
+                    row_count=0 if terminal else len(clean),
+                ),
+                "pronoun-anchor",
+                engine=engine,
+                sql_final=final_sql,
+            )
+        except Exception as exc:
+            log.warning("[chat] pronoun-anchor failed, falling through: %s", exc)
 
     # Disambiguated-entity fast-path. "brand X" / "company X" / "store X" /
     # "category X" → deterministic SQL, no LLM round-trip. Saves ~40s/turn
@@ -644,14 +754,14 @@ async def run_chat(input: ChatInput) -> ChatResult:
 
         parsed = extract_sql(reply)
         if parsed.chat:
-            return _log(ChatResult(kind="chat", message=parsed.chat), "none", attempts=attempt)
+            return _log(ChatResult(kind="chat", message=scrub_llm_prose(parsed.chat)), "none", attempts=attempt)
         if parsed.refusal:
-            return _log(ChatResult(kind="refusal", message=parsed.refusal), "none", attempts=attempt)
+            return _log(ChatResult(kind="refusal", message=scrub_llm_prose(parsed.refusal)), "none", attempts=attempt)
         if parsed.clarify_message:
             return _log(
                 ChatResult(
                     kind="clarify",
-                    message=parsed.clarify_message,
+                    message=scrub_llm_prose(parsed.clarify_message),
                     options=parsed.clarify_options,
                 ),
                 "none",
@@ -720,6 +830,32 @@ async def run_chat(input: ChatInput) -> ChatResult:
                 messages.append(build_retry_message(sql, f"Rejected by safety check: {verdict.reason}"))
                 continue
             final_sql = enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
+
+        # Column existence pre-check — catches hallucinated cols before the
+        # DB round-trip. Feed REAL columns back so attempt 2 is informed,
+        # not just told "column X doesn't exist". The 3B model often retries
+        # the same bad column on a bare DB error.
+        col_check = validate_columns(final_sql)
+        if not col_check.ok:
+            last_sql = final_sql
+            last_error = col_check.reason
+            log.info("[chat] column pre-check rejected: %s", col_check.reason)
+            tables_in_play: set[str] = set()
+            for bad, hints in (col_check.suggestions or {}).items():
+                for h in hints:
+                    tables_in_play.add(h.split(".", 1)[0])
+            schema_hint_lines: list[str] = []
+            for t in sorted(tables_in_play):
+                cols = real_columns_for(t)
+                if cols:
+                    schema_hint_lines.append(f"{t}: {', '.join(cols)}")
+            schema_hint = ("\nReal columns:\n" + "\n".join(schema_hint_lines)) if schema_hint_lines else ""
+            messages.append(ChatMessage(role="assistant", content=final_sql))
+            messages.append(build_retry_message(
+                final_sql,
+                f"{col_check.reason}{schema_hint}",
+            ))
+            continue
 
         last_sql = final_sql
 

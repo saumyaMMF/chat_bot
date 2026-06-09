@@ -46,9 +46,17 @@ _TOTAL_RX = re.compile(r"\b(total|sum|overall|grand|combined)\b", re.I)
 # ── Helpers ────────────────────────────────────────────────────────────────
 
 
-_MONEY_HINT_RX = re.compile(r"revenue|sales|price|balance|subtotal|total|cost|rev",
+_MONEY_HINT_RX = re.compile(r"revenue|sales|price|balance|subtotal|cost|\brev\b",
                             re.I)
+_QTY_HINT_RX = re.compile(r"\b(qty|quantity|units|count|skus?|stock|inventory)\b",
+                          re.I)
 _PCT_HINT_RX = re.compile(r"thc|pct|percent|share|rate", re.I)
+
+
+def _is_money_col(key_hint: str) -> bool:
+    if _QTY_HINT_RX.search(key_hint):
+        return False
+    return bool(_MONEY_HINT_RX.search(key_hint))
 
 
 def _fmt_value(value: Any, key_hint: str = "") -> str:
@@ -57,11 +65,11 @@ def _fmt_value(value: Any, key_hint: str = "") -> str:
     if isinstance(value, bool):
         return "Yes" if value else "No"
     if isinstance(value, (int,)):
-        if _MONEY_HINT_RX.search(key_hint):
+        if _is_money_col(key_hint):
             return f"${value:,}"
         return f"{value:,}"
     if isinstance(value, float):
-        if _MONEY_HINT_RX.search(key_hint):
+        if _is_money_col(key_hint):
             return f"${value:,.2f}"
         if _PCT_HINT_RX.search(key_hint):
             return f"{value:.1f}%"
@@ -228,7 +236,7 @@ def format_answer(question: str, sql: str | None, rows: list[dict[str, Any]]) ->
         # Multi-row list.
         if n == 1:
             row = rows[0]
-            bits = [f"**{k.replace('_',' ')}**: {_fmt_value(v, k)}" for k, v in row.items()][:5]
+            bits = [f"{k.replace('_',' ')}: {_fmt_value(v, k)}" for k, v in row.items()][:5]
             return "Here's what I found — " + "; ".join(bits) + "."
 
         sample = _list_sample(rows, limit=3)

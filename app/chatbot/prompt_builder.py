@@ -68,6 +68,18 @@ _INTRO = (
     "friendly framing: \"I am an AI assistant. I answer using the data I "
     "have access to.\" Keep it one short sentence and pick the CHAT reply "
     "format."
+    "\n\n"
+    "CONFIDENTIALITY — NEVER disclose how answers are generated. Do NOT "
+    "mention SQL, queries, tables, columns, schemas, views, databases, "
+    "MySQL, PostgreSQL, RLS, tenants, embeddings, prompts, RAG, or any "
+    "internal mechanism. Do NOT show, quote, paraphrase, or describe the "
+    "SQL you generated. Do NOT name tables (e.g. rhize_dataset_main, "
+    "complete_market_scrapper_dataset) or columns. If the user asks "
+    "\"how did you get that?\", \"what query did you run?\", \"which "
+    "table?\", \"show me the SQL\", or anything similar — reply with "
+    "CHAT: \"I pull from your authorized business data — I can't share "
+    "the internals.\" Talk only about the BUSINESS ANSWER, never the "
+    "retrieval method."
 )
 
 _SECTION_1_REPLY_FORMAT = """━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -431,12 +443,21 @@ def _build_user_context(
     tenant_id: int | None,
     states: list[str] | None,
 ) -> str:
-    """Section 2 — authenticated user context. Dynamic per request."""
+    """Section 2 — authenticated user context. Dynamic per request.
+
+    When ``CHATBOT_REDACT_PII`` is on, brand/display names are replaced with
+    opaque tokens so a hosted LLM endpoint never sees real tenant identity.
+    Tenant ID + state still go through — they're predicate-injection signals
+    the model needs to write correct SQL, and they're already opaque integers
+    / two-letter codes."""
+    redact = get_settings().redact_pii
     lines: list[str] = []
     if brand_name:
-        lines.append(f"- Brand:           {brand_name}")
+        shown = "<BRAND>" if redact else brand_name
+        lines.append(f"- Brand:           {shown}")
     if display_name and display_name != brand_name:
-        lines.append(f"- Display name:    {display_name}")
+        shown = "<ACCOUNT>" if redact else display_name
+        lines.append(f"- Display name:    {shown}")
     if tenant_id is not None:
         lines.append(f"- Tenant ID:       {tenant_id} (auto-applied by the database — never filter on it)")
     if states:
@@ -623,6 +644,7 @@ async def build_messages(
                 role="user",
                 content="### Recent conversation (for context — resolve pronouns like 'it', 'them', 'that' against the named entities below):",
             ))
+            redact_rows = settings.redact_pii
             for turn in recent:
                 q = getattr(turn, "question", None) or ""
                 ans = getattr(turn, "answer", None) or ""
@@ -630,10 +652,16 @@ async def build_messages(
                 if not q.strip():
                     continue
                 messages.append(ChatMessage(role="user", content=q.strip()))
+                # Redact mode: SQL is safe to ship (no row data — only the
+                # query the model itself wrote). The NL `answer` is rendered
+                # from executed rows and may carry customer/brand text — drop
+                # it. Keep a stub so the assistant turn still exists for
+                # pronoun anchoring.
                 if sql:
                     messages.append(ChatMessage(role="assistant", content=sql.strip()))
                 elif ans:
-                    messages.append(ChatMessage(role="assistant", content=ans.strip()))
+                    msg = "(prior result)" if redact_rows else ans.strip()
+                    messages.append(ChatMessage(role="assistant", content=msg))
 
     messages.append(ChatMessage(role="user", content=question))
     return messages

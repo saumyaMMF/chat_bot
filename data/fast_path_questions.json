@@ -139,17 +139,17 @@
       "dialect": "postgres",
       "pairs": [
         {
-          "q": "how many products added today",
+          "q": "how many products added to market today",
           "params": [],
           "sql": "SELECT COUNT(*) AS added_count FROM chatbot_market WHERE flag = 'added' AND date_d = (SELECT MAX(date_d) FROM chatbot_market)"
         },
         {
-          "q": "what products were added today",
+          "q": "what products were added to market today",
           "params": [],
           "sql": "SELECT product_name, brand, company, category_norm, price_n FROM chatbot_market WHERE flag = 'added' AND date_d = (SELECT MAX(date_d) FROM chatbot_market) ORDER BY brand LIMIT 500"
         },
         {
-          "q": "what products were removed today",
+          "q": "what products were removed from market today",
           "params": [],
           "sql": "SELECT product_name, brand, company, category_norm FROM chatbot_market WHERE flag = 'removed' AND date_d = (SELECT MAX(date_d) FROM chatbot_market) ORDER BY brand LIMIT 500"
         },
@@ -205,6 +205,16 @@
           "sql": "SELECT SUM(revenue) AS rev FROM chatbot_mv_market_daily WHERE {WINDOW_SQL}"
         },
         {
+          "q": "total quantity in the market today",
+          "params": [],
+          "sql": "SELECT SUM(quantity) AS total_qty FROM chatbot_mv_market_daily WHERE date = (SELECT MAX(date) FROM chatbot_mv_market_daily)"
+        },
+        {
+          "q": "total market quantity {WINDOW}",
+          "params": ["WINDOW"],
+          "sql": "SELECT SUM(quantity) AS total_qty FROM chatbot_mv_market_daily WHERE {WINDOW_SQL}"
+        },
+        {
           "q": "how many products listed today",
           "params": [],
           "sql": "SELECT COUNT(*) AS n FROM chatbot_market WHERE date_d = (SELECT MAX(date_d) FROM chatbot_market)"
@@ -218,6 +228,197 @@
           "q": "how many distinct stores today",
           "params": [],
           "sql": "SELECT COUNT(DISTINCT company) AS stores FROM chatbot_market WHERE date_d = (SELECT MAX(date_d) FROM chatbot_market) AND company <> '' AND company IS NOT NULL"
+        }
+      ]
+    },
+    {
+      "group": "tenant_catalog",
+      "dialect": "mysql",
+      "pairs": [
+        {
+          "q": "how many products added today",
+          "params": [],
+          "sql": "SELECT COUNT(*) AS added_count FROM rhize_dataset_main WHERE Flag = 'Added' AND date = (SELECT MAX(date) FROM rhize_dataset_main)"
+        },
+        {
+          "q": "how many products removed today",
+          "params": [],
+          "sql": "SELECT COUNT(*) AS removed_count FROM rhize_dataset_main WHERE Flag = 'Removed' AND date = (SELECT MAX(date) FROM rhize_dataset_main)"
+        },
+        {
+          "q": "what products were added today",
+          "params": [],
+          "sql": "SELECT Product_Name, Company_Name, Category, date FROM rhize_dataset_main WHERE Flag = 'Added' AND date = (SELECT MAX(date) FROM rhize_dataset_main) ORDER BY Product_Name LIMIT 500"
+        },
+        {
+          "q": "what products were removed today",
+          "params": [],
+          "sql": "SELECT Product_Name, Company_Name, Category, date FROM rhize_dataset_main WHERE Flag = 'Removed' AND date = (SELECT MAX(date) FROM rhize_dataset_main) ORDER BY Product_Name LIMIT 500"
+        },
+        {
+          "q": "how many products added in the last 7 days",
+          "params": [],
+          "sql": "SELECT COUNT(*) AS added_count FROM rhize_dataset_main WHERE Flag = 'Added' AND date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 7 DAY, '%Y-%m-%d')"
+        },
+        {
+          "q": "what did I add to my catalog this week",
+          "params": [],
+          "sql": "SELECT Product_Name, Company_Name, Category, date FROM rhize_dataset_main WHERE Flag = 'Added' AND date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 7 DAY, '%Y-%m-%d') ORDER BY date DESC, Product_Name LIMIT 500"
+        },
+        {
+          "q": "what's new in my catalog",
+          "params": [],
+          "sql": "SELECT Product_Name, Company_Name, Category, date FROM rhize_dataset_main WHERE Flag = 'Added' AND date = (SELECT MAX(date) FROM rhize_dataset_main) ORDER BY Product_Name LIMIT 500"
+        },
+        {
+          "q": "discontinued products",
+          "params": [],
+          "sql": "SELECT Product_Name, Company_Name, Category, date FROM rhize_dataset_main WHERE Flag = 'Removed' AND date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 30 DAY, '%Y-%m-%d') ORDER BY date DESC, Product_Name LIMIT 500"
+        },
+        {
+          "q": "products with no change today",
+          "params": [],
+          "sql": "SELECT COUNT(*) AS no_change_count FROM rhize_dataset_main WHERE Flag = 'No Change' AND date = (SELECT MAX(date) FROM rhize_dataset_main)"
+        },
+        {
+          "q": "list products with no change today",
+          "params": [],
+          "sql": "SELECT Product_Name, Company_Name, Category, date FROM rhize_dataset_main WHERE Flag = 'No Change' AND date = (SELECT MAX(date) FROM rhize_dataset_main) ORDER BY Product_Name LIMIT 500"
+        },
+        {
+          "q": "unchanged products",
+          "params": [],
+          "sql": "SELECT Product_Name, Company_Name, Category, date FROM rhize_dataset_main WHERE Flag = 'No Change' AND date = (SELECT MAX(date) FROM rhize_dataset_main) ORDER BY Product_Name LIMIT 500"
+        },
+        {
+          "q": "what products didn't change",
+          "params": [],
+          "sql": "SELECT Product_Name, Company_Name, Category, date FROM rhize_dataset_main WHERE Flag = 'No Change' AND date = (SELECT MAX(date) FROM rhize_dataset_main) ORDER BY Product_Name LIMIT 500"
+        },
+        {
+          "q": "how much quantity today",
+          "params": [],
+          "sql": "SELECT SUM(CAST(REGEXP_REPLACE(`Today's_Quantity_Total`, '[^0-9.]', '') AS DECIMAL(10,2))) AS total_qty FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main)"
+        },
+        {
+          "q": "total quantity of partner stores today",
+          "params": [],
+          "sql": "SELECT SUM(CAST(REGEXP_REPLACE(`Today's_Quantity_Total`, '[^0-9.]', '') AS DECIMAL(10,2))) AS total_qty FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main)"
+        },
+        {
+          "q": "how many units do I have listed today",
+          "params": [],
+          "sql": "SELECT SUM(CAST(REGEXP_REPLACE(`Today's_Quantity_Total`, '[^0-9.]', '') AS DECIMAL(10,2))) AS total_qty FROM rhize_dataset_main WHERE Flag = 'Added' AND date = (SELECT MAX(date) FROM rhize_dataset_main)"
+        },
+        {
+          "q": "how much quantity added today",
+          "params": [],
+          "sql": "SELECT SUM(CAST(REGEXP_REPLACE(`Today's_Quantity_Total`, '[^0-9.]', '') AS DECIMAL(10,2))) AS total_qty FROM rhize_dataset_main WHERE Flag = 'Added' AND date = (SELECT MAX(date) FROM rhize_dataset_main)"
+        },
+        {
+          "q": "added quantity today",
+          "params": [],
+          "sql": "SELECT SUM(CAST(REGEXP_REPLACE(`Today's_Quantity_Total`, '[^0-9.]', '') AS DECIMAL(10,2))) AS total_qty FROM rhize_dataset_main WHERE Flag = 'Added' AND date = (SELECT MAX(date) FROM rhize_dataset_main)"
+        },
+        {
+          "q": "total quantity of newly added products today",
+          "params": [],
+          "sql": "SELECT SUM(CAST(REGEXP_REPLACE(`Today's_Quantity_Total`, '[^0-9.]', '') AS DECIMAL(10,2))) AS total_qty FROM rhize_dataset_main WHERE Flag = 'Added' AND date = (SELECT MAX(date) FROM rhize_dataset_main)"
+        },
+        {
+          "q": "quantity of products added today",
+          "params": [],
+          "sql": "SELECT SUM(CAST(REGEXP_REPLACE(`Today's_Quantity_Total`, '[^0-9.]', '') AS DECIMAL(10,2))) AS total_qty FROM rhize_dataset_main WHERE Flag = 'Added' AND date = (SELECT MAX(date) FROM rhize_dataset_main)"
+        },
+        {
+          "q": "how much quantity removed today",
+          "params": [],
+          "sql": "SELECT SUM(CAST(REGEXP_REPLACE(`Today's_Quantity_Total`, '[^0-9.]', '') AS DECIMAL(10,2))) AS total_qty FROM rhize_dataset_main WHERE Flag = 'Removed' AND date = (SELECT MAX(date) FROM rhize_dataset_main)"
+        },
+        {
+          "q": "removed quantity today",
+          "params": [],
+          "sql": "SELECT SUM(CAST(REGEXP_REPLACE(`Today's_Quantity_Total`, '[^0-9.]', '') AS DECIMAL(10,2))) AS total_qty FROM rhize_dataset_main WHERE Flag = 'Removed' AND date = (SELECT MAX(date) FROM rhize_dataset_main)"
+        },
+        {
+          "q": "quantity per product today",
+          "params": [],
+          "sql": "SELECT Product_Name, SUM(CAST(REGEXP_REPLACE(`Today's_Quantity_Total`, '[^0-9.]', '') AS DECIMAL(10,2))) AS qty FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) GROUP BY Product_Name ORDER BY qty DESC LIMIT 50"
+        },
+        {
+          "q": "average price by category",
+          "params": [],
+          "sql": "SELECT Category, AVG(CAST(REGEXP_REPLACE(Price, '[^0-9.]', '') AS DECIMAL(10,2))) AS avg_price FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND Price IS NOT NULL AND Price <> '' AND Category IS NOT NULL AND Category <> '' GROUP BY Category ORDER BY avg_price DESC LIMIT 50"
+        },
+        {
+          "q": "average price by category today",
+          "params": [],
+          "sql": "SELECT Category, AVG(CAST(REGEXP_REPLACE(Price, '[^0-9.]', '') AS DECIMAL(10,2))) AS avg_price FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND Price IS NOT NULL AND Price <> '' AND Category IS NOT NULL AND Category <> '' GROUP BY Category ORDER BY avg_price DESC LIMIT 50"
+        },
+        {
+          "q": "average price per category",
+          "params": [],
+          "sql": "SELECT Category, AVG(CAST(REGEXP_REPLACE(Price, '[^0-9.]', '') AS DECIMAL(10,2))) AS avg_price FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND Price IS NOT NULL AND Price <> '' AND Category IS NOT NULL AND Category <> '' GROUP BY Category ORDER BY avg_price DESC LIMIT 50"
+        },
+        {
+          "q": "average revenue by category",
+          "params": [],
+          "sql": "SELECT Category, AVG(CAST(REGEXP_REPLACE(Revenue, '[^0-9.]', '') AS DECIMAL(12,2))) AS avg_revenue FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND Revenue IS NOT NULL AND Revenue <> '' GROUP BY Category ORDER BY avg_revenue DESC LIMIT 50"
+        },
+        {
+          "q": "total revenue by category today",
+          "params": [],
+          "sql": "SELECT Category, SUM(CAST(REGEXP_REPLACE(Revenue, '[^0-9.]', '') AS DECIMAL(12,2))) AS total_revenue FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND Revenue IS NOT NULL AND Revenue <> '' GROUP BY Category ORDER BY total_revenue DESC LIMIT 50"
+        },
+        {
+          "q": "total revenue of partner stores today",
+          "params": [],
+          "sql": "SELECT SUM(CAST(REGEXP_REPLACE(Revenue, '[^0-9.]', '') AS DECIMAL(12,2))) AS total_revenue FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND Revenue IS NOT NULL AND Revenue <> ''"
+        },
+        {
+          "q": "partner stores SKU count today",
+          "params": [],
+          "sql": "SELECT COUNT(*) AS sku_count FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main)"
+        },
+        {
+          "q": "which partner has most SKUs",
+          "params": [],
+          "sql": "SELECT Company_Name, COUNT(*) AS sku_count FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND Company_Name IS NOT NULL AND Company_Name <> '' GROUP BY Company_Name ORDER BY sku_count DESC LIMIT 20"
+        },
+        {
+          "q": "partner additions this week",
+          "params": [],
+          "sql": "SELECT Company_Name, COUNT(*) AS added_count FROM rhize_dataset_main WHERE Flag = 'Added' AND date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 7 DAY, '%Y-%m-%d') AND Company_Name IS NOT NULL AND Company_Name <> '' GROUP BY Company_Name ORDER BY added_count DESC LIMIT 50"
+        },
+        {
+          "q": "partner removals this week",
+          "params": [],
+          "sql": "SELECT Company_Name, COUNT(*) AS removed_count FROM rhize_dataset_main WHERE Flag = 'Removed' AND date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 7 DAY, '%Y-%m-%d') AND Company_Name IS NOT NULL AND Company_Name <> '' GROUP BY Company_Name ORDER BY removed_count DESC LIMIT 50"
+        },
+        {
+          "q": "partner stores avg price by category",
+          "params": [],
+          "sql": "SELECT Category, AVG(CAST(REGEXP_REPLACE(Price, '[^0-9.]', '') AS DECIMAL(10,2))) AS avg_price FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND Price IS NOT NULL AND Price <> '' AND Category IS NOT NULL AND Category <> '' GROUP BY Category ORDER BY avg_price DESC LIMIT 50"
+        },
+        {
+          "q": "top category in partner catalog",
+          "params": [],
+          "sql": "SELECT Category, COUNT(*) AS sku_count FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND Category IS NOT NULL AND Category <> '' GROUP BY Category ORDER BY sku_count DESC LIMIT 20"
+        },
+        {
+          "q": "partner store revenue trend last 30 days",
+          "params": [],
+          "sql": "SELECT date, SUM(CAST(REGEXP_REPLACE(Revenue, '[^0-9.]', '') AS DECIMAL(12,2))) AS total_revenue FROM rhize_dataset_main WHERE date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 30 DAY, '%Y-%m-%d') AND Revenue IS NOT NULL AND Revenue <> '' GROUP BY date ORDER BY date ASC"
+        },
+        {
+          "q": "partners with zero adds this week",
+          "params": [],
+          "sql": "SELECT Company_Name FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND Company_Name IS NOT NULL AND Company_Name <> '' GROUP BY Company_Name HAVING SUM(CASE WHEN Flag = 'Added' AND date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 7 DAY, '%Y-%m-%d') THEN 1 ELSE 0 END) = 0 ORDER BY Company_Name LIMIT 100"
+        },
+        {
+          "q": "partner SKUs unchanged 30 days",
+          "params": [],
+          "sql": "SELECT Product_Name, Company_Name, Category FROM rhize_dataset_main WHERE date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 30 DAY, '%Y-%m-%d') GROUP BY Product_Name, Company_Name, Category HAVING SUM(CASE WHEN Flag <> 'No Change' THEN 1 ELSE 0 END) = 0 ORDER BY Company_Name, Product_Name LIMIT 500"
         }
       ]
     },
@@ -264,6 +465,111 @@
           "q": "customers with open balance over 1000",
           "params": [],
           "sql": "SELECT customerName, SUM(openBalance) AS open_total FROM rhize_orders WHERE status <> 'Completed' GROUP BY customerName HAVING open_total > 1000 ORDER BY open_total DESC LIMIT 50"
+        },
+        {
+          "q": "how much sales today",
+          "params": [],
+          "sql": "SELECT SUM(subtotal) AS sales_today FROM rhize_orders WHERE status = 'Completed' AND DATE(date) = CURRENT_DATE"
+        },
+        {
+          "q": "how much sale we have today",
+          "params": [],
+          "sql": "SELECT SUM(subtotal) AS sales_today FROM rhize_orders WHERE status = 'Completed' AND DATE(date) = CURRENT_DATE"
+        },
+        {
+          "q": "total sales today",
+          "params": [],
+          "sql": "SELECT SUM(subtotal) AS sales_today FROM rhize_orders WHERE status = 'Completed' AND DATE(date) = CURRENT_DATE"
+        },
+        {
+          "q": "sales today",
+          "params": [],
+          "sql": "SELECT SUM(subtotal) AS sales_today FROM rhize_orders WHERE status = 'Completed' AND DATE(date) = CURRENT_DATE"
+        },
+        {
+          "q": "revenue today",
+          "params": [],
+          "sql": "SELECT SUM(subtotal) AS revenue_today FROM rhize_orders WHERE status = 'Completed' AND DATE(date) = CURRENT_DATE"
+        },
+        {
+          "q": "sales yesterday",
+          "params": [],
+          "sql": "SELECT SUM(subtotal) AS sales_yesterday FROM rhize_orders WHERE status = 'Completed' AND DATE(date) = DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY)"
+        },
+        {
+          "q": "sales this week",
+          "params": [],
+          "sql": "SELECT SUM(subtotal) AS sales_week FROM rhize_orders WHERE status = 'Completed' AND date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)"
+        },
+        {
+          "q": "sales this month",
+          "params": [],
+          "sql": "SELECT SUM(subtotal) AS sales_month FROM rhize_orders WHERE status = 'Completed' AND date >= DATE_FORMAT(CURRENT_DATE, '%Y-%m-01')"
+        },
+        {
+          "q": "products sold today",
+          "params": [],
+          "sql": "SELECT productName, SUM(qty) AS qty, SUM(subtotal) AS rev FROM rhize_orders WHERE status = 'Completed' AND DATE(date) = CURRENT_DATE GROUP BY productName ORDER BY rev DESC LIMIT 50"
+        },
+        {
+          "q": "list products sold today",
+          "params": [],
+          "sql": "SELECT productName, SUM(qty) AS qty, SUM(subtotal) AS rev FROM rhize_orders WHERE status = 'Completed' AND DATE(date) = CURRENT_DATE GROUP BY productName ORDER BY rev DESC LIMIT 50"
+        },
+        {
+          "q": "products in today sales",
+          "params": [],
+          "sql": "SELECT productName, SUM(qty) AS qty, SUM(subtotal) AS rev FROM rhize_orders WHERE status = 'Completed' AND DATE(date) = CURRENT_DATE GROUP BY productName ORDER BY rev DESC LIMIT 50"
+        },
+        {
+          "q": "list products used in sales today",
+          "params": [],
+          "sql": "SELECT productName, SUM(qty) AS qty, SUM(subtotal) AS rev FROM rhize_orders WHERE status = 'Completed' AND DATE(date) = CURRENT_DATE GROUP BY productName ORDER BY rev DESC LIMIT 50"
+        },
+        {
+          "q": "what products did we sell today",
+          "params": [],
+          "sql": "SELECT productName, SUM(qty) AS qty, SUM(subtotal) AS rev FROM rhize_orders WHERE status = 'Completed' AND DATE(date) = CURRENT_DATE GROUP BY productName ORDER BY rev DESC LIMIT 50"
+        },
+        {
+          "q": "revenue last 7 days",
+          "params": [],
+          "sql": "SELECT COALESCE(SUM(subtotal),0) AS rev FROM rhize_orders WHERE status = 'Completed' AND date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)"
+        },
+        {
+          "q": "revenue last 30 days",
+          "params": [],
+          "sql": "SELECT COALESCE(SUM(subtotal),0) AS rev FROM rhize_orders WHERE status = 'Completed' AND date >= DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY)"
+        },
+        {
+          "q": "revenue past 30 days",
+          "params": [],
+          "sql": "SELECT COALESCE(SUM(subtotal),0) AS rev FROM rhize_orders WHERE status = 'Completed' AND date >= DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY)"
+        },
+        {
+          "q": "order revenue past 30 days",
+          "params": [],
+          "sql": "SELECT COALESCE(SUM(subtotal),0) AS rev FROM rhize_orders WHERE status = 'Completed' AND date >= DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY)"
+        },
+        {
+          "q": "how much order revenue generated in past 30 days",
+          "params": [],
+          "sql": "SELECT COALESCE(SUM(subtotal),0) AS rev FROM rhize_orders WHERE status = 'Completed' AND date >= DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY)"
+        },
+        {
+          "q": "how much revenue last 30 days",
+          "params": [],
+          "sql": "SELECT COALESCE(SUM(subtotal),0) AS rev FROM rhize_orders WHERE status = 'Completed' AND date >= DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY)"
+        },
+        {
+          "q": "total revenue past 90 days",
+          "params": [],
+          "sql": "SELECT COALESCE(SUM(subtotal),0) AS rev FROM rhize_orders WHERE status = 'Completed' AND date >= DATE_SUB(CURRENT_DATE, INTERVAL 90 DAY)"
+        },
+        {
+          "q": "revenue this year",
+          "params": [],
+          "sql": "SELECT COALESCE(SUM(subtotal),0) AS rev FROM rhize_orders WHERE status = 'Completed' AND YEAR(date) = YEAR(CURRENT_DATE)"
         }
       ]
     },
@@ -358,6 +664,86 @@
           "q": "partner stores by city",
           "params": [],
           "sql": "SELECT city, COUNT(*) AS n FROM rhize_stores WHERE isPartner = 1 GROUP BY city ORDER BY n DESC LIMIT 50"
+        },
+        {
+          "q": "how many active dispensaries",
+          "params": [],
+          "sql": "SELECT COUNT(DISTINCT Company_Name) AS n FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND `Today's_Quantity_Total` > 0"
+        },
+        {
+          "q": "how many active dispensaries today",
+          "params": [],
+          "sql": "SELECT COUNT(DISTINCT Company_Name) AS n FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND `Today's_Quantity_Total` > 0"
+        },
+        {
+          "q": "current active dispensaries",
+          "params": [],
+          "sql": "SELECT DISTINCT Company_Name FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND `Today's_Quantity_Total` > 0 ORDER BY Company_Name LIMIT 200"
+        },
+        {
+          "q": "my active dispensaries",
+          "params": [],
+          "sql": "SELECT DISTINCT Company_Name FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND `Today's_Quantity_Total` > 0 ORDER BY Company_Name LIMIT 200"
+        },
+        {
+          "q": "my active partner dispensaries",
+          "params": [],
+          "sql": "SELECT DISTINCT Company_Name FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND `Today's_Quantity_Total` > 0 ORDER BY Company_Name LIMIT 200"
+        },
+        {
+          "q": "list active dispensaries",
+          "params": [],
+          "sql": "SELECT DISTINCT Company_Name FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND `Today's_Quantity_Total` > 0 ORDER BY Company_Name LIMIT 200"
+        },
+        {
+          "q": "how many active partners",
+          "params": [],
+          "sql": "SELECT COUNT(DISTINCT Company_Name) AS n FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND `Today's_Quantity_Total` > 0"
+        },
+        {
+          "q": "how many active partners are active today",
+          "params": [],
+          "sql": "SELECT COUNT(DISTINCT Company_Name) AS n FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND `Today's_Quantity_Total` > 0"
+        },
+        {
+          "q": "how many partners are active today",
+          "params": [],
+          "sql": "SELECT COUNT(DISTINCT Company_Name) AS n FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND `Today's_Quantity_Total` > 0"
+        },
+        {
+          "q": "active partners today",
+          "params": [],
+          "sql": "SELECT DISTINCT Company_Name FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND `Today's_Quantity_Total` > 0 ORDER BY Company_Name LIMIT 200"
+        },
+        {
+          "q": "want how many active partners",
+          "params": [],
+          "sql": "SELECT COUNT(DISTINCT Company_Name) AS n FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND `Today's_Quantity_Total` > 0"
+        },
+        {
+          "q": "total partners",
+          "params": [],
+          "sql": "SELECT COUNT(DISTINCT Company_Name) AS n FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND `Today's_Quantity_Total` > 0"
+        },
+        {
+          "q": "total partner stores",
+          "params": [],
+          "sql": "SELECT COUNT(*) AS n FROM rhize_stores WHERE isPartner = 1"
+        },
+        {
+          "q": "total active dispensaries",
+          "params": [],
+          "sql": "SELECT COUNT(DISTINCT Company_Name) AS n FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND `Today's_Quantity_Total` > 0"
+        },
+        {
+          "q": "number of partners",
+          "params": [],
+          "sql": "SELECT COUNT(DISTINCT Company_Name) AS n FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND `Today's_Quantity_Total` > 0"
+        },
+        {
+          "q": "number of active dispensaries",
+          "params": [],
+          "sql": "SELECT COUNT(DISTINCT Company_Name) AS n FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND `Today's_Quantity_Total` > 0"
         }
       ]
     },

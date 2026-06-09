@@ -43,7 +43,20 @@ async def require_service_token(authorization: str | None = Header(default=None)
     if not hmac.compare_digest(provided, expected):
         raise HTTPException(status_code=403, detail="Invalid token")
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
+_LOG_DIR = __import__("pathlib").Path(__file__).resolve().parents[1] / "logs"
+_LOG_DIR.mkdir(parents=True, exist_ok=True)
+_LOG_FMT = "%(asctime)s %(levelname)s %(name)s %(message)s"
+_file_handler = logging.FileHandler(_LOG_DIR / "chatbot.log", encoding="utf-8")
+_file_handler.setFormatter(logging.Formatter(_LOG_FMT))
+_stream_handler = logging.StreamHandler()
+_stream_handler.setFormatter(logging.Formatter(_LOG_FMT))
+logging.basicConfig(level=logging.INFO, handlers=[_file_handler, _stream_handler], force=True)
+# Pipe uvicorn's loggers into the same handlers so HTTP access lines land in
+# the file too — uvicorn installs its own handlers in lifespan startup.
+for _n in ("uvicorn", "uvicorn.error", "uvicorn.access"):
+    _lg = logging.getLogger(_n)
+    _lg.handlers = [_file_handler, _stream_handler]
+    _lg.propagate = False
 
 MAX_QUESTION_LEN = 1_000
 

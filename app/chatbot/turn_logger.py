@@ -38,6 +38,7 @@ class TurnRecord:
     fast_path: str  # 'greeting' | 'identity' | 'disambig' | 'none'
     kind: str  # 'result' | 'chat' | 'refusal' | 'clarify' | 'error'
     latency_ms: int
+    session_id: str | None = None
     engine: str | None = None
     sql_llm: str | None = None
     sql_final: str | None = None

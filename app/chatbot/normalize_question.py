@@ -31,6 +31,8 @@ MISSPELLINGS: dict[str, str] = {
     "prodcut": "product", "prodcuts": "products",
     "proudct": "product", "proudcts": "products",
     "prodct": "product", "prodcts": "products",
+    "porduct": "product", "porducts": "products",
+    "produt": "product", "produts": "products",
     # market
     "markett": "market", "marekt": "market", "marekts": "markets", "markets": "markets",
     # cannabis
@@ -50,13 +52,21 @@ MISSPELLINGS: dict[str, str] = {
     "qty": "quantity", "quanity": "quantity", "quantitiy": "quantity",
     # greetings
     "helo": "hello", "helllo": "hello", "helooo": "hello",
-    "hii": "hi", "hiii": "hi",
+    "hii": "hi", "hiii": "hi", "hry": "hey", "heyy": "hey", "heyyy": "hey",
+    "yoo": "yo", "sup": "hi",
     "thanx": "thanks", "thnx": "thanks", "thx": "thanks", "ty": "thanks",
     "thnks": "thanks", "thakns": "thanks", "thaks": "thanks",
     # sales / order
-    "sels": "sales", "saless": "sales",
+    "sels": "sales", "saless": "sales", "sale": "sales",
     "oders": "orders", "oder": "order",
     "invntory": "inventory", "invnetory": "inventory", "invetory": "inventory",
+    # partners / stores / dispensary
+    "partener": "partner", "parteners": "partners",
+    "parnter": "partner", "parnters": "partners",
+    "patner": "partner", "patners": "partners",
+    "dispencary": "dispensary", "dispensry": "dispensary",
+    "dispensaries": "dispensaries", "dispencaries": "dispensaries",
+    "stoer": "store", "stoers": "stores",
 }
 
 _TOKEN_RX = re.compile(r"[A-Za-z][A-Za-z'\-]*")
