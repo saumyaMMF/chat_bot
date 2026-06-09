@@ -1,0 +1,1325 @@
+{
+  "engine": "mysql",
+  "schema": null,
+  "table": "rhize_strain_info",
+  "row_count": 34,
+  "column_count": 13,
+  "primary_key": [
+    "id"
+  ],
+  "indexes": [
+    {
+      "name": "PRIMARY",
+      "unique": true,
+      "columns": [
+        "id"
+      ]
+    },
+    {
+      "name": "uq_strain_tenant",
+      "unique": true,
+      "columns": [
+        "strain",
+        "tenantid"
+      ]
+    }
+  ],
+  "columns": [
+    {
+      "name": "id",
+      "declared_type": "varchar(36)",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 34,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 34,
+      "distinct_pct": 100.0,
+      "is_unique": true,
+      "is_low_cardinality": true,
+      "min_value": "cmmaje4mq01hrzpoi7uwprrhp",
+      "max_value": "demo_sn_e40782ebb36657d",
+      "min_length": 23,
+      "max_length": 25,
+      "avg_length": 24.0,
+      "pattern_hints": [],
+      "distinct_values": [
+        "cmmaje4mq01hrzpoi7uwprrhp",
+        "cmmaje4x701hszpoi92vv1628",
+        "cmmaje55n01htzpoif2cd399t",
+        "cmmaje5dj01huzpoidmfja4jf",
+        "cmmaje5mr01hvzpoiccwgfrh1",
+        "cmmaje5vb01hwzpoii5kpxqop",
+        "cmmaje63a01hxzpoi38nfyx4y",
+        "cmmaje6cc01hyzpoigf8in666",
+        "cmmaje6kv01hzzpoit2p4138j",
+        "cmmaje6sr01i0zpoi4x70cxzg",
+        "cmmaje70p01i1zpoitaw4qbmj",
+        "cmmaje7ag01i2zpoilll7nlcg",
+        "cmmaje7iz01i3zpoi37lehxcb",
+        "cmmaje7ri01i4zpoiwmfx023n",
+        "cmmaje80401i5zpoi2csid1oh",
+        "cmmaje88l01i6zpoir59c2hs1",
+        "cmmaje8gi01i7zpoi059o4roc",
+        "demo_sn_0e62719f2620df9",
+        "demo_sn_1e675c4b4354a14",
+        "demo_sn_257e76005cd92c7",
+        "demo_sn_379742f20b095df",
+        "demo_sn_42a43347e29a4d2",
+        "demo_sn_469e7c0a2941dcd",
+        "demo_sn_5b7aee7d2abb7be",
+        "demo_sn_7a71ec4407a5954",
+        "demo_sn_7c9cf2d5337e630",
+        "demo_sn_8a85b9c2d0cf515",
+        "demo_sn_8bd6837618247df",
+        "demo_sn_9a3caa27d8cab1a",
+        "demo_sn_c7dd2ca41335aa1",
+        "demo_sn_cbb0b4e9f608b65",
+        "demo_sn_cc8c098dc03be8b",
+        "demo_sn_cefd32ee9a799dd",
+        "demo_sn_e40782ebb36657d"
+      ],
+      "top_values": [
+        [
+          "demo_sn_8a85b9c2d0cf515",
+          1
+        ],
+        [
+          "demo_sn_1e675c4b4354a14",
+          1
+        ],
+        [
+          "demo_sn_257e76005cd92c7",
+          1
+        ],
+        [
+          "demo_sn_379742f20b095df",
+          1
+        ],
+        [
+          "demo_sn_42a43347e29a4d2",
+          1
+        ],
+        [
+          "demo_sn_469e7c0a2941dcd",
+          1
+        ],
+        [
+          "demo_sn_5b7aee7d2abb7be",
+          1
+        ],
+        [
+          "demo_sn_7a71ec4407a5954",
+          1
+        ],
+        [
+          "demo_sn_7c9cf2d5337e630",
+          1
+        ],
+        [
+          "demo_sn_0e62719f2620df9",
+          1
+        ],
+        [
+          "demo_sn_8bd6837618247df",
+          1
+        ],
+        [
+          "demo_sn_9a3caa27d8cab1a",
+          1
+        ],
+        [
+          "demo_sn_c7dd2ca41335aa1",
+          1
+        ],
+        [
+          "demo_sn_cbb0b4e9f608b65",
+          1
+        ],
+        [
+          "demo_sn_cc8c098dc03be8b",
+          1
+        ],
+        [
+          "demo_sn_cefd32ee9a799dd",
+          1
+        ],
+        [
+          "demo_sn_e40782ebb36657d",
+          1
+        ],
+        [
+          "cmmaje6sr01i0zpoi4x70cxzg",
+          1
+        ],
+        [
+          "cmmaje4x701hszpoi92vv1628",
+          1
+        ],
+        [
+          "cmmaje55n01htzpoif2cd399t",
+          1
+        ],
+        [
+          "cmmaje5dj01huzpoidmfja4jf",
+          1
+        ],
+        [
+          "cmmaje5mr01hvzpoiccwgfrh1",
+          1
+        ],
+        [
+          "cmmaje5vb01hwzpoii5kpxqop",
+          1
+        ],
+        [
+          "cmmaje63a01hxzpoi38nfyx4y",
+          1
+        ],
+        [
+          "cmmaje6cc01hyzpoigf8in666",
+          1
+        ],
+        [
+          "cmmaje6kv01hzzpoit2p4138j",
+          1
+        ],
+        [
+          "cmmaje4mq01hrzpoi7uwprrhp",
+          1
+        ],
+        [
+          "cmmaje70p01i1zpoitaw4qbmj",
+          1
+        ],
+        [
+          "cmmaje7ag01i2zpoilll7nlcg",
+          1
+        ],
+        [
+          "cmmaje7iz01i3zpoi37lehxcb",
+          1
+        ],
+        [
+          "cmmaje7ri01i4zpoiwmfx023n",
+          1
+        ],
+        [
+          "cmmaje80401i5zpoi2csid1oh",
+          1
+        ],
+        [
+          "cmmaje88l01i6zpoir59c2hs1",
+          1
+        ],
+        [
+          "cmmaje8gi01i7zpoi059o4roc",
+          1
+        ]
+      ],
+      "sample_values": [
+        "demo_sn_8a85b9c2d0cf515",
+        "demo_sn_1e675c4b4354a14",
+        "demo_sn_257e76005cd92c7",
+        "demo_sn_379742f20b095df",
+        "demo_sn_42a43347e29a4d2",
+        "demo_sn_469e7c0a2941dcd",
+        "demo_sn_5b7aee7d2abb7be",
+        "demo_sn_7a71ec4407a5954",
+        "demo_sn_7c9cf2d5337e630",
+        "demo_sn_0e62719f2620df9"
+      ],
+      "notes": [
+        "primary-key"
+      ]
+    },
+    {
+      "name": "strain",
+      "declared_type": "varchar(255)",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 34,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 17,
+      "distinct_pct": 50.0,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "Berry Fizz",
+      "max_value": "The Hive",
+      "min_length": 3,
+      "max_length": 19,
+      "avg_length": 12.0,
+      "pattern_hints": [],
+      "distinct_values": [
+        "Berry Fizz",
+        "Black Maple",
+        "Candied Oranges",
+        "Deathstar",
+        "Donkey Butter",
+        "Dulce de Uva",
+        "G13 Skunk",
+        "GMO",
+        "Honey Banana",
+        "Lavender Piff",
+        "Melted Strawberries",
+        "Moroccan Peaches",
+        "Papaya Juice",
+        "Sherb Cream Pie",
+        "Sour Diesel",
+        "Strawberry Guava",
+        "The Hive"
+      ],
+      "top_values": [
+        [
+          "Honey Banana",
+          2
+        ],
+        [
+          "The Hive",
+          2
+        ],
+        [
+          "Strawberry Guava",
+          2
+        ],
+        [
+          "Sour Diesel",
+          2
+        ],
+        [
+          "Sherb Cream Pie",
+          2
+        ],
+        [
+          "Papaya Juice",
+          2
+        ],
+        [
+          "Moroccan Peaches",
+          2
+        ],
+        [
+          "Melted Strawberries",
+          2
+        ],
+        [
+          "Lavender Piff",
+          2
+        ],
+        [
+          "Berry Fizz",
+          2
+        ],
+        [
+          "GMO",
+          2
+        ],
+        [
+          "G13 Skunk",
+          2
+        ],
+        [
+          "Dulce de Uva",
+          2
+        ],
+        [
+          "Donkey Butter",
+          2
+        ],
+        [
+          "Deathstar",
+          2
+        ],
+        [
+          "Candied Oranges",
+          2
+        ],
+        [
+          "Black Maple",
+          2
+        ]
+      ],
+      "sample_values": [
+        "Honey Banana",
+        "The Hive",
+        "Strawberry Guava",
+        "Sour Diesel",
+        "Sherb Cream Pie",
+        "Papaya Juice",
+        "Moroccan Peaches",
+        "Melted Strawberries",
+        "Lavender Piff",
+        "Berry Fizz"
+      ],
+      "notes": [
+        "indexed"
+      ]
+    },
+    {
+      "name": "effectTag",
+      "declared_type": "varchar(100)",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 34,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 5,
+      "distinct_pct": 14.71,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "ENERGY",
+      "max_value": "RELAX",
+      "min_length": 5,
+      "max_length": 13,
+      "avg_length": 7.65,
+      "pattern_hints": [],
+      "distinct_values": [
+        "ENERGY",
+        "HYBRID",
+        "HYBRID-Energy",
+        "HYBRID-Relax",
+        "RELAX"
+      ],
+      "top_values": [
+        [
+          "RELAX",
+          12
+        ],
+        [
+          "HYBRID-Energy",
+          8
+        ],
+        [
+          "HYBRID",
+          8
+        ],
+        [
+          "ENERGY",
+          4
+        ],
+        [
+          "HYBRID-Relax",
+          2
+        ]
+      ],
+      "sample_values": [
+        "RELAX",
+        "HYBRID-Energy",
+        "HYBRID",
+        "ENERGY",
+        "HYBRID-Relax"
+      ],
+      "notes": []
+    },
+    {
+      "name": "genetics1",
+      "declared_type": "varchar(255)",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 34,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 14,
+      "distinct_pct": 41.18,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "Chemdawg",
+      "max_value": "Strawberry Guava",
+      "min_length": 6,
+      "max_length": 17,
+      "avg_length": 11.59,
+      "pattern_hints": [],
+      "distinct_values": [
+        "Chemdawg",
+        "Dulce de Uva",
+        "G13 Haze",
+        "Grease Monkey",
+        "Honey Banana",
+        "Ice Cream Cake",
+        "Lavender",
+        "Mimosa V6",
+        "Papaya",
+        "Papaya Bx",
+        "Sour Diesel",
+        "Spanish Barbara",
+        "Strawberry Banana",
+        "Strawberry Guava"
+      ],
+      "top_values": [
+        [
+          "Strawberry Banana",
+          4
+        ],
+        [
+          "Ice Cream Cake",
+          4
+        ],
+        [
+          "Chemdawg",
+          4
+        ],
+        [
+          "Grease Monkey",
+          2
+        ],
+        [
+          "Papaya",
+          2
+        ],
+        [
+          "Strawberry Guava",
+          2
+        ],
+        [
+          "Dulce de Uva",
+          2
+        ],
+        [
+          "Sour Diesel",
+          2
+        ],
+        [
+          "Spanish Barbara",
+          2
+        ],
+        [
+          "G13 Haze",
+          2
+        ],
+        [
+          "Papaya Bx",
+          2
+        ],
+        [
+          "Mimosa V6",
+          2
+        ],
+        [
+          "Lavender",
+          2
+        ],
+        [
+          "Honey Banana",
+          2
+        ]
+      ],
+      "sample_values": [
+        "Strawberry Banana",
+        "Ice Cream Cake",
+        "Chemdawg",
+        "Grease Monkey",
+        "Papaya",
+        "Strawberry Guava",
+        "Dulce de Uva",
+        "Sour Diesel",
+        "Spanish Barbara",
+        "G13 Haze"
+      ],
+      "notes": []
+    },
+    {
+      "name": "genetics2",
+      "declared_type": "varchar(255)",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 34,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 15,
+      "distinct_pct": 44.12,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "Girl Scout Cookies",
+      "max_value": "Z",
+      "min_length": 1,
+      "max_length": 27,
+      "avg_length": 10.71,
+      "pattern_hints": [],
+      "distinct_values": [
+        "Girl Scout Cookies",
+        "GMO",
+        "Grape Pie x Wedding Crasher",
+        "Honey Boo Boo",
+        "Lemon Tree Skorange",
+        "Papaya",
+        "Piff x Uptown Haze",
+        "Red Piegasm",
+        "Sensi Star",
+        "Sherb Bx1",
+        "Sherbanger",
+        "Skunk #1",
+        "Super Skunk",
+        "Triple OG",
+        "Z"
+      ],
+      "top_values": [
+        [
+          "GMO",
+          4
+        ],
+        [
+          "Papaya",
+          4
+        ],
+        [
+          "Triple OG",
+          2
+        ],
+        [
+          "Sherbanger",
+          2
+        ],
+        [
+          "Honey Boo Boo",
+          2
+        ],
+        [
+          "Grape Pie x Wedding Crasher",
+          2
+        ],
+        [
+          "Girl Scout Cookies",
+          2
+        ],
+        [
+          "Sensi Star",
+          2
+        ],
+        [
+          "Lemon Tree Skorange",
+          2
+        ],
+        [
+          "Sherb Bx1",
+          2
+        ],
+        [
+          "Skunk #1",
+          2
+        ],
+        [
+          "Red Piegasm",
+          2
+        ],
+        [
+          "Z",
+          2
+        ],
+        [
+          "Super Skunk",
+          2
+        ],
+        [
+          "Piff x Uptown Haze",
+          2
+        ]
+      ],
+      "sample_values": [
+        "GMO",
+        "Papaya",
+        "Triple OG",
+        "Sherbanger",
+        "Honey Boo Boo",
+        "Grape Pie x Wedding Crasher",
+        "Girl Scout Cookies",
+        "Sensi Star",
+        "Lemon Tree Skorange",
+        "Sherb Bx1"
+      ],
+      "notes": []
+    },
+    {
+      "name": "breeder",
+      "declared_type": "varchar(255)",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 34,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 13,
+      "distinct_pct": 38.24,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "808 Genetics",
+      "max_value": "Terp Fountain Genetics",
+      "min_length": 9,
+      "max_length": 22,
+      "avg_length": 14.47,
+      "pattern_hints": [],
+      "distinct_values": [
+        "808 Genetics",
+        "Bloom Seed Co",
+        "Dominion Seed Co",
+        "Elemental Seeds",
+        "Exotic Genetix",
+        "Mamiko Seeds",
+        "NY Legend",
+        "Piff Coast",
+        "Purple City Genetics",
+        "Seed Junky Genetics",
+        "Symbiotic Genetics",
+        "Team Deathstar",
+        "Terp Fountain Genetics"
+      ],
+      "top_values": [
+        [
+          "Bloom Seed Co",
+          10
+        ],
+        [
+          "Exotic Genetix",
+          2
+        ],
+        [
+          "808 Genetics",
+          2
+        ],
+        [
+          "Elemental Seeds",
+          2
+        ],
+        [
+          "Mamiko Seeds",
+          2
+        ],
+        [
+          "Team Deathstar",
+          2
+        ],
+        [
+          "Purple City Genetics",
+          2
+        ],
+        [
+          "Seed Junky Genetics",
+          2
+        ],
+        [
+          "Dominion Seed Co",
+          2
+        ],
+        [
+          "Terp Fountain Genetics",
+          2
+        ],
+        [
+          "Symbiotic Genetics",
+          2
+        ],
+        [
+          "NY Legend",
+          2
+        ],
+        [
+          "Piff Coast",
+          2
+        ]
+      ],
+      "sample_values": [
+        "Bloom Seed Co",
+        "Exotic Genetix",
+        "808 Genetics",
+        "Elemental Seeds",
+        "Mamiko Seeds",
+        "Team Deathstar",
+        "Purple City Genetics",
+        "Seed Junky Genetics",
+        "Dominion Seed Co",
+        "Terp Fountain Genetics"
+      ],
+      "notes": []
+    },
+    {
+      "name": "flavor1",
+      "declared_type": "varchar(100)",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 34,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 15,
+      "distinct_pct": 44.12,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "Banana",
+      "max_value": "Sweet",
+      "min_length": 3,
+      "max_length": 6,
+      "avg_length": 5.47,
+      "pattern_hints": [],
+      "distinct_values": [
+        "Banana",
+        "Berry",
+        "Creamy",
+        "Diesel",
+        "Floral",
+        "Fruity",
+        "Garlic",
+        "Gas",
+        "Grape",
+        "Herbal",
+        "Orange",
+        "Papaya",
+        "Peach",
+        "Sour",
+        "Sweet"
+      ],
+      "top_values": [
+        [
+          "Banana",
+          4
+        ],
+        [
+          "Diesel",
+          4
+        ],
+        [
+          "Sour",
+          2
+        ],
+        [
+          "Papaya",
+          2
+        ],
+        [
+          "Gas",
+          2
+        ],
+        [
+          "Herbal",
+          2
+        ],
+        [
+          "Grape",
+          2
+        ],
+        [
+          "Garlic",
+          2
+        ],
+        [
+          "Peach",
+          2
+        ],
+        [
+          "Creamy",
+          2
+        ],
+        [
+          "Fruity",
+          2
+        ],
+        [
+          "Sweet",
+          2
+        ],
+        [
+          "Berry",
+          2
+        ],
+        [
+          "Orange",
+          2
+        ],
+        [
+          "Floral",
+          2
+        ]
+      ],
+      "sample_values": [
+        "Banana",
+        "Diesel",
+        "Sour",
+        "Papaya",
+        "Gas",
+        "Herbal",
+        "Grape",
+        "Garlic",
+        "Peach",
+        "Creamy"
+      ],
+      "notes": []
+    },
+    {
+      "name": "flavor2",
+      "declared_type": "varchar(100)",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 34,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 13,
+      "distinct_pct": 38.24,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "Berry",
+      "max_value": "Tropical",
+      "min_length": 4,
+      "max_length": 8,
+      "avg_length": 5.41,
+      "pattern_hints": [],
+      "distinct_values": [
+        "Berry",
+        "Candy",
+        "Citrus",
+        "Diesel",
+        "Floral",
+        "Fruit",
+        "Haze",
+        "Honey",
+        "Rubber",
+        "Skunk",
+        "Sour",
+        "Sweet",
+        "Tropical"
+      ],
+      "top_values": [
+        [
+          "Citrus",
+          6
+        ],
+        [
+          "Diesel",
+          4
+        ],
+        [
+          "Sour",
+          4
+        ],
+        [
+          "Rubber",
+          2
+        ],
+        [
+          "Berry",
+          2
+        ],
+        [
+          "Floral",
+          2
+        ],
+        [
+          "Honey",
+          2
+        ],
+        [
+          "Sweet",
+          2
+        ],
+        [
+          "Skunk",
+          2
+        ],
+        [
+          "Candy",
+          2
+        ],
+        [
+          "Fruit",
+          2
+        ],
+        [
+          "Haze",
+          2
+        ],
+        [
+          "Tropical",
+          2
+        ]
+      ],
+      "sample_values": [
+        "Citrus",
+        "Diesel",
+        "Sour",
+        "Rubber",
+        "Berry",
+        "Floral",
+        "Honey",
+        "Sweet",
+        "Skunk",
+        "Candy"
+      ],
+      "notes": []
+    },
+    {
+      "name": "flavor3",
+      "declared_type": "varchar(100)",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 34,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 9,
+      "distinct_pct": 26.47,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "Candy",
+      "max_value": "Tropical",
+      "min_length": 3,
+      "max_length": 8,
+      "avg_length": 4.76,
+      "pattern_hints": [],
+      "distinct_values": [
+        "Candy",
+        "Creamy",
+        "Funk",
+        "Gas",
+        "Skunk",
+        "Soda",
+        "Spice",
+        "Sweet",
+        "Tropical"
+      ],
+      "top_values": [
+        [
+          "Sweet",
+          8
+        ],
+        [
+          "Skunk",
+          8
+        ],
+        [
+          "Gas",
+          6
+        ],
+        [
+          "Funk",
+          2
+        ],
+        [
+          "Tropical",
+          2
+        ],
+        [
+          "Soda",
+          2
+        ],
+        [
+          "Candy",
+          2
+        ],
+        [
+          "Spice",
+          2
+        ],
+        [
+          "Creamy",
+          2
+        ]
+      ],
+      "sample_values": [
+        "Sweet",
+        "Skunk",
+        "Gas",
+        "Funk",
+        "Tropical",
+        "Soda",
+        "Candy",
+        "Spice",
+        "Creamy"
+      ],
+      "notes": []
+    },
+    {
+      "name": "createdAt",
+      "declared_type": "datetime",
+      "inferred_kind": "datetime",
+      "nullable": false,
+      "total_rows": 34,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 7,
+      "distinct_pct": 20.59,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "2026-03-03T11:40:55",
+      "max_value": "2026-06-04T11:10:00",
+      "min_length": 19,
+      "max_length": 19,
+      "avg_length": 19.0,
+      "pattern_hints": [
+        "datetime-string"
+      ],
+      "distinct_values": [
+        "2026-03-03T11:40:55",
+        "2026-03-03T11:40:56",
+        "2026-03-03T11:40:57",
+        "2026-03-03T11:40:58",
+        "2026-03-03T11:40:59",
+        "2026-03-03T11:41:00",
+        "2026-06-04T11:10:00"
+      ],
+      "top_values": [
+        [
+          "2026-06-04T11:10:00",
+          17
+        ],
+        [
+          "2026-03-03T11:40:56",
+          4
+        ],
+        [
+          "2026-03-03T11:40:57",
+          3
+        ],
+        [
+          "2026-03-03T11:40:58",
+          3
+        ],
+        [
+          "2026-03-03T11:40:59",
+          3
+        ],
+        [
+          "2026-03-03T11:41:00",
+          3
+        ],
+        [
+          "2026-03-03T11:40:55",
+          1
+        ]
+      ],
+      "sample_values": [
+        "2026-06-04T11:10:00",
+        "2026-03-03T11:40:56",
+        "2026-03-03T11:40:57",
+        "2026-03-03T11:40:58",
+        "2026-03-03T11:40:59",
+        "2026-03-03T11:41:00",
+        "2026-03-03T11:40:55"
+      ],
+      "notes": []
+    },
+    {
+      "name": "updatedAt",
+      "declared_type": "datetime",
+      "inferred_kind": "datetime",
+      "nullable": false,
+      "total_rows": 34,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 7,
+      "distinct_pct": 20.59,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "2026-03-03T11:40:55",
+      "max_value": "2026-06-04T11:10:00",
+      "min_length": 19,
+      "max_length": 19,
+      "avg_length": 19.0,
+      "pattern_hints": [
+        "datetime-string"
+      ],
+      "distinct_values": [
+        "2026-03-03T11:40:55",
+        "2026-03-03T11:40:56",
+        "2026-03-03T11:40:57",
+        "2026-03-03T11:40:58",
+        "2026-03-03T11:40:59",
+        "2026-03-03T11:41:00",
+        "2026-06-04T11:10:00"
+      ],
+      "top_values": [
+        [
+          "2026-06-04T11:10:00",
+          17
+        ],
+        [
+          "2026-03-03T11:40:56",
+          4
+        ],
+        [
+          "2026-03-03T11:40:57",
+          3
+        ],
+        [
+          "2026-03-03T11:40:58",
+          3
+        ],
+        [
+          "2026-03-03T11:40:59",
+          3
+        ],
+        [
+          "2026-03-03T11:41:00",
+          3
+        ],
+        [
+          "2026-03-03T11:40:55",
+          1
+        ]
+      ],
+      "sample_values": [
+        "2026-06-04T11:10:00",
+        "2026-03-03T11:40:56",
+        "2026-03-03T11:40:57",
+        "2026-03-03T11:40:58",
+        "2026-03-03T11:40:59",
+        "2026-03-03T11:41:00",
+        "2026-03-03T11:40:55"
+      ],
+      "notes": []
+    },
+    {
+      "name": "tenantid",
+      "declared_type": "int",
+      "inferred_kind": "integer",
+      "nullable": false,
+      "total_rows": 34,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "distinct_pct": 5.88,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": 1,
+      "max_value": 99,
+      "min_length": 1,
+      "max_length": 2,
+      "avg_length": 1.5,
+      "pattern_hints": [
+        "boolean-token",
+        "integer-as-text"
+      ],
+      "distinct_values": [
+        1,
+        99
+      ],
+      "top_values": [
+        [
+          1,
+          17
+        ],
+        [
+          99,
+          17
+        ]
+      ],
+      "sample_values": [
+        1,
+        99
+      ],
+      "notes": []
+    },
+    {
+      "name": "brand_id",
+      "declared_type": "varchar(36)",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 34,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "distinct_pct": 5.88,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "ca323241-ef74-425f-aa67-239247ccd0e9",
+      "max_value": "cmmakqdsn0037qsoig4b4yo9t",
+      "min_length": 25,
+      "max_length": 36,
+      "avg_length": 30.5,
+      "pattern_hints": [
+        "uuid"
+      ],
+      "distinct_values": [
+        "ca323241-ef74-425f-aa67-239247ccd0e9",
+        "cmmakqdsn0037qsoig4b4yo9t"
+      ],
+      "top_values": [
+        [
+          "cmmakqdsn0037qsoig4b4yo9t",
+          17
+        ],
+        [
+          "ca323241-ef74-425f-aa67-239247ccd0e9",
+          17
+        ]
+      ],
+      "sample_values": [
+        "cmmakqdsn0037qsoig4b4yo9t",
+        "ca323241-ef74-425f-aa67-239247ccd0e9"
+      ],
+      "notes": []
+    }
+  ],
+  "sample_rows": [
+    {
+      "id": "cmmaje4mq01hrzpoi7uwprrhp",
+      "strain": "Donkey Butter",
+      "effecttag": "RELAX",
+      "genetics1": "Grease Monkey",
+      "genetics2": "Triple OG",
+      "breeder": "Exotic Genetix",
+      "flavor1": "Sour",
+      "flavor2": "Rubber",
+      "flavor3": "Gas",
+      "createdat": "2026-03-03T11:40:55",
+      "updatedat": "2026-03-03T11:40:55",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    },
+    {
+      "id": "cmmaje4x701hszpoi92vv1628",
+      "strain": "Papaya Juice",
+      "effecttag": "HYBRID-Energy",
+      "genetics1": "Papaya",
+      "genetics2": "GMO",
+      "breeder": "808 Genetics",
+      "flavor1": "Papaya",
+      "flavor2": "Citrus",
+      "flavor3": "Sweet",
+      "createdat": "2026-03-03T11:40:56",
+      "updatedat": "2026-03-03T11:40:56",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    },
+    {
+      "id": "cmmaje55n01htzpoif2cd399t",
+      "strain": "Melted Strawberries",
+      "effecttag": "HYBRID",
+      "genetics1": "Strawberry Guava",
+      "genetics2": "GMO",
+      "breeder": "Bloom Seed Co",
+      "flavor1": "Gas",
+      "flavor2": "Berry",
+      "flavor3": "Funk",
+      "createdat": "2026-03-03T11:40:56",
+      "updatedat": "2026-03-03T11:40:56",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    },
+    {
+      "id": "cmmaje5dj01huzpoidmfja4jf",
+      "strain": "Black Maple",
+      "effecttag": "HYBRID",
+      "genetics1": "Dulce de Uva",
+      "genetics2": "Sherbanger",
+      "breeder": "Bloom Seed Co",
+      "flavor1": "Herbal",
+      "flavor2": "Floral",
+      "flavor3": "Skunk",
+      "createdat": "2026-03-03T11:40:56",
+      "updatedat": "2026-03-03T11:40:56",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    },
+    {
+      "id": "cmmaje5mr01hvzpoiccwgfrh1",
+      "strain": "Honey Banana",
+      "effecttag": "RELAX",
+      "genetics1": "Strawberry Banana",
+      "genetics2": "Honey Boo Boo",
+      "breeder": "Elemental Seeds",
+      "flavor1": "Banana",
+      "flavor2": "Honey",
+      "flavor3": "Tropical",
+      "createdat": "2026-03-03T11:40:56",
+      "updatedat": "2026-03-03T11:40:56",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    }
+  ],
+  "notes": []
+}

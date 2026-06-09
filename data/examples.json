@@ -385,6 +385,62 @@
     {
       "question": "lowest revenue day",
       "sql": "SELECT date, SUM(CAST(Revenue AS DECIMAL(10,2))) AS daily_revenue FROM rhize_dataset_main WHERE date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 90 DAY, '%Y-%m-%d') GROUP BY date ORDER BY daily_revenue ASC LIMIT 1"
+    },
+    {
+      "question": "top stores by sales last 30 days",
+      "sql": "SELECT s.name AS store, SUM(o.subtotal) AS sales FROM rhize_orders o JOIN rhize_stores s ON s.id = o.storeId WHERE o.status = 'Completed' AND o.date >= DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY) GROUP BY s.name ORDER BY sales DESC LIMIT 10"
+    },
+    {
+      "question": "revenue by category past 30 days",
+      "sql": "SELECT Category, SUM(CAST(Revenue AS DECIMAL(10,2))) AS revenue FROM rhize_dataset_main WHERE date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 30 DAY, '%Y-%m-%d') AND Category IS NOT NULL AND Category <> '' GROUP BY Category ORDER BY revenue DESC"
+    },
+    {
+      "question": "week over week revenue change",
+      "sql": "SELECT week_start, weekly_revenue, ROUND((weekly_revenue - LAG(weekly_revenue) OVER (ORDER BY week_start)) / LAG(weekly_revenue) OVER (ORDER BY week_start) * 100, 2) AS pct_change FROM (SELECT DATE_FORMAT(STR_TO_DATE(date,'%Y-%m-%d'), '%x-%v') AS week_start, SUM(CAST(Revenue AS DECIMAL(10,2))) AS weekly_revenue FROM rhize_dataset_main WHERE date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 84 DAY, '%Y-%m-%d') GROUP BY week_start) w ORDER BY week_start DESC LIMIT 12"
+    },
+    {
+      "question": "monthly revenue trend last year",
+      "sql": "SELECT DATE_FORMAT(STR_TO_DATE(date,'%Y-%m-%d'), '%Y-%m') AS month, SUM(CAST(Revenue AS DECIMAL(10,2))) AS revenue FROM rhize_dataset_main WHERE date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 365 DAY, '%Y-%m-%d') GROUP BY month ORDER BY month"
+    },
+    {
+      "question": "customers with open balance",
+      "sql": "SELECT customerName, SUM(openBalance) AS balance, COUNT(*) AS open_orders FROM rhize_orders WHERE status <> 'Completed' AND openBalance > 0 GROUP BY customerName ORDER BY balance DESC LIMIT 20"
+    },
+    {
+      "question": "lots expiring next 30 days",
+      "sql": "SELECT strain, lotNumber, productType, thc, expirationDate FROM rhize_product_lots WHERE expirationDate IS NOT NULL AND expirationDate >= CURRENT_DATE AND expirationDate <= DATE_ADD(CURRENT_DATE, INTERVAL 30 DAY) ORDER BY expirationDate ASC LIMIT 50"
+    },
+    {
+      "question": "low stock items",
+      "sql": "SELECT productName, strain, productType, current_qty, remaining FROM rhize_live_inventory WHERE remaining IS NOT NULL AND remaining < 10 ORDER BY remaining ASC LIMIT 50"
+    },
+    {
+      "question": "top brands in the market past 30 days",
+      "sql": "SELECT brand, SUM(revenue) AS revenue, SUM(quantity) AS quantity, SUM(sku_count) AS skus FROM chatbot_mv_market_daily WHERE date >= CURRENT_DATE - INTERVAL '30 days' AND brand IS NOT NULL AND brand <> '' GROUP BY brand ORDER BY revenue DESC LIMIT 10"
+    },
+    {
+      "question": "market share by company this month",
+      "sql": "SELECT company, SUM(revenue) AS revenue, ROUND(SUM(revenue) * 100.0 / SUM(SUM(revenue)) OVER (), 2) AS market_share_pct FROM chatbot_mv_market_daily WHERE date >= date_trunc('month', CURRENT_DATE)::date AND company IS NOT NULL AND company <> '' GROUP BY company ORDER BY revenue DESC LIMIT 15"
+    },
+    {
+      "question": "products added today in the market",
+      "sql": "SELECT DISTINCT brand, company, category, product_name, unit FROM complete_market_scrapper_dataset WHERE date = to_char(CURRENT_DATE, 'YYYY-MM-DD') AND flag = 'added' LIMIT 200"
+    },
+    {
+      "question": "longest on shelf products",
+      "sql": "SELECT brand, product_name, MAX(days_on_shelf) AS days_on_shelf, category FROM complete_market_scrapper_dataset WHERE date >= to_char(CURRENT_DATE - INTERVAL '7 days', 'YYYY-MM-DD') AND days_on_shelf IS NOT NULL GROUP BY brand, product_name, category ORDER BY days_on_shelf DESC LIMIT 20"
+    },
+    {
+      "question": "top sales actions by priority",
+      "sql": "SELECT priority, status, COUNT(*) AS n FROM rhize_sales_actions GROUP BY priority, status ORDER BY FIELD(priority,'Critical','High','Medium','Low'), n DESC"
+    },
+    {
+      "question": "customers we have not sold to in 60 days",
+      "sql": "SELECT customerName, MAX(date) AS last_order, DATEDIFF(CURRENT_DATE, MAX(date)) AS days_since FROM rhize_orders WHERE status = 'Completed' GROUP BY customerName HAVING DATEDIFF(CURRENT_DATE, MAX(date)) >= 60 ORDER BY days_since DESC LIMIT 30"
+    },
+    {
+      "question": "average order value by store",
+      "sql": "SELECT s.name AS store, COUNT(DISTINCT o.orderNumber) AS orders, ROUND(SUM(o.subtotal) / NULLIF(COUNT(DISTINCT o.orderNumber), 0), 2) AS avg_order FROM rhize_orders o JOIN rhize_stores s ON s.id = o.storeId WHERE o.status = 'Completed' AND o.date >= DATE_SUB(CURRENT_DATE, INTERVAL 90 DAY) GROUP BY s.name ORDER BY avg_order DESC LIMIT 20"
     }
   ]
 }

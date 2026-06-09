@@ -1,0 +1,2360 @@
+{
+  "engine": "postgres",
+  "schema": "public",
+  "table": "chatbot_schema_embeddings",
+  "row_count": 206,
+  "column_count": 9,
+  "primary_key": [
+    "id"
+  ],
+  "indexes": [
+    {
+      "name": "chatbot_schema_embeddings_emb_idx",
+      "unique": false,
+      "columns": [
+        "embedding"
+      ]
+    },
+    {
+      "name": "chatbot_schema_embeddings_pkey",
+      "unique": true,
+      "columns": [
+        "id"
+      ]
+    },
+    {
+      "name": "chatbot_schema_embeddings_table_idx",
+      "unique": false,
+      "columns": [
+        "table_name"
+      ]
+    }
+  ],
+  "columns": [
+    {
+      "name": "id",
+      "declared_type": "text",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 206,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 206,
+      "distinct_pct": 100.0,
+      "is_unique": true,
+      "is_low_cardinality": false,
+      "min_value": "col:category_map.category_norm",
+      "max_value": "table:rhize_user_states",
+      "min_length": 18,
+      "max_length": 54,
+      "avg_length": 30.19,
+      "pattern_hints": [],
+      "distinct_values": [
+        "col:category_map.category_norm",
+        "col:category_map.raw_lower",
+        "col:chatbot_mv_market_daily.brand",
+        "col:chatbot_mv_market_daily.category",
+        "col:chatbot_mv_market_daily.company",
+        "col:chatbot_mv_market_daily.date",
+        "col:chatbot_mv_market_daily.quantity",
+        "col:chatbot_mv_market_daily.revenue",
+        "col:chatbot_mv_market_daily.sku_count",
+        "col:chatbot_mv_market_daily.state",
+        "col:complete_market_scrapper_dataset.brand",
+        "col:complete_market_scrapper_dataset.category",
+        "col:complete_market_scrapper_dataset.change",
+        "col:complete_market_scrapper_dataset.company",
+        "col:complete_market_scrapper_dataset.created_at",
+        "col:complete_market_scrapper_dataset.date",
+        "col:complete_market_scrapper_dataset.days_on_shelf",
+        "col:complete_market_scrapper_dataset.first_seen",
+        "col:complete_market_scrapper_dataset.flag",
+        "col:complete_market_scrapper_dataset.previous_quantity",
+        "col:complete_market_scrapper_dataset.price",
+        "col:complete_market_scrapper_dataset.price_num",
+        "col:complete_market_scrapper_dataset.product_name",
+        "col:complete_market_scrapper_dataset.quantity",
+        "col:complete_market_scrapper_dataset.revenue",
+        "col:complete_market_scrapper_dataset.state",
+        "col:complete_market_scrapper_dataset.thc",
+        "col:complete_market_scrapper_dataset.unit",
+        "col:rhize_brands.createdAt",
+        "col:rhize_brands.id",
+        "col:rhize_brands.isRhize",
+        "col:rhize_brands.name",
+        "col:rhize_brands.tenantid",
+        "col:rhize_dataset_main.`14d`",
+        "col:rhize_dataset_main.`1d`",
+        "col:rhize_dataset_main.`3d`",
+        "col:rhize_dataset_main.`7d`",
+        "col:rhize_dataset_main.brand_id",
+        "col:rhize_dataset_main.Category",
+        "col:rhize_dataset_main.Change",
+        "col:rhize_dataset_main.Company_Name",
+        "col:rhize_dataset_main.created_at",
+        "col:rhize_dataset_main.date",
+        "col:rhize_dataset_main.Days",
+        "col:rhize_dataset_main.Discount_Price_Data",
+        "col:rhize_dataset_main.Flag",
+        "col:rhize_dataset_main.id",
+        "col:rhize_dataset_main.Price",
+        "col:rhize_dataset_main.Product_Name",
+        "col:rhize_dataset_main.Revenue",
+        "col:rhize_dataset_main.SKU",
+        "col:rhize_dataset_main.tenantid",
+        "col:rhize_dataset_main.THC",
+        "col:rhize_dataset_main.`Today's_Quantity_Total`",
+        "col:rhize_dataset_main.Type",
+        "col:rhize_dataset_main.Unit",
+        "col:rhize_dataset_store.brand_id",
+        "col:rhize_dataset_store.Category",
+        "col:rhize_dataset_store.Company_Name",
+        "col:rhize_dataset_store.created_at",
+        "col:rhize_dataset_store.date",
+        "col:rhize_dataset_store.id",
+        "col:rhize_dataset_store.Product_Name",
+        "col:rhize_dataset_store.SKU",
+        "col:rhize_dataset_store.tenantid",
+        "col:rhize_dataset_store.Type",
+        "col:rhize_live_inventory.brand_id",
+        "col:rhize_live_inventory.current_qty",
+        "col:rhize_live_inventory.id",
+        "col:rhize_live_inventory.lbs",
+        "col:rhize_live_inventory.lotNumber",
+        "col:rhize_live_inventory.pending",
+        "col:rhize_live_inventory.productName",
+        "col:rhize_live_inventory.productType",
+        "col:rhize_live_inventory.remaining",
+        "col:rhize_live_inventory.strain",
+        "col:rhize_live_inventory.tenantid",
+        "col:rhize_live_inventory.updatedAt",
+        "col:rhize_orders.brand_id",
+        "col:rhize_orders.createdAt",
+        "col:rhize_orders.customerName",
+        "col:rhize_orders.date",
+        "col:rhize_orders.deliveryDate",
+        "col:rhize_orders.id",
+        "col:rhize_orders.lotNumber",
+        "col:rhize_orders.openBalance",
+        "col:rhize_orders.orderNumber",
+        "col:rhize_orders.paymentType",
+        "col:rhize_orders.productName",
+        "col:rhize_orders.productType",
+        "col:rhize_orders.qty",
+        "col:rhize_orders.status",
+        "col:rhize_orders.storeId",
+        "col:rhize_orders.subtotal",
+        "col:rhize_orders.tenantid",
+        "col:rhize_orders.uid",
+        "col:rhize_orders.unitPrice",
+        "col:rhize_orders.updatedAt",
+        "col:rhize_orders.variant",
+        "col:rhize_partner_stores.brand_id",
+        "col:rhize_partner_stores.created_at",
+        "col:rhize_partner_stores.customer_name",
+        "col:rhize_partner_stores.id",
+        "col:rhize_partner_stores.tenantid",
+        "col:rhize_partner_stores.updated_at",
+        "col:rhize_product_lots.brand_id",
+        "col:rhize_product_lots.ccbLotNumber",
+        "col:rhize_product_lots.createdAt",
+        "col:rhize_product_lots.expirationDate",
+        "col:rhize_product_lots.id",
+        "col:rhize_product_lots.internalLotId",
+        "col:rhize_product_lots.lotNumber",
+        "col:rhize_product_lots.productType",
+        "col:rhize_product_lots.strain",
+        "col:rhize_product_lots.tac",
+        "col:rhize_product_lots.tenantid",
+        "col:rhize_product_lots.terps",
+        "col:rhize_product_lots.thc",
+        "col:rhize_product_lots.updatedAt",
+        "col:rhize_sales_actions.brand_id",
+        "col:rhize_sales_actions.category",
+        "col:rhize_sales_actions.createdAt",
+        "col:rhize_sales_actions.customerName",
+        "col:rhize_sales_actions.description",
+        "col:rhize_sales_actions.id",
+        "col:rhize_sales_actions.lastUpdated",
+        "col:rhize_sales_actions.notes",
+        "col:rhize_sales_actions.offerSent",
+        "col:rhize_sales_actions.priority",
+        "col:rhize_sales_actions.status",
+        "col:rhize_sales_actions.tenantid",
+        "col:Rhize_sales_data.created_at",
+        "col:Rhize_sales_data.customer",
+        "col:Rhize_sales_data.date",
+        "col:Rhize_sales_data.delivery_date",
+        "col:Rhize_sales_data.id",
+        "col:Rhize_sales_data.lot_id",
+        "col:Rhize_sales_data.open_balance",
+        "col:Rhize_sales_data.order_id",
+        "col:Rhize_sales_data.payment_date",
+        "col:Rhize_sales_data.payment_type",
+        "col:Rhize_sales_data.product_name",
+        "col:Rhize_sales_data.product_type",
+        "col:Rhize_sales_data.qty",
+        "col:Rhize_sales_data.status",
+        "col:Rhize_sales_data.subtotal",
+        "col:Rhize_sales_data.uid",
+        "col:Rhize_sales_data.unit_price",
+        "col:Rhize_sales_data.variant",
+        "col:rhize_stores.address",
+        "col:rhize_stores.brand_id",
+        "col:rhize_stores.city",
+        "col:rhize_stores.contactName",
+        "col:rhize_stores.createdAt",
+        "col:rhize_stores.id",
+        "col:rhize_stores.isPartner",
+        "col:rhize_stores.licenseNumber",
+        "col:rhize_stores.name",
+        "col:rhize_stores.phone",
+        "col:rhize_stores.slug",
+        "col:rhize_stores.tenantid",
+        "col:rhize_stores.tier",
+        "col:rhize_stores.updatedAt",
+        "col:rhize_strain_info.brand_id",
+        "col:rhize_strain_info.breeder",
+        "col:rhize_strain_info.createdAt",
+        "col:rhize_strain_info.effectTag",
+        "col:rhize_strain_info.flavor1",
+        "col:rhize_strain_info.flavor2",
+        "col:rhize_strain_info.flavor3",
+        "col:rhize_strain_info.genetics1",
+        "col:rhize_strain_info.genetics2",
+        "col:rhize_strain_info.id",
+        "col:rhize_strain_info.strain",
+        "col:rhize_strain_info.tenantid",
+        "col:rhize_strain_info.updatedAt",
+        "col:rhize_sync_log.error_message",
+        "col:rhize_sync_log.id",
+        "col:rhize_sync_log.rows_inserted",
+        "col:rhize_sync_log.rows_unchanged",
+        "col:rhize_sync_log.rows_updated",
+        "col:rhize_sync_log.source",
+        "col:rhize_sync_log.status",
+        "col:rhize_sync_log.synced_at",
+        "col:rhize_sync_log.tenantid",
+        "col:rhize_sync_log.trigger_type",
+        "col:rhize_user_states.id",
+        "col:rhize_user_states.state_key",
+        "col:rhize_user_states.tenantid",
+        "table:category_map",
+        "table:chatbot_example_embeddings",
+        "table:chatbot_mv_market_daily",
+        "table:complete_market_scrapper_dataset",
+        "table:rhize_brands",
+        "table:rhize_dataset_main",
+        "table:rhize_dataset_store",
+        "table:rhize_live_inventory",
+        "table:rhize_orders",
+        "table:rhize_partner_stores",
+        "table:rhize_product_lots",
+        "table:rhize_sales_actions",
+        "table:Rhize_sales_data",
+        "table:rhize_stores",
+        "table:rhize_strain_info",
+        "table:rhize_sync_log",
+        "table:rhize_user_states"
+      ],
+      "top_values": [
+        [
+          "col:rhize_product_lots.terps",
+          1
+        ],
+        [
+          "col:rhize_sales_actions.description",
+          1
+        ],
+        [
+          "col:rhize_orders.orderNumber",
+          1
+        ],
+        [
+          "col:Rhize_sales_data.date",
+          1
+        ],
+        [
+          "col:rhize_product_lots.strain",
+          1
+        ],
+        [
+          "col:rhize_sync_log.source",
+          1
+        ],
+        [
+          "col:rhize_dataset_store.created_at",
+          1
+        ],
+        [
+          "col:rhize_product_lots.tenantid",
+          1
+        ],
+        [
+          "table:rhize_orders",
+          1
+        ],
+        [
+          "col:rhize_live_inventory.lotNumber",
+          1
+        ],
+        [
+          "col:rhize_sales_actions.priority",
+          1
+        ],
+        [
+          "col:rhize_brands.tenantid",
+          1
+        ],
+        [
+          "col:Rhize_sales_data.status",
+          1
+        ],
+        [
+          "col:rhize_sales_actions.notes",
+          1
+        ],
+        [
+          "col:rhize_sales_actions.customerName",
+          1
+        ],
+        [
+          "col:complete_market_scrapper_dataset.created_at",
+          1
+        ],
+        [
+          "col:rhize_product_lots.createdAt",
+          1
+        ],
+        [
+          "col:rhize_stores.city",
+          1
+        ],
+        [
+          "col:rhize_sync_log.rows_unchanged",
+          1
+        ],
+        [
+          "col:rhize_dataset_main.id",
+          1
+        ],
+        [
+          "col:rhize_dataset_main.date",
+          1
+        ],
+        [
+          "col:Rhize_sales_data.customer",
+          1
+        ],
+        [
+          "col:rhize_user_states.id",
+          1
+        ],
+        [
+          "col:complete_market_scrapper_dataset.days_on_shelf",
+          1
+        ],
+        [
+          "col:rhize_sales_actions.category",
+          1
+        ],
+        [
+          "col:rhize_strain_info.createdAt",
+          1
+        ],
+        [
+          "col:complete_market_scrapper_dataset.brand",
+          1
+        ],
+        [
+          "col:chatbot_mv_market_daily.category",
+          1
+        ],
+        [
+          "col:rhize_dataset_store.id",
+          1
+        ],
+        [
+          "col:rhize_orders.productType",
+          1
+        ],
+        [
+          "table:chatbot_mv_market_daily",
+          1
+        ],
+        [
+          "col:rhize_product_lots.thc",
+          1
+        ],
+        [
+          "col:rhize_live_inventory.current_qty",
+          1
+        ],
+        [
+          "col:rhize_stores.phone",
+          1
+        ],
+        [
+          "col:rhize_live_inventory.productName",
+          1
+        ],
+        [
+          "table:complete_market_scrapper_dataset",
+          1
+        ],
+        [
+          "col:Rhize_sales_data.order_id",
+          1
+        ],
+        [
+          "col:rhize_product_lots.updatedAt",
+          1
+        ],
+        [
+          "col:rhize_partner_stores.customer_name",
+          1
+        ],
+        [
+          "col:rhize_strain_info.breeder",
+          1
+        ],
+        [
+          "col:complete_market_scrapper_dataset.change",
+          1
+        ],
+        [
+          "col:category_map.raw_lower",
+          1
+        ],
+        [
+          "col:rhize_stores.name",
+          1
+        ],
+        [
+          "col:chatbot_mv_market_daily.date",
+          1
+        ],
+        [
+          "col:rhize_orders.uid",
+          1
+        ],
+        [
+          "col:rhize_sales_actions.brand_id",
+          1
+        ],
+        [
+          "col:rhize_orders.openBalance",
+          1
+        ],
+        [
+          "table:rhize_sales_actions",
+          1
+        ],
+        [
+          "col:rhize_strain_info.flavor1",
+          1
+        ],
+        [
+          "col:rhize_strain_info.genetics1",
+          1
+        ]
+      ],
+      "sample_values": [
+        "col:rhize_product_lots.terps",
+        "col:rhize_sales_actions.description",
+        "col:rhize_orders.orderNumber",
+        "col:Rhize_sales_data.date",
+        "col:rhize_product_lots.strain",
+        "col:rhize_sync_log.source",
+        "col:rhize_dataset_store.created_at",
+        "col:rhize_product_lots.tenantid",
+        "table:rhize_orders",
+        "col:rhize_live_inventory.lotNumber"
+      ],
+      "notes": []
+    },
+    {
+      "name": "kind",
+      "declared_type": "text",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 206,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 3,
+      "distinct_pct": 1.46,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "column",
+      "max_value": "view",
+      "min_length": 4,
+      "max_length": 6,
+      "avg_length": 5.91,
+      "pattern_hints": [],
+      "distinct_values": [
+        "column",
+        "table",
+        "view"
+      ],
+      "top_values": [
+        [
+          "column",
+          189
+        ],
+        [
+          "table",
+          16
+        ],
+        [
+          "view",
+          1
+        ]
+      ],
+      "sample_values": [
+        "column",
+        "table",
+        "view"
+      ],
+      "notes": []
+    },
+    {
+      "name": "table_name",
+      "declared_type": "text",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 206,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 17,
+      "distinct_pct": 8.25,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "category_map",
+      "max_value": "rhize_user_states",
+      "min_length": 12,
+      "max_length": 32,
+      "avg_length": 18.03,
+      "pattern_hints": [],
+      "distinct_values": [
+        "category_map",
+        "chatbot_example_embeddings",
+        "chatbot_mv_market_daily",
+        "complete_market_scrapper_dataset",
+        "rhize_brands",
+        "rhize_dataset_main",
+        "rhize_dataset_store",
+        "rhize_live_inventory",
+        "rhize_orders",
+        "rhize_partner_stores",
+        "rhize_product_lots",
+        "rhize_sales_actions",
+        "Rhize_sales_data",
+        "rhize_stores",
+        "rhize_strain_info",
+        "rhize_sync_log",
+        "rhize_user_states"
+      ],
+      "top_values": [
+        [
+          "rhize_dataset_main",
+          24
+        ],
+        [
+          "rhize_orders",
+          22
+        ],
+        [
+          "Rhize_sales_data",
+          19
+        ],
+        [
+          "complete_market_scrapper_dataset",
+          19
+        ],
+        [
+          "rhize_stores",
+          15
+        ],
+        [
+          "rhize_product_lots",
+          15
+        ],
+        [
+          "rhize_strain_info",
+          14
+        ],
+        [
+          "rhize_live_inventory",
+          13
+        ],
+        [
+          "rhize_sales_actions",
+          13
+        ],
+        [
+          "rhize_sync_log",
+          11
+        ],
+        [
+          "rhize_dataset_store",
+          11
+        ],
+        [
+          "chatbot_mv_market_daily",
+          9
+        ],
+        [
+          "rhize_partner_stores",
+          7
+        ],
+        [
+          "rhize_brands",
+          6
+        ],
+        [
+          "rhize_user_states",
+          4
+        ],
+        [
+          "category_map",
+          3
+        ],
+        [
+          "chatbot_example_embeddings",
+          1
+        ]
+      ],
+      "sample_values": [
+        "rhize_dataset_main",
+        "rhize_orders",
+        "Rhize_sales_data",
+        "complete_market_scrapper_dataset",
+        "rhize_stores",
+        "rhize_product_lots",
+        "rhize_strain_info",
+        "rhize_live_inventory",
+        "rhize_sales_actions",
+        "rhize_sync_log"
+      ],
+      "notes": []
+    },
+    {
+      "name": "column_name",
+      "declared_type": "text",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 206,
+      "null_count": 17,
+      "null_pct": 8.25,
+      "distinct_count": 110,
+      "distinct_pct": 58.2,
+      "is_unique": false,
+      "is_low_cardinality": false,
+      "min_value": "`14d`",
+      "max_value": "variant",
+      "min_length": 2,
+      "max_length": 24,
+      "avg_length": 7.71,
+      "pattern_hints": [],
+      "distinct_values": [
+        "`14d`",
+        "`1d`",
+        "`3d`",
+        "`7d`",
+        "address",
+        "brand",
+        "brand_id",
+        "breeder",
+        "category",
+        "Category",
+        "category_norm",
+        "ccbLotNumber",
+        "change",
+        "Change",
+        "city",
+        "company",
+        "Company_Name",
+        "contactName",
+        "created_at",
+        "createdAt",
+        "current_qty",
+        "customer",
+        "customer_name",
+        "customerName",
+        "date",
+        "Days",
+        "days_on_shelf",
+        "delivery_date",
+        "deliveryDate",
+        "description",
+        "Discount_Price_Data",
+        "effectTag",
+        "error_message",
+        "expirationDate",
+        "first_seen",
+        "flag",
+        "Flag",
+        "flavor1",
+        "flavor2",
+        "flavor3",
+        "genetics1",
+        "genetics2",
+        "id",
+        "internalLotId",
+        "isPartner",
+        "isRhize",
+        "lastUpdated",
+        "lbs",
+        "licenseNumber",
+        "lot_id",
+        "lotNumber",
+        "name",
+        "notes",
+        "offerSent",
+        "open_balance",
+        "openBalance",
+        "order_id",
+        "orderNumber",
+        "payment_date",
+        "payment_type",
+        "paymentType",
+        "pending",
+        "phone",
+        "previous_quantity",
+        "price",
+        "Price",
+        "price_num",
+        "priority",
+        "product_name",
+        "productName",
+        "Product_Name",
+        "product_type",
+        "productType",
+        "qty",
+        "quantity",
+        "raw_lower",
+        "remaining",
+        "revenue",
+        "Revenue",
+        "rows_inserted",
+        "rows_unchanged",
+        "rows_updated",
+        "SKU",
+        "sku_count",
+        "slug",
+        "source",
+        "state",
+        "state_key",
+        "status",
+        "storeId",
+        "strain",
+        "subtotal",
+        "synced_at",
+        "tac",
+        "tenantid",
+        "terps",
+        "thc",
+        "THC",
+        "tier",
+        "`Today's_Quantity_Total`",
+        "trigger_type",
+        "Type",
+        "uid",
+        "unit",
+        "Unit",
+        "unit_price",
+        "unitPrice",
+        "updated_at",
+        "updatedAt",
+        "variant"
+      ],
+      "top_values": [
+        [
+          "id",
+          13
+        ],
+        [
+          "tenantid",
+          12
+        ],
+        [
+          "brand_id",
+          9
+        ],
+        [
+          "createdAt",
+          6
+        ],
+        [
+          "date",
+          6
+        ],
+        [
+          "created_at",
+          5
+        ],
+        [
+          "updatedAt",
+          5
+        ],
+        [
+          "status",
+          4
+        ],
+        [
+          "lotNumber",
+          3
+        ],
+        [
+          "category",
+          3
+        ],
+        [
+          "productType",
+          3
+        ],
+        [
+          "strain",
+          3
+        ],
+        [
+          "brand",
+          2
+        ],
+        [
+          "uid",
+          2
+        ],
+        [
+          "thc",
+          2
+        ],
+        [
+          "state",
+          2
+        ],
+        [
+          "product_name",
+          2
+        ],
+        [
+          "customerName",
+          2
+        ],
+        [
+          "subtotal",
+          2
+        ],
+        [
+          "revenue",
+          2
+        ],
+        [
+          "productName",
+          2
+        ],
+        [
+          "Type",
+          2
+        ],
+        [
+          "Category",
+          2
+        ],
+        [
+          "SKU",
+          2
+        ],
+        [
+          "Product_Name",
+          2
+        ],
+        [
+          "quantity",
+          2
+        ],
+        [
+          "qty",
+          2
+        ],
+        [
+          "Company_Name",
+          2
+        ],
+        [
+          "variant",
+          2
+        ],
+        [
+          "name",
+          2
+        ],
+        [
+          "company",
+          2
+        ],
+        [
+          "flavor1",
+          1
+        ],
+        [
+          "Flag",
+          1
+        ],
+        [
+          "lastUpdated",
+          1
+        ],
+        [
+          "customer",
+          1
+        ],
+        [
+          "`7d`",
+          1
+        ],
+        [
+          "Unit",
+          1
+        ],
+        [
+          "unit_price",
+          1
+        ],
+        [
+          "orderNumber",
+          1
+        ],
+        [
+          "`3d`",
+          1
+        ],
+        [
+          "raw_lower",
+          1
+        ],
+        [
+          "source",
+          1
+        ],
+        [
+          "Change",
+          1
+        ],
+        [
+          "tier",
+          1
+        ],
+        [
+          "priority",
+          1
+        ],
+        [
+          "updated_at",
+          1
+        ],
+        [
+          "`1d`",
+          1
+        ],
+        [
+          "payment_date",
+          1
+        ],
+        [
+          "effectTag",
+          1
+        ],
+        [
+          "paymentType",
+          1
+        ]
+      ],
+      "sample_values": [
+        "id",
+        "tenantid",
+        "brand_id",
+        "createdAt",
+        "date",
+        "created_at",
+        "updatedAt",
+        "status",
+        "lotNumber",
+        "category"
+      ],
+      "notes": []
+    },
+    {
+      "name": "data_type",
+      "declared_type": "text",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 206,
+      "null_count": 17,
+      "null_pct": 8.25,
+      "distinct_count": 21,
+      "distinct_pct": 11.11,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "BIGINT",
+      "max_value": "VARCHAR(500)",
+      "min_length": 3,
+      "max_length": 16,
+      "avg_length": 7.33,
+      "pattern_hints": [],
+      "distinct_values": [
+        "BIGINT",
+        "BIGINT UNSIGNED",
+        "DATE",
+        "DATETIME",
+        "DOUBLE",
+        "DOUBLE PRECISION",
+        "INT",
+        "INTEGER",
+        "NUMERIC",
+        "SMALLINT",
+        "TEXT",
+        "TIMESTAMP",
+        "TINYINT(1)",
+        "VARCHAR",
+        "VARCHAR(10)",
+        "VARCHAR(100)",
+        "VARCHAR(20)",
+        "VARCHAR(255)",
+        "VARCHAR(36)",
+        "VARCHAR(50)",
+        "VARCHAR(500)"
+      ],
+      "top_values": [
+        [
+          "TEXT",
+          61
+        ],
+        [
+          "INT",
+          19
+        ],
+        [
+          "VARCHAR(255)",
+          18
+        ],
+        [
+          "VARCHAR(36)",
+          17
+        ],
+        [
+          "DATETIME",
+          15
+        ],
+        [
+          "VARCHAR(100)",
+          13
+        ],
+        [
+          "DOUBLE",
+          11
+        ],
+        [
+          "TIMESTAMP",
+          8
+        ],
+        [
+          "INTEGER",
+          4
+        ],
+        [
+          "VARCHAR(500)",
+          3
+        ],
+        [
+          "VARCHAR(50)",
+          3
+        ],
+        [
+          "TINYINT(1)",
+          3
+        ],
+        [
+          "DOUBLE PRECISION",
+          3
+        ],
+        [
+          "VARCHAR(20)",
+          2
+        ],
+        [
+          "NUMERIC",
+          2
+        ],
+        [
+          "BIGINT",
+          2
+        ],
+        [
+          "BIGINT UNSIGNED",
+          1
+        ],
+        [
+          "SMALLINT",
+          1
+        ],
+        [
+          "VARCHAR",
+          1
+        ],
+        [
+          "DATE",
+          1
+        ],
+        [
+          "VARCHAR(10)",
+          1
+        ]
+      ],
+      "sample_values": [
+        "TEXT",
+        "INT",
+        "VARCHAR(255)",
+        "VARCHAR(36)",
+        "DATETIME",
+        "VARCHAR(100)",
+        "DOUBLE",
+        "TIMESTAMP",
+        "INTEGER",
+        "VARCHAR(500)"
+      ],
+      "notes": []
+    },
+    {
+      "name": "definition",
+      "declared_type": "text",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 206,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 159,
+      "distinct_pct": 77.18,
+      "is_unique": false,
+      "is_low_cardinality": false,
+      "min_value": "14-day quantity change",
+      "max_value": "`YYYY-MM-DD` \u2014 text not DATE",
+      "min_length": 8,
+      "max_length": 364,
+      "avg_length": 35.29,
+      "pattern_hints": [],
+      "distinct_values": [
+        "14-day quantity change",
+        "1-day quantity change",
+        "`1` = highest priority",
+        "`1` = partner store",
+        "`1` = user's OWN brand, `0` = competitor brand in catalog",
+        "3-day quantity change",
+        "7-day quantity change",
+        "Account tier/level",
+        "Action category: `MARKET`, `OUTREACH`, etc.",
+        "Action description",
+        "`added` / `no change` / `removed`",
+        "`'Added'` / `'Removed'` / `'No Change'`",
+        "Auto-increment primary key",
+        "Available-to-sell (`current_qty - pending`)",
+        "Brand creation timestamp",
+        "Brand grouping key",
+        "Brand name",
+        "Brand name (free-text)",
+        "Brand primary key (cuid)",
+        "Brand reference",
+        "Breeder name",
+        "Cleaned numeric price",
+        "`'Completed'` / `'Pending'` / `'Cancelled'`",
+        "Contact person",
+        "Contact phone",
+        "Customer/store name",
+        "Daily revenue \u2014 OWN business ONLY",
+        "Daily sum of base quantity",
+        "Daily sum of base revenue per grouping",
+        "Days metric",
+        "Days since first seen",
+        "Delivery date",
+        "Delivery date as text",
+        "Discount price",
+        "Distinct SKUs per grouping",
+        "Effect: `RELAX`, `ENERGIZE`, `HYBRID`, `HYBRID-Energy`",
+        "Error details if failed",
+        "First scrape timestamp for the SKU",
+        "Free-text notes",
+        "Internal lot reference",
+        "Inventory row primary key",
+        "ISO `YYYY-MM-DD` string",
+        "Last snapshot update",
+        "Last status update",
+        "Last update",
+        "Last update timestamp",
+        "Line revenue as TEXT",
+        "Line revenue (`qty \u00d7 unitPrice`)",
+        "Lot expiry date",
+        "Lot identifier",
+        "Lot number reference",
+        "Lot primary key",
+        "Lot reference",
+        "Lowercased raw category string",
+        "`manual` / automated",
+        "`'New'` / `'In Progress'` / `'Done'`",
+        "Normalized label: `Flower`, `PreRoll`, `Vape`, `Concentrate`, `Edible`, `Other`",
+        "On-hand units",
+        "Order date",
+        "Order date as text",
+        "Order identifier",
+        "Order line primary key (cuid)",
+        "Order status",
+        "Pack size",
+        "Pack size: `1g`, `3.5g`, `7g`, `28g`, `1pk`",
+        "Pack size variant",
+        "Pack size variant (e.g. `0.5g`, `1g`)",
+        "Parent genetics 1",
+        "Parent genetics 2",
+        "Partner store name",
+        "Payment date as text",
+        "Payment method",
+        "Per-unit price",
+        "Per-unit price as TEXT",
+        "Pre-baked units sold (pack-size normalized)",
+        "`price_num \u00d7",
+        "Primary flavor",
+        "Primary key",
+        "Product category",
+        "Product category type (Cart, Preroll, etc.)",
+        "Product name",
+        "Product ordered",
+        "Product type",
+        "Product type (Trim, Flower Bulk, Waste, etc.)",
+        "Purpose: Brand registry \u2014 own brand + competitor catalog Data grain: One row per (tenantid, name) \u2014 unique Use when: Identifying own brand, listing brand catalog",
+        "Purpose: Current on-hand inventory snapshot Data grain: One row per (productName, tenant) Use when: Low stock queries, what's in stock, on-hand units by product",
+        "Purpose: Flat export/snapshot of sales data synced from Google Sheets via `rhize_sync_log` Data grain: One row per order line item (similar to `rhize_orders` but all TEXT) Use when: Only when `rhize_orders` does not have the required data. Prefer `rhize_orders` for order queries Avoid when: General order queries \u2014 use `rhize_orders` (proper types, tenant-scoped)",
+        "Purpose: Lot tracking and lab result metadata Data grain: One row per (lotNumber, tenant) Use when: THC by strain, expiring lots, lot metadata, lab results",
+        "Purpose: Maps raw category strings to normalized category labels Data grain: One row per raw category variant Use when: Normalizing `category` in market tables \u2014 preferred over inline CASE block",
+        "Purpose: Maps tenants to their US state(s) \u2014 drives RLS on PostgreSQL market tables Data grain: One row per (tenantid, state_key) Use when: Understanding which state(s) a tenant operates in. Not typically queried directly in business queries",
+        "Purpose: Partner store roster (minimal version) Data grain: One row per partner customer per tenant Use when: Simple partner customer name list only. For richer data use `rhize_stores WHERE isPartner = 1`",
+        "Purpose: Per-store breakdown of tenant's products Data grain: One row per (date, Product_Name, Company_Name) per tenant Use when: Store-level product breakdown",
+        "Purpose: Pre-aggregated market data \u2014 compressed daily snapshot Data grain: One row per (date, brand, company, category, state) per day Use when: Top brands, top companies, category mix, market share, multi-day trends, any GROUP BY brand/company/category Avoid when: SKU-level detail needed (`product_name`, individual `thc`, `flag`, `days_on_shelf`)",
+        "Purpose: Raw scraped competitor/market listings Data grain: One row per (date, state, company, product, unit) per scrape run Use when: SKU-level detail needed: `product_name`, `price`, `thc`, `flag`, `days_on_shelf` Avoid when: Aggregating by brand/company/category \u2014 use `chatbot_mv_market_daily` (~480x smaller)",
+        "Purpose: Retail store / account registry Data grain: One row per store per tenant Use when: Partner stores, retail accounts, store directory",
+        "Purpose: Sales action queue / CRM follow-up tasks Data grain: One row per sales action per tenant Use when: Open tasks, CRM queue, follow-ups, sales pipeline",
+        "Purpose: Strain genetics and flavor metadata Data grain: One row per strain per tenant Use when: Strain genetics, flavor profiles, effect tags",
+        "Purpose: Tenant's OWN daily sales/revenue summary Data grain: One row per (Product_Name, date, tenant) approx. Use when: \"My revenue\", \"my sales\", daily totals, own top products, own product flags",
+        "Purpose: Tracks Google Sheets \u2192 `Rhize_sales_data` sync job results Use when: Debugging sync failures only. Never use for business analytics",
+        "Purpose: User's own product order history Data grain: One row per order line item Use when: Own orders, customer revenue, sales by product, open balances, AR",
+        "Quantity from previous scrape",
+        "Raw displayed price (`$63.00` or `45`)",
+        "Raw product category \u2014 58 variants",
+        "Real DATE type \u2014 arithmetic works directly",
+        "Record creation",
+        "Record creation timestamp",
+        "Regulatory license",
+        "Regulatory lot number",
+        "Reserved/pending units",
+        "Retailer/dispensary name",
+        "Retailer grouping key",
+        "Retail store name on the order",
+        "Row ingestion timestamp",
+        "Row primary key",
+        "Rows added",
+        "Rows updated",
+        "Rows with no change",
+        "Same 58 raw variants as base table",
+        "Secondary flavor",
+        "Sequential order number",
+        "Short display ID",
+        "Short unique display ID (e.g. `C6OEGT`)",
+        "SKU display name",
+        "SKU identifier",
+        "Source system (e.g. `google_sheets`)",
+        "Store city",
+        "Store/company name",
+        "Store name",
+        "Store primary key",
+        "Store reference ID",
+        "Strain name",
+        "Strain name \u2014 join key",
+        "Street address",
+        "`success` / `error`",
+        "Table chatbot_example_embeddings.",
+        "Target customer/store name",
+        "Tenant identifier",
+        "Terpene percentage",
+        "Tertiary flavor",
+        "THC content \u2014 noisy (`24%`, `100mg`, `THC -`, `''`)",
+        "THC percentage \u2014 already numeric",
+        "THC percentage as text",
+        "Today's quantity",
+        "Total active cannabinoids",
+        "Unit price \u2014 stored as TEXT",
+        "Units change",
+        "Units listed on scrape day",
+        "Units sold on this line",
+        "Units sold \u2014 stored as TEXT",
+        "Unpaid balance as text",
+        "Unpaid balance per line",
+        "URL slug",
+        "US state code",
+        "US state code (VT, MA, etc.)",
+        "Weight in pounds",
+        "When the sync ran",
+        "Whether offer was sent (`0` = no)",
+        "`YYYY-MM-DD` text",
+        "`YYYY-MM-DD` \u2014 text not DATE"
+      ],
+      "top_values": [
+        [
+          "Tenant identifier",
+          12
+        ],
+        [
+          "Brand reference",
+          9
+        ],
+        [
+          "Record creation timestamp",
+          5
+        ],
+        [
+          "Row ingestion timestamp",
+          4
+        ],
+        [
+          "Product name",
+          4
+        ],
+        [
+          "Primary key",
+          4
+        ],
+        [
+          "Last update timestamp",
+          4
+        ],
+        [
+          "Product type",
+          4
+        ],
+        [
+          "Row primary key",
+          3
+        ],
+        [
+          "SKU identifier",
+          2
+        ],
+        [
+          "Payment method",
+          2
+        ],
+        [
+          "Lot reference",
+          2
+        ],
+        [
+          "US state code (VT, MA, etc.)",
+          2
+        ],
+        [
+          "Store name",
+          2
+        ],
+        [
+          "Strain name",
+          2
+        ],
+        [
+          "Product category",
+          2
+        ],
+        [
+          "Order date",
+          1
+        ],
+        [
+          "`YYYY-MM-DD` text",
+          1
+        ],
+        [
+          "ISO `YYYY-MM-DD` string",
+          1
+        ],
+        [
+          "Days since first seen",
+          1
+        ],
+        [
+          "Purpose: Per-store breakdown of tenant's products Data grain: One row per (date, Product_Name, Company_Name) per tenant Use when: Store-level product breakdown",
+          1
+        ],
+        [
+          "Per-unit price",
+          1
+        ],
+        [
+          "Partner store name",
+          1
+        ],
+        [
+          "Store primary key",
+          1
+        ],
+        [
+          "Lot primary key",
+          1
+        ],
+        [
+          "Brand primary key (cuid)",
+          1
+        ],
+        [
+          "Customer/store name",
+          1
+        ],
+        [
+          "7-day quantity change",
+          1
+        ],
+        [
+          "Today's quantity",
+          1
+        ],
+        [
+          "Purpose: Tenant's OWN daily sales/revenue summary Data grain: One row per (Product_Name, date, tenant) approx. Use when: \"My revenue\", \"my sales\", daily totals, own top products, own product flags",
+          1
+        ],
+        [
+          "Tertiary flavor",
+          1
+        ],
+        [
+          "Purpose: Lot tracking and lab result metadata Data grain: One row per (lotNumber, tenant) Use when: THC by strain, expiring lots, lot metadata, lab results",
+          1
+        ],
+        [
+          "Retailer grouping key",
+          1
+        ],
+        [
+          "Cleaned numeric price",
+          1
+        ],
+        [
+          "Effect: `RELAX`, `ENERGIZE`, `HYBRID`, `HYBRID-Energy`",
+          1
+        ],
+        [
+          "Brand grouping key",
+          1
+        ],
+        [
+          "`manual` / automated",
+          1
+        ],
+        [
+          "Brand name",
+          1
+        ],
+        [
+          "Purpose: Maps tenants to their US state(s) \u2014 drives RLS on PostgreSQL market tables Data grain: One row per (tenantid, state_key) Use when: Understanding which state(s) a tenant operates in. Not typically queried directly in business queries",
+          1
+        ],
+        [
+          "Pack size",
+          1
+        ],
+        [
+          "Retail store name on the order",
+          1
+        ],
+        [
+          "Purpose: Current on-hand inventory snapshot Data grain: One row per (productName, tenant) Use when: Low stock queries, what's in stock, on-hand units by product",
+          1
+        ],
+        [
+          "Secondary flavor",
+          1
+        ],
+        [
+          "`1` = highest priority",
+          1
+        ],
+        [
+          "Weight in pounds",
+          1
+        ],
+        [
+          "Daily revenue \u2014 OWN business ONLY",
+          1
+        ],
+        [
+          "Brand name (free-text)",
+          1
+        ],
+        [
+          "Purpose: Brand registry \u2014 own brand + competitor catalog Data grain: One row per (tenantid, name) \u2014 unique Use when: Identifying own brand, listing brand catalog",
+          1
+        ],
+        [
+          "Same 58 raw variants as base table",
+          1
+        ],
+        [
+          "Delivery date as text",
+          1
+        ]
+      ],
+      "sample_values": [
+        "Tenant identifier",
+        "Brand reference",
+        "Record creation timestamp",
+        "Row ingestion timestamp",
+        "Product name",
+        "Primary key",
+        "Last update timestamp",
+        "Product type",
+        "Row primary key",
+        "SKU identifier"
+      ],
+      "notes": []
+    },
+    {
+      "name": "restrictions",
+      "declared_type": "text",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 206,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 75,
+      "distinct_pct": 36.41,
+      "is_unique": false,
+      "is_low_cardinality": false,
+      "min_value": "",
+      "max_value": "`WHERE date >= CURRENT_DATE - INTERVAL '14 days'`",
+      "min_length": 0,
+      "max_length": 218,
+      "avg_length": 24.16,
+      "pattern_hints": [],
+      "distinct_values": [
+        "",
+        "Always `CAST(Price AS DECIMAL(10,2))` for math",
+        "Always `CAST(Revenue AS DECIMAL(10,2))`. This is tenant's OWN revenue \u2014 NOT market revenue",
+        "Always filter: `brand IS NOT NULL AND brand <> ''` when grouping",
+        "Always filter: `company IS NOT NULL AND company <> ''` when grouping",
+        "Always filter status for revenue vs. open orders",
+        "ALWAYS normalize. Preferred: `JOIN category_map ON lower(category) = raw_lower`. Fallback: inline CASE block (see \u00a74). NEVER write `category = 'Flower'`",
+        "ALWAYS normalize via `category_map` join or CASE block",
+        "Always use: `COALESCE(price_num, NULLIF(regexp_replace(price,'[^0-9.]','','g'),'')::numeric)`. Filter `> 0` before averaging",
+        "Always use `remaining` not `current_qty` for sellable stock",
+        "Always `WHERE days_on_shelf IS NOT NULL` when sorting/aggregating. ASC = fastest moving; DESC = stale",
+        "Auto-injected",
+        "Auto-injected. Never write in query",
+        "Backtick required. Cast before math",
+        "Can join to `rhize_product_lots.lotNumber`",
+        "Cast before math",
+        "Cast: `CAST(qty AS DECIMAL(10,2))`",
+        "Cast: `CAST(subtotal AS DECIMAL(10,2))`",
+        "Cast: `CAST(unit_price AS DECIMAL(10,2))`",
+        "Cast: `STR_TO_DATE(date, '%Y-%m-%d')` for arithmetic",
+        "change",
+        "Default ranking metric for market aggregates",
+        "Different from market `thc` (TEXT). Always `WHERE thc IS NOT NULL` when averaging. No cast needed",
+        "Direct MySQL date arithmetic: `WHERE date >= DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY)`",
+        "Do NOT scope by `brand_id` \u2014 collides cross-tenant",
+        "Expiring soon: `WHERE expirationDate BETWEEN CURRENT_DATE AND DATE_ADD(CURRENT_DATE, INTERVAL 30 DAY)`",
+        "Filter blanks when ranking. Only available in base table (not in view)",
+        "Filter: `brand IS NOT NULL AND brand <> ''`",
+        "Filter: `company IS NOT NULL AND company <> ''`",
+        "Filter for delivery timeline queries",
+        "For \"my brand\" / \"own brand\" queries: `WHERE isRhize = 1`",
+        "For \"partner stores\": `WHERE isPartner = 1`",
+        "Inconsistent format. Never use directly for math",
+        "Join key to `rhize_live_inventory.lotNumber`",
+        "Join: `lower(category) = raw_lower`",
+        "Join to `rhize_product_lots.lotNumber`",
+        "Join to `rhize_product_lots.strain`, `rhize_live_inventory.strain`",
+        "Join to `rhize_stores.id` if needed",
+        "Join to `rhize_strain_info.strain`. Group by for `AVG(thc)`",
+        "Last 7d: `WHERE date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 7 DAY, '%Y-%m-%d')`. Latest: `WHERE date = (SELECT MAX(date) FROM rhize_dataset_main)`",
+        "Low stock: `WHERE current_qty < N`. Order `ASC` for lowest first",
+        "Maps tenant to state for RLS",
+        "Must cast: `CASE WHEN thc ~ '^[0-9]+(\\.[0-9]+)?%?$' THEN regexp_replace(thc,'[^0-9.]','','g')::numeric END AS thc_num` then filter `thc_num BETWEEN 0 AND 100`",
+        "Note: column name is `customer` not `customerName` \u2014 different from `rhize_orders`",
+        "Note: `lot_id` not `lotNumber` \u2014 different from `rhize_orders`",
+        "Note: snake_case unlike `rhize_orders.productName`",
+        "Not the business date \u2014 use `date` for business logic",
+        "No visible `tenantid` \u2014 scope may be implied by sync source",
+        "Often NULL \u2014 check before using",
+        "Often NULL in data",
+        "Open queue: `WHERE status <> 'Done'`",
+        "`ORDER BY priority ASC` for most urgent first",
+        "References tenant",
+        "RLS-scoped. Never filter manually",
+        "RLS: State is auto-filtered. Never add `WHERE state = ...`",
+        "Same date rules as `rhize_dataset_main`: use `DATE_FORMAT` for arithmetic",
+        "`SUM(openBalance)` for total AR. Filter `status <> 'Completed'` for outstanding",
+        "`SUM(subtotal)` for total revenue. Combine `WHERE status = 'Completed'` for realized revenue",
+        "`tenantid` (INT) auto-injected",
+        "`tenantid` (INT) auto-injected by middleware",
+        "Text, not DATE. Use `to_char()` for date arithmetic. Latest: `WHERE date = (SELECT MAX(date) FROM complete_market_scrapper_dataset)`. Last N days: `WHERE date >= to_char(CURRENT_DATE - INTERVAL 'N days', 'YYYY-MM-DD')`",
+        "Today's new SKUs: `WHERE Flag = 'Added' AND date = (SELECT MAX(date)...)`",
+        "Unique per (productName, tenant)",
+        "Unique per (tenantid, name)",
+        "Used in sell-through calculations",
+        "Used to derive sell-through delta",
+        "Use `flag = 'added'` for new products, `flag = 'removed'` for dropped",
+        "Use for grouping all lines of one order",
+        "Use for new product analysis",
+        "Use for sell-through. Represents `quantity - previous_quantity`",
+        "Use for weight/size filtering",
+        "Use `lower(customerName) LIKE lower('%X%')` for partial match. Group by for top customers",
+        "Use `SUM(sku_count)` when grouping by brand for \"most products listed\"",
+        "Use this as the display/group-by value",
+        "`WHERE date >= CURRENT_DATE - INTERVAL '14 days'`"
+      ],
+      "top_values": [
+        [
+          "",
+          102
+        ],
+        [
+          "`tenantid` (INT) auto-injected",
+          9
+        ],
+        [
+          "Auto-injected",
+          9
+        ],
+        [
+          "Often NULL in data",
+          5
+        ],
+        [
+          "Cast before math",
+          5
+        ],
+        [
+          "Backtick required. Cast before math",
+          5
+        ],
+        [
+          "RLS-scoped. Never filter manually",
+          2
+        ],
+        [
+          "RLS: State is auto-filtered. Never add `WHERE state = ...`",
+          2
+        ],
+        [
+          "`SUM(openBalance)` for total AR. Filter `status <> 'Completed'` for outstanding",
+          1
+        ],
+        [
+          "Always `WHERE days_on_shelf IS NOT NULL` when sorting/aggregating. ASC = fastest moving; DESC = stale",
+          1
+        ],
+        [
+          "For \"partner stores\": `WHERE isPartner = 1`",
+          1
+        ],
+        [
+          "ALWAYS normalize. Preferred: `JOIN category_map ON lower(category) = raw_lower`. Fallback: inline CASE block (see \u00a74). NEVER write `category = 'Flower'`",
+          1
+        ],
+        [
+          "Today's new SKUs: `WHERE Flag = 'Added' AND date = (SELECT MAX(date)...)`",
+          1
+        ],
+        [
+          "Used to derive sell-through delta",
+          1
+        ],
+        [
+          "Do NOT scope by `brand_id` \u2014 collides cross-tenant",
+          1
+        ],
+        [
+          "Use for grouping all lines of one order",
+          1
+        ],
+        [
+          "Low stock: `WHERE current_qty < N`. Order `ASC` for lowest first",
+          1
+        ],
+        [
+          "References tenant",
+          1
+        ],
+        [
+          "Use `flag = 'added'` for new products, `flag = 'removed'` for dropped",
+          1
+        ],
+        [
+          "Use for weight/size filtering",
+          1
+        ],
+        [
+          "Join: `lower(category) = raw_lower`",
+          1
+        ],
+        [
+          "`tenantid` (INT) auto-injected by middleware",
+          1
+        ],
+        [
+          "Not the business date \u2014 use `date` for business logic",
+          1
+        ],
+        [
+          "Join to `rhize_strain_info.strain`. Group by for `AVG(thc)`",
+          1
+        ],
+        [
+          "Often NULL \u2014 check before using",
+          1
+        ],
+        [
+          "Cast: `CAST(unit_price AS DECIMAL(10,2))`",
+          1
+        ],
+        [
+          "Always filter: `company IS NOT NULL AND company <> ''` when grouping",
+          1
+        ],
+        [
+          "Note: column name is `customer` not `customerName` \u2014 different from `rhize_orders`",
+          1
+        ],
+        [
+          "change",
+          1
+        ],
+        [
+          "Cast: `CAST(qty AS DECIMAL(10,2))`",
+          1
+        ],
+        [
+          "Open queue: `WHERE status <> 'Done'`",
+          1
+        ],
+        [
+          "Note: snake_case unlike `rhize_orders.productName`",
+          1
+        ],
+        [
+          "Text, not DATE. Use `to_char()` for date arithmetic. Latest: `WHERE date = (SELECT MAX(date) FROM complete_market_scrapper_dataset)`. Last N days: `WHERE date >= to_char(CURRENT_DATE - INTERVAL 'N days', 'YYYY-MM-DD')`",
+          1
+        ],
+        [
+          "Always filter status for revenue vs. open orders",
+          1
+        ],
+        [
+          "Filter for delivery timeline queries",
+          1
+        ],
+        [
+          "Cast: `CAST(subtotal AS DECIMAL(10,2))`",
+          1
+        ],
+        [
+          "Use this as the display/group-by value",
+          1
+        ],
+        [
+          "ALWAYS normalize via `category_map` join or CASE block",
+          1
+        ],
+        [
+          "Used in sell-through calculations",
+          1
+        ],
+        [
+          "`SUM(subtotal)` for total revenue. Combine `WHERE status = 'Completed'` for realized revenue",
+          1
+        ],
+        [
+          "Note: `lot_id` not `lotNumber` \u2014 different from `rhize_orders`",
+          1
+        ],
+        [
+          "Use for sell-through. Represents `quantity - previous_quantity`",
+          1
+        ],
+        [
+          "Use for new product analysis",
+          1
+        ],
+        [
+          "Can join to `rhize_product_lots.lotNumber`",
+          1
+        ],
+        [
+          "Last 7d: `WHERE date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 7 DAY, '%Y-%m-%d')`. Latest: `WHERE date = (SELECT MAX(date) FROM rhize_dataset_main)`",
+          1
+        ],
+        [
+          "Filter: `brand IS NOT NULL AND brand <> ''`",
+          1
+        ],
+        [
+          "Always `CAST(Revenue AS DECIMAL(10,2))`. This is tenant's OWN revenue \u2014 NOT market revenue",
+          1
+        ],
+        [
+          "Join to `rhize_product_lots.lotNumber`",
+          1
+        ],
+        [
+          "Unique per (productName, tenant)",
+          1
+        ],
+        [
+          "Always use `remaining` not `current_qty` for sellable stock",
+          1
+        ]
+      ],
+      "sample_values": [
+        "",
+        "`tenantid` (INT) auto-injected",
+        "Auto-injected",
+        "Often NULL in data",
+        "Cast before math",
+        "Backtick required. Cast before math",
+        "RLS-scoped. Never filter manually",
+        "RLS: State is auto-filtered. Never add `WHERE state = ...`",
+        "`SUM(openBalance)` for total AR. Filter `status <> 'Completed'` for outstanding",
+        "Always `WHERE days_on_shelf IS NOT NULL` when sorting/aggregating. ASC = fastest moving; DESC = stale"
+      ],
+      "notes": []
+    },
+    {
+      "name": "embedding",
+      "declared_type": "USER-DEFINED (vector)",
+      "inferred_kind": "unknown",
+      "nullable": false,
+      "total_rows": 206,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 206,
+      "distinct_pct": 100.0,
+      "is_unique": true,
+      "is_low_cardinality": false,
+      "min_value": null,
+      "max_value": null,
+      "min_length": 9449,
+      "max_length": 9549,
+      "avg_length": 9503.49,
+      "pattern_hints": [],
+      "distinct_values": null,
+      "top_values": [],
+      "sample_values": [],
+      "notes": []
+    },
+    {
+      "name": "updated_at",
+      "declared_type": "timestamp with time zone (timestamptz)",
+      "inferred_kind": "datetime",
+      "nullable": false,
+      "total_rows": 206,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 206,
+      "distinct_pct": 100.0,
+      "is_unique": true,
+      "is_low_cardinality": false,
+      "min_value": "2026-06-06T08:58:58.319016+00:00",
+      "max_value": "2026-06-06T09:01:37.745275+00:00",
+      "min_length": 27,
+      "max_length": 29,
+      "avg_length": 28.89,
+      "pattern_hints": [
+        "datetime-string"
+      ],
+      "distinct_values": [
+        "2026-06-06T08:58:58.319016+00:00",
+        "2026-06-06T08:58:59.249744+00:00",
+        "2026-06-06T08:59:00.054181+00:00",
+        "2026-06-06T08:59:00.867057+00:00",
+        "2026-06-06T08:59:01.645599+00:00",
+        "2026-06-06T08:59:02.457627+00:00",
+        "2026-06-06T08:59:03.230796+00:00",
+        "2026-06-06T08:59:04.023645+00:00",
+        "2026-06-06T08:59:04.820580+00:00",
+        "2026-06-06T08:59:05.662389+00:00",
+        "2026-06-06T08:59:06.573718+00:00",
+        "2026-06-06T08:59:07.328732+00:00",
+        "2026-06-06T08:59:08.091899+00:00",
+        "2026-06-06T08:59:08.888718+00:00",
+        "2026-06-06T08:59:09.649178+00:00",
+        "2026-06-06T08:59:10.446326+00:00",
+        "2026-06-06T08:59:11.246805+00:00",
+        "2026-06-06T08:59:12.032160+00:00",
+        "2026-06-06T08:59:12.807911+00:00",
+        "2026-06-06T08:59:13.728405+00:00",
+        "2026-06-06T08:59:14.503137+00:00",
+        "2026-06-06T08:59:15.290122+00:00",
+        "2026-06-06T08:59:16.061940+00:00",
+        "2026-06-06T08:59:16.844963+00:00",
+        "2026-06-06T08:59:17.626475+00:00",
+        "2026-06-06T08:59:18.371024+00:00",
+        "2026-06-06T08:59:19.167988+00:00",
+        "2026-06-06T08:59:19.934785+00:00",
+        "2026-06-06T08:59:20.708599+00:00",
+        "2026-06-06T08:59:21.496095+00:00",
+        "2026-06-06T08:59:22.304755+00:00",
+        "2026-06-06T08:59:23.101825+00:00",
+        "2026-06-06T08:59:23.867156+00:00",
+        "2026-06-06T08:59:24.658821+00:00",
+        "2026-06-06T08:59:25.429468+00:00",
+        "2026-06-06T08:59:26.223706+00:00",
+        "2026-06-06T08:59:27.038299+00:00",
+        "2026-06-06T08:59:27.781268+00:00",
+        "2026-06-06T08:59:28.559392+00:00",
+        "2026-06-06T08:59:29.315746+00:00",
+        "2026-06-06T08:59:30.104187+00:00",
+        "2026-06-06T08:59:30.890458+00:00",
+        "2026-06-06T08:59:31.640063+00:00",
+        "2026-06-06T08:59:32.450117+00:00",
+        "2026-06-06T08:59:33.242394+00:00",
+        "2026-06-06T08:59:34.003912+00:00",
+        "2026-06-06T08:59:34.773030+00:00",
+        "2026-06-06T08:59:35.537478+00:00",
+        "2026-06-06T08:59:36.300520+00:00",
+        "2026-06-06T08:59:37.086557+00:00",
+        "2026-06-06T08:59:37.831598+00:00",
+        "2026-06-06T08:59:38.612106+00:00",
+        "2026-06-06T08:59:39.385098+00:00",
+        "2026-06-06T08:59:40.202682+00:00",
+        "2026-06-06T08:59:40.951122+00:00",
+        "2026-06-06T08:59:41.713875+00:00",
+        "2026-06-06T08:59:42.472726+00:00",
+        "2026-06-06T08:59:43.238358+00:00",
+        "2026-06-06T08:59:44.018297+00:00",
+        "2026-06-06T08:59:44.798828+00:00",
+        "2026-06-06T08:59:45.549281+00:00",
+        "2026-06-06T08:59:46.351714+00:00",
+        "2026-06-06T08:59:47.128338+00:00",
+        "2026-06-06T08:59:47.874392+00:00",
+        "2026-06-06T08:59:48.628829+00:00",
+        "2026-06-06T08:59:49.389127+00:00",
+        "2026-06-06T08:59:50.186442+00:00",
+        "2026-06-06T08:59:50.959438+00:00",
+        "2026-06-06T08:59:51.765078+00:00",
+        "2026-06-06T08:59:52.535996+00:00",
+        "2026-06-06T08:59:53.283058+00:00",
+        "2026-06-06T08:59:54.027317+00:00",
+        "2026-06-06T08:59:54.780544+00:00",
+        "2026-06-06T08:59:55.573597+00:00",
+        "2026-06-06T08:59:56.369669+00:00",
+        "2026-06-06T08:59:57.125293+00:00",
+        "2026-06-06T08:59:57.921694+00:00",
+        "2026-06-06T08:59:58.675091+00:00",
+        "2026-06-06T08:59:59.449480+00:00",
+        "2026-06-06T09:00:00.247935+00:00",
+        "2026-06-06T09:00:01.274436+00:00",
+        "2026-06-06T09:00:02.099722+00:00",
+        "2026-06-06T09:00:02.866557+00:00",
+        "2026-06-06T09:00:03.635169+00:00",
+        "2026-06-06T09:00:04.449358+00:00",
+        "2026-06-06T09:00:05.235963+00:00",
+        "2026-06-06T09:00:06.012390+00:00",
+        "2026-06-06T09:00:06.830770+00:00",
+        "2026-06-06T09:00:07.585541+00:00",
+        "2026-06-06T09:00:08.356010+00:00",
+        "2026-06-06T09:00:09.111578+00:00",
+        "2026-06-06T09:00:09.889007+00:00",
+        "2026-06-06T09:00:10.649759+00:00",
+        "2026-06-06T09:00:11.395394+00:00",
+        "2026-06-06T09:00:12.173082+00:00",
+        "2026-06-06T09:00:12.938890+00:00",
+        "2026-06-06T09:00:13.721336+00:00",
+        "2026-06-06T09:00:14.480870+00:00",
+        "2026-06-06T09:00:15.242238+00:00",
+        "2026-06-06T09:00:15.988278+00:00",
+        "2026-06-06T09:00:16.733201+00:00",
+        "2026-06-06T09:00:17.479712+00:00",
+        "2026-06-06T09:00:18.318938+00:00",
+        "2026-06-06T09:00:19.067775+00:00",
+        "2026-06-06T09:00:19.809814+00:00",
+        "2026-06-06T09:00:20.568864+00:00",
+        "2026-06-06T09:00:21.312993+00:00",
+        "2026-06-06T09:00:22.080328+00:00",
+        "2026-06-06T09:00:22.841369+00:00",
+        "2026-06-06T09:00:23.630156+00:00",
+        "2026-06-06T09:00:24.374403+00:00",
+        "2026-06-06T09:00:25.166940+00:00",
+        "2026-06-06T09:00:25.937932+00:00",
+        "2026-06-06T09:00:26.693489+00:00",
+        "2026-06-06T09:00:27.452010+00:00",
+        "2026-06-06T09:00:28.197610+00:00",
+        "2026-06-06T09:00:28.956645+00:00",
+        "2026-06-06T09:00:29.706870+00:00",
+        "2026-06-06T09:00:30.464329+00:00",
+        "2026-06-06T09:00:31.226476+00:00",
+        "2026-06-06T09:00:31.987418+00:00",
+        "2026-06-06T09:00:32.737590+00:00",
+        "2026-06-06T09:00:33.492645+00:00",
+        "2026-06-06T09:00:34.289796+00:00",
+        "2026-06-06T09:00:35.036400+00:00",
+        "2026-06-06T09:00:35.798211+00:00",
+        "2026-06-06T09:00:36.570227+00:00",
+        "2026-06-06T09:00:37.339693+00:00",
+        "2026-06-06T09:00:38.094854+00:00",
+        "2026-06-06T09:00:38.895855+00:00",
+        "2026-06-06T09:00:39.645004+00:00",
+        "2026-06-06T09:00:40.395896+00:00",
+        "2026-06-06T09:00:41.149383+00:00",
+        "2026-06-06T09:00:41.897865+00:00",
+        "2026-06-06T09:00:42.656425+00:00",
+        "2026-06-06T09:00:43.423939+00:00",
+        "2026-06-06T09:00:44.242935+00:00",
+        "2026-06-06T09:00:44.987998+00:00",
+        "2026-06-06T09:00:45.736406+00:00",
+        "2026-06-06T09:00:46.501757+00:00",
+        "2026-06-06T09:00:47.253431+00:00",
+        "2026-06-06T09:00:48.019025+00:00",
+        "2026-06-06T09:00:48.767598+00:00",
+        "2026-06-06T09:00:49.569689+00:00",
+        "2026-06-06T09:00:50.317105+00:00",
+        "2026-06-06T09:00:51.092048+00:00",
+        "2026-06-06T09:00:51.869156+00:00",
+        "2026-06-06T09:00:52.647134+00:00",
+        "2026-06-06T09:00:53.412371+00:00",
+        "2026-06-06T09:00:54.182358+00:00",
+        "2026-06-06T09:00:54.951856+00:00",
+        "2026-06-06T09:00:55.722441+00:00",
+        "2026-06-06T09:00:56.485281+00:00",
+        "2026-06-06T09:00:57.239322+00:00",
+        "2026-06-06T09:00:57.988302+00:00",
+        "2026-06-06T09:00:58.794838+00:00",
+        "2026-06-06T09:00:59.623428+00:00",
+        "2026-06-06T09:01:00.382546+00:00",
+        "2026-06-06T09:01:01.156585+00:00",
+        "2026-06-06T09:01:01.918432+00:00",
+        "2026-06-06T09:01:02.716957+00:00",
+        "2026-06-06T09:01:03.473971+00:00",
+        "2026-06-06T09:01:04.265481+00:00",
+        "2026-06-06T09:01:05.021428+00:00",
+        "2026-06-06T09:01:05.758447+00:00",
+        "2026-06-06T09:01:06.504787+00:00",
+        "2026-06-06T09:01:07.248545+00:00",
+        "2026-06-06T09:01:08.002165+00:00",
+        "2026-06-06T09:01:08.771076+00:00",
+        "2026-06-06T09:01:09.550623+00:00",
+        "2026-06-06T09:01:10.356176+00:00",
+        "2026-06-06T09:01:11.335695+00:00",
+        "2026-06-06T09:01:12.135701+00:00",
+        "2026-06-06T09:01:13.095964+00:00",
+        "2026-06-06T09:01:13.897281+00:00",
+        "2026-06-06T09:01:14.709234+00:00",
+        "2026-06-06T09:01:15.492795+00:00",
+        "2026-06-06T09:01:16.242798+00:00",
+        "2026-06-06T09:01:17.018416+00:00",
+        "2026-06-06T09:01:17.774368+00:00",
+        "2026-06-06T09:01:18.565893+00:00",
+        "2026-06-06T09:01:19.362906+00:00",
+        "2026-06-06T09:01:20.133954+00:00",
+        "2026-06-06T09:01:20.887951+00:00",
+        "2026-06-06T09:01:21.632475+00:00",
+        "2026-06-06T09:01:22.381957+00:00",
+        "2026-06-06T09:01:23.141028+00:00",
+        "2026-06-06T09:01:23.914473+00:00",
+        "2026-06-06T09:01:24.665663+00:00",
+        "2026-06-06T09:01:25.454812+00:00",
+        "2026-06-06T09:01:26.326121+00:00",
+        "2026-06-06T09:01:27.073110+00:00",
+        "2026-06-06T09:01:27.843729+00:00",
+        "2026-06-06T09:01:28.595120+00:00",
+        "2026-06-06T09:01:29.390718+00:00",
+        "2026-06-06T09:01:30.156483+00:00",
+        "2026-06-06T09:01:30.902920+00:00",
+        "2026-06-06T09:01:31.674880+00:00",
+        "2026-06-06T09:01:32.437584+00:00",
+        "2026-06-06T09:01:33.193796+00:00",
+        "2026-06-06T09:01:33.945235+00:00",
+        "2026-06-06T09:01:34.704901+00:00",
+        "2026-06-06T09:01:35.466346+00:00",
+        "2026-06-06T09:01:36.228818+00:00",
+        "2026-06-06T09:01:36.978924+00:00",
+        "2026-06-06T09:01:37.745275+00:00"
+      ],
+      "top_values": [
+        [
+          "2026-06-06T08:58:58.319016+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:01:34.704901+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:01:10.356176+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:00:16.733201+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:01:31.674880+00:00",
+          1
+        ],
+        [
+          "2026-06-06T08:59:46.351714+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:01:30.902920+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:01:18.565893+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:00:41.149383+00:00",
+          1
+        ],
+        [
+          "2026-06-06T08:59:12.807911+00:00",
+          1
+        ],
+        [
+          "2026-06-06T08:59:52.535996+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:01:15.492795+00:00",
+          1
+        ],
+        [
+          "2026-06-06T08:59:51.765078+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:01:16.242798+00:00",
+          1
+        ],
+        [
+          "2026-06-06T08:59:55.573597+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:00:54.951856+00:00",
+          1
+        ],
+        [
+          "2026-06-06T08:59:43.238358+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:00:20.568864+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:01:22.381957+00:00",
+          1
+        ],
+        [
+          "2026-06-06T08:59:25.429468+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:01:36.228818+00:00",
+          1
+        ],
+        [
+          "2026-06-06T08:59:24.658821+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:01:02.716957+00:00",
+          1
+        ],
+        [
+          "2026-06-06T08:59:50.959438+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:01:00.382546+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:00:52.647134+00:00",
+          1
+        ],
+        [
+          "2026-06-06T08:59:17.626475+00:00",
+          1
+        ],
+        [
+          "2026-06-06T08:59:40.202682+00:00",
+          1
+        ],
+        [
+          "2026-06-06T08:59:23.101825+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:01:28.595120+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:00:33.492645+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:00:06.830770+00:00",
+          1
+        ],
+        [
+          "2026-06-06T08:59:59.449480+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:00:11.395394+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:01:23.914473+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:01:08.771076+00:00",
+          1
+        ],
+        [
+          "2026-06-06T08:59:39.385098+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:00:28.197610+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:00:59.623428+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:01:17.774368+00:00",
+          1
+        ],
+        [
+          "2026-06-06T08:59:20.708599+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:00:47.253431+00:00",
+          1
+        ],
+        [
+          "2026-06-06T08:59:37.086557+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:00:10.649759+00:00",
+          1
+        ],
+        [
+          "2026-06-06T08:59:44.798828+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:01:04.265481+00:00",
+          1
+        ],
+        [
+          "2026-06-06T08:59:16.844963+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:01:32.437584+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:01:12.135701+00:00",
+          1
+        ],
+        [
+          "2026-06-06T09:01:20.133954+00:00",
+          1
+        ]
+      ],
+      "sample_values": [
+        "2026-06-06T08:58:58.319016+00:00",
+        "2026-06-06T09:01:34.704901+00:00",
+        "2026-06-06T09:01:10.356176+00:00",
+        "2026-06-06T09:00:16.733201+00:00",
+        "2026-06-06T09:01:31.674880+00:00",
+        "2026-06-06T08:59:46.351714+00:00",
+        "2026-06-06T09:01:30.902920+00:00",
+        "2026-06-06T09:01:18.565893+00:00",
+        "2026-06-06T09:00:41.149383+00:00",
+        "2026-06-06T08:59:12.807911+00:00"
+      ],
+      "notes": []
+    }
+  ],
+  "sample_rows": [
+    {
+      "id": "col:rhize_strain_info.strain",
+      "kind": "column",
+      "table_name": "rhize_strain_info",
+      "column_name": "strain",
+      "data_type": "VARCHAR(255)",
+      "definition": "Strain name \u2014 join key",
+      "restrictions": "Join to `rhize_product_lots.strain`, `rhize_live_inventory.strain`",
+      "embedding": "[0.0034536086,0.026447508,-0.19790755,-0.029489039,0.056725837,-0.085149564,0.039555997,-0.03876212,-0.046543717,-0.030806553,-0.04075403,0.02525524,0.04967328,-0.048970874,0.039295312,0.012448124,-0.026512362,-0.05852305,0.019072127,0.019052915,-0.04881896,-0.035544343,0.042233493,0.0010314818,0.054219425,0.069680825,0.021902189,0.005943415,-0.02341837,0.033817694,0.0057801674,0.033332217,0.017857142,0.00921788,-0.03751862,-0.020703286,0.022684222,0.00939508,0.0061918446,0.03914589,0.011297754,0.059707932,0.015275097,-0.019021044,-0.011952273,0.015850516,0.0472692,-0.0015615002,0.050199784,-0.03413588,0.0058362484,-0.00499202,-0.041353833,-0.04307542,0.051786024,-0.015610634,0.015185946,0.029139027,0.034949385,0.005095944,0.068728894,0.0629547,-0.0307443,0.07228715,0.027964208,0.005077464,-0.068562634,0.06758133,-0.005267456,-0.01869793,0.045567743,-0.0024829402,0.061771177,0.016332416,-0.024567526,-0.014224495,-0.03156072,-0.040645298,0.021927224,0.028781585,-0.008375198,-0.016236065,0.056167815,0.0055488516,0.040025078,-0.009767002,-0.03162153,-0.03249106,-0.0030612543,0.036086462,0.014595572,0.0026600906,0.017431917,0.047691587,-0.058447435,0.014822862,-0.039806392,0.02063094,-0.05902486,-0.055624537,0.00018128836,-0.028874906,-0.0014623814,0.018882373,-0.043962367,0.0135976,-0.011268964,-0.01152222,-0.0059481408,-0.028133042,-0.037024356,0.05703741,0.00016643743,-0.03682282,-0.021241497,-0.048591536,0.05758111,0.011462218,0.008495491,-0.02927471,-0.034726977,0.018507252,0.019139346,0.067298114,-0.020561868,-0.0038374653,-0.0009040295,0.031809486,0.051677797,-0.07085417,-0.021632342,-0.08003588,-0.02206299,0.02710624,0.01164773,0.03142885,-0.073146254,0.011327392,0.013523383,0.009568765,0.0006522519,0.027059866,0.00410715,-0.018277042,-0.0069431653,-0.04493961,0.070675634,-0.03895371,0.0007869276,0.015191101,-0.025908267,-0.0035663275,-0.028683286,0.00056605454,0.021561306,-0.042513818,0.041598517,-0.04188001,0.030391099,0.036052104,0.036313135,-0.02122394,-0.045051046,0.068268,-0.016796654,-0.083098374,0.05155047,0.074851625,0.0045579732,0.030911813,-0.08862289,-0.050122336,-0.01176376,-0.031495698,0.03473569,-0.019820713,0.03426963,0.010926953,0.06975467,-0.04207547,0.004682882,-0.0635371,0.04458765,-0.013970894,-0.021897651,-0.041735508,0.029433753,-0.04721247,-0.036761817,-0.027106225,-0.025498398,0.035761517,-0.043880627,-0.02946966,-0.03311978,-0.064173676,0.010772948,-0.011693741,0.037521876,0.0347364,-0.071284115,-0.012372412,-0.027957084,0.024908906,-0.037863377,-0.013858628,-9.801826e-05,0.039985355,0.00066560385,0.044805273,0.09067363,-0.07442558,0.002695322,-0.006483639,-0.02530533,-0.036453724,0.014388542,-0.028819574,-0.011063107,0.035418667,0.02211158,-0.004221502,0.046145223,0.0036607203,0.05562413,-0.023175327,0.0038569374,0.022781052,0.021040028,-0.052547187,-0.029593272,-0.0304448,0.0520509,0.003086074,-0.04829369,0.013201476,-0.025098113,0.0593312,-0.051689126,-0.04001385,0.0027041084,0.025553519,-0.0048839715,0.018778643,-0.039539415,0.06998193,0.021199342,-0.007206123,-0.0029199424,0.06960574,0.0393402,0.012441177,0.029526122,0.028082572,0.012706199,-0.03695921,-0.07830952,0.01288,0.026703078,-0.011645965,0.01074076,0.014717132,0.10164923,-0.03196801,-0.008499053,-0.007957133,-0.014021344,-2.877927e-05,0.011883099,0.012791035,0.0076826788,0.008800422,0.0027783562,0.005474743,-0.015093457,0.044016924,-0.03809813,-0.009873662,-0.03203985,-0.011984028,-0.023079589,-0.032591444,-0.050095573,0.013180571,-0.05314828,0.040853664,0.012370663,-0.0069640647,0.012249234,0.004560593,0.0068446365,0.046036925,0.00037000203,0.033711493,0.0184879,-0.031293843,0.05548828,0.010587142,0.023506714,-0.01583808,-0.023412002,0.030262414,0.037364397,0.041827492,-0.028623426,0.0017918369,-0.017224398,-0.040971346,0.06898254,-0.0002183956,-0.05809104,-0.045410514,-0.01624401,0.06900936,-0.04687303,0.016534453,0.008750523,0.025855826,0.03348424,-0.042703714,0.034533285,-0.06530154,0.012912239,-0.022930702,-0.0107058175,0.05069835,-0.03526172,0.050131533,0.008364564,-0.0359945,0.015717259,-0.0017176651,0.030377723,-0.05822833,-0.032444824,0.07041527,-0.018334426,-0.020946713,-0.021389341,0.010828245,0.019458229,-0.011185463,0.009520902,-0.039329123,-0.012330861,0.010829282,-0.06744832,-0.021906892,0.03904656,0.03406299,-0.09587679,0.0058918972,-0.040096026,0.00027153545,-0.0048771896,-0.014086596,0.014172457,0.006576065,-0.0104407845,0.009811402,0.0017248881,-0.016717566,-0.05306788,-0.059727915,0.029446984,0.015719824,0.06843267,0.011833615,0.058693513,0.014099614,0.007735778,-0.041800663,-0.0140658785,0.04799307,0.0007252116,0.017765122,-0.06387981,-0.0067623924,-0.018179731,0.052401233,0.03932488,-0.0530878,0.04305501,0.0090959035,-0.017065529,-0.022910599,-0.011777923,0.0110695725,-0.015999543,0.049120773,-0.034545742,-0.027786126,-0.07452177,-0.03414481,0.002587321,-0.05254827,0.046552148,0.029824557,-0.0069949715,0.036794607,-0.024448402,-0.033517096,0.026747089,0.0015432286,0.0031935666,0.044386763,0.004929321,-0.001034015,0.052604765,-0.014089812,0.010751945,-0.0057699843,-0.011639494,-0.0607138,0.030560201,-0.025465863,0.06062265,-0.00045738523,-0.03439721,-0.021875668,0.028642084,0.010786085,0.012870754,-0.017308494,0.013805427,-0.011467694,0.0165381,-0.007239237,0.004208972,-0.08196656,-0.022408256,0.042256765,0.014639202,-0.05220669,0.007841697,-0.010981607,0.0024760012,-0.022987511,-0.011041244,0.033451974,0.0047110664,-0.015158204,0.013342345,-0.016183278,0.019088171,0.07004276,0.065580584,-0.04153676,-0.022670113,0.10888949,0.03698524,-0.014031398,0.0039252746,0.025590243,0.12781882,-0.033893198,-0.010794426,0.014555217,0.04291293,0.0041460153,0.008112386,0.0139884725,-0.041036587,-0.009799213,0.022601219,-0.037438482,-0.0048936317,-0.035255294,-0.009730549,0.07740325,-0.05074681,-0.017394245,0.036689866,-0.0025098259,0.0009790525,0.022933125,0.0051427768,0.014018583,-0.018495085,-0.009200904,-0.0016712369,-0.008110356,-0.03792269,-0.020823168,0.03898288,0.0014333302,-0.02692356,-0.008089226,0.028908595,0.045432944,0.009244997,0.049440946,0.0075875153,0.028911583,0.011825396,-0.044729907,0.010532802,-0.035651907,-0.005929808,-0.023744432,0.041192327,0.0033303474,0.030508552,0.011403738,-0.005174166,-0.056247972,0.029622028,-0.04606078,-0.0038571516,-0.01260995,-0.008530717,0.038260695,0.020910814,0.034123812,0.029251073,-0.033489726,0.03737359,0.03877962,-0.01992346,-0.036689132,-0.0113401385,-0.06562493,-0.019789437,-0.027395649,-0.057354573,0.03632226,-0.023729792,-0.021052347,0.032185894,-0.020941572,-0.0043408084,0.0015235107,-0.01770501,-4.8362635e-05,0.013440244,-0.053437468,-0.050234344,0.04840241,-0.035960775,0.0049244254,-0.0025660074,-0.014222162,-0.045414124,-0.020119254,4.8388505e-05,-0.010191605,-0.00037374336,0.0035870678,-0.021268746,0.023819659,0.030827263,-0.068238795,0.01614087,-0.022674028,0.02520142,-0.06649596,0.0069934423,-0.016791034,-0.02613944,0.01176294,-0.004182578,0.0388626,0.022011809,-0.01690353,0.008335557,-0.024704618,0.0116567025,-0.01510174,0.022749875,0.029098459,-0.013308814,-0.069847815,0.04234333,-0.032879062,0.0029554123,-0.019904772,-0.007159529,0.01615165,-0.011991372,-0.049326193,-0.012288998,-0.047469184,0.044666205,0.010211153,-0.012955336,0.0026023514,-0.007257958,-0.013722399,0.020484278,-0.058339,-0.00973291,0.038247373,0.0042242934,0.010748878,-0.018859966,0.0271708,-0.06147886,-0.012453953,0.020179294,-0.01597656,0.032570202,0.03924473,0.099542625,-0.031704508,-0.015598733,0.024269795,-0.015511174,0.021368956,-0.014412621,-0.018596454,-0.00022129634,-0.011382752,0.011896701,-0.023997465,0.0649248,-0.034294724,0.004681803,0.03467778,-0.0096005,-0.08554029,-0.027341697,-0.046325143,0.027275365,-0.06251372,0.057169758,-0.014409991,-0.040562514,-0.028940434,0.01501985,0.03610929,-0.016112091,0.03846504,-0.075562425,-0.08416245,-0.025144918,0.022802284,-0.02904756,0.07496896,0.060773958,0.04100103,0.047933463,-0.010835012,-0.005313443,0.021948993,0.04956698,-0.021107662,0.045850247,0.011580232,0.03438774,-0.019448142,0.08189155,0.06907867,0.014969281,0.021014137,0.02143806,-0.0055334684,0.049712855,-0.021772593,-0.083691865,-0.0005770108,-0.03853114,-0.024679644,-0.0050047617,-0.015158266,0.0015498719,0.021565685,0.009962885,-0.00063031557,-0.028564489,-0.03231012,0.02501782,0.05029578,0.04448936,-0.024195656,0.02308224,-0.008771539,0.049033105,0.04771357,-0.014965534,-0.044393133,0.04025809,-0.034156635,0.061448447,0.008704336,-0.009703754,-0.043412637,-0.0010745949,-0.025516232,0.028759664,-0.041543677,-0.024514224,-0.0433021,-0.02747732,0.026031038,-0.012447202,0.030722255,-0.03171463,0.035033405,-0.044118304,0.074467674,0.022656266,0.038080905,0.01503,0.0038910212,0.004379404,-0.036697473,0.011529583,-0.049969047,0.010125107,0.00094626896,-0.033541057,0.009410102,0.008003574,0.060862325,0.037072293,0.04718115,0.005509547,-0.051993765,-0.015302376,0.07539451,-0.02257663,-0.012680846,-0.029113183,-0.023376415,0.0070731365,-0.02579071,0.02367102,-0.0033759233,-0.0013519602,0.011408978,0.016864508,-0.0051879967,-0.058346186,0.06372225,0.011003446,0.030819204,-0.038848635,0.0066813375,-0.027505364,-0.021919763,-0.0676516,0.030789645,-0.024011753,0.050826073,-0.0056640673,-0.008463818,-0.04817245,0.07420534,0.034700293,0.0018067696,-0.027802726,-0.059100203,0.032410983,0.0022815731,0.021818547,0.043797594,-0.013609137,0.04290501,0.11767717,0.046821956,0.03633805,-0.013538715,-0.019341355,0.06297422,0.0025258777,-0.045684736,-0.035293363,0.0076888204]",
+      "updated_at": "2026-06-06T09:00:25.166940+00:00"
+    },
+    {
+      "id": "col:rhize_strain_info.createdAt",
+      "kind": "column",
+      "table_name": "rhize_strain_info",
+      "column_name": "createdAt",
+      "data_type": "DATETIME",
+      "definition": "Record creation timestamp",
+      "restrictions": "",
+      "embedding": "[0.035293788,-0.01789947,-0.21642852,-0.037598826,0.045579657,-0.03811484,0.05415503,-0.037301537,-0.03765162,-0.030418703,-0.023844158,0.0392759,0.08121337,-0.025567155,0.0061567724,-0.035202358,-0.0011584354,-0.034082897,-0.029311376,0.06755637,0.013747818,-0.06303691,-0.01104269,0.0024300932,0.0188412,0.046459634,0.009732508,0.010469504,-0.01883606,0.026720298,0.048083127,0.064256094,-0.04451124,0.028187666,0.005267141,-0.05151031,0.020050267,0.0030049603,0.042488594,-0.008997537,0.026812308,0.016660068,0.0035099192,-0.03650407,-0.0064519057,0.026588593,0.045194965,0.03629457,-0.02928953,-0.011946634,-0.013194643,0.00943006,-0.030380413,-0.04650212,0.062394843,0.0045543374,0.031013709,0.0072285263,0.0040495633,0.025585879,0.032437876,0.05660475,-0.046349395,0.09468327,0.05319351,-0.015743492,0.008461376,0.059891526,0.0066469773,0.009967515,0.03807351,-9.818645e-06,0.03668286,0.03312204,0.014930205,0.03944132,-0.011776858,-0.028081777,-0.0031999764,0.045721196,0.03335605,0.01968894,0.025439415,-0.039863523,0.07239366,-0.017532289,0.017127292,0.012386174,-0.0067619537,0.089802645,-0.015852714,-0.055109486,0.04625439,0.010534656,-0.04118072,0.009427722,-0.047641955,0.014798533,-0.050255854,0.016350666,0.0019904631,-0.03128004,0.018032735,0.014070656,-0.0020012076,-0.014737418,-0.043741908,-0.04328472,-0.030655682,-0.029810995,-0.026119733,0.06688663,0.011065037,0.030060774,0.009852364,-0.026312327,0.053257298,-0.009053506,-0.018035702,-0.031140579,-0.039266042,0.0029094685,0.01963832,0.049656425,-0.045349747,0.022458414,-0.006830096,0.03633105,0.048108917,-0.020350825,-0.05167734,-0.036513895,-0.016441725,0.007245234,0.010975139,0.025891772,-0.02060275,-0.0012845203,-0.0154013205,0.022964457,0.014743868,-0.00904827,0.0061946344,-0.040168703,-0.018183883,-0.024751598,0.06985204,-0.04494623,0.009244327,0.06033165,-0.03672451,0.0054104878,-0.04237222,0.0013409595,0.032236073,0.012020274,-0.027302772,-0.050417837,0.023098435,0.04414175,0.029849686,-0.016744377,-0.052502427,0.031182313,-0.003867066,-0.0710666,0.023004264,0.04345166,0.028906163,0.0192148,-0.049887832,-0.039082825,-0.013143519,-0.035235755,-0.013410971,0.00076846406,0.016017208,-0.026179794,0.102984406,-0.036462806,0.015673816,-0.07531023,0.034733254,0.011183847,-0.017498331,-0.07960208,0.06525397,-0.061981816,-0.07350306,-0.019876711,-0.034656625,0.023366937,-0.064761244,-0.0117235035,-0.049327835,-0.055782426,0.031844076,-0.013326008,-0.0072622574,0.052767824,-0.06683506,-0.017738592,-0.016559323,0.01120243,-0.044880625,0.039145283,0.003839234,0.026051182,-0.033515044,0.046896257,0.054818444,-0.007690228,-0.020044418,0.002089982,-0.037875593,-0.016387442,-0.01333392,-0.016836863,0.008187599,0.039991397,0.024058305,-0.0031768477,0.02868971,-0.016196564,0.04353503,-0.04107262,-0.012247046,0.014367445,-0.00876881,-0.027606823,-0.036535144,-0.03857934,0.001773627,0.011685064,-0.019687124,0.037995588,-0.015924739,0.057602465,0.0015550343,-0.019307187,-0.014424058,0.031946696,-0.030943906,0.020269971,-0.025083156,0.009990773,0.035443317,-0.027356269,0.0275019,0.037073176,0.056392364,-0.0259861,-0.0016913558,0.0037681055,0.019498976,-0.055380803,-0.042448554,0.008481139,-0.06217013,0.0021235086,-0.00090049923,0.026325941,0.021006726,-0.02928095,-0.00463095,-0.06712899,-0.032289427,-0.021843297,-0.0132803675,0.012265667,0.008523573,-0.0139739765,0.0293028,0.044362135,-0.016301638,0.006033699,-0.012833448,-0.029855829,-0.06958255,0.013991953,0.0015398123,-0.07638601,-0.046723425,0.033823084,-0.07024781,0.001710386,0.018945232,-0.021277498,-0.0043079853,0.0074067996,0.019406412,0.03875916,-0.046915557,0.023642583,0.004788988,-0.0363533,0.062348217,0.008065772,0.029813655,-0.044169415,-0.008868468,0.036154307,0.057143766,0.047384217,0.009029749,-0.0077300896,0.03813177,-0.0542658,0.05313198,-0.025035594,-0.04146846,-0.03181174,-0.03223295,0.061418116,-0.031521887,0.035852548,0.014252058,0.021487515,0.03781896,-0.0044882656,0.046572648,-0.06985849,0.004525908,-0.017865151,-0.011764375,0.016428053,-0.015160309,0.038265035,0.017160047,-0.019600596,0.060977552,0.018047307,0.009662152,-0.054692954,-0.017928967,0.04832906,-0.021439863,-0.018808056,-0.041514114,0.055731323,0.031878766,-0.010443108,0.027124098,-0.06918046,0.011469481,-0.022860384,-0.047147162,0.0032698903,0.022572262,0.04160348,-0.037186477,-0.02365142,-0.027567714,-0.030093772,-0.012206002,0.0316761,0.010538467,0.07714608,-0.019700563,-0.0074736853,0.01544387,0.0055065723,-0.021301297,-0.020943653,0.017169762,0.026073718,0.045212384,0.019370722,0.047379714,0.029119663,-0.017019128,-0.0074444595,0.014346755,0.04138907,0.026643291,0.0098675825,-0.071682446,0.016165527,-0.028113509,0.067620866,0.048219543,-0.03607948,0.053864807,0.004518016,-0.019565433,-0.018583309,-0.001978189,-0.025249073,-0.032598566,-0.009828165,-0.007616284,-0.016504137,-0.06607374,-0.05573587,-0.0010364209,-0.03978442,0.043177668,0.04069535,0.017136917,-0.0027485872,0.03111227,-0.0037113253,0.026119389,-0.01602321,-0.030125085,0.02625224,0.001122424,-0.025849815,0.042621635,0.0012148789,0.004201115,0.08043607,-0.017099207,-0.047379505,0.031969655,-0.016651345,0.05984451,0.023713425,0.005570149,-0.006495708,0.034982897,0.038746174,0.011582252,-0.0123013705,0.011325428,0.018506806,0.0064035663,-5.601615e-06,-0.02265082,-0.04892265,0.018045349,0.030033132,0.017588347,-0.012942669,0.0038340627,-0.009080788,0.017724847,0.034001272,0.05183854,0.011554015,0.0052188477,-0.06669501,0.013998896,-0.020348897,0.016448908,0.08611173,0.03464136,-0.05423236,-0.036358386,0.08100164,0.016729243,0.017918563,0.02753306,0.024499124,0.10063311,-0.027063537,-0.0039419415,0.010818448,0.01068341,0.08414044,-0.04594194,0.046899613,-0.05493333,-0.013890613,-0.024987124,-0.00487506,0.017304512,-0.03179935,-0.007874014,0.08214949,-0.064580224,-0.030632515,0.025431821,-0.036367886,-0.009464649,0.037763454,-0.012689773,-0.010533974,0.023014996,0.030072426,0.034884326,-0.0028015536,-0.0165415,-0.023486907,0.08443518,0.03993029,0.008112938,-0.009022491,0.04032647,-0.0072589447,-0.01460526,-0.008818989,0.03794512,-0.043047972,-0.010551566,-0.013685679,-0.020541877,-0.041178696,-0.01741155,-0.045633893,0.009049435,0.046607673,-0.01451092,0.0038187248,-0.0045554885,-0.032723982,0.038408723,-0.04266327,0.0028854248,0.017147053,-0.02587104,0.051095437,0.04085392,0.024473958,0.07617049,-0.019562747,0.02740359,0.047220625,-0.020345014,-0.02266415,-0.0020168326,-0.023489285,0.0023304513,0.0008392924,-0.0026028987,0.030950699,-0.011371463,-0.00084393326,0.04638461,-0.036408335,-0.014268025,-0.034721132,-0.013136613,-0.015165227,0.013666422,-0.024674825,-0.010762334,0.022357317,0.009243511,-0.030754529,-0.010503397,0.003314911,-0.05787164,-0.03063759,0.005821152,-0.020056011,-0.03998047,0.019530589,-0.013324152,-0.0030263765,0.06548334,-0.057665356,0.045716494,-0.029354207,-0.007464751,-0.05900585,0.005638731,-0.047271233,-0.06589463,-0.036477588,0.021338986,0.07554772,0.052366477,0.03814969,-0.034114163,0.0033077786,0.012448687,0.0058488846,0.04161603,-0.008262297,0.022660403,-0.06156811,0.027720274,-0.05687707,-0.018485922,-0.0051172324,0.03362754,0.014546854,-0.053627692,-0.00877388,0.021706738,-0.0589353,0.029618427,0.025687015,0.019430205,-0.021488814,0.00032865864,-0.017037177,0.012363549,-0.018111274,-0.034863174,0.00974265,0.005206435,-0.0078768935,-0.024664454,0.007487628,-0.078412555,-0.022430023,0.02617013,-0.030375214,-0.025939086,0.010642111,0.064322196,-0.071590066,0.03252189,0.030599033,0.009976547,0.018985048,0.027043737,-0.039306287,0.024243455,0.0058375783,-0.007693869,0.014213611,0.024408607,-0.03618133,0.040190887,0.04612948,-0.022152305,-0.069819495,-0.0022738636,-0.011594465,0.03775821,-0.029675703,0.067149594,-0.010213378,-0.05716741,-0.029512912,-0.022803282,0.03352929,-0.0034947202,0.014800579,-0.07230029,-0.027462648,-0.038370095,0.012114214,0.009550647,0.080708854,0.034296043,-0.00048954284,0.030009618,-0.004273457,0.0005984249,-0.013251132,0.01276076,0.0026603441,0.07785915,0.047301162,0.046522316,-0.04053567,0.075829044,0.043876268,0.027058043,0.014179631,0.029703464,-0.0075704847,0.019861417,-0.011181207,-0.08443662,-0.0072455173,-0.048001517,-0.027328204,-0.019289806,-0.0058193794,0.010587268,0.010801284,0.02831838,-0.004925725,-0.0009493285,-0.05450608,0.016970841,0.009965588,0.06817778,-0.019259926,0.0092768995,0.02040827,0.042061713,0.08349011,-0.029216444,-0.027034352,0.026143901,-0.009443434,0.031678945,-0.07124527,0.048794482,-0.034183744,-0.013143178,-0.035866167,-0.02280399,-0.045099586,-0.023270084,-0.02993493,-0.06880844,0.015718952,0.0002510176,-0.012325662,0.01989983,-0.022834376,-0.045553226,0.057470653,0.019200986,0.022607103,0.042747132,0.015357107,-0.032347754,-0.04958599,0.002940688,-0.035853267,0.024138633,0.0155324275,-0.031674836,-0.018810058,-0.043024946,-0.0073069595,0.009074332,0.02938211,-0.025814,-0.08473256,-0.0138287945,0.0480234,-0.03283801,-0.022630723,-0.06914864,-0.06511138,0.0069057005,-0.015891347,0.050859425,0.020462068,0.021261817,-0.030846246,0.033418894,-0.025950909,-0.056684505,0.07051582,0.017543025,0.013029833,-0.014705359,-0.0083618825,-0.024791246,-0.01492176,-0.07217793,0.020485517,-0.033199962,0.020128042,-0.041836046,-0.03151181,-0.051435504,0.06962549,0.025949256,-0.035203304,-0.04776489,-0.043317337,0.010584433,-0.016839469,0.034250405,0.017827116,0.018712902,0.04342959,0.12664002,0.0134103885,0.046426047,0.002979067,0.026247522,0.05081198,-0.004577394,-0.015255751,-0.0038228724,-0.0048081093]",
+      "updated_at": "2026-06-06T09:00:31.226476+00:00"
+    },
+    {
+      "id": "col:rhize_dataset_main.Discount_Price_Data",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "Discount_Price_Data",
+      "data_type": "TEXT",
+      "definition": "Discount price",
+      "restrictions": "Cast before math",
+      "embedding": "[0.03918741,0.03455399,-0.18812074,-0.06475396,0.038204715,-0.016916176,0.060925182,-0.022536252,-0.044358023,-0.011280705,-0.02794978,0.09483095,0.07366633,-0.008657736,0.016142225,0.063816115,-0.038629204,-0.060882505,0.019717729,0.0640119,-0.00792659,-0.03561173,-0.012241163,-0.02412905,0.0486924,0.019346658,-0.0057364134,-0.014948446,-0.0417852,0.0374848,-0.015701687,0.03222619,0.020648275,0.02218979,-0.04373727,-0.047839332,0.046276193,0.017025037,-0.041234836,0.0035417527,0.03476078,0.018334711,0.0046403757,-0.0009123551,-0.008487188,-0.0068148705,0.05320635,-0.013748881,0.028161861,-0.010981807,0.028368544,0.01239608,-0.02033256,-0.028770315,0.010311061,-0.022862203,0.011729002,0.056779403,0.0152681945,-0.004629183,0.07869517,0.067912966,-0.047669664,0.046867814,0.04631694,0.0058623063,-0.0460662,0.043911554,-0.032412138,-0.03774552,0.010175986,0.043988217,-0.007996162,-0.013003769,-0.027872533,-0.019314252,-0.06584633,0.027347138,0.012950307,0.01989755,-0.03616236,0.022991953,0.0688409,0.011895258,0.011936153,0.0148552805,0.01225926,-0.00677989,-0.038679387,0.043282464,-0.025798595,-0.014324962,0.045197256,0.01897963,-0.050750718,0.015039686,-0.064353995,-0.0032167027,-0.01980482,-0.02117634,-0.00082236755,0.00473667,0.011006422,0.0075315926,-0.015939636,0.01006125,0.039326828,0.0060202368,-0.009835272,-0.050266676,-0.031514723,-0.0023093068,-0.008853651,-0.023802,-0.056423496,-0.055161007,0.08077278,-0.035784885,-0.020650221,-0.018823905,-0.03681584,0.04546778,0.05417408,0.087492816,-0.033819593,0.05069587,-0.009319918,0.03830376,-0.022151003,-0.07214867,0.024382882,-0.037996173,-0.05282613,0.004806934,-0.009414487,0.048953388,-0.02606251,-0.00626217,-0.040008973,-0.017715214,0.02167434,0.046561692,-0.010672331,-0.037962638,-0.0065928595,-0.07806162,0.031951904,-0.037631415,0.006770282,0.03650155,0.003713092,0.003089053,-0.01306973,0.04089083,0.025017334,-0.055722535,0.07811179,-0.015743852,-0.0028490475,0.05782276,0.043496486,0.012795382,-0.03212439,0.05635721,0.011092592,-0.051627666,-0.014076426,0.07584829,0.0062496797,0.043112755,-0.04558146,-0.047511734,-0.052053552,-0.05106931,0.014036006,-0.016734086,0.032047406,-0.010276441,0.055322126,-0.031079397,-0.0030024494,-0.042372644,0.07611202,0.024118146,0.00015738605,-0.07159441,-0.008503159,0.02309555,-0.015414939,-0.011578452,-0.04295319,-0.0030170048,-0.059280742,-0.037138343,-0.041079145,-0.086960614,0.07214804,0.03153504,0.049559135,0.011853335,-0.029519107,-0.0065873,-0.04927141,0.024393914,-0.06245521,0.053046655,-0.0058879126,0.043748133,-0.020464744,0.033124838,0.08001245,-0.048690107,0.04345362,0.008052325,0.017936863,-0.008815087,-0.02215928,-0.055436846,0.007005459,0.05418636,-0.029084384,-0.036865544,0.01652373,-0.0030467738,0.035691943,0.0048099915,-0.01406687,0.018787764,0.017075697,0.010526799,-0.0049748886,-0.05413291,-0.0051230732,0.0018105053,0.018648053,0.0028689082,0.023113823,0.061977074,0.010644148,-0.014507454,-0.027132198,0.03377487,-0.02661896,0.039819613,-0.019273045,0.032262206,0.0086236335,-0.02983591,-0.0008968193,0.05319835,0.014371203,0.005016202,0.004975077,0.047476098,0.013985502,-0.03131292,-0.07652982,-0.01934568,0.0049997987,0.013297584,0.041891653,0.04880088,0.04226032,-0.041274823,-0.021217482,-0.015737789,-0.009643919,-0.010034171,0.02700725,0.012957314,0.007545256,0.022891393,0.00960488,0.026749672,0.0032246069,0.030274976,-0.012669521,-0.032286193,-0.0020643028,0.002544499,0.027026279,-0.039986573,-0.04237563,0.019487377,-0.03771099,0.030122092,0.0004088148,0.00039514978,-0.022769079,-0.0036912262,0.01766224,0.042781755,-0.0073092515,0.0019557814,0.037586067,-0.032682743,0.049017012,0.02930693,0.03433511,-0.003302001,-0.0064576785,0.004374301,0.02849436,0.047197584,-0.01829306,0.0056296317,0.04193906,-0.024649572,0.051561326,-0.044227213,-0.05977431,-0.025071368,-0.06753816,0.031470306,-0.04614652,0.0060472977,0.045377914,0.026637156,0.042952053,-0.043297764,0.04573218,-0.042955734,0.011640242,-0.01873231,-0.016368667,0.07028327,-0.04380433,0.03271561,-0.015497764,-0.030490678,0.045282625,0.029137917,0.033418268,-0.026012361,-0.01571424,0.0585343,0.02363766,0.0037295278,0.008701921,0.034906793,0.039848994,0.0012526717,0.03187685,-0.044327483,0.0025766613,0.024059026,-0.07813859,-0.020456651,0.05659014,-0.00030538952,-0.08439122,-0.034682997,0.016218083,-0.010989121,-0.016882893,0.056588393,0.05057752,0.011962111,-0.008635891,0.013673269,0.005865475,-0.0160232,-0.041097622,-0.022279624,0.02238806,0.005927696,0.04401402,0.029813942,0.031453982,0.004409378,0.00010652103,-0.012470439,0.022826808,0.026376706,0.00954321,0.00017675383,-0.050832577,0.002962746,0.005592344,0.06816848,0.03775437,-0.009446961,0.07760557,-0.0025228458,0.0019991135,-0.04052865,0.006847938,-0.022253871,0.022026371,-0.0002741205,-0.046806097,-0.02773658,-0.028553788,-0.0033313686,-0.0045317165,-0.03866358,0.0523448,0.026157081,0.037346996,0.013930257,-0.07332454,-0.029769192,-0.012721384,0.008382399,0.039765228,0.00074414385,-0.017100146,-0.016517112,0.016094094,0.012133578,-0.040675957,0.0072244913,-0.021145036,-0.031443078,-0.01986124,-0.0005099966,0.06111844,0.02375838,0.008251576,-0.061988343,0.021184748,0.054866772,-0.0015730468,-0.007512837,0.060499914,0.003276684,0.0120712,-0.0016939646,-0.03534343,-0.048280004,-0.010573539,0.010341209,-0.01336248,-0.017049644,-0.036976613,-0.0366873,-0.005807552,-0.00046169295,-0.044581525,0.019708661,-0.019222548,-0.037319284,-0.012746463,-0.052005127,0.023539292,0.054931123,0.027612535,-0.053166073,-0.025375726,0.0424051,0.014127373,-0.027259754,0.022400841,0.02491481,0.11066143,-0.026604528,0.027336052,0.046706878,0.047819138,0.009192932,0.017898083,0.014234215,-0.06931349,0.017631277,0.024668083,-0.030994935,0.0025751302,-0.022936216,0.037121758,0.060399994,-0.0520971,0.019577142,0.05372753,-0.027418729,-0.016833462,0.037576,-0.007353294,0.018533487,0.0071243634,0.05486192,-0.03976542,0.033505097,-0.0014090652,-0.0001723177,0.003979456,0.038584918,0.009966155,-0.0024277992,0.004557851,-0.0024301556,-0.02538248,0.006397739,0.0106880665,-0.026830196,-0.017311407,0.030691292,-0.020887502,0.022731498,0.019616581,-0.03986658,0.017475756,0.0077084033,-0.008619589,0.031078642,0.025276912,-0.05706199,0.04113135,-0.0610237,-0.06776748,0.033701926,-0.005059469,0.03049012,0.05921482,0.019806625,0.030875515,-0.04111849,0.02617634,0.024648083,-0.014280554,-0.0017386159,-0.011031854,-0.081966184,-0.027724197,-0.023419594,-0.03473316,0.0011267855,0.010868888,-0.058984216,0.010069822,-0.014757815,-0.018250648,-0.0018762463,-0.044662293,-0.054417185,0.02067345,-0.013696949,-0.033609346,0.0019359593,-0.019188331,-0.0062153097,0.011503422,0.005225747,-0.008778679,0.017363546,-0.002037918,-0.0074620456,-0.029178774,-0.011969883,-0.014424883,-0.05689552,0.04534396,-0.028448524,0.00495075,-0.016741462,0.026734903,-0.060664468,-0.024879284,-0.007436353,-0.033541556,-0.008789569,-0.014934241,0.016173162,0.06336102,0.035977177,-0.010551821,-0.008126282,0.003930301,0.014607943,0.024377177,-0.00875368,0.0044462658,-0.05287539,0.0020512792,-0.018224565,-0.011108074,0.0080556255,-0.008084881,-0.0045122346,-0.0060017654,-0.049556382,-0.012338423,-0.055429086,0.007995971,0.055420794,-0.02919868,-0.018924097,-0.049306814,-0.012995093,-0.015542971,-0.041043572,-0.02983429,0.014313966,-0.016846666,-0.024335027,-0.023607383,-0.0011366598,-0.044663444,0.013056603,-0.017576236,-0.053033736,0.037052322,0.013231626,0.09920253,-0.028920224,0.07607548,0.05986648,0.008203934,0.008921768,-0.019112583,-0.024092725,0.03373968,-0.016174639,0.021217324,-0.016947174,0.050062776,-0.03887498,0.0682104,0.040208716,-0.029214324,-0.060182117,-0.0064708004,-0.028939895,0.009848192,-0.092140265,0.08297627,0.038471222,-0.059116807,-0.014897716,0.027006311,0.033061545,0.003639002,0.02667265,-0.08544468,-0.045466226,-0.06160903,0.020993521,-0.016110469,0.07297804,0.045708522,0.03423181,0.045699365,0.0038271304,-0.010283996,0.0059231725,0.019970557,0.013086314,0.0547533,0.021294996,0.06397845,-0.052605532,0.10017591,0.057916086,0.0376549,0.010673997,0.029314019,-0.0474067,0.025401851,0.015316587,-0.09326852,-0.019522028,-0.03237189,-0.03760764,-0.039574865,-0.008414786,0.029738214,0.011561058,0.022617368,-0.007709922,-0.010068526,-0.011663181,0.041177064,-0.015559673,0.034502927,-0.014154163,0.06348627,-0.0063867792,0.04594954,0.021698872,-0.03442222,-0.03476595,0.030640217,0.0050477525,0.021450803,-0.047343697,0.015008974,-0.0689183,0.017576491,-0.0128491735,0.04673504,-0.020019474,-0.018953215,-0.06697702,-0.02558559,0.035132483,-0.005467497,-0.02951265,-0.022527324,0.02090924,-0.013451368,0.0629518,-0.0006786108,0.006503725,0.048895683,0.023564374,-0.024486851,0.002371541,0.049592532,-0.030811045,-0.03559238,-0.0695866,0.013409027,0.010916128,-0.030901428,0.057091333,0.03657551,0.026044486,0.038216434,-0.06472968,-0.028969005,-0.0025830173,-0.01722633,-0.022327779,-0.047142774,-0.024313536,-0.016013825,-0.023211999,-0.02492044,-0.019865206,0.0057863323,0.001871331,-0.019642629,-0.0047207866,-0.037302267,0.065976925,0.012276657,0.048927423,-0.04392363,-0.02979585,-0.0057372716,0.026817147,-0.075306736,0.016074225,-0.008950123,0.041787613,-0.0634822,0.029797733,-0.05043364,0.06452821,-0.0022230877,-0.03986313,-0.056086764,-0.02776605,-0.06325905,0.012820132,0.017459774,0.0017871545,-0.005867165,0.0151683455,0.12252132,0.004253973,0.027546253,-0.0014337067,-0.001712879,-0.006318299,0.04200045,-0.033341836,-0.015164353,-0.052982796]",
+      "updated_at": "2026-06-06T09:00:51.869156+00:00"
+    },
+    {
+      "id": "col:complete_market_scrapper_dataset.date",
+      "kind": "column",
+      "table_name": "complete_market_scrapper_dataset",
+      "column_name": "date",
+      "data_type": "TEXT",
+      "definition": "ISO `YYYY-MM-DD` string",
+      "restrictions": "Text, not DATE. Use `to_char()` for date arithmetic. Latest: `WHERE date = (SELECT MAX(date) FROM complete_market_scrapper_dataset)`. Last N days: `WHERE date >= to_char(CURRENT_DATE - INTERVAL 'N days', 'YYYY-MM-DD')`",
+      "embedding": "[0.03686478,-0.023904013,-0.16890803,-0.06431525,0.016701492,-0.016602626,0.046483334,-0.025941456,-0.013827181,-0.012177752,-0.047066618,0.040578377,0.106625654,-0.044310924,0.037095603,-0.02782882,0.007666325,-0.047577336,-0.018121712,0.09355485,0.059010264,-0.017689968,-0.011021292,-0.019043066,0.04129251,0.0036739972,-0.009198274,0.0380835,-0.015565913,0.056910913,0.003973356,0.043833494,0.02967834,-0.015126473,-0.021038657,-0.062729806,0.03276522,-0.0033758716,0.0034394958,-0.008888636,0.058861293,0.028455077,0.016312446,-0.023052223,0.035412177,-0.033284407,0.0679092,0.008790176,0.027129304,-0.08272078,-0.010099949,-0.008684166,0.020882325,-0.059138697,0.022851316,0.03501797,0.028783709,0.01282765,0.013897,0.00013169936,0.0811642,0.028709557,-0.05152469,0.07799519,0.038194243,-0.009499363,-0.056300644,0.040008087,-0.00024892192,-0.08544544,0.06908611,0.030215736,0.026000518,0.040302984,-0.005176854,0.011608192,-0.07528327,-0.05366673,0.0036046158,0.045708552,0.016961671,0.039380983,0.03548244,-0.020661294,0.05264905,-0.01928455,0.0067939064,0.008471875,0.007332816,0.06230103,-0.012201231,0.037525732,0.031860292,0.034151506,-0.019312683,0.051410485,-0.034301236,0.0127320755,0.024345925,-0.018050138,-0.02117902,-0.01947493,0.04841665,0.03648212,0.02044666,0.0337637,0.011596991,0.0064076036,-0.04903325,-0.041988138,-0.029066458,0.033956632,-0.018401757,0.0048612095,-0.0020003507,0.010641297,0.07000493,0.005831809,-0.037516136,0.01756604,-0.0062586274,-0.023831284,0.025170164,0.061845206,-0.012327501,-0.03743117,-0.021459978,0.05440818,-0.007936869,-0.03688572,-0.034971323,0.00064480153,0.00039140662,0.030163389,0.020012902,0.010206888,-0.037900325,-0.0076385005,0.013201332,-0.013711919,0.034523886,-0.024618644,-0.020203667,-0.039738037,-0.012503895,-0.051594365,-0.0024009685,-0.035555612,0.009737532,0.036450468,0.0005624682,0.017506886,0.0006758514,0.004279814,0.035300493,-0.040785145,0.04707004,-0.03762874,-0.008999773,-0.0027660006,0.040469404,0.008556109,-0.020662889,0.039939288,-0.008538289,-0.046570312,-0.035082478,0.010740526,0.0020064719,0.041769207,-0.07535273,-0.056109898,-0.016969457,-0.0260001,0.009078388,-0.0056598596,0.027187152,-0.007296922,0.045383982,-0.062229265,0.011218994,-0.08174813,0.06957691,0.0034718532,-0.034417372,-0.054829855,0.0053844578,0.0125996675,0.0017253559,0.011793426,-0.06341878,-0.017527873,-0.058235195,-0.0054214955,-0.05194895,-0.070215575,0.041962672,0.006327761,0.017364906,-0.015503988,-0.041448448,-0.01576872,-0.033603545,0.03392302,-0.03195368,0.014586572,0.020956008,0.022811767,-0.01838235,0.023139503,0.07688485,0.013486913,0.0025853282,0.015364476,-0.008893921,-0.043024883,-0.02585132,0.014554684,0.011165231,0.043522246,0.022806216,-0.019515453,0.033969786,0.020599345,0.046570897,0.02501721,0.0010083499,0.07273758,-0.0106397215,-0.010182975,-0.027494075,-0.049167372,0.0135305235,0.0012509791,0.04363549,0.027344938,0.013890665,0.096386984,-0.006007259,-0.005437863,-0.004353172,0.042668805,-0.015665762,-0.0045967926,-0.027706292,0.0027524235,-0.010792277,-0.0011395797,-0.0018151839,0.069567546,0.00055400754,0.02739948,0.02317012,0.08230135,0.04514419,-0.03442353,-0.05686518,0.015998805,-0.034646932,0.005144327,0.061035473,0.019883463,0.05574682,-0.02758636,-0.0017024744,-0.046912838,-0.029149255,-0.014658387,0.008533259,-0.013368395,-0.0135067655,-0.0017038807,0.030118939,0.034310233,0.0007912308,-0.0001881592,0.037644703,-0.014124649,-0.02544496,0.018756915,-0.029062048,-0.05761696,0.0020011908,0.014931756,-0.053008486,0.049584974,-0.001508262,-0.043648615,0.0069487537,-0.004929737,-0.006756077,0.019403199,-0.032538485,0.049827717,0.037479665,0.010033868,0.0721792,0.029092258,0.03421721,-0.054164816,-0.00010279226,0.06219195,0.015382654,0.044371136,-0.005043715,-0.028776137,0.0119364,-0.031915188,0.02411475,-0.041289564,-0.015417732,-0.0026029202,-0.031811643,0.034793824,-0.09910677,0.05575121,0.03750958,0.0028755118,0.011475369,-0.019690227,0.03273883,-0.039451767,0.06120136,-0.032717314,-0.035736952,0.050573777,0.0059758993,0.04175696,-0.08569998,0.002689084,0.024324786,0.011482055,0.03709218,-0.01658076,-0.05175962,0.01807629,0.014119946,-0.002516195,0.012750244,0.055520188,0.050832905,0.02675266,0.014583866,-0.022974253,0.02859082,-0.002203286,-0.09303934,-0.007735854,0.06632959,0.03095035,-0.053654797,0.019211577,-0.03307571,-0.028636944,-0.008009668,0.04656542,0.032351587,0.048869528,-0.013540579,-0.024742816,0.040536504,0.01407476,0.017626764,-0.03332652,0.0058657853,0.004010446,0.068933986,0.04183156,0.057877466,-0.0012052358,0.0127299065,-0.059130043,0.05317759,0.043798383,0.014385747,-0.01690534,-0.06489871,-0.023886314,0.0022609753,0.06474186,0.04424175,-0.045083523,0.00352761,0.005360643,0.029284883,-0.036193363,0.009892218,-0.02864896,-0.044859592,-0.03133212,0.032970574,-0.016950497,-0.010613431,-0.011262378,0.013970427,-0.035588246,0.026926545,0.04736146,-0.039165117,-0.0017030691,-0.026838576,-0.02759546,0.020797689,0.0046395506,0.0239208,0.051615257,-0.062500305,-0.045766555,0.052754544,0.0014216409,0.007055658,0.025708606,-0.051178742,-0.026938561,0.022362985,-9.266587e-05,0.07160748,-0.007874402,-0.03644872,-0.046565615,0.053585738,0.028531019,-0.02105639,-0.0061063725,0.009443371,0.027221864,0.015078446,0.0010810245,-0.002757607,-0.043320023,-0.012667821,0.011418324,0.041948456,0.0049562044,-0.03852859,0.019106496,0.0058200685,0.02381454,0.00185264,0.02141117,0.028933723,-0.052039847,-0.0011933001,-0.03032032,0.008868346,0.049249686,0.053553533,-0.08942505,-0.019641632,0.059171077,-0.020174438,-0.008522951,0.0038742363,0.028589398,0.097789414,-0.092565216,0.0032493346,0.019323392,0.038716193,0.061675005,-0.021867303,-0.029307613,-0.043767452,0.027431058,-0.016442515,-0.02204696,0.024847737,-0.03928674,0.022232061,0.07790482,-0.08258978,0.027140165,0.042230356,-0.030010168,-0.016272182,0.018871095,-0.05033196,0.0010498336,0.0061823097,0.03754726,0.011779739,-0.017270396,-0.026381908,-0.02671005,-0.0069891145,0.028571108,0.0171062,-0.018651955,-0.0068695485,0.025428299,0.0017751886,-0.00909671,0.0029097064,-0.008369469,-0.033388425,-0.04991407,0.015271816,0.02217558,-0.0039037874,-0.022907678,0.022487355,0.013113515,-0.011859455,0.024645306,0.0017327216,-0.024723204,0.010478378,-0.06708985,-0.073609106,0.012338257,0.0074223275,0.013133778,0.009433243,0.040704533,0.036942292,-0.017596804,0.05920015,0.024514304,-0.065723814,-0.008759068,-0.01082437,-0.017934285,0.011171311,-0.008338201,-0.040787168,0.009291363,-0.021737192,-0.06587004,0.011823961,-0.052516658,0.0022976545,-0.025894454,-0.01043073,-0.026465373,-0.02527984,0.011878701,-0.07264708,-0.008578662,-0.0210416,-0.03631129,-0.015740752,-0.029986283,-0.05993783,-0.0032602919,0.010348662,-0.012106155,-0.020620067,-0.0059308084,-0.015402599,-0.049356233,0.0646355,-0.048762854,-0.0022585168,-0.042119622,0.023309747,-0.037655283,0.0023702036,0.008542764,-0.086047746,-0.0134304175,0.034094047,0.033780847,0.04830365,0.042409286,0.01326456,0.018023401,-0.0038429054,0.009721452,0.009544614,0.027425865,0.017892728,-0.06112575,-0.00045372578,-0.006944094,-0.040978733,0.011876232,-0.011013524,0.012392251,-0.054046314,-0.0041073347,-0.013217644,-0.07211398,0.0014064533,0.07786705,-0.05165224,-0.0071808263,-0.0133741,-0.032798667,0.01666566,-0.014457252,-0.033632968,0.042319052,0.006264216,-0.013964436,-0.020424945,0.008713028,-0.06456602,-0.034145363,-0.028768511,-0.073209554,0.001153261,0.0063228803,0.06879342,-0.047335982,0.035024658,0.06299953,0.011610695,0.019586792,0.028500028,-0.07723981,-0.0009824953,0.0010243995,-0.0151185775,0.014691625,0.03826704,-0.04071504,0.025531946,0.05374964,-0.060967006,-0.02201555,-0.013349756,0.014304958,0.0047106175,-0.050440867,0.0062765414,0.024054848,-0.051771604,0.0088547105,-0.012029248,0.015050515,-0.0067136674,0.01001377,-0.064667374,-0.06274922,-0.04421987,0.014811622,-0.030177642,0.0770847,0.009731337,0.02674544,0.05312798,-0.04278454,-0.020030426,0.033709385,0.017628876,-0.03024514,0.09148474,0.030431088,0.035582416,-0.0176856,0.094101235,0.07147309,0.06193482,0.031484097,0.040134516,-0.009198889,-0.017008036,-0.044166867,-0.06420099,-0.024813069,-0.021185696,-0.012847935,0.00028524423,-0.010837229,0.041640155,-0.018900022,0.025155326,-0.018075986,-0.037681192,-0.07304198,0.009258488,-0.0043711895,0.040768255,-0.027144734,0.044282474,0.059432026,0.0020020683,0.028194863,-0.036609426,-0.012952603,0.026729312,0.013607957,0.007642718,-0.05137539,0.0368964,-0.02244903,0.0050550345,-0.013517878,-0.009245224,-0.009273413,-0.013660859,-0.05068936,-0.03198847,-0.017540947,-0.016409898,-0.049571145,-0.0017908912,-0.0045578745,-0.020221472,0.06595462,-0.007897896,0.018408222,0.036699124,0.023188146,-0.016186934,-0.02053688,-0.029493332,-0.02370254,-0.03021251,-0.015138827,-0.0029282402,0.02326454,-0.0490787,0.021948745,0.067116804,0.05092198,0.0068140933,-0.069953404,-0.0046945186,-0.002145624,0.0009778768,0.007970008,-0.036319185,-0.05506129,-0.0025604893,-0.009025745,-0.035408452,0.006502371,0.016560245,-0.020510381,0.045687966,-0.026716935,-0.040701456,0.069831274,-0.0037596908,0.024896473,-0.055828705,0.019564828,-0.006869544,-0.007639662,-0.03536387,0.035542537,-0.02749079,0.008141048,-0.046713714,-0.005177826,-0.048199177,0.053557318,-0.0057328474,0.00010408536,-0.035301097,-0.015306996,-0.0637941,-0.004009509,0.014372235,-0.019630674,0.0060760276,-0.0032613534,0.11803378,0.019467171,0.01601799,0.0041824393,0.028147371,0.0082792,0.011509295,-0.020797253,-0.006754668,-0.030873679]",
+      "updated_at": "2026-06-06T08:58:59.249744+00:00"
+    },
+    {
+      "id": "col:complete_market_scrapper_dataset.state",
+      "kind": "column",
+      "table_name": "complete_market_scrapper_dataset",
+      "column_name": "state",
+      "data_type": "VARCHAR",
+      "definition": "US state code (VT, MA, etc.)",
+      "restrictions": "RLS-scoped. Never filter manually",
+      "embedding": "[0.030609585,0.01715211,-0.17994972,-0.05805388,0.06713012,-0.017091593,0.031189626,0.027135367,0.020574307,0.01925395,-0.04810759,0.017262764,0.101476215,-0.042133074,-0.031892866,0.0038454162,0.012404796,-0.055485163,-0.002252617,0.020164171,-0.008115881,-0.0087872725,0.027138133,-0.033972293,0.06799824,0.041776713,0.03339844,0.03775449,-0.020178212,0.043392878,-0.054637045,0.025065826,-0.01724995,-0.052707557,-0.0628807,-0.059299305,0.032011356,-0.035092764,-0.025256416,-0.009913529,0.013120134,0.06881365,-0.009702025,-0.0073311585,0.01960704,0.015436307,0.07725466,0.008637432,0.040532876,-0.038881402,0.028419122,-0.010543936,-0.02570752,-0.064647585,-0.010980752,-0.038489096,-0.03431646,0.063661486,0.015441694,-0.005937604,0.06880393,0.026663298,-0.021633843,0.08573832,0.00011637327,0.014956024,-0.03522579,0.016951475,0.010754026,-0.049241427,0.020775322,0.026360998,0.0067602713,-0.0014272773,-0.041636523,-0.01751128,-0.08146397,-0.02659867,-0.03157208,0.035597052,-0.0016256601,-0.030027332,0.026786966,0.01866889,0.025034407,-0.048120555,0.0012421785,-0.017544426,-0.042547233,0.06644336,-0.0023441897,0.02556037,0.04629731,0.04124728,-0.046125725,0.024036052,-0.010860354,-0.0127193695,-0.019874716,-0.020940887,-0.056210212,-0.019308265,0.012242174,-0.005315201,0.01598088,0.00473445,0.004310449,-0.006516873,-0.01081423,-0.041127093,-0.032130748,0.038557958,-0.03134371,-0.02395464,-0.007012169,-0.030463854,0.1012731,-0.027847376,-0.0034176528,0.015181672,0.0052477494,0.010738054,0.037955508,0.065356165,-0.022039335,0.015586649,-0.05375366,0.045601465,0.0195338,-0.041253418,0.004107474,-0.048862845,-0.031536233,0.029991796,0.025889048,0.005634114,-0.008693902,0.0063389326,0.017673628,0.028491143,0.011211537,0.043448593,-0.03396326,-0.0026071337,-0.018331751,-0.049007475,0.036537785,-0.055816527,-0.01056255,-0.0075794733,0.032002088,0.022358002,0.009922408,0.0003748327,0.007775966,-0.04429647,0.08074236,-0.020051112,0.020193465,0.016284008,0.04891094,0.021272674,-0.01501592,0.07216074,-0.008673758,-0.036387343,-0.00633257,0.035647426,0.009616556,-0.008674163,-0.048793443,-0.048563827,0.015254052,-0.040385194,0.052932438,-0.033317585,0.031143995,-0.010834657,0.0792082,-0.023807278,0.017480815,-0.06593781,0.051738907,0.04505684,-0.012260956,-0.06401775,-0.010861555,0.015201944,0.01019304,-0.062374488,-0.00942655,0.02585451,-0.078123525,-0.032380942,-0.0448049,-0.050980654,0.0060962397,-0.010085741,0.062119648,-0.032241303,-0.024757553,0.018903352,-0.059980165,0.01771384,-0.064450495,0.017307289,0.0055907182,0.011149852,-0.044378567,0.023585198,0.08487713,-0.051622186,0.02772542,0.024100043,0.0070427456,-0.0011554173,-0.04125735,-0.012407224,0.019523833,0.029515546,0.013948892,-0.0065193702,0.03989593,-0.014077212,0.034635123,-0.013837459,-0.03529834,0.0129333595,0.026380254,-0.0007098982,0.05302437,-0.04528368,0.034688786,-0.008167872,-0.007287074,0.038103905,0.0060337353,0.072941825,-0.0334785,-0.02040325,-0.02269897,0.05875355,-0.0020682516,0.03612705,-0.03191013,0.022539707,-0.002457767,-0.0006065577,0.030605994,0.04536131,-0.026611395,0.036035452,0.012622009,0.09264454,0.002366411,-0.06867221,-0.009872173,0.018536113,0.011935407,0.017505748,0.020853644,0.00013198232,0.06378499,-0.058962166,-0.028623642,-0.022402141,-0.033309195,-0.03147891,0.040823355,0.01121988,-0.0072285268,0.03580972,0.039320752,-0.0033623488,0.033461664,-0.0015285499,-0.0005653829,-0.05039342,-0.020854188,0.025530484,-0.04182918,-0.029567605,0.022466512,-0.013516041,-0.054512206,0.028669812,0.012090095,-4.449221e-05,-0.008778558,0.016466463,0.00972369,0.034895636,-0.002926805,0.023238122,-0.01288853,0.017717972,0.011795256,-0.02267887,0.044494014,-0.02581759,-0.002860014,0.008870585,0.046305243,0.03988614,0.0013607558,-0.031851973,0.03266917,-2.5201052e-05,0.06703048,0.0010717292,-0.03885049,-0.0077569834,-0.048230223,0.028577281,-0.02151884,0.06549365,0.01075016,-0.00020189732,0.011693399,0.0069147376,0.02652097,-0.03841286,0.0223526,-0.034211714,0.003996075,0.08339481,-0.029146954,0.039340846,0.0052255117,-0.025233995,0.024504902,-0.009858585,0.05389812,-0.039573506,-0.03965571,0.01619037,-0.02142887,-0.007052207,0.021085054,0.03194862,0.045532912,0.009657486,0.019488804,-0.020275665,-0.01923025,0.006414757,-0.06393944,-0.0012480371,0.05431732,0.02223213,-0.06744,0.004225103,-0.0012229742,-0.0427813,-0.015581979,0.03978334,0.029622115,0.031405065,0.023794096,-0.0033639565,0.053182732,-0.027425498,-0.027865939,-0.05313354,0.043800205,0.004735319,0.06257278,-0.007062536,0.052370973,0.027976466,-0.022604587,-0.02941411,0.042791426,0.050065994,0.00097465754,0.051965576,-0.055073693,0.014882528,-0.03359539,0.028391078,0.08693867,-0.031019209,0.015325431,-0.008173473,-0.03086942,-0.042201534,-0.02735776,-0.0032965196,-0.042033087,-0.021048445,0.007889781,-0.056334086,-0.026439242,0.007937533,0.004518729,-0.0018382408,0.03214683,0.0008596476,0.0011473756,0.032778725,-0.06273199,-0.033492174,0.014531815,-0.013610632,-0.0022207797,0.003495444,-0.084321275,-0.037891146,0.050514083,0.01913001,-0.05890415,0.020254068,-0.032384295,-0.018236864,0.0057235635,0.037482608,0.05160042,0.01467871,-0.025662526,-0.07465424,0.042248555,0.0052772,0.012017431,0.016189603,0.012706146,0.01906757,0.01929804,-0.016304992,0.021790909,-0.09011813,0.01023658,0.01448267,-0.0004858076,0.0067037805,-0.008455853,-6.419068e-05,-0.03435868,-0.0027058385,-0.024722803,0.046068307,0.008450533,-0.09172548,-0.03375449,-0.017061876,0.0057016937,0.08194179,0.08455692,-0.034784958,-0.017425561,0.07614727,-0.012487453,-0.0027415275,0.010255723,0.006210872,0.11042124,-0.04938254,0.014082347,0.0012133777,0.021305757,0.030001052,0.04055335,0.0028280176,-0.04004602,0.012743907,0.022307226,-0.05106091,0.01287647,-0.019281445,0.014526121,0.07759453,-0.059888847,-0.0051028067,0.02105621,-0.022790056,-0.0072743627,0.013244163,0.01376231,0.008009497,0.016737683,0.009459813,-0.0193402,-0.0035972267,-0.031019803,-0.04881265,0.005211276,0.05622021,0.028023686,-0.029617008,-0.0020758894,0.008859835,0.00039408816,0.048142523,-0.018934986,-0.019151503,0.028464979,-0.048784316,-0.04137296,-0.03842003,0.01423735,0.040524475,0.025501372,0.0016667469,0.025034348,0.054324996,0.0019459382,-0.030695034,0.010019299,-0.010254098,-0.065142974,-0.032556545,0.022583058,0.033354707,0.026343044,0.031318717,0.021546595,-0.0057631833,0.01844821,0.04142287,-0.040237796,0.0013923141,-0.035205342,-0.075722866,-0.008543713,0.01628939,-0.058150448,0.008519888,0.019551426,-0.029627614,-0.00093452353,-0.01690286,0.02207537,-0.019374393,-0.009123379,-0.002382807,0.03569591,-0.015439223,-0.053313244,-0.004113739,0.015927589,0.0241818,-0.00092440005,-0.015007622,-0.033126906,-0.018719159,-0.0011904256,-0.03575027,-0.010801885,-0.054404303,-0.0555196,-0.06731426,-0.009177161,-0.087619945,-0.0055690496,-0.036607634,0.01181407,-0.054000296,-0.0033836367,0.040921763,-0.055314235,-0.007523083,0.0007724446,0.006826868,0.08452401,0.06827718,-0.004989303,0.00039425684,0.008924805,0.021836838,-0.01317636,0.012108288,-0.004547187,-0.08134179,-0.0019044318,-0.03019824,-0.02482864,0.021546008,-0.05117197,-0.0138462875,-0.021986926,-0.007399244,0.029141556,-0.073522635,0.030594185,0.034285557,-0.035612766,0.009145547,-0.009656143,-0.03761684,0.0039497707,-0.025333092,-0.03738048,0.03547233,0.04135172,-0.026895272,-0.014149533,-0.017748708,-0.03845175,-0.023214718,-0.028025232,-0.03586162,0.012225737,0.0069886236,0.055005986,-0.058452748,0.023056636,0.033213053,0.0026710979,-0.008160665,-0.020497978,-0.040023375,0.0069933487,-0.017672818,-0.033222664,-0.028631335,0.035916332,-0.060523067,0.020450901,0.009006583,-0.05044859,-0.0469427,-0.031708095,-0.054468267,0.025123311,-0.01989765,0.053368486,0.06111652,-0.037468378,-0.026914284,0.046482936,0.06250198,-0.012250236,0.0027632562,-0.03325981,-0.063086666,-0.05847209,0.040415656,0.0002893717,0.04280281,0.05174105,0.04298301,0.040032763,0.017064564,-0.031565312,0.019760061,0.017201679,-0.010157119,0.08549165,0.02687065,0.049427222,0.0052680047,0.06730892,0.068775564,0.048609294,0.0037818027,0.016355978,-0.04055615,0.03201367,-0.006393835,-0.053483684,-0.019394195,-0.0035216054,0.0030467971,-0.011569977,0.010683559,0.031814616,-0.011456009,0.009440237,-0.006371659,-0.06487504,-0.037781037,0.059794974,-0.040135942,0.015050768,0.00486901,0.06123456,0.010749323,0.025642717,0.018774334,0.022080062,-0.04897233,0.03732411,0.025549946,0.025176361,-0.029852916,0.0060013286,-0.077496424,0.0031271894,-0.02937932,0.01050189,-0.051350888,0.014215373,-0.0037114248,0.0041998136,-0.013159356,-0.0035940711,-0.008470268,-0.012332975,0.022549588,-0.005630716,0.022535624,0.0008626938,0.053435422,0.04505363,0.0054882863,-0.0014730404,-0.008039861,-8.2463936e-05,-0.07424266,0.0105688,0.0074928757,-0.0047462042,0.026546346,0.010471673,0.05886433,0.04397322,0.036321845,-0.0014748503,-0.022890395,-0.005586483,0.016811153,0.044091087,-0.006188575,-0.043191917,-0.01885675,0.0064907116,0.0069043515,0.014237729,0.016697012,0.013713904,-0.062382467,0.023560017,-0.0335173,-0.08096478,0.117193185,0.015897263,0.035821766,-0.06534176,-0.0022172395,-0.01640929,0.0027945433,-0.076290235,0.00769298,0.002866925,0.011267494,-0.018517159,-0.019635303,-0.04446444,0.025650773,-0.014448082,-0.0098408265,0.02950542,-0.06743894,-0.024330927,-0.0046346863,-0.009947313,0.020765847,0.024759619,-0.000592405,0.113265336,0.07034251,0.025417693,-0.010872518,0.022311892,0.020421552,-0.0024512592,-0.08840721,-0.027959056,-0.023622328]",
+      "updated_at": "2026-06-06T08:59:00.054181+00:00"
+    }
+  ],
+  "notes": []
+}

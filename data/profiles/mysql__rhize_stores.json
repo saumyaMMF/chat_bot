@@ -1,0 +1,3148 @@
+{
+  "engine": "mysql",
+  "schema": null,
+  "table": "rhize_stores",
+  "row_count": 175,
+  "column_count": 14,
+  "primary_key": [
+    "id"
+  ],
+  "indexes": [
+    {
+      "name": "idx_isPartner",
+      "unique": false,
+      "columns": [
+        "isPartner"
+      ]
+    },
+    {
+      "name": "idx_slug",
+      "unique": false,
+      "columns": [
+        "slug"
+      ]
+    },
+    {
+      "name": "PRIMARY",
+      "unique": true,
+      "columns": [
+        "id"
+      ]
+    },
+    {
+      "name": "uq_slug_tenant",
+      "unique": true,
+      "columns": [
+        "slug",
+        "tenantid"
+      ]
+    }
+  ],
+  "columns": [
+    {
+      "name": "id",
+      "declared_type": "varchar(36)",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 175,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 175,
+      "distinct_pct": 100.0,
+      "is_unique": true,
+      "is_low_cardinality": false,
+      "min_value": "16188dfd-5363-11f1-bc3a-7e0f98092871",
+      "max_value": "y9u7ori9svrmmaqynf7",
+      "min_length": 18,
+      "max_length": 36,
+      "avg_length": 24.41,
+      "pattern_hints": [],
+      "distinct_values": [
+        "16188dfd-5363-11f1-bc3a-7e0f98092871",
+        "16189cf4-5363-11f1-bc3a-7e0f98092871",
+        "ais70qd1trmmaqzk3v",
+        "cmmairubn00004joiaf2uaesn",
+        "cmmairw9500014joi5rx66iqm",
+        "cmmairwlx00024joi8q28o5fo",
+        "cmmairwyu00034joi780hjxhp",
+        "cmmairxbp00044joi6c4lhlz7",
+        "cmmairxoq00054joiv8igy6dw",
+        "cmmairy1k00064joiji5h0o96",
+        "cmmairyeb00074joio3fxz5ft",
+        "cmmairywb00084joiut1ie57f",
+        "cmmairz9500094joi7f4tco1j",
+        "cmmairzm2000a4joijluvjb37",
+        "cmmais008000b4joiaz7ywi7q",
+        "cmmais0d6000c4joi49ir2yg5",
+        "cmmais0q0000d4joi9a9525q6",
+        "cmmais1fo000f4joiwpmxgsnm",
+        "cmmais1we000g4joi4p86k9od",
+        "cmmais296000h4joiz03cxb5a",
+        "cmmais2lx000i4joiefoqo58x",
+        "cmmais2yp000j4joi88pyfcuk",
+        "cmmais3el000k4joil3ezu6xu",
+        "cmmais3rf000l4joie6355b1x",
+        "cmmais447000m4joipymca9x7",
+        "cmmais4h1000n4joizk5cbbo0",
+        "cmmais4tw000o4joibf62now7",
+        "cmmais57y000p4joi0j3lot9h",
+        "cmmais5kp000q4joi5q2xqmyj",
+        "cmmais60c000r4joirho6akjl",
+        "cmmais6d9000s4joiysqf0z5m",
+        "cmmais6q5000t4joi2zqb6xjo",
+        "cmmais72z000u4joivbu377og",
+        "cmmais7fr000v4joim2ekp8fi",
+        "cmmais7sm000w4joihqqtkpli",
+        "cmmais85t000x4joilosddsbm",
+        "cmmais8k1000y4joiw42gf1x8",
+        "cmmajj9qz0000jaoit4tpf6pc",
+        "cmmajjait0003jaoifbra8gy2",
+        "cmmajjd4m000ejaoi6m2fq5tt",
+        "cmmajjeia000kjaoiwjkaijd7",
+        "cmmajjg26000rjaoinavapxl3",
+        "cmmajjhfc000xjaoi1o6y4jps",
+        "cmmajjija0012jaoiejf184m5",
+        "cmmajjm21001hjaoil85237zn",
+        "cmmajjo49001qjaoifvlmfozo",
+        "cmmajjq8j001zjaoii9hnuc8v",
+        "cmmajjrgu0024jaoirnzjb2lv",
+        "cmmajjtl9002cjaoi3udnyw3n",
+        "cmmajk1xl003bjaoio37rymal",
+        "cmmajk3if003ijaoiksku3hi7",
+        "cmmajk4fi003mjaoios33yfd0",
+        "cmmajk6kd003vjaoiyws0yfog",
+        "cmmakbfqa003r7ooijuswljzh",
+        "cmmakbj6c00447ooicdpb5llz",
+        "cmmakbm3b004g7ooifaivnv79",
+        "cmmakqcxr0001qsoiwph09tl0",
+        "cmmakqcxr0002qsoib01or8xx",
+        "cmmakqcxr0003qsoicz3ovbt7",
+        "cmmakqcxr0004qsoipojnvtjq",
+        "cmmakqcxr0005qsoilkyzldpy",
+        "cmmakqcxr0006qsoiua87e66m",
+        "cmmakqcxr0007qsoioejgz7ye",
+        "cmmakqcxr0009qsoi9cefwy73",
+        "cmmakqcxr000aqsoic314usa1",
+        "cmmakqcxr000bqsoirrs91gzr",
+        "cmmakqcxr000cqsoi063hwxgr",
+        "cmmakqcxr000dqsoi3of2puoy",
+        "cmmakqcxr000eqsoiufeiq4cj",
+        "cmmakqcxr000fqsoiveph4z7q",
+        "cmmakqcxr000gqsoifovbxjtx",
+        "cmmakqcxr000iqsoik7ktu4e8",
+        "cmmakqcxr000jqsoi2j123njp",
+        "cmmakqcxr000kqsoiu168ehp3",
+        "cmmakqcxr000lqsoi4s4gtfc4",
+        "cmmakqcxr000mqsoi1ntlje5r",
+        "cmmakqcxr000nqsoi3fjrdmec",
+        "cmmakqcxr000sqsoihyjr3xq8",
+        "cmmakqcxr000tqsoifzfhf2pg",
+        "cmmakqcxr000vqsoimi0fbng8",
+        "cmmakqcxr000wqsoilur8cjx9",
+        "cmmakqcxr000yqsoi7xgcwmpn",
+        "cmmakqcxr000zqsoisv098hdx",
+        "cmmakqcxr0010qsoiett3ry5r",
+        "cmmakqcxr0011qsoigdlwutz2",
+        "cmmakqcxr0012qsoi2fzn3vgh",
+        "cmmakqcxr0013qsoi0u8e9seq",
+        "cmmakqcxr0014qsoizbdnk3mj",
+        "cmmakqcxr0015qsoizrh29jm3",
+        "cmmakqcxs0016qsoiehapmxtt",
+        "cmmakqcxs0017qsoiibq66zmx",
+        "cmmakqcxs0018qsoi40814v9q",
+        "cmmakqcxs0019qsoi0jx2ijda",
+        "cmmakqcxs001aqsoiap3vbjfd",
+        "cmmakqcxs001bqsoi5z2yjqrq",
+        "cmmakqcxs001cqsoicqegec3n",
+        "cmmakqcxs001dqsoirt6o2549",
+        "cmmakqcxs001eqsoir3imu603",
+        "cmmakqcxs001gqsoio19uc88v",
+        "cmmakqcxs001hqsoia1av4t90",
+        "cmmakqcxs001iqsoisx8og0ld",
+        "cmmakqcxs001jqsoir6v87el9",
+        "cmmakqcxs001mqsoi1itzi1hg",
+        "cmmakqcxs001nqsoi5r5v59px",
+        "cmmakqcxs001oqsoi69de4qsm",
+        "cmmakqcxs001rqsoi9f73xft2",
+        "cmmakqcxs001tqsoih24ycuew",
+        "cmmakqcxs001uqsoi7sfcbbc6",
+        "cmmakqcxs001vqsoidlymlf57",
+        "cmmakqcxs001wqsoi7yu4xbzd",
+        "cmmakqcxs001xqsoivb7afopf",
+        "cmmakqcxs001zqsoi3azehvqx",
+        "cmmakqcxs0020qsoi3dfxykcw",
+        "cmmakqcxs0023qsoiuburqpmg",
+        "cmmakqcxs0024qsoigoli8llg",
+        "cmmakqcxs0025qsoip3zqlgvp",
+        "cmmakqcxs0026qsoisl8j4kyb",
+        "cmmakqcxs0027qsoidmgi4vgd",
+        "cmmakqcxs0028qsoivthfv6ff",
+        "cmmakqcxs0029qsoi52hutyeg",
+        "cmmakqcxs002aqsoid901wmmd",
+        "cmmakqcxs002bqsoijftrbiqr",
+        "cmmakqcxs002cqsoinflf2oq3",
+        "cmmakqcxs002dqsoi7luspi9o",
+        "cmmakqcxs002eqsoih2vt1trs",
+        "cmmakqcxs002fqsoimny7r0rp",
+        "cmmakqcxs002gqsoifckzayri",
+        "cmmakqcxs002hqsoi4hv76rqm",
+        "cmmakqcxs002iqsoi4cl7nx7q",
+        "cmmakqcxs002jqsoikwq5v3ak",
+        "cmmakqcxs002kqsoio4y4a4hh",
+        "cmmakqcxs002lqsoixm5dgy0a",
+        "cmmakqcxs002mqsoipqstlhh3",
+        "cmmakqcxs002nqsoimrg4relq",
+        "cmmakqcxs002oqsoimwz918fl",
+        "cmmakqcxs002pqsoiqvfa45u6",
+        "demo_st_0474549e4b674ef",
+        "demo_st_087cd72fc677564",
+        "demo_st_0d8d7d0abd0467e",
+        "demo_st_18bca7fac9f8881",
+        "demo_st_1b70ad361f0ca04",
+        "demo_st_217509b543473bd",
+        "demo_st_231489c9203897c",
+        "demo_st_29961a37447a78f",
+        "demo_st_388c872ebc48229",
+        "demo_st_5154fffc3ac8476",
+        "demo_st_5c43c27357e96d4",
+        "demo_st_63f25f28a7bdb29",
+        "demo_st_64049da73e8c9c7",
+        "demo_st_65399bf497731ae",
+        "demo_st_763e6c2cb77baf7",
+        "demo_st_7e626207eb302fd",
+        "demo_st_8c12369d3538751",
+        "demo_st_928703fb909e489",
+        "demo_st_9f8a426b5706d21",
+        "demo_st_a3e3cb124c1846b",
+        "demo_st_a64565af88cb69a",
+        "demo_st_ace42f725d5b49d",
+        "demo_st_b49412bf815f18c",
+        "demo_st_b815c539c7cc911",
+        "demo_st_d10e95c4c8a7abe",
+        "demo_st_d2edd1c0512bc5e",
+        "demo_st_e1532389e6dfb9f",
+        "demo_st_e694194d8738699",
+        "demo_st_ed87d68b5ed4325",
+        "demo_st_f97d27985a8e528",
+        "g1hu4lfyfn4mmaqzk3v",
+        "mmgkovd9r2mmaqz5z5",
+        "n57amr06nzcmmaqynf7",
+        "o1yesbv8nfmmaqz5z5",
+        "tjrlov45e7rmmaqynf7",
+        "u8f23dxsbcmmaqzk3v",
+        "u90hryimp3mmaqxnck",
+        "vw21vlk6onkmmaqynf7",
+        "y9u7ori9svrmmaqynf7"
+      ],
+      "top_values": [
+        [
+          "cmmajjait0003jaoifbra8gy2",
+          1
+        ],
+        [
+          "cmmais4tw000o4joibf62now7",
+          1
+        ],
+        [
+          "cmmais57y000p4joi0j3lot9h",
+          1
+        ],
+        [
+          "cmmais5kp000q4joi5q2xqmyj",
+          1
+        ],
+        [
+          "cmmais60c000r4joirho6akjl",
+          1
+        ],
+        [
+          "cmmais6d9000s4joiysqf0z5m",
+          1
+        ],
+        [
+          "cmmais6q5000t4joi2zqb6xjo",
+          1
+        ],
+        [
+          "cmmais72z000u4joivbu377og",
+          1
+        ],
+        [
+          "cmmais7fr000v4joim2ekp8fi",
+          1
+        ],
+        [
+          "cmmais7sm000w4joihqqtkpli",
+          1
+        ],
+        [
+          "cmmais85t000x4joilosddsbm",
+          1
+        ],
+        [
+          "cmmais8k1000y4joiw42gf1x8",
+          1
+        ],
+        [
+          "cmmajj9qz0000jaoit4tpf6pc",
+          1
+        ],
+        [
+          "cmmais4h1000n4joizk5cbbo0",
+          1
+        ],
+        [
+          "cmmajjd4m000ejaoi6m2fq5tt",
+          1
+        ],
+        [
+          "cmmajjeia000kjaoiwjkaijd7",
+          1
+        ],
+        [
+          "cmmajjg26000rjaoinavapxl3",
+          1
+        ],
+        [
+          "cmmajjhfc000xjaoi1o6y4jps",
+          1
+        ],
+        [
+          "cmmajjija0012jaoiejf184m5",
+          1
+        ],
+        [
+          "cmmajjm21001hjaoil85237zn",
+          1
+        ],
+        [
+          "cmmajjo49001qjaoifvlmfozo",
+          1
+        ],
+        [
+          "cmmajjq8j001zjaoii9hnuc8v",
+          1
+        ],
+        [
+          "cmmajjrgu0024jaoirnzjb2lv",
+          1
+        ],
+        [
+          "cmmajjtl9002cjaoi3udnyw3n",
+          1
+        ],
+        [
+          "cmmajk1xl003bjaoio37rymal",
+          1
+        ],
+        [
+          "y9u7ori9svrmmaqynf7",
+          1
+        ],
+        [
+          "cmmairzm2000a4joijluvjb37",
+          1
+        ],
+        [
+          "16189cf4-5363-11f1-bc3a-7e0f98092871",
+          1
+        ],
+        [
+          "ais70qd1trmmaqzk3v",
+          1
+        ],
+        [
+          "cmmairubn00004joiaf2uaesn",
+          1
+        ],
+        [
+          "cmmairw9500014joi5rx66iqm",
+          1
+        ],
+        [
+          "cmmairwlx00024joi8q28o5fo",
+          1
+        ],
+        [
+          "cmmairwyu00034joi780hjxhp",
+          1
+        ],
+        [
+          "cmmairxbp00044joi6c4lhlz7",
+          1
+        ],
+        [
+          "cmmairxoq00054joiv8igy6dw",
+          1
+        ],
+        [
+          "cmmairy1k00064joiji5h0o96",
+          1
+        ],
+        [
+          "cmmairyeb00074joio3fxz5ft",
+          1
+        ],
+        [
+          "cmmairywb00084joiut1ie57f",
+          1
+        ],
+        [
+          "cmmairz9500094joi7f4tco1j",
+          1
+        ],
+        [
+          "16188dfd-5363-11f1-bc3a-7e0f98092871",
+          1
+        ],
+        [
+          "cmmais008000b4joiaz7ywi7q",
+          1
+        ],
+        [
+          "cmmais0d6000c4joi49ir2yg5",
+          1
+        ],
+        [
+          "cmmais0q0000d4joi9a9525q6",
+          1
+        ],
+        [
+          "cmmais1fo000f4joiwpmxgsnm",
+          1
+        ],
+        [
+          "cmmais1we000g4joi4p86k9od",
+          1
+        ],
+        [
+          "cmmais296000h4joiz03cxb5a",
+          1
+        ],
+        [
+          "cmmais2lx000i4joiefoqo58x",
+          1
+        ],
+        [
+          "cmmais2yp000j4joi88pyfcuk",
+          1
+        ],
+        [
+          "cmmais3el000k4joil3ezu6xu",
+          1
+        ],
+        [
+          "cmmais3rf000l4joie6355b1x",
+          1
+        ]
+      ],
+      "sample_values": [
+        "cmmajjait0003jaoifbra8gy2",
+        "cmmais4tw000o4joibf62now7",
+        "cmmais57y000p4joi0j3lot9h",
+        "cmmais5kp000q4joi5q2xqmyj",
+        "cmmais60c000r4joirho6akjl",
+        "cmmais6d9000s4joiysqf0z5m",
+        "cmmais6q5000t4joi2zqb6xjo",
+        "cmmais72z000u4joivbu377og",
+        "cmmais7fr000v4joim2ekp8fi",
+        "cmmais7sm000w4joihqqtkpli"
+      ],
+      "notes": [
+        "primary-key"
+      ]
+    },
+    {
+      "name": "slug",
+      "declared_type": "varchar(255)",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 175,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 175,
+      "distinct_pct": 100.0,
+      "is_unique": true,
+      "is_low_cardinality": false,
+      "min_value": "100centerrd",
+      "max_value": "woollymammothshop",
+      "min_length": 6,
+      "max_length": 28,
+      "avg_length": 13.64,
+      "pattern_hints": [],
+      "distinct_values": [
+        "100centerrd",
+        "10railroadstreet",
+        "120riverst",
+        "135mainst",
+        "139pearlst",
+        "1513us2",
+        "158nmainst",
+        "174westst",
+        "180smainst",
+        "185churchstreet",
+        "187vt15",
+        "21essexwaysuite216",
+        "21metrowayunit8",
+        "2200wildbranchrd",
+        "24pleasantst",
+        "2653waterburystowerd",
+        "269mainstreetriverviewunit",
+        "2parkst",
+        "319swantonrd",
+        "31northvt",
+        "335grovest",
+        "36wmainst",
+        "3jscannabis",
+        "4267usroute5",
+        "440rockinghamrd",
+        "442woodstockrdste3a",
+        "44mainst",
+        "4542mainstreet",
+        "4merrillln102",
+        "50woodstockrd",
+        "65northgateavesuite6",
+        "7pineviewdr",
+        "8768vtrt30",
+        "87mainst",
+        "8vermonthighway17",
+        "97churchst",
+        "9thstatecannabis",
+        "bernlegacycannabis",
+        "bestbuds",
+        "bluesagevt",
+        "budbarnvt",
+        "budega",
+        "bwellvt",
+        "cambridgecannabiscompany",
+        "cannmaxx",
+        "capitalcannabisvt",
+        "castlecannabis",
+        "cleancountry",
+        "clearskyworcester",
+        "cloud9vt",
+        "craftcanabisco",
+        "craftsburycannabis",
+        "damesvt",
+        "demo-store-01",
+        "demo-store-02",
+        "demo-store-03",
+        "demo-store-04",
+        "demo-store-05",
+        "demo-store-06",
+        "demo-store-07",
+        "demo-store-08",
+        "demo-store-09",
+        "demo-store-10",
+        "demo-store-11",
+        "demo-store-12",
+        "demo-store-13",
+        "demo-store-14",
+        "demo-store-15",
+        "demo-store-16",
+        "demo-store-17",
+        "demo-store-18",
+        "demo-store-19",
+        "demo-store-20",
+        "demo-store-21",
+        "demo-store-22",
+        "demo-store-23",
+        "demo-store-24",
+        "demo-store-25",
+        "demo-store-26",
+        "demo-store-27",
+        "demo-store-28",
+        "demo-store-29",
+        "demo-store-30",
+        "depotshop",
+        "devilsdencannabis",
+        "domecity",
+        "downtorootsvt",
+        "emeraldrose",
+        "euphoriacannabis",
+        "fiveseasonscannabis",
+        "floatoncannabis",
+        "floravt",
+        "flowerfirst",
+        "forbinsfinest",
+        "freedomflowerllc",
+        "garciascannabis",
+        "gastonweedcompany",
+        "goodfirevt",
+        "gramcentral",
+        "greenhavenherbal",
+        "greenhousedispensary",
+        "greenleafcentral",
+        "greenmountaincannabisworks",
+        "greenmountaintherapeutics",
+        "greenpeakdispensary",
+        "greenunion",
+        "heybudcollective",
+        "highcountryvt",
+        "higherelevation",
+        "highsociety",
+        "idealcannabis",
+        "juanasgarden",
+        "juniperlane",
+        "killingtonmountaindispensary",
+        "kingdomboyz",
+        "kingdomkind",
+        "kushies",
+        "lakeeffectvt",
+        "littleamsterdam",
+        "littlecitygreen",
+        "lucky7",
+        "luckyyoucannabis",
+        "magicmann",
+        "maryjanejunction",
+        "maryjanemountain",
+        "matterhornapothecary",
+        "miltonremedies",
+        "montyvt",
+        "mothaplant",
+        "mountaingirlcannabis",
+        "newbedfordmassachusetts",
+        "ninnygoatandco",
+        "northeastkannabis",
+        "pinegroveorganicsorg",
+        "polestarvt",
+        "poultneycannabissupply",
+        "ratuscannabissupply",
+        "rimeline",
+        "rollingtwenties",
+        "royalbuds",
+        "silvertherapeutics",
+        "simpsonbrookdispensary",
+        "somethingwickedcannabis",
+        "somewhereonthemountain",
+        "stoneleafdispensary",
+        "sunkissedfarm",
+        "sweetspot",
+        "teahousevt",
+        "thebudstop",
+        "thecannabisshop",
+        "thedankcloset",
+        "thegasstation",
+        "thegreenman",
+        "theherbalcollectivevt",
+        "theherbcloset",
+        "thehiddengrove",
+        "thehighbar",
+        "theorywellness",
+        "tmmdispensary",
+        "true802cannabis",
+        "upstateelevatoroperators",
+        "valleymeade",
+        "verdiggityorganics",
+        "vermontalternative",
+        "vermontcannabiscafe",
+        "vermontraphouse",
+        "vermontterps",
+        "vtstrong",
+        "vtsundaydrive",
+        "vtterps",
+        "vveeds",
+        "wildlegacycannabis",
+        "winooskiorganics",
+        "winterlandhaze",
+        "woollymammothshop"
+      ],
+      "top_values": [
+        [
+          "bestbuds",
+          1
+        ],
+        [
+          "44mainst",
+          1
+        ],
+        [
+          "4542mainstreet",
+          1
+        ],
+        [
+          "4merrillln102",
+          1
+        ],
+        [
+          "50woodstockrd",
+          1
+        ],
+        [
+          "65northgateavesuite6",
+          1
+        ],
+        [
+          "7pineviewdr",
+          1
+        ],
+        [
+          "8768vtrt30",
+          1
+        ],
+        [
+          "87mainst",
+          1
+        ],
+        [
+          "8vermonthighway17",
+          1
+        ],
+        [
+          "97churchst",
+          1
+        ],
+        [
+          "9thstatecannabis",
+          1
+        ],
+        [
+          "bernlegacycannabis",
+          1
+        ],
+        [
+          "442woodstockrdste3a",
+          1
+        ],
+        [
+          "bluesagevt",
+          1
+        ],
+        [
+          "budbarnvt",
+          1
+        ],
+        [
+          "budega",
+          1
+        ],
+        [
+          "bwellvt",
+          1
+        ],
+        [
+          "cambridgecannabiscompany",
+          1
+        ],
+        [
+          "cannmaxx",
+          1
+        ],
+        [
+          "capitalcannabisvt",
+          1
+        ],
+        [
+          "castlecannabis",
+          1
+        ],
+        [
+          "cleancountry",
+          1
+        ],
+        [
+          "clearskyworcester",
+          1
+        ],
+        [
+          "cloud9vt",
+          1
+        ],
+        [
+          "woollymammothshop",
+          1
+        ],
+        [
+          "2200wildbranchrd",
+          1
+        ],
+        [
+          "10railroadstreet",
+          1
+        ],
+        [
+          "120riverst",
+          1
+        ],
+        [
+          "135mainst",
+          1
+        ],
+        [
+          "139pearlst",
+          1
+        ],
+        [
+          "1513us2",
+          1
+        ],
+        [
+          "158nmainst",
+          1
+        ],
+        [
+          "174westst",
+          1
+        ],
+        [
+          "180smainst",
+          1
+        ],
+        [
+          "185churchstreet",
+          1
+        ],
+        [
+          "187vt15",
+          1
+        ],
+        [
+          "21essexwaysuite216",
+          1
+        ],
+        [
+          "21metrowayunit8",
+          1
+        ],
+        [
+          "100centerrd",
+          1
+        ],
+        [
+          "24pleasantst",
+          1
+        ],
+        [
+          "2653waterburystowerd",
+          1
+        ],
+        [
+          "269mainstreetriverviewunit",
+          1
+        ],
+        [
+          "2parkst",
+          1
+        ],
+        [
+          "319swantonrd",
+          1
+        ],
+        [
+          "31northvt",
+          1
+        ],
+        [
+          "335grovest",
+          1
+        ],
+        [
+          "36wmainst",
+          1
+        ],
+        [
+          "3jscannabis",
+          1
+        ],
+        [
+          "4267usroute5",
+          1
+        ]
+      ],
+      "sample_values": [
+        "bestbuds",
+        "44mainst",
+        "4542mainstreet",
+        "4merrillln102",
+        "50woodstockrd",
+        "65northgateavesuite6",
+        "7pineviewdr",
+        "8768vtrt30",
+        "87mainst",
+        "8vermonthighway17"
+      ],
+      "notes": [
+        "indexed"
+      ]
+    },
+    {
+      "name": "name",
+      "declared_type": "varchar(255)",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 175,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 175,
+      "distinct_pct": 100.0,
+      "is_unique": true,
+      "is_low_cardinality": false,
+      "min_value": "10 Railroad Street",
+      "max_value": "Woollymammothshop",
+      "min_length": 6,
+      "max_length": 30,
+      "avg_length": 15.11,
+      "pattern_hints": [],
+      "distinct_values": [
+        "10 Railroad Street",
+        "100 Center Rd",
+        "120 River St",
+        "135 Main St.",
+        "139 Pearl St",
+        "1513 US-2",
+        "158 N Main St",
+        "174 West St",
+        "180 S Main St",
+        "185 Church Street",
+        "187 VT 15",
+        "2 Park St",
+        "21 Essex Way Suite 216",
+        "21 Metro Way Unit 8",
+        "2200 Wild Branch Rd,",
+        "24 Pleasant St",
+        "2653 Waterbury-Stowe Rd.",
+        "269 Main Street Riverview Unit",
+        "319 Swanton Rd",
+        "31Northvt",
+        "335 Grove St",
+        "36 W Main St",
+        "3Jscannabis",
+        "4 Merrill Ln #102",
+        "4267 U.S. Route 5",
+        "44 Main St",
+        "440 Rockingham Rd.",
+        "442 Woodstock Rd Ste 3A",
+        "4542 Main Street",
+        "50 Woodstock Rd",
+        "65 Northgate Ave Suite 6",
+        "7 Pine View Dr",
+        "8 Vermont Highway 17",
+        "87 Main St",
+        "8768 VT Rt 30",
+        "97 Church St",
+        "9thstatecannabis",
+        "Bernlegacycannabis",
+        "Bestbuds",
+        "Bluesagevt",
+        "Budbarnvt",
+        "Budega",
+        "Bwellvt",
+        "Cambridgecannabiscompany",
+        "cannmaxx",
+        "Capitalcannabisvt",
+        "Castlecannabis",
+        "Cleancountry",
+        "Clear Sky Worcester",
+        "Cloud9Vt",
+        "Craftcanabisco",
+        "Craftsburycannabis",
+        "Damesvt",
+        "Demo Dispensary 01",
+        "Demo Dispensary 02",
+        "Demo Dispensary 03",
+        "Demo Dispensary 04",
+        "Demo Dispensary 05",
+        "Demo Dispensary 06",
+        "Demo Dispensary 07",
+        "Demo Dispensary 08",
+        "Demo Dispensary 09",
+        "Demo Dispensary 10",
+        "Demo Dispensary 11",
+        "Demo Dispensary 12",
+        "Demo Dispensary 13",
+        "Demo Dispensary 14",
+        "Demo Dispensary 15",
+        "Demo Dispensary 16",
+        "Demo Dispensary 17",
+        "Demo Dispensary 18",
+        "Demo Dispensary 19",
+        "Demo Dispensary 20",
+        "Demo Dispensary 21",
+        "Demo Dispensary 22",
+        "Demo Dispensary 23",
+        "Demo Dispensary 24",
+        "Demo Dispensary 25",
+        "Demo Dispensary 26",
+        "Demo Dispensary 27",
+        "Demo Dispensary 28",
+        "Demo Dispensary 29",
+        "Demo Dispensary 30",
+        "Depotshop",
+        "devilsdencannabis",
+        "Domecity",
+        "Downtorootsvt",
+        "Emeraldrose",
+        "euphoriacannabis",
+        "Fiveseasonscannabis",
+        "Floatoncannabis",
+        "Floravt",
+        "Flowerfirst",
+        "Forbinsfinest",
+        "Freedomflower",
+        "Garciascannabis",
+        "Gasstationvt",
+        "Gastonweedcompany",
+        "Goodfirevt",
+        "Gramcentral",
+        "greenhavenherbal",
+        "Greenhousedispensary",
+        "Greenleaf-Central",
+        "Greenmountaincannabisworks",
+        "Greenmountaintherapeutics",
+        "Greenpeakdispensary",
+        "Greenunion",
+        "Heybudcollective",
+        "Highcountryvt",
+        "Higherelevation",
+        "Highsociety",
+        "Idealcannabis",
+        "Juanasgarden",
+        "Juniperlane",
+        "Killingtonmountaindispensary",
+        "Kingdom-Kind",
+        "Kingdomboyz",
+        "Kushies",
+        "Lakeeffectvt",
+        "littleamsterdam",
+        "Littlecitygreen",
+        "lucky7",
+        "Luckyyoucannabis",
+        "Magicmann",
+        "Maryjanejunction",
+        "Maryjanemountain",
+        "matterhornapothecary",
+        "Miltonremedies",
+        "Montyvt",
+        "Mothaplant",
+        "Mountaingirlcannabis",
+        "New Bedford Massachusetts",
+        "Ninnygoatandco",
+        "Northeastkannabis",
+        "Pinegroveorganics.Org",
+        "Polestarvt",
+        "Poultneycannabissupplyvt",
+        "Ratuscannabissupply",
+        "Rimeline",
+        "Rollingtwenties",
+        "Royalbuds",
+        "Silvertherapeutics",
+        "Simpsonbrookdispensary",
+        "Somethingwickedcannabis",
+        "Somewhereonthemountain",
+        "Stoneleafdispensary",
+        "Sunkissedfarm",
+        "Sweetspotfarms",
+        "Teahousevt",
+        "Thebudstop",
+        "Thecannabisshop",
+        "Thedankcloset",
+        "Thegreenman",
+        "Theherbalcollectivevt",
+        "Theherbcloset",
+        "Thehiddengrove",
+        "Thehighbar",
+        "Theorywellness",
+        "Tmmdispensary",
+        "True802Cannabis",
+        "Upstate-Elevatoroperators",
+        "Valleymeade",
+        "Verdiggityorganics",
+        "Vermontalternative",
+        "Vermontcannabiscafe",
+        "Vermontraphouse",
+        "Vermontterps",
+        "vtstrong",
+        "Vtsundaydrive",
+        "vtterps",
+        "Vveeds",
+        "Wildlegacy-Cannabis",
+        "Winooskiorganics",
+        "Winterlandhaze",
+        "Woollymammothshop"
+      ],
+      "top_values": [
+        [
+          "Cambridgecannabiscompany",
+          1
+        ],
+        [
+          "335 Grove St",
+          1
+        ],
+        [
+          "36 W Main St",
+          1
+        ],
+        [
+          "8768 VT Rt 30",
+          1
+        ],
+        [
+          "4 Merrill Ln #102",
+          1
+        ],
+        [
+          "180 S Main St",
+          1
+        ],
+        [
+          "269 Main Street Riverview Unit",
+          1
+        ],
+        [
+          "158 N Main St",
+          1
+        ],
+        [
+          "139 Pearl St",
+          1
+        ],
+        [
+          "50 Woodstock Rd",
+          1
+        ],
+        [
+          "8 Vermont Highway 17",
+          1
+        ],
+        [
+          "24 Pleasant St",
+          1
+        ],
+        [
+          "31Northvt",
+          1
+        ],
+        [
+          "97 Church St",
+          1
+        ],
+        [
+          "Domecity",
+          1
+        ],
+        [
+          "Forbinsfinest",
+          1
+        ],
+        [
+          "Freedomflower",
+          1
+        ],
+        [
+          "Greenmountaincannabisworks",
+          1
+        ],
+        [
+          "Garciascannabis",
+          1
+        ],
+        [
+          "Gramcentral",
+          1
+        ],
+        [
+          "Magicmann",
+          1
+        ],
+        [
+          "Mothaplant",
+          1
+        ],
+        [
+          "Mountaingirlcannabis",
+          1
+        ],
+        [
+          "Polestarvt",
+          1
+        ],
+        [
+          "Poultneycannabissupplyvt",
+          1
+        ],
+        [
+          "cannmaxx",
+          1
+        ],
+        [
+          "1513 US-2",
+          1
+        ],
+        [
+          "Clear Sky Worcester",
+          1
+        ],
+        [
+          "littleamsterdam",
+          1
+        ],
+        [
+          "2653 Waterbury-Stowe Rd.",
+          1
+        ],
+        [
+          "440 Rockingham Rd.",
+          1
+        ],
+        [
+          "135 Main St.",
+          1
+        ],
+        [
+          "10 Railroad Street",
+          1
+        ],
+        [
+          "185 Church Street",
+          1
+        ],
+        [
+          "44 Main St",
+          1
+        ],
+        [
+          "87 Main St",
+          1
+        ],
+        [
+          "442 Woodstock Rd Ste 3A",
+          1
+        ],
+        [
+          "2200 Wild Branch Rd,",
+          1
+        ],
+        [
+          "7 Pine View Dr",
+          1
+        ],
+        [
+          "New Bedford Massachusetts",
+          1
+        ],
+        [
+          "2 Park St",
+          1
+        ],
+        [
+          "21 Metro Way Unit 8",
+          1
+        ],
+        [
+          "187 VT 15",
+          1
+        ],
+        [
+          "100 Center Rd",
+          1
+        ],
+        [
+          "120 River St",
+          1
+        ],
+        [
+          "4542 Main Street",
+          1
+        ],
+        [
+          "65 Northgate Ave Suite 6",
+          1
+        ],
+        [
+          "4267 U.S. Route 5",
+          1
+        ],
+        [
+          "21 Essex Way Suite 216",
+          1
+        ],
+        [
+          "174 West St",
+          1
+        ]
+      ],
+      "sample_values": [
+        "Cambridgecannabiscompany",
+        "335 Grove St",
+        "36 W Main St",
+        "8768 VT Rt 30",
+        "4 Merrill Ln #102",
+        "180 S Main St",
+        "269 Main Street Riverview Unit",
+        "158 N Main St",
+        "139 Pearl St",
+        "50 Woodstock Rd"
+      ],
+      "notes": []
+    },
+    {
+      "name": "licenseNumber",
+      "declared_type": "varchar(255)",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 175,
+      "null_count": 111,
+      "null_pct": 63.43,
+      "distinct_count": 64,
+      "distinct_pct": 100.0,
+      "is_unique": true,
+      "is_low_cardinality": false,
+      "min_value": "31\u00b0 North Holdings LLC",
+      "max_value": "VherBio, LLC DBA Polestar",
+      "min_length": 5,
+      "max_length": 40,
+      "avg_length": 18.44,
+      "pattern_hints": [],
+      "distinct_values": [
+        "31\u00b0 North Holdings LLC",
+        "802 420 LLC",
+        "Bern Legacy Cannabis",
+        "Big Intelligence Group dba/Wild Legacy",
+        "Cambridge Cannabis Company",
+        "Capital Cannabis Company",
+        "Cloud 9 Cannabis Dispensary",
+        "Clover VT LLC, DBA Sunday Drive",
+        "Craftsbury Cannabis LLC",
+        "DEMO-LIC-0001",
+        "DEMO-LIC-0002",
+        "DEMO-LIC-0003",
+        "DEMO-LIC-0004",
+        "DEMO-LIC-0005",
+        "DEMO-LIC-0006",
+        "DEMO-LIC-0007",
+        "DEMO-LIC-0008",
+        "DEMO-LIC-0009",
+        "DEMO-LIC-0010",
+        "DEMO-LIC-0011",
+        "DEMO-LIC-0012",
+        "DEMO-LIC-0013",
+        "DEMO-LIC-0014",
+        "DEMO-LIC-0015",
+        "DEMO-LIC-0016",
+        "DEMO-LIC-0017",
+        "DEMO-LIC-0018",
+        "DEMO-LIC-0019",
+        "DEMO-LIC-0020",
+        "DEMO-LIC-0021",
+        "DEMO-LIC-0022",
+        "DEMO-LIC-0023",
+        "DEMO-LIC-0024",
+        "DEMO-LIC-0025",
+        "DEMO-LIC-0026",
+        "DEMO-LIC-0027",
+        "DEMO-LIC-0028",
+        "DEMO-LIC-0029",
+        "DEMO-LIC-0030",
+        "Down to the Roots",
+        "DP Holdings LLC DBA The Bud Stop",
+        "FLORA",
+        "Forbin's Reserve",
+        "Freedom Flower, LLC",
+        "Gaston Weed Company",
+        "Gram Central, LLC",
+        "Green Mountain Cannabis Works LLC",
+        "Higher Elevation, LLC",
+        "Kushies",
+        "Magic Mann",
+        "Mountain Girl Cannabis",
+        "New England Cannabis Partners, LLC",
+        "Palatino Ronci LLC",
+        "Pine Grove Organics",
+        "Ratu's Cannabis Supply, LLC",
+        "Rimeline Products LLC - dba Rimeline",
+        "Sawyer Dog Retail LLC",
+        "Sharp Family Farms d.b.a The Gas Station",
+        "Something Wicked Cannabis Company",
+        "Somewhere On The Mountain, LLC",
+        "Sweetspot Farms Dispensary",
+        "The Tea House, LLC",
+        "Valley Meade Dispensary",
+        "VherBio, LLC DBA Polestar"
+      ],
+      "top_values": [
+        [
+          "DEMO-LIC-0012",
+          1
+        ],
+        [
+          "Sawyer Dog Retail LLC",
+          1
+        ],
+        [
+          "Sharp Family Farms d.b.a The Gas Station",
+          1
+        ],
+        [
+          "Something Wicked Cannabis Company",
+          1
+        ],
+        [
+          "Somewhere On The Mountain, LLC",
+          1
+        ],
+        [
+          "Sweetspot Farms Dispensary",
+          1
+        ],
+        [
+          "The Tea House, LLC",
+          1
+        ],
+        [
+          "Valley Meade Dispensary",
+          1
+        ],
+        [
+          "VherBio, LLC DBA Polestar",
+          1
+        ],
+        [
+          "DEMO-LIC-0002",
+          1
+        ],
+        [
+          "DEMO-LIC-0008",
+          1
+        ],
+        [
+          "DEMO-LIC-0010",
+          1
+        ],
+        [
+          "DEMO-LIC-0020",
+          1
+        ],
+        [
+          "Rimeline Products LLC - dba Rimeline",
+          1
+        ],
+        [
+          "DEMO-LIC-0015",
+          1
+        ],
+        [
+          "DEMO-LIC-0025",
+          1
+        ],
+        [
+          "DEMO-LIC-0027",
+          1
+        ],
+        [
+          "DEMO-LIC-0019",
+          1
+        ],
+        [
+          "DEMO-LIC-0017",
+          1
+        ],
+        [
+          "DEMO-LIC-0029",
+          1
+        ],
+        [
+          "DEMO-LIC-0026",
+          1
+        ],
+        [
+          "DEMO-LIC-0023",
+          1
+        ],
+        [
+          "DEMO-LIC-0028",
+          1
+        ],
+        [
+          "DEMO-LIC-0011",
+          1
+        ],
+        [
+          "DEMO-LIC-0018",
+          1
+        ],
+        [
+          "DEMO-LIC-0001",
+          1
+        ],
+        [
+          "Freedom Flower, LLC",
+          1
+        ],
+        [
+          "802 420 LLC",
+          1
+        ],
+        [
+          "Bern Legacy Cannabis",
+          1
+        ],
+        [
+          "Big Intelligence Group dba/Wild Legacy",
+          1
+        ],
+        [
+          "Cambridge Cannabis Company",
+          1
+        ],
+        [
+          "Capital Cannabis Company",
+          1
+        ],
+        [
+          "Cloud 9 Cannabis Dispensary",
+          1
+        ],
+        [
+          "Clover VT LLC, DBA Sunday Drive",
+          1
+        ],
+        [
+          "Craftsbury Cannabis LLC",
+          1
+        ],
+        [
+          "Down to the Roots",
+          1
+        ],
+        [
+          "DP Holdings LLC DBA The Bud Stop",
+          1
+        ],
+        [
+          "FLORA",
+          1
+        ],
+        [
+          "Forbin's Reserve",
+          1
+        ],
+        [
+          "31\u00b0 North Holdings LLC",
+          1
+        ],
+        [
+          "Gaston Weed Company",
+          1
+        ],
+        [
+          "Gram Central, LLC",
+          1
+        ],
+        [
+          "Green Mountain Cannabis Works LLC",
+          1
+        ],
+        [
+          "Higher Elevation, LLC",
+          1
+        ],
+        [
+          "Kushies",
+          1
+        ],
+        [
+          "Magic Mann",
+          1
+        ],
+        [
+          "Mountain Girl Cannabis",
+          1
+        ],
+        [
+          "New England Cannabis Partners, LLC",
+          1
+        ],
+        [
+          "Palatino Ronci LLC",
+          1
+        ],
+        [
+          "Pine Grove Organics",
+          1
+        ]
+      ],
+      "sample_values": [
+        "DEMO-LIC-0012",
+        "Sawyer Dog Retail LLC",
+        "Sharp Family Farms d.b.a The Gas Station",
+        "Something Wicked Cannabis Company",
+        "Somewhere On The Mountain, LLC",
+        "Sweetspot Farms Dispensary",
+        "The Tea House, LLC",
+        "Valley Meade Dispensary",
+        "VherBio, LLC DBA Polestar",
+        "DEMO-LIC-0002"
+      ],
+      "notes": []
+    },
+    {
+      "name": "address",
+      "declared_type": "varchar(500)",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 175,
+      "null_count": 111,
+      "null_pct": 63.43,
+      "distinct_count": 59,
+      "distinct_pct": 92.19,
+      "is_unique": false,
+      "is_low_cardinality": false,
+      "min_value": "100 Demo Way",
+      "max_value": "Woodstock VT 05091",
+      "min_length": 12,
+      "max_length": 30,
+      "avg_length": 16.17,
+      "pattern_hints": [],
+      "distinct_values": [
+        "100 Demo Way",
+        "101 Demo Way",
+        "102 Demo Way",
+        "103 Demo Way",
+        "104 Demo Way",
+        "105 Demo Way",
+        "106 Demo Way",
+        "107 Demo Way",
+        "108 Demo Way",
+        "109 Demo Way",
+        "110 Demo Way",
+        "111 Demo Way",
+        "112 Demo Way",
+        "113 Demo Way",
+        "114 Demo Way",
+        "115 Demo Way",
+        "116 Demo Way",
+        "117 Demo Way",
+        "118 Demo Way",
+        "119 Demo Way",
+        "120 Demo Way",
+        "121 Demo Way",
+        "122 Demo Way",
+        "123 Demo Way",
+        "124 Demo Way",
+        "125 Demo Way",
+        "126 Demo Way",
+        "127 Demo Way",
+        "128 Demo Way",
+        "129 Demo Way",
+        "335 Grove St",
+        "Barre, VT 05641",
+        "Bethel, VT 05032",
+        "Burlington, Vermont 05401",
+        "Burlington, VT 05401",
+        "Cambridge, VT 05464",
+        "Chester, VT 05149",
+        "Craftsbury, VT 05826",
+        "Danville, VT 05828",
+        "Derby VT 05829",
+        "Essex Junction, VT 05452",
+        "Fair Haven, VT 05743",
+        "Manchester Center, VT 05255",
+        "Middlebury, VT 05753",
+        "Milton, VT 05468",
+        "Montpelier, VT 05602",
+        "Morrisville, VT 05661",
+        "Morrisville, VT 05662",
+        "Randolph, VT 05060",
+        "Rawsonville VT 05155",
+        "Rockingham, VT 05101",
+        "Rutland, VT 05470",
+        "Rutland, VT 05701",
+        "St. Albans City, VT 05478",
+        "Waitsfield, VT 05673",
+        "Waterbury, VT 05677",
+        "White River Junction, VT 05001",
+        "Wilmington, VT 05363",
+        "Woodstock VT 05091"
+      ],
+      "top_values": [
+        [
+          "Essex Junction, VT 05452",
+          3
+        ],
+        [
+          "Morrisville, VT 05661",
+          2
+        ],
+        [
+          "Montpelier, VT 05602",
+          2
+        ],
+        [
+          "Rutland, VT 05701",
+          2
+        ],
+        [
+          "Randolph, VT 05060",
+          1
+        ],
+        [
+          "Rutland, VT 05470",
+          1
+        ],
+        [
+          "101 Demo Way",
+          1
+        ],
+        [
+          "107 Demo Way",
+          1
+        ],
+        [
+          "109 Demo Way",
+          1
+        ],
+        [
+          "119 Demo Way",
+          1
+        ],
+        [
+          "111 Demo Way",
+          1
+        ],
+        [
+          "114 Demo Way",
+          1
+        ],
+        [
+          "124 Demo Way",
+          1
+        ],
+        [
+          "126 Demo Way",
+          1
+        ],
+        [
+          "118 Demo Way",
+          1
+        ],
+        [
+          "116 Demo Way",
+          1
+        ],
+        [
+          "128 Demo Way",
+          1
+        ],
+        [
+          "125 Demo Way",
+          1
+        ],
+        [
+          "122 Demo Way",
+          1
+        ],
+        [
+          "127 Demo Way",
+          1
+        ],
+        [
+          "110 Demo Way",
+          1
+        ],
+        [
+          "117 Demo Way",
+          1
+        ],
+        [
+          "102 Demo Way",
+          1
+        ],
+        [
+          "113 Demo Way",
+          1
+        ],
+        [
+          "108 Demo Way",
+          1
+        ],
+        [
+          "129 Demo Way",
+          1
+        ],
+        [
+          "103 Demo Way",
+          1
+        ],
+        [
+          "100 Demo Way",
+          1
+        ],
+        [
+          "Manchester Center, VT 05255",
+          1
+        ],
+        [
+          "Rockingham, VT 05101",
+          1
+        ],
+        [
+          "Burlington, Vermont 05401",
+          1
+        ],
+        [
+          "Cambridge, VT 05464",
+          1
+        ],
+        [
+          "Fair Haven, VT 05743",
+          1
+        ],
+        [
+          "Woodstock VT 05091",
+          1
+        ],
+        [
+          "Craftsbury, VT 05826",
+          1
+        ],
+        [
+          "Chester, VT 05149",
+          1
+        ],
+        [
+          "Danville, VT 05828",
+          1
+        ],
+        [
+          "Middlebury, VT 05753",
+          1
+        ],
+        [
+          "Barre, VT 05641",
+          1
+        ],
+        [
+          "Morrisville, VT 05662",
+          1
+        ],
+        [
+          "Waitsfield, VT 05673",
+          1
+        ],
+        [
+          "Derby VT 05829",
+          1
+        ],
+        [
+          "St. Albans City, VT 05478",
+          1
+        ],
+        [
+          "Burlington, VT 05401",
+          1
+        ],
+        [
+          "335 Grove St",
+          1
+        ],
+        [
+          "Wilmington, VT 05363",
+          1
+        ],
+        [
+          "Rawsonville VT 05155",
+          1
+        ],
+        [
+          "Milton, VT 05468",
+          1
+        ],
+        [
+          "Bethel, VT 05032",
+          1
+        ],
+        [
+          "Waterbury, VT 05677",
+          1
+        ]
+      ],
+      "sample_values": [
+        "Essex Junction, VT 05452",
+        "Morrisville, VT 05661",
+        "Montpelier, VT 05602",
+        "Rutland, VT 05701",
+        "Randolph, VT 05060",
+        "Rutland, VT 05470",
+        "101 Demo Way",
+        "107 Demo Way",
+        "109 Demo Way",
+        "119 Demo Way"
+      ],
+      "notes": []
+    },
+    {
+      "name": "city",
+      "declared_type": "varchar(255)",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 175,
+      "null_count": 116,
+      "null_pct": 66.29,
+      "distinct_count": 34,
+      "distinct_pct": 57.63,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "(802) 262-1701",
+      "max_value": "Worcester",
+      "min_length": 5,
+      "max_length": 14,
+      "avg_length": 10.76,
+      "pattern_hints": [],
+      "distinct_values": [
+        "(802) 262-1701",
+        "(802) 332-6043",
+        "(802) 353-8731",
+        "(802) 464-1390",
+        "(802) 622-0359",
+        "(802) 871-5810",
+        "(802) 989-1163",
+        "(802)851-8587",
+        "603-548-9059",
+        "781-281-0677",
+        "802-279-2244",
+        "802-289-1869",
+        "802-297-2847",
+        "802-309-1693",
+        "802-323-8197",
+        "802-367-3562",
+        "802-417-7774",
+        "802-428-6703",
+        "802-560-7927",
+        "802-565-5168",
+        "802-579-6831",
+        "802-595-1299",
+        "802-683-0189",
+        "802-793-9858",
+        "802-851-8735",
+        "816-547-6831",
+        "845-764-0081",
+        "Brattleboro",
+        "Burlington",
+        "Manchester",
+        "Montpelier",
+        "New Bedford",
+        "Stowe",
+        "Worcester"
+      ],
+      "top_values": [
+        [
+          "Brattleboro",
+          6
+        ],
+        [
+          "Stowe",
+          6
+        ],
+        [
+          "Manchester",
+          6
+        ],
+        [
+          "Montpelier",
+          6
+        ],
+        [
+          "Burlington",
+          6
+        ],
+        [
+          "802-309-1693",
+          1
+        ],
+        [
+          "(802) 871-5810",
+          1
+        ],
+        [
+          "781-281-0677",
+          1
+        ],
+        [
+          "816-547-6831",
+          1
+        ],
+        [
+          "(802) 464-1390",
+          1
+        ],
+        [
+          "802-297-2847",
+          1
+        ],
+        [
+          "(802) 353-8731",
+          1
+        ],
+        [
+          "802-417-7774",
+          1
+        ],
+        [
+          "845-764-0081",
+          1
+        ],
+        [
+          "(802) 332-6043",
+          1
+        ],
+        [
+          "802-279-2244",
+          1
+        ],
+        [
+          "802-565-5168",
+          1
+        ],
+        [
+          "(802) 989-1163",
+          1
+        ],
+        [
+          "Worcester",
+          1
+        ],
+        [
+          "802-560-7927",
+          1
+        ],
+        [
+          "802-428-6703",
+          1
+        ],
+        [
+          "603-548-9059",
+          1
+        ],
+        [
+          "802-851-8735",
+          1
+        ],
+        [
+          "802-793-9858",
+          1
+        ],
+        [
+          "802-683-0189",
+          1
+        ],
+        [
+          "802-579-6831",
+          1
+        ],
+        [
+          "New Bedford",
+          1
+        ],
+        [
+          "(802) 622-0359",
+          1
+        ],
+        [
+          "802-595-1299",
+          1
+        ],
+        [
+          "802-289-1869",
+          1
+        ],
+        [
+          "(802) 262-1701",
+          1
+        ],
+        [
+          "802-367-3562",
+          1
+        ],
+        [
+          "(802)851-8587",
+          1
+        ],
+        [
+          "802-323-8197",
+          1
+        ]
+      ],
+      "sample_values": [
+        "Brattleboro",
+        "Stowe",
+        "Manchester",
+        "Montpelier",
+        "Burlington",
+        "802-309-1693",
+        "(802) 871-5810",
+        "781-281-0677",
+        "816-547-6831",
+        "(802) 464-1390"
+      ],
+      "notes": []
+    },
+    {
+      "name": "phone",
+      "declared_type": "varchar(100)",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 175,
+      "null_count": 111,
+      "null_pct": 63.43,
+      "distinct_count": 64,
+      "distinct_pct": 100.0,
+      "is_unique": true,
+      "is_low_cardinality": false,
+      "min_value": "(555) 555-1000",
+      "max_value": "Wilson Knight",
+      "min_length": 3,
+      "max_length": 20,
+      "avg_length": 13.19,
+      "pattern_hints": [],
+      "distinct_values": [
+        "(555) 555-1000",
+        "(555) 555-1001",
+        "(555) 555-1002",
+        "(555) 555-1003",
+        "(555) 555-1004",
+        "(555) 555-1005",
+        "(555) 555-1006",
+        "(555) 555-1007",
+        "(555) 555-1008",
+        "(555) 555-1009",
+        "(555) 555-1010",
+        "(555) 555-1011",
+        "(555) 555-1012",
+        "(555) 555-1013",
+        "(555) 555-1014",
+        "(555) 555-1015",
+        "(555) 555-1016",
+        "(555) 555-1017",
+        "(555) 555-1018",
+        "(555) 555-1019",
+        "(555) 555-1020",
+        "(555) 555-1021",
+        "(555) 555-1022",
+        "(555) 555-1023",
+        "(555) 555-1024",
+        "(555) 555-1025",
+        "(555) 555-1026",
+        "(555) 555-1027",
+        "(555) 555-1028",
+        "(555) 555-1029",
+        "Adam Blanchard",
+        "Andrea Cheney",
+        "Ashley Sorrentino",
+        "Avery Cheney",
+        "Ben",
+        "Brandon Marshall",
+        "Buying Team",
+        "Christian Pozcubut",
+        "Christopher Chabot",
+        "Cole",
+        "Devin Clark",
+        "Dora Palmieri",
+        "Dove Sharp",
+        "Dusty Kenney",
+        "Ebo Singleton",
+        "Jeff White",
+        "Jennifer Betit-Engel",
+        "Joe Ruggiero",
+        "Josh MacDuff",
+        "Keith LaPlante",
+        "Lisa Merriman",
+        "Michael Sims",
+        "Parker Rice",
+        "Patricia James",
+        "Raeven Petell",
+        "Robert Ronci",
+        "Ronnie Kreth",
+        "Sarah Lefkowitz",
+        "Scott Blair",
+        "Shannon",
+        "Shannon Morrill",
+        "Shawn Furbish",
+        "Uday Smith",
+        "Wilson Knight"
+      ],
+      "top_values": [
+        [
+          "(555) 555-1011",
+          1
+        ],
+        [
+          "Uday Smith",
+          1
+        ],
+        [
+          "Dove Sharp",
+          1
+        ],
+        [
+          "Shannon Morrill",
+          1
+        ],
+        [
+          "Ronnie Kreth",
+          1
+        ],
+        [
+          "Keith LaPlante",
+          1
+        ],
+        [
+          "Shawn Furbish",
+          1
+        ],
+        [
+          "Andrea Cheney",
+          1
+        ],
+        [
+          "Adam Blanchard",
+          1
+        ],
+        [
+          "(555) 555-1001",
+          1
+        ],
+        [
+          "(555) 555-1007",
+          1
+        ],
+        [
+          "(555) 555-1009",
+          1
+        ],
+        [
+          "(555) 555-1019",
+          1
+        ],
+        [
+          "Parker Rice",
+          1
+        ],
+        [
+          "(555) 555-1014",
+          1
+        ],
+        [
+          "(555) 555-1024",
+          1
+        ],
+        [
+          "(555) 555-1026",
+          1
+        ],
+        [
+          "(555) 555-1018",
+          1
+        ],
+        [
+          "(555) 555-1016",
+          1
+        ],
+        [
+          "(555) 555-1028",
+          1
+        ],
+        [
+          "(555) 555-1025",
+          1
+        ],
+        [
+          "(555) 555-1022",
+          1
+        ],
+        [
+          "(555) 555-1027",
+          1
+        ],
+        [
+          "(555) 555-1010",
+          1
+        ],
+        [
+          "(555) 555-1017",
+          1
+        ],
+        [
+          "(555) 555-1000",
+          1
+        ],
+        [
+          "Christopher Chabot",
+          1
+        ],
+        [
+          "Joe Ruggiero",
+          1
+        ],
+        [
+          "Jeff White",
+          1
+        ],
+        [
+          "Cole",
+          1
+        ],
+        [
+          "Dusty Kenney",
+          1
+        ],
+        [
+          "Wilson Knight",
+          1
+        ],
+        [
+          "Christian Pozcubut",
+          1
+        ],
+        [
+          "Patricia James",
+          1
+        ],
+        [
+          "Shannon",
+          1
+        ],
+        [
+          "Scott Blair",
+          1
+        ],
+        [
+          "Dora Palmieri",
+          1
+        ],
+        [
+          "Michael Sims",
+          1
+        ],
+        [
+          "Brandon Marshall",
+          1
+        ],
+        [
+          "Ben",
+          1
+        ],
+        [
+          "Ebo Singleton",
+          1
+        ],
+        [
+          "Avery Cheney",
+          1
+        ],
+        [
+          "Lisa Merriman",
+          1
+        ],
+        [
+          "Buying Team",
+          1
+        ],
+        [
+          "Raeven Petell",
+          1
+        ],
+        [
+          "Sarah Lefkowitz",
+          1
+        ],
+        [
+          "Josh MacDuff",
+          1
+        ],
+        [
+          "Ashley Sorrentino",
+          1
+        ],
+        [
+          "Robert Ronci",
+          1
+        ],
+        [
+          "Devin Clark",
+          1
+        ]
+      ],
+      "sample_values": [
+        "(555) 555-1011",
+        "Uday Smith",
+        "Dove Sharp",
+        "Shannon Morrill",
+        "Ronnie Kreth",
+        "Keith LaPlante",
+        "Shawn Furbish",
+        "Andrea Cheney",
+        "Adam Blanchard",
+        "(555) 555-1001"
+      ],
+      "notes": []
+    },
+    {
+      "name": "contactName",
+      "declared_type": "varchar(255)",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 175,
+      "null_count": 145,
+      "null_pct": 82.86,
+      "distinct_count": 30,
+      "distinct_pct": 100.0,
+      "is_unique": true,
+      "is_low_cardinality": true,
+      "min_value": "Demo Contact 01",
+      "max_value": "Demo Contact 30",
+      "min_length": 15,
+      "max_length": 15,
+      "avg_length": 15.0,
+      "pattern_hints": [],
+      "distinct_values": [
+        "Demo Contact 01",
+        "Demo Contact 02",
+        "Demo Contact 03",
+        "Demo Contact 04",
+        "Demo Contact 05",
+        "Demo Contact 06",
+        "Demo Contact 07",
+        "Demo Contact 08",
+        "Demo Contact 09",
+        "Demo Contact 10",
+        "Demo Contact 11",
+        "Demo Contact 12",
+        "Demo Contact 13",
+        "Demo Contact 14",
+        "Demo Contact 15",
+        "Demo Contact 16",
+        "Demo Contact 17",
+        "Demo Contact 18",
+        "Demo Contact 19",
+        "Demo Contact 20",
+        "Demo Contact 21",
+        "Demo Contact 22",
+        "Demo Contact 23",
+        "Demo Contact 24",
+        "Demo Contact 25",
+        "Demo Contact 26",
+        "Demo Contact 27",
+        "Demo Contact 28",
+        "Demo Contact 29",
+        "Demo Contact 30"
+      ],
+      "top_values": [
+        [
+          "Demo Contact 18",
+          1
+        ],
+        [
+          "Demo Contact 01",
+          1
+        ],
+        [
+          "Demo Contact 13",
+          1
+        ],
+        [
+          "Demo Contact 24",
+          1
+        ],
+        [
+          "Demo Contact 22",
+          1
+        ],
+        [
+          "Demo Contact 06",
+          1
+        ],
+        [
+          "Demo Contact 16",
+          1
+        ],
+        [
+          "Demo Contact 05",
+          1
+        ],
+        [
+          "Demo Contact 21",
+          1
+        ],
+        [
+          "Demo Contact 07",
+          1
+        ],
+        [
+          "Demo Contact 04",
+          1
+        ],
+        [
+          "Demo Contact 30",
+          1
+        ],
+        [
+          "Demo Contact 09",
+          1
+        ],
+        [
+          "Demo Contact 14",
+          1
+        ],
+        [
+          "Demo Contact 03",
+          1
+        ],
+        [
+          "Demo Contact 02",
+          1
+        ],
+        [
+          "Demo Contact 11",
+          1
+        ],
+        [
+          "Demo Contact 28",
+          1
+        ],
+        [
+          "Demo Contact 23",
+          1
+        ],
+        [
+          "Demo Contact 26",
+          1
+        ],
+        [
+          "Demo Contact 29",
+          1
+        ],
+        [
+          "Demo Contact 17",
+          1
+        ],
+        [
+          "Demo Contact 19",
+          1
+        ],
+        [
+          "Demo Contact 27",
+          1
+        ],
+        [
+          "Demo Contact 25",
+          1
+        ],
+        [
+          "Demo Contact 15",
+          1
+        ],
+        [
+          "Demo Contact 12",
+          1
+        ],
+        [
+          "Demo Contact 20",
+          1
+        ],
+        [
+          "Demo Contact 10",
+          1
+        ],
+        [
+          "Demo Contact 08",
+          1
+        ]
+      ],
+      "sample_values": [
+        "Demo Contact 18",
+        "Demo Contact 01",
+        "Demo Contact 13",
+        "Demo Contact 24",
+        "Demo Contact 22",
+        "Demo Contact 06",
+        "Demo Contact 16",
+        "Demo Contact 05",
+        "Demo Contact 21",
+        "Demo Contact 07"
+      ],
+      "notes": []
+    },
+    {
+      "name": "isPartner",
+      "declared_type": "tinyint(1)",
+      "inferred_kind": "integer",
+      "nullable": false,
+      "total_rows": 175,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "distinct_pct": 1.14,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": 0,
+      "max_value": 1,
+      "min_length": 1,
+      "max_length": 1,
+      "avg_length": 1.0,
+      "pattern_hints": [
+        "boolean-token",
+        "integer-as-text"
+      ],
+      "distinct_values": [
+        0,
+        1
+      ],
+      "top_values": [
+        [
+          0,
+          123
+        ],
+        [
+          1,
+          52
+        ]
+      ],
+      "sample_values": [
+        0,
+        1
+      ],
+      "notes": [
+        "indexed"
+      ]
+    },
+    {
+      "name": "tier",
+      "declared_type": "varchar(10)",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 175,
+      "null_count": 175,
+      "null_pct": 100.0,
+      "distinct_count": 0,
+      "distinct_pct": 0.0,
+      "is_unique": false,
+      "is_low_cardinality": false,
+      "min_value": null,
+      "max_value": null,
+      "min_length": null,
+      "max_length": null,
+      "avg_length": null,
+      "pattern_hints": [],
+      "distinct_values": null,
+      "top_values": [],
+      "sample_values": [],
+      "notes": []
+    },
+    {
+      "name": "createdAt",
+      "declared_type": "datetime",
+      "inferred_kind": "datetime",
+      "nullable": false,
+      "total_rows": 175,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 44,
+      "distinct_pct": 25.14,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "2026-03-03T11:23:35",
+      "max_value": "2026-06-04T11:09:59",
+      "min_length": 19,
+      "max_length": 19,
+      "avg_length": 19.0,
+      "pattern_hints": [
+        "datetime-string"
+      ],
+      "distinct_values": [
+        "2026-03-03T11:23:35",
+        "2026-03-03T11:23:38",
+        "2026-03-03T11:23:39",
+        "2026-03-03T11:23:40",
+        "2026-03-03T11:23:41",
+        "2026-03-03T11:23:42",
+        "2026-03-03T11:23:43",
+        "2026-03-03T11:23:44",
+        "2026-03-03T11:23:45",
+        "2026-03-03T11:23:46",
+        "2026-03-03T11:23:47",
+        "2026-03-03T11:23:48",
+        "2026-03-03T11:23:49",
+        "2026-03-03T11:23:50",
+        "2026-03-03T11:23:51",
+        "2026-03-03T11:23:52",
+        "2026-03-03T11:23:53",
+        "2026-03-03T11:23:54",
+        "2026-03-03T11:44:55",
+        "2026-03-03T11:44:56",
+        "2026-03-03T11:44:59",
+        "2026-03-03T11:45:01",
+        "2026-03-03T11:45:03",
+        "2026-03-03T11:45:05",
+        "2026-03-03T11:45:06",
+        "2026-03-03T11:45:11",
+        "2026-03-03T11:45:14",
+        "2026-03-03T11:45:16",
+        "2026-03-03T11:45:18",
+        "2026-03-03T11:45:21",
+        "2026-03-03T11:45:32",
+        "2026-03-03T11:45:34",
+        "2026-03-03T11:45:35",
+        "2026-03-03T11:45:38",
+        "2026-03-03T12:06:49",
+        "2026-03-03T12:06:54",
+        "2026-03-03T12:06:57",
+        "2026-03-03T12:18:24",
+        "2026-03-03T15:12:03",
+        "2026-03-03T15:12:50",
+        "2026-03-03T15:13:14",
+        "2026-03-03T15:13:32",
+        "2026-05-19T09:14:06",
+        "2026-06-04T11:09:59"
+      ],
+      "top_values": [
+        [
+          "2026-03-03T12:18:24",
+          80
+        ],
+        [
+          "2026-06-04T11:09:59",
+          30
+        ],
+        [
+          "2026-03-03T15:12:50",
+          4
+        ],
+        [
+          "2026-03-03T15:13:32",
+          3
+        ],
+        [
+          "2026-03-03T11:23:51",
+          3
+        ],
+        [
+          "2026-03-03T11:23:49",
+          3
+        ],
+        [
+          "2026-03-03T15:13:14",
+          2
+        ],
+        [
+          "2026-03-03T11:23:53",
+          2
+        ],
+        [
+          "2026-03-03T11:23:52",
+          2
+        ],
+        [
+          "2026-03-03T11:23:48",
+          2
+        ],
+        [
+          "2026-03-03T11:23:47",
+          2
+        ],
+        [
+          "2026-03-03T11:23:45",
+          2
+        ],
+        [
+          "2026-05-19T09:14:06",
+          2
+        ],
+        [
+          "2026-03-03T11:23:38",
+          2
+        ],
+        [
+          "2026-03-03T11:23:39",
+          2
+        ],
+        [
+          "2026-03-03T11:23:40",
+          2
+        ],
+        [
+          "2026-03-03T11:23:41",
+          2
+        ],
+        [
+          "2026-03-03T11:23:42",
+          2
+        ],
+        [
+          "2026-03-03T11:23:43",
+          2
+        ],
+        [
+          "2026-03-03T11:23:46",
+          2
+        ],
+        [
+          "2026-03-03T15:12:03",
+          1
+        ],
+        [
+          "2026-03-03T12:06:57",
+          1
+        ],
+        [
+          "2026-03-03T12:06:54",
+          1
+        ],
+        [
+          "2026-03-03T12:06:49",
+          1
+        ],
+        [
+          "2026-03-03T11:45:38",
+          1
+        ],
+        [
+          "2026-03-03T11:45:35",
+          1
+        ],
+        [
+          "2026-03-03T11:45:34",
+          1
+        ],
+        [
+          "2026-03-03T11:45:32",
+          1
+        ],
+        [
+          "2026-03-03T11:45:21",
+          1
+        ],
+        [
+          "2026-03-03T11:45:18",
+          1
+        ],
+        [
+          "2026-03-03T11:45:16",
+          1
+        ],
+        [
+          "2026-03-03T11:45:14",
+          1
+        ],
+        [
+          "2026-03-03T11:45:11",
+          1
+        ],
+        [
+          "2026-03-03T11:45:06",
+          1
+        ],
+        [
+          "2026-03-03T11:45:05",
+          1
+        ],
+        [
+          "2026-03-03T11:45:03",
+          1
+        ],
+        [
+          "2026-03-03T11:45:01",
+          1
+        ],
+        [
+          "2026-03-03T11:44:59",
+          1
+        ],
+        [
+          "2026-03-03T11:44:56",
+          1
+        ],
+        [
+          "2026-03-03T11:44:55",
+          1
+        ],
+        [
+          "2026-03-03T11:23:54",
+          1
+        ],
+        [
+          "2026-03-03T11:23:50",
+          1
+        ],
+        [
+          "2026-03-03T11:23:44",
+          1
+        ],
+        [
+          "2026-03-03T11:23:35",
+          1
+        ]
+      ],
+      "sample_values": [
+        "2026-03-03T12:18:24",
+        "2026-06-04T11:09:59",
+        "2026-03-03T15:12:50",
+        "2026-03-03T15:13:32",
+        "2026-03-03T11:23:51",
+        "2026-03-03T11:23:49",
+        "2026-03-03T15:13:14",
+        "2026-03-03T11:23:53",
+        "2026-03-03T11:23:52",
+        "2026-03-03T11:23:48"
+      ],
+      "notes": []
+    },
+    {
+      "name": "updatedAt",
+      "declared_type": "datetime",
+      "inferred_kind": "datetime",
+      "nullable": false,
+      "total_rows": 175,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 9,
+      "distinct_pct": 5.14,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "2026-05-12T11:58:50",
+      "max_value": "2026-06-04T11:09:59",
+      "min_length": 19,
+      "max_length": 19,
+      "avg_length": 19.0,
+      "pattern_hints": [
+        "datetime-string"
+      ],
+      "distinct_values": [
+        "2026-05-12T11:58:50",
+        "2026-05-19T11:24:13",
+        "2026-05-19T11:24:35",
+        "2026-05-19T11:24:53",
+        "2026-05-19T11:25:05",
+        "2026-05-19T11:25:27",
+        "2026-05-19T11:32:07",
+        "2026-05-30T10:25:32",
+        "2026-06-04T11:09:59"
+      ],
+      "top_values": [
+        [
+          "2026-05-12T11:58:50",
+          137
+        ],
+        [
+          "2026-06-04T11:09:59",
+          30
+        ],
+        [
+          "2026-05-30T10:25:32",
+          2
+        ],
+        [
+          "2026-05-19T11:32:07",
+          1
+        ],
+        [
+          "2026-05-19T11:25:27",
+          1
+        ],
+        [
+          "2026-05-19T11:24:13",
+          1
+        ],
+        [
+          "2026-05-19T11:24:53",
+          1
+        ],
+        [
+          "2026-05-19T11:24:35",
+          1
+        ],
+        [
+          "2026-05-19T11:25:05",
+          1
+        ]
+      ],
+      "sample_values": [
+        "2026-05-12T11:58:50",
+        "2026-06-04T11:09:59",
+        "2026-05-30T10:25:32",
+        "2026-05-19T11:32:07",
+        "2026-05-19T11:25:27",
+        "2026-05-19T11:24:13",
+        "2026-05-19T11:24:53",
+        "2026-05-19T11:24:35",
+        "2026-05-19T11:25:05"
+      ],
+      "notes": []
+    },
+    {
+      "name": "tenantid",
+      "declared_type": "int",
+      "inferred_kind": "integer",
+      "nullable": false,
+      "total_rows": 175,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 3,
+      "distinct_pct": 1.71,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": 1,
+      "max_value": 99,
+      "min_length": 1,
+      "max_length": 2,
+      "avg_length": 1.17,
+      "pattern_hints": [
+        "integer-as-text"
+      ],
+      "distinct_values": [
+        1,
+        3,
+        99
+      ],
+      "top_values": [
+        [
+          1,
+          143
+        ],
+        [
+          99,
+          30
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "sample_values": [
+        1,
+        99,
+        3
+      ],
+      "notes": []
+    },
+    {
+      "name": "brand_id",
+      "declared_type": "varchar(36)",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 175,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 3,
+      "distinct_pct": 1.71,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "a5bb33e7-5365-11f1-bc3a-7e0f98092871",
+      "max_value": "cmmakqdsn0037qsoig4b4yo9t",
+      "min_length": 25,
+      "max_length": 36,
+      "avg_length": 27.01,
+      "pattern_hints": [
+        "uuid"
+      ],
+      "distinct_values": [
+        "a5bb33e7-5365-11f1-bc3a-7e0f98092871",
+        "ca323241-ef74-425f-aa67-239247ccd0e9",
+        "cmmakqdsn0037qsoig4b4yo9t"
+      ],
+      "top_values": [
+        [
+          "cmmakqdsn0037qsoig4b4yo9t",
+          143
+        ],
+        [
+          "ca323241-ef74-425f-aa67-239247ccd0e9",
+          30
+        ],
+        [
+          "a5bb33e7-5365-11f1-bc3a-7e0f98092871",
+          2
+        ]
+      ],
+      "sample_values": [
+        "cmmakqdsn0037qsoig4b4yo9t",
+        "ca323241-ef74-425f-aa67-239247ccd0e9",
+        "a5bb33e7-5365-11f1-bc3a-7e0f98092871"
+      ],
+      "notes": []
+    }
+  ],
+  "sample_rows": [
+    {
+      "id": "16188dfd-5363-11f1-bc3a-7e0f98092871",
+      "slug": "newbedfordmassachusetts",
+      "name": "New Bedford Massachusetts",
+      "licensenumber": null,
+      "address": null,
+      "city": "New Bedford",
+      "phone": null,
+      "contactname": null,
+      "ispartner": 1,
+      "tier": null,
+      "createdat": "2026-05-19T09:14:06",
+      "updatedat": "2026-05-30T10:25:32",
+      "tenantid": 3,
+      "brand_id": "a5bb33e7-5365-11f1-bc3a-7e0f98092871"
+    },
+    {
+      "id": "16189cf4-5363-11f1-bc3a-7e0f98092871",
+      "slug": "clearskyworcester",
+      "name": "Clear Sky Worcester",
+      "licensenumber": null,
+      "address": null,
+      "city": "Worcester",
+      "phone": null,
+      "contactname": null,
+      "ispartner": 1,
+      "tier": null,
+      "createdat": "2026-05-19T09:14:06",
+      "updatedat": "2026-05-30T10:25:32",
+      "tenantid": 3,
+      "brand_id": "a5bb33e7-5365-11f1-bc3a-7e0f98092871"
+    },
+    {
+      "id": "ais70qd1trmmaqzk3v",
+      "slug": "littleamsterdam",
+      "name": "littleamsterdam",
+      "licensenumber": null,
+      "address": null,
+      "city": null,
+      "phone": null,
+      "contactname": null,
+      "ispartner": 0,
+      "tier": null,
+      "createdat": "2026-03-03T15:13:32",
+      "updatedat": "2026-05-12T11:58:50",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    },
+    {
+      "id": "cmmairubn00004joiaf2uaesn",
+      "slug": "2653waterburystowerd",
+      "name": "2653 Waterbury-Stowe Rd.",
+      "licensenumber": "31\u00b0 North Holdings LLC",
+      "address": "Waterbury, VT 05677",
+      "city": "802-560-7927",
+      "phone": "Ben",
+      "contactname": null,
+      "ispartner": 0,
+      "tier": null,
+      "createdat": "2026-03-03T11:23:35",
+      "updatedat": "2026-05-12T11:58:50",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    },
+    {
+      "id": "cmmairw9500014joi5rx66iqm",
+      "slug": "440rockinghamrd",
+      "name": "440 Rockingham Rd.",
+      "licensenumber": "802 420 LLC",
+      "address": "Rockingham, VT 05101",
+      "city": "802-428-6703",
+      "phone": "Joe Ruggiero",
+      "contactname": null,
+      "ispartner": 0,
+      "tier": null,
+      "createdat": "2026-03-03T11:23:38",
+      "updatedat": "2026-05-12T11:58:50",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    }
+  ],
+  "notes": []
+}

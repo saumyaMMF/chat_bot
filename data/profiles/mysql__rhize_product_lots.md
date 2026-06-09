@@ -1,0 +1,152 @@
+# `rhize_product_lots` (mysql)
+
+- **Schema:** —
+- **Rows:** 256
+- **Columns:** 14
+- **Primary key:** `id`
+- **Indexes:** `idx_internalLotId`(N: internalLotId), `idx_lotNumber`(N: lotNumber), `idx_strain`(N: strain), `PRIMARY`(U: id), `uq_lot_tenant`(U: lotNumber,tenantid)
+
+## Columns
+
+### `id` — text
+
+- **Declared type:** `varchar(36)`
+- **Nullable:** False · **Null %:** 0.0%
+- **Rows:** 256 · **Distinct:** 256 (100.0% of non-null)
+- **Flags:** UNIQUE-LIKE, PRIMARY-KEY
+- **Range:** min=`cmmaje8oo01i8zpoidqu4jcx2` · max=`demo_lt_fee0b6306fa2e12`
+- **Length:** min=23 · max=25 · avg=24.0
+- **All distinct values (256):** `cmmaje8oo01i8zpoidqu4jcx2`, `cmmaje8wn01i9zpoiell7jkr9`, `cmmaje94k01iazpoidwqxwo1z`, `cmmaje9cg01ibzpoiqaxtatf7`, `cmmaje9kd01iczpoi1046b0c1`, `cmmaje9sd01idzpoidruauyed`, `cmmajea2001iezpoiu4x8s1d7`, `cmmajeaa201ifzpoighgv4hob`, `cmmajeaj401igzpoia1d1jtu2`, `cmmajeaqz01ihzpoiez4ysefc`, `cmmajeb0601iizpoiaoijm0uh`, `cmmajeb8o01ijzpoil16eg48i`, `cmmajebgn01ikzpoinb6r6r6a`, `cmmajebom01ilzpoiihgyx6kf`, `cmmajebwj01imzpoi8cpwy4c2`, `cmmajec4i01inzpoiymh174d5`, `cmmajecee01iozpoiobso7krz`, `cmmajecme01ipzpoiup6g0gzv`, `cmmajecv101iqzpoi97b74lnc`, `cmmajed2y01irzpoi26k3m0zl`, `cmmajedau01iszpoiftktw4xt`, `cmmajedir01itzpoivd8c7ssy`, `cmmajedqp01iuzpoinqodfu68`, `cmmajedyn01ivzpoie71wcorz`, `cmmajee6k01iwzpoi8f3z9ej1`, `cmmajeeeg01ixzpoiw9usi7z4`, `cmmajeen101iyzpoi6nbs53hz`, `cmmajeev101izzpoio40tb83m`, `cmmajef4401j0zpoi4hc75i5q`, `cmmajefcn01j1zpoi7k2e2jpq`, `cmmajefl601j2zpoi02ridm8c`, `cmmajeft601j3zpoipa2v7d8h`, `cmmajeg2801j4zpoimfd3sp0b`, `cmmajegas01j5zpoi08919p1r`, `cmmajegjb01j6zpoiyacjazxg`, `cmmajegrv01j7zpoid9zi1hsp`, `cmmajeh0d01j8zpoihiq4pb2q`, `cmmajeh8x01j9zpoiwv4q8tj3`, `cmmajehgu01jazpoii1gox11z`, `cmmajehq001jbzpoib91hol2s`, `cmmajehyi01jczpoisn7kg06s`, `cmmajei7101jdzpoil3jzs84m`, `cmmajeif001jezpoi9r1uotia`, `cmmajeimz01jfzpoikw0yufmu`, `cmmajeiuy01jgzpoit2982n42`, `cmmajej5401jhzpoi86jc7z68`, `cmmajejd201jizpoim4gokz9e`, `cmmajejl201jjzpoibe2666ka`, `cmmajejt001jkzpoinhpp80pn`, `cmmajek3401jlzpoiqgd1dn96`, `cmmajekb001jmzpoiv6b5bq1y`, `cmmajekiy01jnzpoiz1lye6x0`, `cmmajekqv01jozpoi0yglzyqk`, `cmmajekyu01jpzpoi0xztf6i9`, `cmmajel6s01jqzpoiqr2yehex`, `cmmajelep01jrzpoigvlx5yx3`, `cmmajelo501jszpois58p8d42`, `cmmajelw201jtzpoinln00xsh`, `cmmajem4101juzpoi78sw9lsb`, `cmmajembx01jvzpoib4jfip3c`, `cmmajemju01jwzpoiad4gysob`, `cmmajemrs01jxzpoiwpzqc0uj`, `cmmajemzp01jyzpoi5zxbbtho`, `cmmajen7m01jzzpoiy0l7dz8w`, `cmmajenfm01k0zpoi3kzwjp7v`, `cmmajennk01k1zpoi8w4xokbh`, `cmmajenvi01k2zpoijdngswjs`, `cmmajeo3m01k3zpoig5603wfm`, `cmmajeobn01k4zpoietcgr7tt`, `cmmajeolj01k5zpoi5mpf0ahv`, `cmmajeotf01k6zpoiketxs01k`, `cmmajep2i01k7zpoik99dtmbd`, `cmmajepam01k8zpoif7wgq1bq`, `cmmajepik01k9zpoiqypfunhh`, `cmmajepqh01kazpoinpn11vvv`, `cmmajepyf01kbzpoiaznfjxhm`, `cmmajeq6d01kczpoimkezmjp9`, `cmmajeqek01kdzpoijbxb7xqf`, `cmmajeqmh01kezpoi5yvp75cm`, `cmmajeque01kfzpoirzutzmlf`, `cmmajer4g01kgzpoi5fqdhhal`, `cmmajerd001khzpoiaeuxu485`, `cmmajerkz01kizpoiophpf1y2`, `cmmajerty01kjzpoiksywhtky`, `cmmajes2l01kkzpoifz8z7990`, `cmmajesb601klzpoismyhr1rc`, `cmmajesj501kmzpoie9xo6gjw`, `cmmajesr301knzpoi78v1h7rb`, `cmmajesz401kozpoi4lujwc3r`, `cmmajet9801kpzpoiknpoqpgs`, `cmmajethq01kqzpoiexytmcjc`, `cmmajetqa01krzpoiuas35myu`, `cmmajety701kszpoi519rdi89`, `cmmajeu6601ktzpoi4mmfx0bi`, `cmmajeue401kuzpoicbfjqpz2`, `cmmajeuog01kvzpoiiz6ahgyh`, `cmmajeuwx01kwzpoi2xyqhk45`, `cmmajev5j01kxzpoi0v5nap6n`, `cmmajeve001kyzpoib8a9d6s5`, `cmmajevly01kzzpoi4op5q873`, `cmmajevv401l0zpoioygpb0fv`, `cmmajew2z01l1zpoi7sltwyxk`, `cmmajewau01l2zpoiut3vwe3b`, `cmmajewko01l3zpoihqbto3cp`, `cmmajewsk01l4zpoidn6n031x`, `cmmajex1t01l5zpoiyg11fxml`, `cmmajex9q01l6zpoiievdhqju`, `cmmajexhp01l7zpoiqbia9vdb`, `cmmajexrc01l8zpoi81kfpa9a`, `cmmajexzw01l9zpoivzubpyeh`, `cmmajey8201lazpoi3frycxyl`, `cmmajeyh001lbzpoigdgqq5zg`, `cmmajeyph01lczpoik9gaicpp`, `cmmajeyxe01ldzpoi3c1216sz`, `cmmajez6j01lezpoiiw4zpse9`, `cmmajezf401lfzpoiggzzu1gb`, `cmmajezn101lgzpoigjum0slm`, `cmmajezuz01lhzpoirpmxhsc5`, `cmmajf02w01lizpoimyqlyjl6`, `cmmajf0aw01ljzpoisby62hkw`, `cmmajf0iv01lkzpoi4pj6k5fi`, `cmmajf0rf01llzpoivp0uv916`, `cmmajf0zg01lmzpoi9hznclw8`, `cmmajf17b01lnzpoigrt18myg`, `cmmajf1f801lozpoidroszu92`, `cmmajf23601lrzpoizzi8uql0`, `cmmajf2s701luzpoi4tgt9raz`, `cmmajf40201lzzpoitdlq717o`, `demo_lt_00fb5a4c9ee37ad`, `demo_lt_02fb834cd3c5fe4`, `demo_lt_032600824effbca`, `demo_lt_03baf6739795769`, `demo_lt_03f7a1e8f6e3afb`, `demo_lt_05414fa8145e75f`, `demo_lt_05b27b5fc4e8cad`, `demo_lt_0679869ce7849c7`, `demo_lt_0bd0ad0eab38881`, `demo_lt_0be744e51d6d4af`, `demo_lt_0c156aff59315b1`, `demo_lt_13b01f590dd2b2d`, `demo_lt_1597edd0cbc4500`, `demo_lt_15ec33673dbb68d`, `demo_lt_1cb8bebb87a07c5`, `demo_lt_1ce1b4df45301d2`, `demo_lt_1de18e774304aba`, `demo_lt_1e5e9d761b643eb`, `demo_lt_218ee9987340fce`, `demo_lt_23fee0270add74b`, `demo_lt_2494335868c3223`, `demo_lt_254edaf18076b52`, `demo_lt_2617663dc43a0ae`, `demo_lt_26893d4fc5642c2`, `demo_lt_2958dbfd993d266`, `demo_lt_2d114e08a7b8edc`, `demo_lt_2e6b0d11699e0a5`, `demo_lt_2f2b564e839bdf8`, `demo_lt_2f754456972bdd7`, `demo_lt_2f84f4722168247`, `demo_lt_302067e0ba8d8cb`, `demo_lt_3186f81906b4161`, `demo_lt_31d708ffedd87e3`, `demo_lt_34437c80a2c4530`, `demo_lt_3856a24aeb20951`, `demo_lt_3bf167862bd9c52`, `demo_lt_3cd79ed43b53312`, `demo_lt_3cfe9c568393f9b`, `demo_lt_3dcac6e8ac66423`, `demo_lt_3e6300f65db1ffa`, `demo_lt_3fab81cd68d45a8`, `demo_lt_436dec014437de4`, `demo_lt_43c3e3f7aa4b505`, `demo_lt_4692c84ed458fc3`, `demo_lt_4762cf793e01d88`, `demo_lt_48447b40cc9b60c`, `demo_lt_4ef44651bb73ae6`, `demo_lt_50f94aa8a1d4db3`, `demo_lt_5108c76b3ddd18d`, `demo_lt_51e09f14f362ccc`, `demo_lt_545b6b825edfedb`, `demo_lt_54bd837509e1103`, `demo_lt_564919ad1d42b8e`, `demo_lt_57674a6a7e31ec0`, `demo_lt_6276232c0776f1c`, `demo_lt_6292374e46aef05`, `demo_lt_6416941d4967188`, `demo_lt_685e22fc3df9fdb`, `demo_lt_68b1583a58fe402`, `demo_lt_6b1f935852cad61`, `demo_lt_71390b16c660c4a`, `demo_lt_74b3ba863cee6de`, `demo_lt_76726651c59fe43`, `demo_lt_78b72f721c6c53f`, `demo_lt_79b160dae6e7c32`, `demo_lt_7a79c65b7355f46`, `demo_lt_7a80cbd6013dae6`, `demo_lt_7b482b61409e5b4`, `demo_lt_7c76938d434471b`, `demo_lt_7d5f9d59683ecec`, `demo_lt_7e2421a6980ee37`, `demo_lt_7e661fded9e8624` _(+56 more)_
+
+### `strain` — text
+
+- **Declared type:** `varchar(255)`
+- **Nullable:** False · **Null %:** 0.0%
+- **Rows:** 256 · **Distinct:** 29 (11.33% of non-null)
+- **Flags:** LOW-CARDINALITY (categorical), INDEXED
+- **Range:** min=`Animal Face` · max=`The Hive`
+- **Length:** min=3 · max=19 · avg=12.36
+- **All distinct values (29):** `Animal Face`, `Berry Fizz`, `Black Maple`, `Blackout Truffle`, `Bop Gun`, `Candied Oranges`, `Cat Piff`, `Death Star`, `Deathstar`, `Donkey Butter`, `Dulce de Uva`, `Eastside OG`, `Forbidden Fruit`, `G13 Skunk`, `GMO`, `Grape Gatsby`, `Grape Pie`, `Honey Banana`, `Ice Cream Cake`, `Lavender Piff`, `Melted Strawberries`, `Moroccan Peaches`, `Papaya Juice`, `Sherb Cream Pie`, `Sour Diesel`, `Strawberry Guava`, `Strawberry Pie`, `Tahiti Lime`, `The Hive`
+
+### `lotNumber` — text
+
+- **Declared type:** `varchar(255)`
+- **Nullable:** False · **Null %:** 0.0%
+- **Rows:** 256 · **Distinct:** 128 (50.0% of non-null)
+- **Flags:** INDEXED
+- **Range:** min=`HL-SCLT0295-1-1` · max=`HL-SCLT0295-9-5`
+- **Length:** min=14 · max=17 · avg=15.73
+- **All distinct values (128):** `HL-SCLT0295-1-1`, `HL-SCLT0295-1-2`, `HL-SCLT0295-1-3`, `HL-SCLT0295-1-4`, `HL-SCLT0295-10-1`, `HL-SCLT0295-10-2`, `HL-SCLT0295-10-3`, `HL-SCLT0295-10-4`, `HL-SCLT0295-11-1`, `HL-SCLT0295-11-2`, `HL-SCLT0295-11-3`, `HL-SCLT0295-11-4`, `HL-SCLT0295-12-1`, `HL-SCLT0295-12-2`, `HL-SCLT0295-12-3`, `HL-SCLT0295-12-4`, `HL-SCLT0295-12-5`, `HL-SCLT0295-13-1`, `HL-SCLT0295-13-2`, `HL-SCLT0295-13-3`, `HL-SCLT0295-13-4`, `HL-SCLT0295-13-5`, `HL-SCLT0295-14-1`, `HL-SCLT0295-14-2`, `HL-SCLT0295-14-3`, `HL-SCLT0295-14-4`, `HL-SCLT0295-14-5`, `HL-SCLT0295-15-1`, `HL-SCLT0295-15-2`, `HL-SCLT0295-15-3`, `HL-SCLT0295-15-4`, `HL-SCLT0295-15-5`, `HL-SCLT0295-16-1`, `HL-SCLT0295-16-2`, `HL-SCLT0295-16-3`, `HL-SCLT0295-16-4`, `HL-SCLT0295-17-1`, `HL-SCLT0295-17-2`, `HL-SCLT0295-17-3`, `HL-SCLT0295-17-4`, `HL-SCLT0295-17-5`, `HL-SCLT0295-18-1`, `HL-SCLT0295-18-2`, `HL-SCLT0295-18-3`, `HL-SCLT0295-18-4`, `HL-SCLT0295-19-1`, `HL-SCLT0295-19-2`, `HL-SCLT0295-19-3`, `HL-SCLT0295-19-4`, `HL-SCLT0295-19-5`, `HL-SCLT0295-2-1`, `HL-SCLT0295-2-2`, `HL-SCLT0295-2-3`, `HL-SCLT0295-2-4`, `HL-SCLT0295-2-5`, `HL-SCLT0295-20-1`, `HL-SCLT0295-20-2`, `HL-SCLT0295-20-3`, `HL-SCLT0295-20-4`, `HL-SCLT0295-20-5`, `HL-SCLT0295-21-1`, `HL-SCLT0295-21-2`, `HL-SCLT0295-21-3`, `HL-SCLT0295-21-4`, `HL-SCLT0295-21-5`, `HL-SCLT0295-22-1`, `HL-SCLT0295-22-2`, `HL-SCLT0295-22-3`, `HL-SCLT0295-22-4`, `HL-SCLT0295-22T-1`, `HL-SCLT0295-22T-2`, `HL-SCLT0295-22T-3`, `HL-SCLT0295-22T-4`, `HL-SCLT0295-23-1`, `HL-SCLT0295-23-2`, `HL-SCLT0295-23-3`, `HL-SCLT0295-23-4`, `HL-SCLT0295-23T-1`, `HL-SCLT0295-23T-2`, `HL-SCLT0295-23T-3`, `HL-SCLT0295-23T-4`, `HL-SCLT0295-24-1`, `HL-SCLT0295-24-2`, `HL-SCLT0295-24-3`, `HL-SCLT0295-24T-1`, `HL-SCLT0295-24T-2`, `HL-SCLT0295-24T-3`, `HL-SCLT0295-24T-4`, `HL-SCLT0295-25-1`, `HL-SCLT0295-25-2`, `HL-SCLT0295-25-3`, `HL-SCLT0295-25-4`, `HL-SCLT0295-25-5`, `HL-SCLT0295-26`, `HL-SCLT0295-26B`, `HL-SCLT0295-27`, `HL-SCLT0295-27T`, `HL-SCLT0295-3-1`, `HL-SCLT0295-3-2`, `HL-SCLT0295-3-3`, `HL-SCLT0295-3-4`, `HL-SCLT0295-4-1`, `HL-SCLT0295-4-2`, `HL-SCLT0295-4-3`, `HL-SCLT0295-4-4`, `HL-SCLT0295-4-5`, `HL-SCLT0295-5-1`, `HL-SCLT0295-5-2`, `HL-SCLT0295-5-3`, `HL-SCLT0295-5-4`, `HL-SCLT0295-6-1`, `HL-SCLT0295-6-2`, `HL-SCLT0295-6-3`, `HL-SCLT0295-6-4`, `HL-SCLT0295-6-5`, `HL-SCLT0295-7-1`, `HL-SCLT0295-7-2`, `HL-SCLT0295-7-3`, `HL-SCLT0295-7-4`, `HL-SCLT0295-7-5`, `HL-SCLT0295-8-1`, `HL-SCLT0295-8-2`, `HL-SCLT0295-8-3`, `HL-SCLT0295-9-1`, `HL-SCLT0295-9-2`, `HL-SCLT0295-9-3`, `HL-SCLT0295-9-4`, `HL-SCLT0295-9-5`
+
+### `productType` — text
+
+- **Declared type:** `varchar(255)`
+- **Nullable:** True · **Null %:** 100.0%
+- **Rows:** 256 · **Distinct:** 0 (0.0% of non-null)
+
+### `internalLotId` — text
+
+- **Declared type:** `varchar(100)`
+- **Nullable:** True · **Null %:** 94.53%
+- **Rows:** 256 · **Distinct:** 4 (28.57% of non-null)
+- **Flags:** LOW-CARDINALITY (categorical), INDEXED
+- **Range:** min=`HL-23` · max=`HL-26`
+- **Length:** min=5 · max=5 · avg=5.0
+- **All distinct values (4):** `HL-23`, `HL-24`, `HL-25`, `HL-26`
+
+### `ccbLotNumber` — text
+
+- **Declared type:** `varchar(100)`
+- **Nullable:** True · **Null %:** 100.0%
+- **Rows:** 256 · **Distinct:** 0 (0.0% of non-null)
+
+### `thc` — float
+
+- **Declared type:** `double`
+- **Nullable:** True · **Null %:** 3.12%
+- **Rows:** 256 · **Distinct:** 118 (47.58% of non-null)
+- **Range:** min=`0.038` · max=`89.38`
+- **Length:** min=4 · max=11 · avg=4.97
+- **Pattern hints:** float-as-text
+- **All distinct values (118):** `0.038`, `0.16`, `0.163`, `0.17`, `0.19`, `0.26`, `28.40714286`, `42.93`, `69.88`, `70.54`, `70.65`, `71.56`, `71.59`, `71.8`, `72.09`, `72.21`, `72.71`, `73.33`, `73.39`, `74.22`, `74.47`, `74.52`, `74.61`, `74.77`, `75.01`, `75.22`, `75.28`, `75.6`, `75.67`, `75.91`, `76.01`, `76.1`, `76.13`, `76.21`, `76.25`, `76.32`, `76.34`, `76.44`, `76.7`, `76.71`, `76.81`, `76.85`, `76.91`, `77.01`, `77.06`, `77.16`, `77.18`, `77.415`, `77.42`, `77.46`, `77.49`, `77.5`, `77.53`, `77.57`, `77.67`, `77.781`, `77.8`, `77.9`, `77.94`, `78.02`, `78.03`, `78.15`, `78.29`, `78.35`, `78.48`, `78.61`, `78.65`, `78.661`, `78.691`, `78.83`, `78.96`, `78.97`, `78.997`, `79.06`, `79.17`, `79.35`, `79.4`, `79.5`, `79.59`, `80.14`, `80.24`, `80.35`, `80.43`, `80.44`, `80.46`, `80.5`, `80.53`, `80.69`, `80.72`, `80.83`, `80.89`, `80.93`, `81.327`, `81.37`, `81.45`, `81.49`, `81.51`, `81.54`, `81.55`, `81.83`, `81.89`, `82.03`, `82.069`, `82.1`, `82.2`, `82.203`, `82.25`, `82.48`, `82.62`, `83.05`, `83.36`, `83.6`, `84.23`, `84.33`, `84.38`, `85.97`, `87.62`, `89.38`
+
+### `tac` — float
+
+- **Declared type:** `double`
+- **Nullable:** True · **Null %:** 10.94%
+- **Rows:** 256 · **Distinct:** 104 (45.61% of non-null)
+- **Range:** min=`2.45` · max=`9.86`
+- **Length:** min=1 · max=6 · avg=4.15
+- **Pattern hints:** float-as-text
+- **All distinct values (104):** `2.45`, `2.84`, `2.96`, `3.2326`, `3.24`, `3.47`, `3.82`, `4.14`, `4.21`, `4.24`, `4.37`, `4.45`, `4.5`, `4.52`, `4.57`, `4.59`, `4.75`, `4.76`, `4.9`, `4.95`, `5.0`, `5.04`, `5.05`, `5.12`, `5.17`, `5.22`, `5.2331`, `5.25`, `5.3`, `5.31`, `5.38`, `5.39`, `5.4`, `5.41`, `5.42`, `5.43`, `5.45`, `5.46`, `5.47`, `5.54`, `5.55`, `5.62`, `5.6503`, `5.67`, `5.68`, `5.69`, `5.77`, `5.78`, `5.82`, `5.86`, `5.87`, `5.88`, `5.89`, `5.93`, `5.99`, `6.0`, `6.06`, `6.07`, `6.08`, `6.0912`, `6.13`, `6.14`, `6.18`, `6.1852`, `6.27`, `6.38`, `6.39`, `6.4`, `6.47`, `6.48`, `6.52`, `6.58`, `6.66`, `6.73`, `6.76`, `6.7639`, `6.8`, `7.16`, `7.17`, `7.1788`, `7.21`, `7.24`, `7.25`, `7.36`, `7.39`, `7.5349`, `7.633`, `7.65`, `7.6781`, `7.7496`, `7.9251`, `7.93`, `7.9909`, `8.0769`, `8.13`, `8.43`, `8.49`, `8.54`, `8.568`, `8.6041`, `8.7`, `8.81`, `9.08`, `9.86`
+
+### `terps` — float
+
+- **Declared type:** `double`
+- **Nullable:** True · **Null %:** 60.94%
+- **Rows:** 256 · **Distinct:** 15 (15.0% of non-null)
+- **Flags:** LOW-CARDINALITY (categorical)
+- **Range:** min=`45519.0` · max=`46079.0`
+- **Length:** min=5 · max=5 · avg=5.0
+- **Pattern hints:** float-as-text
+- **All distinct values (15):** `45519.0`, `45559.0`, `45672.0`, `45810.0`, `45818.0`, `45870.0`, `45889.0`, `45890.0`, `45922.0`, `45952.0`, `45992.0`, `46014.0`, `46043.0`, `46048.0`, `46079.0`
+
+### `expirationDate` — datetime
+
+- **Declared type:** `datetime`
+- **Nullable:** True · **Null %:** 100.0%
+- **Rows:** 256 · **Distinct:** 0 (0.0% of non-null)
+
+### `createdAt` — datetime
+
+- **Declared type:** `datetime`
+- **Nullable:** False · **Null %:** 0.0%
+- **Rows:** 256 · **Distinct:** 43 (16.8% of non-null)
+- **Flags:** LOW-CARDINALITY (categorical)
+- **Range:** min=`2026-03-03 11:41:00` · max=`2026-06-04 11:10:02`
+- **Length:** min=19 · max=19 · avg=19.0
+- **Pattern hints:** datetime-string
+- **All distinct values (43):** `2026-03-03 11:41:00`, `2026-03-03 11:41:01`, `2026-03-03 11:41:02`, `2026-03-03 11:41:03`, `2026-03-03 11:41:04`, `2026-03-03 11:41:05`, `2026-03-03 11:41:06`, `2026-03-03 11:41:07`, `2026-03-03 11:41:08`, `2026-03-03 11:41:09`, `2026-03-03 11:41:10`, `2026-03-03 11:41:11`, `2026-03-03 11:41:12`, `2026-03-03 11:41:13`, `2026-03-03 11:41:14`, `2026-03-03 11:41:15`, `2026-03-03 11:41:16`, `2026-03-03 11:41:17`, `2026-03-03 11:41:18`, `2026-03-03 11:41:19`, `2026-03-03 11:41:20`, `2026-03-03 11:41:21`, `2026-03-03 11:41:22`, `2026-03-03 11:41:23`, `2026-03-03 11:41:24`, `2026-03-03 11:41:25`, `2026-03-03 11:41:26`, `2026-03-03 11:41:27`, `2026-03-03 11:41:28`, `2026-03-03 11:41:29`, `2026-03-03 11:41:30`, `2026-03-03 11:41:31`, `2026-03-03 11:41:32`, `2026-03-03 11:41:33`, `2026-03-03 11:41:34`, `2026-03-03 11:41:35`, `2026-03-03 11:41:36`, `2026-03-03 11:41:37`, `2026-03-03 11:41:38`, `2026-03-03 11:41:39`, `2026-03-03 11:41:41`, `2026-06-04 11:10:01`, `2026-06-04 11:10:02`
+
+### `updatedAt` — datetime
+
+- **Declared type:** `datetime`
+- **Nullable:** False · **Null %:** 0.0%
+- **Rows:** 256 · **Distinct:** 43 (16.8% of non-null)
+- **Flags:** LOW-CARDINALITY (categorical)
+- **Range:** min=`2026-03-03 11:41:00` · max=`2026-06-04 11:10:02`
+- **Length:** min=19 · max=19 · avg=19.0
+- **Pattern hints:** datetime-string
+- **All distinct values (43):** `2026-03-03 11:41:00`, `2026-03-03 11:41:01`, `2026-03-03 11:41:02`, `2026-03-03 11:41:03`, `2026-03-03 11:41:04`, `2026-03-03 11:41:05`, `2026-03-03 11:41:06`, `2026-03-03 11:41:07`, `2026-03-03 11:41:08`, `2026-03-03 11:41:09`, `2026-03-03 11:41:10`, `2026-03-03 11:41:11`, `2026-03-03 11:41:12`, `2026-03-03 11:41:13`, `2026-03-03 11:41:14`, `2026-03-03 11:41:15`, `2026-03-03 11:41:16`, `2026-03-03 11:41:17`, `2026-03-03 11:41:18`, `2026-03-03 11:41:19`, `2026-03-03 11:41:20`, `2026-03-03 11:41:21`, `2026-03-03 11:41:22`, `2026-03-03 11:41:23`, `2026-03-03 11:41:24`, `2026-03-03 11:41:25`, `2026-03-03 11:41:26`, `2026-03-03 11:41:27`, `2026-03-03 11:41:28`, `2026-03-03 11:41:29`, `2026-03-03 11:41:30`, `2026-03-03 11:41:31`, `2026-03-03 11:41:32`, `2026-03-03 11:41:33`, `2026-03-03 11:41:34`, `2026-03-03 11:41:35`, `2026-03-03 11:41:36`, `2026-03-03 11:41:37`, `2026-03-03 11:41:39`, `2026-03-03 11:41:41`, `2026-03-03 11:41:42`, `2026-06-04 11:10:01`, `2026-06-04 11:10:02`
+
+### `tenantid` — integer
+
+- **Declared type:** `int`
+- **Nullable:** False · **Null %:** 0.0%
+- **Rows:** 256 · **Distinct:** 2 (0.78% of non-null)
+- **Flags:** LOW-CARDINALITY (categorical)
+- **Range:** min=`1` · max=`99`
+- **Length:** min=1 · max=2 · avg=1.5
+- **Pattern hints:** boolean-token, integer-as-text
+- **All distinct values (2):** `1`, `99`
+
+### `brand_id` — text
+
+- **Declared type:** `varchar(36)`
+- **Nullable:** False · **Null %:** 0.0%
+- **Rows:** 256 · **Distinct:** 2 (0.78% of non-null)
+- **Flags:** LOW-CARDINALITY (categorical)
+- **Range:** min=`ca323241-ef74-425f-aa67-239247ccd0e9` · max=`cmmakqdsn0037qsoig4b4yo9t`
+- **Length:** min=25 · max=36 · avg=30.5
+- **Pattern hints:** uuid
+- **All distinct values (2):** `ca323241-ef74-425f-aa67-239247ccd0e9`, `cmmakqdsn0037qsoig4b4yo9t`
+
+## Sample rows
+
+| id | strain | lotnumber | producttype | internallotid | ccblotnumber | thc | tac | terps | expirationdate | createdat | updatedat | tenantid | brand_id |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| cmmaje8oo01i8zpoidqu4jcx2 | Bop Gun | HL-SCLT0295-1-1 | — | — | — | 42.93 | — | — | — | 2026-03-03 11:41:00 | 2026-03-03 11:41:00 | 1 | cmmakqdsn0037qsoig4b4yo9t |
+| cmmaje8wn01i9zpoiell7jkr9 | Eastside OG | HL-SCLT0295-1-2 | — | — | — | 75.22 | 4.21 | — | — | 2026-03-03 11:41:01 | 2026-03-03 11:41:01 | 1 | cmmakqdsn0037qsoig4b4yo9t |
+| cmmaje94k01iazpoidwqxwo1z | Tahiti Lime | HL-SCLT0295-1-3 | — | — | — | 71.8 | 2.84 | — | — | 2026-03-03 11:41:01 | 2026-03-03 11:41:01 | 1 | cmmakqdsn0037qsoig4b4yo9t |
+| cmmaje9cg01ibzpoiqaxtatf7 | Animal Face | HL-SCLT0295-1-4 | — | — | — | 69.88 | 3.82 | — | — | 2026-03-03 11:41:01 | 2026-03-03 11:41:01 | 1 | cmmakqdsn0037qsoig4b4yo9t |
+| cmmaje9kd01iczpoi1046b0c1 | Forbidden Fruit | HL-SCLT0295-2-1 | — | — | — | 74.47 | 6.48 | — | — | 2026-03-03 11:41:02 | 2026-03-03 11:41:02 | 1 | cmmakqdsn0037qsoig4b4yo9t |

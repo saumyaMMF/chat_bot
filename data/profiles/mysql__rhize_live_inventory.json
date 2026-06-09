@@ -1,0 +1,2054 @@
+{
+  "engine": "mysql",
+  "schema": null,
+  "table": "rhize_live_inventory",
+  "row_count": 146,
+  "column_count": 12,
+  "primary_key": [
+    "id"
+  ],
+  "indexes": [
+    {
+      "name": "idx_lotNumber",
+      "unique": false,
+      "columns": [
+        "lotNumber"
+      ]
+    },
+    {
+      "name": "idx_strain",
+      "unique": false,
+      "columns": [
+        "strain"
+      ]
+    },
+    {
+      "name": "PRIMARY",
+      "unique": true,
+      "columns": [
+        "id"
+      ]
+    },
+    {
+      "name": "uq_product_tenant",
+      "unique": true,
+      "columns": [
+        "productName",
+        "tenantid"
+      ]
+    }
+  ],
+  "columns": [
+    {
+      "name": "id",
+      "declared_type": "varchar(36)",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 146,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 146,
+      "distinct_pct": 100.0,
+      "is_unique": true,
+      "is_low_cardinality": false,
+      "min_value": "0clgn3ickmpwdlu53",
+      "max_value": "zvtr5x76jmpwdlr0y",
+      "min_length": 17,
+      "max_length": 23,
+      "avg_length": 20.0,
+      "pattern_hints": [],
+      "distinct_values": [
+        "0clgn3ickmpwdlu53",
+        "162eaz2z9mpwdlskd",
+        "1jadje5a4mpwdlopv",
+        "1y2fbdbh5mpwdlr7w",
+        "2xk3pdynympwdloc1",
+        "37uq3fgkjmpwdlkhm",
+        "4u1tbudiompwdlp3q",
+        "5aztpk7xgmpwdlqn3",
+        "5ji8psf4dmpwdluq0",
+        "6in03qy0qmpwdlq99",
+        "6r5ip8q4empwdlwab",
+        "727186ueqmpwdluj3",
+        "7y99djpxgmpwdlpvf",
+        "9nwpznb21mpwdlxto",
+        "a5yahmhj6mpwdlyek",
+        "bmwqhnlocmpwdlty6",
+        "bn3i6zgnompwdlx8y",
+        "bu6tqltx6mpwdlwh8",
+        "c6bam3w1qmpwdlphl",
+        "cbvydej7umpwdlret",
+        "cnbgqgwrdmpwdlkvh",
+        "ctexu3g79mpwdlrzj",
+        "cwujq3dlampwdlln6",
+        "d8c2kb537mpwdlm7y",
+        "demo_iv_0185f3bc3c51f9b",
+        "demo_iv_030cf99fa175763",
+        "demo_iv_0363351050f5afb",
+        "demo_iv_07d48518570b3e1",
+        "demo_iv_092bd614e9250d6",
+        "demo_iv_0e0d2a70f620401",
+        "demo_iv_14b170226bd36ee",
+        "demo_iv_167216c6ff03888",
+        "demo_iv_1a8c63a14d62e05",
+        "demo_iv_1b1d3fae1740ba7",
+        "demo_iv_1e1191160de1199",
+        "demo_iv_239af4c75387262",
+        "demo_iv_24d8a511a4712e9",
+        "demo_iv_25d67548d8dfc7e",
+        "demo_iv_25fdba052d89597",
+        "demo_iv_2a16f3b66cb051f",
+        "demo_iv_3a16404eec9b1ce",
+        "demo_iv_3fddf7948933ff4",
+        "demo_iv_440aa7cda111868",
+        "demo_iv_446b089ec784209",
+        "demo_iv_4597b87a545fc3d",
+        "demo_iv_48ee9424eb87f39",
+        "demo_iv_490f803f18981ec",
+        "demo_iv_4cdbe40f685ae72",
+        "demo_iv_517b9e30cd352b2",
+        "demo_iv_545b95a702776ad",
+        "demo_iv_569868dd649bb6b",
+        "demo_iv_577f7c9a8cf9754",
+        "demo_iv_586c9059e1f73a8",
+        "demo_iv_5b85f31241eaa41",
+        "demo_iv_5d58c7fdfc3305b",
+        "demo_iv_604721a09b0a7fd",
+        "demo_iv_692f5316c6aa742",
+        "demo_iv_72fdcc8e47c40d4",
+        "demo_iv_740e867e0b0b22b",
+        "demo_iv_795eba0457b2bf2",
+        "demo_iv_7bc3deba8b291e9",
+        "demo_iv_87d7c871a95ddfb",
+        "demo_iv_88e7692dc6ed092",
+        "demo_iv_8cbde06cbd17b7f",
+        "demo_iv_8d20ac221d763d1",
+        "demo_iv_8dbb2647e42089c",
+        "demo_iv_8e9ca5ffd471bd1",
+        "demo_iv_915b74b8ecc9b07",
+        "demo_iv_9189b51c054d5b9",
+        "demo_iv_9406e3836464e11",
+        "demo_iv_9bce268fa4fcf06",
+        "demo_iv_9c030dbbe7e6d7b",
+        "demo_iv_a07c5061b7800a6",
+        "demo_iv_a0c6021d9b64994",
+        "demo_iv_a306b0d1a35df72",
+        "demo_iv_a5d16123952fec8",
+        "demo_iv_aa60c29ba9ad72a",
+        "demo_iv_b1733a807a9a1cc",
+        "demo_iv_b2e52c0edfd12eb",
+        "demo_iv_b3626f6779308a9",
+        "demo_iv_b4d5fed2d40141f",
+        "demo_iv_b8d8687e43a0d6e",
+        "demo_iv_c1a3711741685f2",
+        "demo_iv_ca2556d6d6f556f",
+        "demo_iv_cfbc3ea8e23af91",
+        "demo_iv_d43992c6143e55f",
+        "demo_iv_d567c4413c8ca76",
+        "demo_iv_d7b912b59ddd58f",
+        "demo_iv_da5371ae537eee4",
+        "demo_iv_df1e984cac8f598",
+        "demo_iv_e124f1d387dea50",
+        "demo_iv_e831764b97774c5",
+        "demo_iv_efd1b0feb612710",
+        "demo_iv_f35dfb242bea909",
+        "demo_iv_f6e5fa5263811de",
+        "demo_iv_f9bb67c91f6e71b",
+        "demo_iv_f9cac27169a2bc3",
+        "dj3ugf5h9mpwdlubz",
+        "fhhkxr1d9mpwdlrlo",
+        "fkxaofp05mpwdlwv2",
+        "gibz0bbd3mpwdltr9",
+        "gt2tzlzzsmpwdly0q",
+        "hmducr6i0mpwdlnr9",
+        "idbj4ha8smpwdloiy",
+        "idh92aj4jmpwdll2f",
+        "iendzyb05mpwdlt6i",
+        "it8qt0pc6mpwdllu3",
+        "j9f711bp7mpwdlylx",
+        "jcsrc22ypmpwdlqu1",
+        "kbkjan7hwmpwdlvbp",
+        "kpraeey52mpwdluxu",
+        "ks1l3zj3tmpwdlsr9",
+        "ksoer101ampwdllg9",
+        "l03n0f08ampwdlmso",
+        "l46kglc14mpwdlmev",
+        "l9wmz4bfempwdlxmr",
+        "lnwq7bbgqmpwdlmzl",
+        "ntwfnmy8cmpwdlqg6",
+        "om6ffv7qampwdlm10",
+        "p5rfdskpqmpwdlv4r",
+        "plmq1mk8qmpwdlq2c",
+        "pulg7vk6fmpwdlw3e",
+        "q6iiqmf9lmpwdlows",
+        "rsgo200f1mpwdlsde",
+        "rz7s17vrhmpwdln6k",
+        "s3up6aybtmpwdlndg",
+        "sotw6kl8hmpwdlx1z",
+        "ssm3mu8t3mpwdlvim",
+        "t8iu5ih90mpwdlny7",
+        "tmibmdehwmpwdlo53",
+        "tyasggo5vmpwdlpoi",
+        "v8i48sqdrmpwdltdf",
+        "vbtgg58o9mpwdls6g",
+        "vnoouw77ampwdlvpj",
+        "vywq7no5fmpwdlpao",
+        "w9jen5mbrmpwdlvwg",
+        "weshmjt5hmpwdlxfu",
+        "wvoqlb6vompwdlrsl",
+        "x2dye4dy6mpwdly7n",
+        "xb9248lbympwdltkc",
+        "xyto5j9egmpwdlwo5",
+        "y4g9uq47rmpwdlnkd",
+        "zody3sn2umpwdlsye",
+        "zrlmy9qjcmpwdll9c",
+        "zvsy3y8y6mpwdlmlr",
+        "zvtr5x76jmpwdlr0y"
+      ],
+      "top_values": [
+        [
+          "kpraeey52mpwdluxu",
+          1
+        ],
+        [
+          "demo_iv_a306b0d1a35df72",
+          1
+        ],
+        [
+          "demo_iv_a5d16123952fec8",
+          1
+        ],
+        [
+          "demo_iv_aa60c29ba9ad72a",
+          1
+        ],
+        [
+          "demo_iv_b1733a807a9a1cc",
+          1
+        ],
+        [
+          "demo_iv_b2e52c0edfd12eb",
+          1
+        ],
+        [
+          "demo_iv_b3626f6779308a9",
+          1
+        ],
+        [
+          "demo_iv_b4d5fed2d40141f",
+          1
+        ],
+        [
+          "demo_iv_b8d8687e43a0d6e",
+          1
+        ],
+        [
+          "demo_iv_c1a3711741685f2",
+          1
+        ],
+        [
+          "demo_iv_ca2556d6d6f556f",
+          1
+        ],
+        [
+          "demo_iv_cfbc3ea8e23af91",
+          1
+        ],
+        [
+          "demo_iv_d43992c6143e55f",
+          1
+        ],
+        [
+          "demo_iv_d567c4413c8ca76",
+          1
+        ],
+        [
+          "demo_iv_d7b912b59ddd58f",
+          1
+        ],
+        [
+          "demo_iv_da5371ae537eee4",
+          1
+        ],
+        [
+          "demo_iv_df1e984cac8f598",
+          1
+        ],
+        [
+          "demo_iv_e124f1d387dea50",
+          1
+        ],
+        [
+          "demo_iv_e831764b97774c5",
+          1
+        ],
+        [
+          "demo_iv_efd1b0feb612710",
+          1
+        ],
+        [
+          "demo_iv_f35dfb242bea909",
+          1
+        ],
+        [
+          "demo_iv_f6e5fa5263811de",
+          1
+        ],
+        [
+          "demo_iv_f9bb67c91f6e71b",
+          1
+        ],
+        [
+          "demo_iv_f9cac27169a2bc3",
+          1
+        ],
+        [
+          "dj3ugf5h9mpwdlubz",
+          1
+        ],
+        [
+          "fhhkxr1d9mpwdlrlo",
+          1
+        ],
+        [
+          "fkxaofp05mpwdlwv2",
+          1
+        ],
+        [
+          "gibz0bbd3mpwdltr9",
+          1
+        ],
+        [
+          "gt2tzlzzsmpwdly0q",
+          1
+        ],
+        [
+          "hmducr6i0mpwdlnr9",
+          1
+        ],
+        [
+          "idbj4ha8smpwdloiy",
+          1
+        ],
+        [
+          "idh92aj4jmpwdll2f",
+          1
+        ],
+        [
+          "iendzyb05mpwdlt6i",
+          1
+        ],
+        [
+          "it8qt0pc6mpwdllu3",
+          1
+        ],
+        [
+          "j9f711bp7mpwdlylx",
+          1
+        ],
+        [
+          "jcsrc22ypmpwdlqu1",
+          1
+        ],
+        [
+          "kbkjan7hwmpwdlvbp",
+          1
+        ],
+        [
+          "wvoqlb6vompwdlrsl",
+          1
+        ],
+        [
+          "tmibmdehwmpwdlo53",
+          1
+        ],
+        [
+          "tyasggo5vmpwdlpoi",
+          1
+        ],
+        [
+          "v8i48sqdrmpwdltdf",
+          1
+        ],
+        [
+          "vbtgg58o9mpwdls6g",
+          1
+        ],
+        [
+          "vnoouw77ampwdlvpj",
+          1
+        ],
+        [
+          "vywq7no5fmpwdlpao",
+          1
+        ],
+        [
+          "w9jen5mbrmpwdlvwg",
+          1
+        ],
+        [
+          "weshmjt5hmpwdlxfu",
+          1
+        ],
+        [
+          "zvsy3y8y6mpwdlmlr",
+          1
+        ],
+        [
+          "zody3sn2umpwdlsye",
+          1
+        ],
+        [
+          "zrlmy9qjcmpwdll9c",
+          1
+        ],
+        [
+          "y4g9uq47rmpwdlnkd",
+          1
+        ]
+      ],
+      "sample_values": [
+        "kpraeey52mpwdluxu",
+        "demo_iv_a306b0d1a35df72",
+        "demo_iv_a5d16123952fec8",
+        "demo_iv_aa60c29ba9ad72a",
+        "demo_iv_b1733a807a9a1cc",
+        "demo_iv_b2e52c0edfd12eb",
+        "demo_iv_b3626f6779308a9",
+        "demo_iv_b4d5fed2d40141f",
+        "demo_iv_b8d8687e43a0d6e",
+        "demo_iv_c1a3711741685f2"
+      ],
+      "notes": [
+        "primary-key"
+      ]
+    },
+    {
+      "name": "productName",
+      "declared_type": "varchar(500)",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 146,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 73,
+      "distinct_pct": 50.0,
+      "is_unique": false,
+      "is_low_cardinality": false,
+      "min_value": "Battery - Accessory - N/A",
+      "max_value": "Strawberry Guava - Trim - HL-17",
+      "min_length": 18,
+      "max_length": 43,
+      "avg_length": 31.78,
+      "pattern_hints": [],
+      "distinct_values": [
+        "Battery - Accessory - N/A",
+        "Berry Fizz - Flower Bulk - HL-24",
+        "Berry Fizz - Flower Bulk - HL-25",
+        "Berry Fizz - Flower Bulk - HL-29",
+        "Berry Fizz - Flower Smalls - HL-24",
+        "Berry Fizz - Flower Smalls - HL-25",
+        "Berry Fizz - Trim - HL-24",
+        "Berry Fizz - Trim - HL-25",
+        "Berry Fizz - Waste - HL-24",
+        "Berry Fizz - Waste - HL-25",
+        "Black Maple - Flower Bulk - HL-18",
+        "Black Maple - Flower Smalls - HL-18",
+        "Black Maple - Trim - HL-18",
+        "Black Maple - Waste - HL-18",
+        "Candied Oranges - Flower Bulk - HL-29",
+        "Deathstar - Flower Bulk - HL-15",
+        "Donkey Butter - Rosin Jar - ML-36",
+        "Dulce De Uva - Flower Bulk - HL-17",
+        "Dulce De Uva - Flower Bulk - HL-18",
+        "Dulce De Uva - Flower Jars - HL-15",
+        "Dulce De Uva - Flower Smalls - HL-18",
+        "Dulce De Uva - Trim - HL-17",
+        "Dulce De Uva - Trim - HL-18",
+        "Dulce De Uva - Waste - HL-18",
+        "G13 Skunk - Flower Bulk - HL-25",
+        "G13 Skunk - Flower Bulk - HL-29",
+        "G13 Skunk - Flower Smalls - HL-25",
+        "G13 Skunk - Trim - HL-25",
+        "G13 Skunk - Waste - HL-25",
+        "GMO - Flower Bulk - HL-20",
+        "GMO - Flower Bulk - HL-25",
+        "GMO - Flower Smalls - HL-25",
+        "GMO - Rosin Bulk - ML-42",
+        "GMO - Trim - HL-25",
+        "GMO - Waste - HL-25",
+        "Lavender Piff - Flower Bulk - HL-25",
+        "Lavender Piff - Flower Smalls - HL-25",
+        "Lavender Piff - Trim - HL-25",
+        "Lavender Piff - Waste - HL-25",
+        "Melted Strawberries - Flower Bulk - HL-18",
+        "Melted Strawberries - Flower Bulk - HL-20",
+        "Melted Strawberries - Flower Bulk - HL-24",
+        "Melted Strawberries - Flower Bulk - HL-25",
+        "Melted Strawberries - Flower Bulk - HL-29",
+        "Melted Strawberries - Flower Smalls - HL-18",
+        "Melted Strawberries - Flower Smalls - HL-24",
+        "Melted Strawberries - Flower Smalls - HL-25",
+        "Melted Strawberries - Rosin Bulk - ML-41",
+        "Melted Strawberries - Trim - HL-17",
+        "Melted Strawberries - Trim - HL-20",
+        "Melted Strawberries - Trim - HL-24",
+        "Melted Strawberries - Trim - HL-25",
+        "Melted Strawberries - Waste - HL-18",
+        "Melted Strawberries - Waste - HL-24",
+        "Melted Strawberries - Waste - HL-25",
+        "Moroccan Peaches - Flower Bulk - HL-17",
+        "Moroccan Peaches - Trim - HL-17",
+        "Multipack - Preroll - ML-44",
+        "Multipack - Preroll - ML-45",
+        "Multipack - Preroll - ML-46",
+        "Multipack - Preroll - ML-47",
+        "Multipack - Preroll - ML-51",
+        "Papaya Juice - Flower Bulk - HL-18",
+        "Papaya Juice - Flower Smalls - HL-18",
+        "Papaya Juice - Waste - HL-18",
+        "Sherb Cream Pie - Flower Bulk - HL-24",
+        "Sherb Cream Pie - Flower Smalls - HL-24",
+        "Sherb Cream Pie - Trim - HL-24",
+        "Sherb Cream Pie - Waste - HL-24",
+        "Sour Diesel - Flower Smalls - HL-24T",
+        "Sour Diesel - Trim - HL-24T",
+        "Sour Diesel - Waste - HL-24T",
+        "Strawberry Guava - Trim - HL-17"
+      ],
+      "top_values": [
+        [
+          "Melted Strawberries - Flower Smalls - HL-24",
+          2
+        ],
+        [
+          "Melted Strawberries - Waste - HL-25",
+          2
+        ],
+        [
+          "Melted Strawberries - Waste - HL-24",
+          2
+        ],
+        [
+          "Melted Strawberries - Waste - HL-18",
+          2
+        ],
+        [
+          "Melted Strawberries - Trim - HL-25",
+          2
+        ],
+        [
+          "Melted Strawberries - Trim - HL-24",
+          2
+        ],
+        [
+          "Melted Strawberries - Trim - HL-20",
+          2
+        ],
+        [
+          "Melted Strawberries - Trim - HL-17",
+          2
+        ],
+        [
+          "Melted Strawberries - Rosin Bulk - ML-41",
+          2
+        ],
+        [
+          "Melted Strawberries - Flower Smalls - HL-25",
+          2
+        ],
+        [
+          "Moroccan Peaches - Flower Bulk - HL-17",
+          2
+        ],
+        [
+          "Melted Strawberries - Flower Smalls - HL-18",
+          2
+        ],
+        [
+          "Melted Strawberries - Flower Bulk - HL-29",
+          2
+        ],
+        [
+          "Melted Strawberries - Flower Bulk - HL-25",
+          2
+        ],
+        [
+          "Melted Strawberries - Flower Bulk - HL-24",
+          2
+        ],
+        [
+          "Melted Strawberries - Flower Bulk - HL-20",
+          2
+        ],
+        [
+          "Melted Strawberries - Flower Bulk - HL-18",
+          2
+        ],
+        [
+          "Lavender Piff - Waste - HL-25",
+          2
+        ],
+        [
+          "Lavender Piff - Trim - HL-25",
+          2
+        ],
+        [
+          "Papaya Juice - Waste - HL-18",
+          2
+        ],
+        [
+          "Strawberry Guava - Trim - HL-17",
+          2
+        ],
+        [
+          "Sour Diesel - Waste - HL-24T",
+          2
+        ],
+        [
+          "Sour Diesel - Trim - HL-24T",
+          2
+        ],
+        [
+          "Sour Diesel - Flower Smalls - HL-24T",
+          2
+        ],
+        [
+          "Sherb Cream Pie - Waste - HL-24",
+          2
+        ],
+        [
+          "Sherb Cream Pie - Trim - HL-24",
+          2
+        ],
+        [
+          "Sherb Cream Pie - Flower Smalls - HL-24",
+          2
+        ],
+        [
+          "Sherb Cream Pie - Flower Bulk - HL-24",
+          2
+        ],
+        [
+          "Lavender Piff - Flower Smalls - HL-25",
+          2
+        ],
+        [
+          "Papaya Juice - Flower Smalls - HL-18",
+          2
+        ],
+        [
+          "Papaya Juice - Flower Bulk - HL-18",
+          2
+        ],
+        [
+          "Multipack - Preroll - ML-51",
+          2
+        ],
+        [
+          "Multipack - Preroll - ML-47",
+          2
+        ],
+        [
+          "Multipack - Preroll - ML-46",
+          2
+        ],
+        [
+          "Multipack - Preroll - ML-45",
+          2
+        ],
+        [
+          "Multipack - Preroll - ML-44",
+          2
+        ],
+        [
+          "Moroccan Peaches - Trim - HL-17",
+          2
+        ],
+        [
+          "Berry Fizz - Waste - HL-25",
+          2
+        ],
+        [
+          "Dulce De Uva - Flower Bulk - HL-17",
+          2
+        ],
+        [
+          "Donkey Butter - Rosin Jar - ML-36",
+          2
+        ],
+        [
+          "Deathstar - Flower Bulk - HL-15",
+          2
+        ],
+        [
+          "Candied Oranges - Flower Bulk - HL-29",
+          2
+        ],
+        [
+          "Black Maple - Waste - HL-18",
+          2
+        ],
+        [
+          "Black Maple - Trim - HL-18",
+          2
+        ],
+        [
+          "Black Maple - Flower Smalls - HL-18",
+          2
+        ],
+        [
+          "Black Maple - Flower Bulk - HL-18",
+          2
+        ],
+        [
+          "Dulce De Uva - Flower Bulk - HL-18",
+          2
+        ],
+        [
+          "Berry Fizz - Waste - HL-24",
+          2
+        ],
+        [
+          "Berry Fizz - Trim - HL-25",
+          2
+        ],
+        [
+          "Berry Fizz - Trim - HL-24",
+          2
+        ]
+      ],
+      "sample_values": [
+        "Melted Strawberries - Flower Smalls - HL-24",
+        "Melted Strawberries - Waste - HL-25",
+        "Melted Strawberries - Waste - HL-24",
+        "Melted Strawberries - Waste - HL-18",
+        "Melted Strawberries - Trim - HL-25",
+        "Melted Strawberries - Trim - HL-24",
+        "Melted Strawberries - Trim - HL-20",
+        "Melted Strawberries - Trim - HL-17",
+        "Melted Strawberries - Rosin Bulk - ML-41",
+        "Melted Strawberries - Flower Smalls - HL-25"
+      ],
+      "notes": [
+        "indexed"
+      ]
+    },
+    {
+      "name": "strain",
+      "declared_type": "varchar(255)",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 146,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 17,
+      "distinct_pct": 11.64,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "Battery",
+      "max_value": "Strawberry Guava",
+      "min_length": 3,
+      "max_length": 19,
+      "avg_length": 12.37,
+      "pattern_hints": [],
+      "distinct_values": [
+        "Battery",
+        "Berry Fizz",
+        "Black Maple",
+        "Candied Oranges",
+        "Deathstar",
+        "Donkey Butter",
+        "Dulce De Uva",
+        "G13 Skunk",
+        "GMO",
+        "Lavender Piff",
+        "Melted Strawberries",
+        "Moroccan Peaches",
+        "Multipack",
+        "Papaya Juice",
+        "Sherb Cream Pie",
+        "Sour Diesel",
+        "Strawberry Guava"
+      ],
+      "top_values": [
+        [
+          "Melted Strawberries",
+          32
+        ],
+        [
+          "Berry Fizz",
+          18
+        ],
+        [
+          "Dulce De Uva",
+          14
+        ],
+        [
+          "GMO",
+          12
+        ],
+        [
+          "G13 Skunk",
+          10
+        ],
+        [
+          "Multipack",
+          10
+        ],
+        [
+          "Lavender Piff",
+          8
+        ],
+        [
+          "Black Maple",
+          8
+        ],
+        [
+          "Sherb Cream Pie",
+          8
+        ],
+        [
+          "Papaya Juice",
+          6
+        ],
+        [
+          "Sour Diesel",
+          6
+        ],
+        [
+          "Moroccan Peaches",
+          4
+        ],
+        [
+          "Deathstar",
+          2
+        ],
+        [
+          "Donkey Butter",
+          2
+        ],
+        [
+          "Candied Oranges",
+          2
+        ],
+        [
+          "Battery",
+          2
+        ],
+        [
+          "Strawberry Guava",
+          2
+        ]
+      ],
+      "sample_values": [
+        "Melted Strawberries",
+        "Berry Fizz",
+        "Dulce De Uva",
+        "GMO",
+        "G13 Skunk",
+        "Multipack",
+        "Lavender Piff",
+        "Black Maple",
+        "Sherb Cream Pie",
+        "Papaya Juice"
+      ],
+      "notes": [
+        "indexed"
+      ]
+    },
+    {
+      "name": "productType",
+      "declared_type": "varchar(255)",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 146,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 9,
+      "distinct_pct": 6.16,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "Accessory",
+      "max_value": "Waste",
+      "min_length": 4,
+      "max_length": 13,
+      "avg_length": 8.4,
+      "pattern_hints": [],
+      "distinct_values": [
+        "Accessory",
+        "Flower Bulk",
+        "Flower Jars",
+        "Flower Smalls",
+        "Preroll",
+        "Rosin Bulk",
+        "Rosin Jar",
+        "Trim",
+        "Waste"
+      ],
+      "top_values": [
+        [
+          "Flower Bulk",
+          42
+        ],
+        [
+          "Trim",
+          32
+        ],
+        [
+          "Waste",
+          26
+        ],
+        [
+          "Flower Smalls",
+          26
+        ],
+        [
+          "Preroll",
+          10
+        ],
+        [
+          "Rosin Bulk",
+          4
+        ],
+        [
+          "Flower Jars",
+          2
+        ],
+        [
+          "Accessory",
+          2
+        ],
+        [
+          "Rosin Jar",
+          2
+        ]
+      ],
+      "sample_values": [
+        "Flower Bulk",
+        "Trim",
+        "Waste",
+        "Flower Smalls",
+        "Preroll",
+        "Rosin Bulk",
+        "Flower Jars",
+        "Accessory",
+        "Rosin Jar"
+      ],
+      "notes": []
+    },
+    {
+      "name": "lotNumber",
+      "declared_type": "varchar(100)",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 146,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 17,
+      "distinct_pct": 11.64,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "HL-15",
+      "max_value": "N/A",
+      "min_length": 3,
+      "max_length": 6,
+      "avg_length": 5.01,
+      "pattern_hints": [],
+      "distinct_values": [
+        "HL-15",
+        "HL-17",
+        "HL-18",
+        "HL-20",
+        "HL-24",
+        "HL-24T",
+        "HL-25",
+        "HL-29",
+        "ML-36",
+        "ML-41",
+        "ML-42",
+        "ML-44",
+        "ML-45",
+        "ML-46",
+        "ML-47",
+        "ML-51",
+        "N/A"
+      ],
+      "top_values": [
+        [
+          "HL-25",
+          40
+        ],
+        [
+          "HL-18",
+          28
+        ],
+        [
+          "HL-24",
+          24
+        ],
+        [
+          "HL-17",
+          12
+        ],
+        [
+          "HL-29",
+          8
+        ],
+        [
+          "HL-20",
+          6
+        ],
+        [
+          "HL-24T",
+          6
+        ],
+        [
+          "HL-15",
+          4
+        ],
+        [
+          "N/A",
+          2
+        ],
+        [
+          "ML-51",
+          2
+        ],
+        [
+          "ML-47",
+          2
+        ],
+        [
+          "ML-46",
+          2
+        ],
+        [
+          "ML-45",
+          2
+        ],
+        [
+          "ML-44",
+          2
+        ],
+        [
+          "ML-42",
+          2
+        ],
+        [
+          "ML-41",
+          2
+        ],
+        [
+          "ML-36",
+          2
+        ]
+      ],
+      "sample_values": [
+        "HL-25",
+        "HL-18",
+        "HL-24",
+        "HL-17",
+        "HL-29",
+        "HL-20",
+        "HL-24T",
+        "HL-15",
+        "N/A",
+        "ML-51"
+      ],
+      "notes": [
+        "indexed"
+      ]
+    },
+    {
+      "name": "current_qty",
+      "declared_type": "double",
+      "inferred_kind": "float",
+      "nullable": true,
+      "total_rows": 146,
+      "null_count": 48,
+      "null_pct": 32.88,
+      "distinct_count": 49,
+      "distinct_pct": 50.0,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": 5.0,
+      "max_value": 2300.0,
+      "min_length": 1,
+      "max_length": 6,
+      "avg_length": 4.61,
+      "pattern_hints": [
+        "float-as-text"
+      ],
+      "distinct_values": [
+        5.0,
+        7.0,
+        13.0,
+        25.5,
+        65.2,
+        75.7,
+        78.2,
+        110.4,
+        131.7,
+        155.1,
+        174.5,
+        182.5,
+        205.6,
+        212.2,
+        212.9,
+        245.1,
+        248.7,
+        265.6,
+        268.4,
+        291.7,
+        295.8,
+        306.0,
+        325.7,
+        344.9,
+        362.2,
+        376.0,
+        378.9,
+        397.9,
+        447.0,
+        452.8,
+        457.4,
+        460.9,
+        477.2,
+        540.8,
+        586.2,
+        664.9,
+        673.6,
+        700.0,
+        714.1,
+        732.4,
+        787.7,
+        844.9,
+        851.5,
+        1067.1,
+        1221.7,
+        1230.6,
+        1310.4,
+        1570.1,
+        2300.0
+      ],
+      "top_values": [
+        [
+          1570.1,
+          2
+        ],
+        [
+          540.8,
+          2
+        ],
+        [
+          1067.1,
+          2
+        ],
+        [
+          851.5,
+          2
+        ],
+        [
+          457.4,
+          2
+        ],
+        [
+          182.5,
+          2
+        ],
+        [
+          25.5,
+          2
+        ],
+        [
+          460.9,
+          2
+        ],
+        [
+          1230.6,
+          2
+        ],
+        [
+          325.7,
+          2
+        ],
+        [
+          397.9,
+          2
+        ],
+        [
+          344.9,
+          2
+        ],
+        [
+          291.7,
+          2
+        ],
+        [
+          700.0,
+          2
+        ],
+        [
+          477.2,
+          2
+        ],
+        [
+          131.7,
+          2
+        ],
+        [
+          7.0,
+          2
+        ],
+        [
+          452.8,
+          2
+        ],
+        [
+          362.2,
+          2
+        ],
+        [
+          2300.0,
+          2
+        ],
+        [
+          787.7,
+          2
+        ],
+        [
+          265.6,
+          2
+        ],
+        [
+          844.9,
+          2
+        ],
+        [
+          155.1,
+          2
+        ],
+        [
+          586.2,
+          2
+        ],
+        [
+          714.1,
+          2
+        ],
+        [
+          268.4,
+          2
+        ],
+        [
+          376.0,
+          2
+        ],
+        [
+          78.2,
+          2
+        ],
+        [
+          5.0,
+          2
+        ],
+        [
+          306.0,
+          2
+        ],
+        [
+          174.5,
+          2
+        ],
+        [
+          65.2,
+          2
+        ],
+        [
+          1310.4,
+          2
+        ],
+        [
+          378.9,
+          2
+        ],
+        [
+          13.0,
+          2
+        ],
+        [
+          673.6,
+          2
+        ],
+        [
+          248.7,
+          2
+        ],
+        [
+          664.9,
+          2
+        ],
+        [
+          75.7,
+          2
+        ],
+        [
+          245.1,
+          2
+        ],
+        [
+          212.2,
+          2
+        ],
+        [
+          295.8,
+          2
+        ],
+        [
+          732.4,
+          2
+        ],
+        [
+          212.9,
+          2
+        ],
+        [
+          1221.7,
+          2
+        ],
+        [
+          110.4,
+          2
+        ],
+        [
+          205.6,
+          2
+        ],
+        [
+          447.0,
+          2
+        ]
+      ],
+      "sample_values": [
+        1570.1,
+        540.8,
+        1067.1,
+        851.5,
+        457.4,
+        182.5,
+        25.5,
+        460.9,
+        1230.6,
+        325.7
+      ],
+      "notes": []
+    },
+    {
+      "name": "pending",
+      "declared_type": "double",
+      "inferred_kind": "float",
+      "nullable": true,
+      "total_rows": 146,
+      "null_count": 48,
+      "null_pct": 32.88,
+      "distinct_count": 1,
+      "distinct_pct": 1.02,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": 0.0,
+      "max_value": 0.0,
+      "min_length": 1,
+      "max_length": 1,
+      "avg_length": 1.0,
+      "pattern_hints": [
+        "float-as-text"
+      ],
+      "distinct_values": [
+        0.0
+      ],
+      "top_values": [
+        [
+          0.0,
+          98
+        ]
+      ],
+      "sample_values": [
+        0.0
+      ],
+      "notes": []
+    },
+    {
+      "name": "remaining",
+      "declared_type": "double",
+      "inferred_kind": "float",
+      "nullable": true,
+      "total_rows": 146,
+      "null_count": 48,
+      "null_pct": 32.88,
+      "distinct_count": 49,
+      "distinct_pct": 50.0,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": 5.0,
+      "max_value": 2300.0,
+      "min_length": 1,
+      "max_length": 6,
+      "avg_length": 4.61,
+      "pattern_hints": [
+        "float-as-text"
+      ],
+      "distinct_values": [
+        5.0,
+        7.0,
+        13.0,
+        25.5,
+        65.2,
+        75.7,
+        78.2,
+        110.4,
+        131.7,
+        155.1,
+        174.5,
+        182.5,
+        205.6,
+        212.2,
+        212.9,
+        245.1,
+        248.7,
+        265.6,
+        268.4,
+        291.7,
+        295.8,
+        306.0,
+        325.7,
+        344.9,
+        362.2,
+        376.0,
+        378.9,
+        397.9,
+        447.0,
+        452.8,
+        457.4,
+        460.9,
+        477.2,
+        540.8,
+        586.2,
+        664.9,
+        673.6,
+        700.0,
+        714.1,
+        732.4,
+        787.7,
+        844.9,
+        851.5,
+        1067.1,
+        1221.7,
+        1230.6,
+        1310.4,
+        1570.1,
+        2300.0
+      ],
+      "top_values": [
+        [
+          1570.1,
+          2
+        ],
+        [
+          540.8,
+          2
+        ],
+        [
+          1067.1,
+          2
+        ],
+        [
+          851.5,
+          2
+        ],
+        [
+          457.4,
+          2
+        ],
+        [
+          182.5,
+          2
+        ],
+        [
+          25.5,
+          2
+        ],
+        [
+          460.9,
+          2
+        ],
+        [
+          1230.6,
+          2
+        ],
+        [
+          325.7,
+          2
+        ],
+        [
+          397.9,
+          2
+        ],
+        [
+          344.9,
+          2
+        ],
+        [
+          291.7,
+          2
+        ],
+        [
+          700.0,
+          2
+        ],
+        [
+          477.2,
+          2
+        ],
+        [
+          131.7,
+          2
+        ],
+        [
+          7.0,
+          2
+        ],
+        [
+          452.8,
+          2
+        ],
+        [
+          362.2,
+          2
+        ],
+        [
+          2300.0,
+          2
+        ],
+        [
+          787.7,
+          2
+        ],
+        [
+          265.6,
+          2
+        ],
+        [
+          844.9,
+          2
+        ],
+        [
+          155.1,
+          2
+        ],
+        [
+          586.2,
+          2
+        ],
+        [
+          714.1,
+          2
+        ],
+        [
+          268.4,
+          2
+        ],
+        [
+          376.0,
+          2
+        ],
+        [
+          78.2,
+          2
+        ],
+        [
+          5.0,
+          2
+        ],
+        [
+          306.0,
+          2
+        ],
+        [
+          174.5,
+          2
+        ],
+        [
+          65.2,
+          2
+        ],
+        [
+          1310.4,
+          2
+        ],
+        [
+          378.9,
+          2
+        ],
+        [
+          13.0,
+          2
+        ],
+        [
+          673.6,
+          2
+        ],
+        [
+          248.7,
+          2
+        ],
+        [
+          664.9,
+          2
+        ],
+        [
+          75.7,
+          2
+        ],
+        [
+          245.1,
+          2
+        ],
+        [
+          212.2,
+          2
+        ],
+        [
+          295.8,
+          2
+        ],
+        [
+          732.4,
+          2
+        ],
+        [
+          212.9,
+          2
+        ],
+        [
+          1221.7,
+          2
+        ],
+        [
+          110.4,
+          2
+        ],
+        [
+          205.6,
+          2
+        ],
+        [
+          447.0,
+          2
+        ]
+      ],
+      "sample_values": [
+        1570.1,
+        540.8,
+        1067.1,
+        851.5,
+        457.4,
+        182.5,
+        25.5,
+        460.9,
+        1230.6,
+        325.7
+      ],
+      "notes": []
+    },
+    {
+      "name": "lbs",
+      "declared_type": "double",
+      "inferred_kind": "float",
+      "nullable": true,
+      "total_rows": 146,
+      "null_count": 122,
+      "null_pct": 83.56,
+      "distinct_count": 12,
+      "distinct_pct": 50.0,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": 0.76,
+      "max_value": 5.07,
+      "min_length": 1,
+      "max_length": 4,
+      "avg_length": 3.75,
+      "pattern_hints": [
+        "float-as-text"
+      ],
+      "distinct_values": [
+        0.76,
+        1.0,
+        1.29,
+        1.46,
+        1.48,
+        1.61,
+        1.86,
+        2.35,
+        2.69,
+        2.71,
+        2.89,
+        5.07
+      ],
+      "top_values": [
+        [
+          2.89,
+          2
+        ],
+        [
+          1.48,
+          2
+        ],
+        [
+          1.46,
+          2
+        ],
+        [
+          1.61,
+          2
+        ],
+        [
+          2.69,
+          2
+        ],
+        [
+          2.35,
+          2
+        ],
+        [
+          2.71,
+          2
+        ],
+        [
+          0.76,
+          2
+        ],
+        [
+          1.0,
+          2
+        ],
+        [
+          5.07,
+          2
+        ],
+        [
+          1.86,
+          2
+        ],
+        [
+          1.29,
+          2
+        ]
+      ],
+      "sample_values": [
+        2.89,
+        1.48,
+        1.46,
+        1.61,
+        2.69,
+        2.35,
+        2.71,
+        0.76,
+        1.0,
+        5.07
+      ],
+      "notes": []
+    },
+    {
+      "name": "updatedAt",
+      "declared_type": "datetime",
+      "inferred_kind": "datetime",
+      "nullable": false,
+      "total_rows": 146,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 20,
+      "distinct_pct": 13.7,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "2026-06-02T08:28:47",
+      "max_value": "2026-06-04T11:10:02",
+      "min_length": 19,
+      "max_length": 19,
+      "avg_length": 19.0,
+      "pattern_hints": [
+        "datetime-string"
+      ],
+      "distinct_values": [
+        "2026-06-02T08:28:47",
+        "2026-06-02T08:28:48",
+        "2026-06-02T08:28:49",
+        "2026-06-02T08:28:50",
+        "2026-06-02T08:28:51",
+        "2026-06-02T08:28:52",
+        "2026-06-02T08:28:53",
+        "2026-06-02T08:28:54",
+        "2026-06-02T08:28:55",
+        "2026-06-02T08:28:56",
+        "2026-06-02T08:28:57",
+        "2026-06-02T08:28:58",
+        "2026-06-02T08:28:59",
+        "2026-06-02T08:29:00",
+        "2026-06-02T08:29:01",
+        "2026-06-02T08:29:02",
+        "2026-06-02T08:29:03",
+        "2026-06-02T08:29:04",
+        "2026-06-02T08:29:05",
+        "2026-06-04T11:10:02"
+      ],
+      "top_values": [
+        [
+          "2026-06-04T11:10:02",
+          73
+        ],
+        [
+          "2026-06-02T08:29:04",
+          4
+        ],
+        [
+          "2026-06-02T08:28:50",
+          4
+        ],
+        [
+          "2026-06-02T08:29:01",
+          4
+        ],
+        [
+          "2026-06-02T08:28:58",
+          4
+        ],
+        [
+          "2026-06-02T08:28:51",
+          4
+        ],
+        [
+          "2026-06-02T08:28:49",
+          4
+        ],
+        [
+          "2026-06-02T08:28:48",
+          4
+        ],
+        [
+          "2026-06-02T08:29:03",
+          4
+        ],
+        [
+          "2026-06-02T08:28:59",
+          4
+        ],
+        [
+          "2026-06-02T08:29:02",
+          4
+        ],
+        [
+          "2026-06-02T08:28:54",
+          4
+        ],
+        [
+          "2026-06-02T08:29:00",
+          4
+        ],
+        [
+          "2026-06-02T08:28:55",
+          4
+        ],
+        [
+          "2026-06-02T08:28:53",
+          4
+        ],
+        [
+          "2026-06-02T08:28:56",
+          4
+        ],
+        [
+          "2026-06-02T08:28:52",
+          4
+        ],
+        [
+          "2026-06-02T08:28:57",
+          4
+        ],
+        [
+          "2026-06-02T08:29:05",
+          3
+        ],
+        [
+          "2026-06-02T08:28:47",
+          2
+        ]
+      ],
+      "sample_values": [
+        "2026-06-04T11:10:02",
+        "2026-06-02T08:29:04",
+        "2026-06-02T08:28:50",
+        "2026-06-02T08:29:01",
+        "2026-06-02T08:28:58",
+        "2026-06-02T08:28:51",
+        "2026-06-02T08:28:49",
+        "2026-06-02T08:28:48",
+        "2026-06-02T08:29:03",
+        "2026-06-02T08:28:59"
+      ],
+      "notes": []
+    },
+    {
+      "name": "tenantid",
+      "declared_type": "int",
+      "inferred_kind": "integer",
+      "nullable": false,
+      "total_rows": 146,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "distinct_pct": 1.37,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": 1,
+      "max_value": 99,
+      "min_length": 1,
+      "max_length": 2,
+      "avg_length": 1.5,
+      "pattern_hints": [
+        "boolean-token",
+        "integer-as-text"
+      ],
+      "distinct_values": [
+        1,
+        99
+      ],
+      "top_values": [
+        [
+          1,
+          73
+        ],
+        [
+          99,
+          73
+        ]
+      ],
+      "sample_values": [
+        1,
+        99
+      ],
+      "notes": []
+    },
+    {
+      "name": "brand_id",
+      "declared_type": "varchar(36)",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 146,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "distinct_pct": 1.37,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "ca323241-ef74-425f-aa67-239247ccd0e9",
+      "max_value": "cmmakqdsn0037qsoig4b4yo9t",
+      "min_length": 25,
+      "max_length": 36,
+      "avg_length": 30.5,
+      "pattern_hints": [
+        "uuid"
+      ],
+      "distinct_values": [
+        "ca323241-ef74-425f-aa67-239247ccd0e9",
+        "cmmakqdsn0037qsoig4b4yo9t"
+      ],
+      "top_values": [
+        [
+          "cmmakqdsn0037qsoig4b4yo9t",
+          73
+        ],
+        [
+          "ca323241-ef74-425f-aa67-239247ccd0e9",
+          73
+        ]
+      ],
+      "sample_values": [
+        "cmmakqdsn0037qsoig4b4yo9t",
+        "ca323241-ef74-425f-aa67-239247ccd0e9"
+      ],
+      "notes": []
+    }
+  ],
+  "sample_rows": [
+    {
+      "id": "0clgn3ickmpwdlu53",
+      "productname": "Melted Strawberries - Trim - HL-20",
+      "strain": "Melted Strawberries",
+      "producttype": "Trim",
+      "lotnumber": "HL-20",
+      "current_qty": 248.7,
+      "pending": 0.0,
+      "remaining": 248.7,
+      "lbs": null,
+      "updatedat": "2026-06-02T08:28:59",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    },
+    {
+      "id": "162eaz2z9mpwdlskd",
+      "productname": "Melted Strawberries - Flower Bulk - HL-24",
+      "strain": "Melted Strawberries",
+      "producttype": "Flower Bulk",
+      "lotnumber": "HL-24",
+      "current_qty": 268.4,
+      "pending": 0.0,
+      "remaining": 268.4,
+      "lbs": null,
+      "updatedat": "2026-06-02T08:28:57",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    },
+    {
+      "id": "1jadje5a4mpwdlopv",
+      "productname": "Dulce De Uva - Trim - HL-17",
+      "strain": "Dulce De Uva",
+      "producttype": "Trim",
+      "lotnumber": "HL-17",
+      "current_qty": 376.0,
+      "pending": 0.0,
+      "remaining": 376.0,
+      "lbs": null,
+      "updatedat": "2026-06-02T08:28:52",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    },
+    {
+      "id": "1y2fbdbh5mpwdlr7w",
+      "productname": "GMO - Waste - HL-25",
+      "strain": "GMO",
+      "producttype": "Waste",
+      "lotnumber": "HL-25",
+      "current_qty": 78.2,
+      "pending": 0.0,
+      "remaining": 78.2,
+      "lbs": null,
+      "updatedat": "2026-06-02T08:28:56",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    },
+    {
+      "id": "2xk3pdynympwdloc1",
+      "productname": "Dulce De Uva - Flower Jars - HL-15",
+      "strain": "Dulce De Uva",
+      "producttype": "Flower Jars",
+      "lotnumber": "HL-15",
+      "current_qty": 5.0,
+      "pending": 0.0,
+      "remaining": 5.0,
+      "lbs": null,
+      "updatedat": "2026-06-02T08:28:52",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    }
+  ],
+  "notes": []
+}

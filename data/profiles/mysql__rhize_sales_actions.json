@@ -1,0 +1,1404 @@
+{
+  "engine": "mysql",
+  "schema": null,
+  "table": "rhize_sales_actions",
+  "row_count": 137,
+  "column_count": 12,
+  "primary_key": [
+    "id"
+  ],
+  "indexes": [
+    {
+      "name": "idx_category",
+      "unique": false,
+      "columns": [
+        "category"
+      ]
+    },
+    {
+      "name": "idx_customerName",
+      "unique": false,
+      "columns": [
+        "customerName"
+      ]
+    },
+    {
+      "name": "idx_sales_actions_tenantid_brand",
+      "unique": false,
+      "columns": [
+        "tenantid",
+        "brand_id"
+      ]
+    },
+    {
+      "name": "idx_status",
+      "unique": false,
+      "columns": [
+        "status"
+      ]
+    },
+    {
+      "name": "PRIMARY",
+      "unique": true,
+      "columns": [
+        "id"
+      ]
+    }
+  ],
+  "columns": [
+    {
+      "name": "id",
+      "declared_type": "varchar(36)",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 137,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 137,
+      "distinct_pct": 100.0,
+      "is_unique": true,
+      "is_low_cardinality": false,
+      "min_value": "cmmaje3hw01euzpoixg4i4rqs",
+      "max_value": "stiixkw08mps64nwd",
+      "min_length": 17,
+      "max_length": 25,
+      "avg_length": 24.45,
+      "pattern_hints": [],
+      "distinct_values": [
+        "cmmaje3hw01euzpoixg4i4rqs",
+        "cmmaje3hw01evzpoil58v4kn3",
+        "cmmaje3hw01ewzpoi7nsfx5yq",
+        "cmmaje3hw01exzpoiupwru32j",
+        "cmmaje3hw01eyzpoigoc3uk08",
+        "cmmaje3hw01ezzpoiu2102fbm",
+        "cmmaje3hw01f0zpoijxgl2013",
+        "cmmaje3hw01f1zpoi0ktxyh8c",
+        "cmmaje3hw01f2zpoi93ni2to3",
+        "cmmaje3hw01f3zpoi3e2x2n2a",
+        "cmmaje3hw01f4zpoixblgsuf7",
+        "cmmaje3hw01f5zpoi09p9iqb6",
+        "cmmaje3hw01f6zpoi6zxb7twk",
+        "cmmaje3hw01f7zpoik00js8u7",
+        "cmmaje3hw01f8zpoiy6kzne8z",
+        "cmmaje3hw01f9zpoi2v01lzps",
+        "cmmaje3hw01fazpoi0t11jk7e",
+        "cmmaje3hw01fbzpoiial7bggs",
+        "cmmaje3hw01fczpoixti38jc2",
+        "cmmaje3hw01fdzpoi8l4j57zh",
+        "cmmaje3hw01fezpoim8us6hrf",
+        "cmmaje3hw01ffzpoiwe403z36",
+        "cmmaje3hw01fgzpoi5vd3dwun",
+        "cmmaje3hw01fhzpoia77i7at5",
+        "cmmaje3hw01fizpoiihvzpjpt",
+        "cmmaje3hw01fjzpoijfx2w5l5",
+        "cmmaje3hw01fkzpoi36cgtcpx",
+        "cmmaje3hw01flzpoi0285rzqv",
+        "cmmaje3hw01fmzpoipcgl6gav",
+        "cmmaje3hw01fnzpoi549xgcbb",
+        "cmmaje3hw01fozpoia2eptq62",
+        "cmmaje3hw01fpzpoi4k0pnua8",
+        "cmmaje3hw01fqzpoih96khpud",
+        "cmmaje3hw01frzpoiytq6w3t1",
+        "cmmaje3hw01fszpoi8ifjwras",
+        "cmmaje3hw01ftzpoilhvkc1ow",
+        "cmmaje3hw01fuzpoi4bjw806w",
+        "cmmaje3hw01fvzpoi2y70a4u7",
+        "cmmaje3hw01fwzpoi6dtjtb0l",
+        "cmmaje3hw01fxzpoiqpb9gmbq",
+        "cmmaje3hw01fyzpoi2zyfgqt0",
+        "cmmaje3hw01fzzpoi8zpgmidu",
+        "cmmaje3hw01g0zpoi4mlg4nwa",
+        "cmmaje3hw01g1zpoijc4gletg",
+        "cmmaje3hw01g2zpoi49kdtowv",
+        "cmmaje3hw01g3zpoi5j8vxz08",
+        "cmmaje3hw01g4zpoi93xnihgf",
+        "cmmaje3hw01g5zpoi0xvztjv8",
+        "cmmaje3hw01g6zpoig7zvc1jl",
+        "cmmaje3hw01g7zpoisb6kq5d4",
+        "cmmaje3hw01g8zpoinis1nayu",
+        "cmmaje3hw01g9zpoi127q27ck",
+        "cmmaje3hw01gazpoiwp5qd64a",
+        "cmmaje3hw01gbzpoi1rufzdeu",
+        "cmmaje3hw01gczpoimn7prxtt",
+        "cmmaje3hw01gdzpoixgqjnxnd",
+        "cmmaje3hw01gezpoie9wyqz7j",
+        "cmmaje3hw01gfzpoiotlx53vk",
+        "cmmaje3hw01ggzpoimm2qpx8w",
+        "cmmaje3hw01ghzpoii2zsq2qo",
+        "cmmaje3hw01gizpoi6642o4uc",
+        "cmmaje3hw01gjzpoi38qb1vzv",
+        "cmmaje3hw01gkzpoiv8tjylg5",
+        "cmmaje3hw01glzpoijs585n58",
+        "cmmaje3hw01gmzpoi6xhsenh8",
+        "cmmaje3hw01gnzpoi3rnlfh35",
+        "cmmaje3hw01gozpoi5m0q1a04",
+        "cmmaje3hw01gpzpoinptf9ddy",
+        "cmmaje3hx01gqzpoilkv977r8",
+        "cmmaje3hx01grzpoi8knewxvz",
+        "cmmaje3hx01gszpoiwftcphgf",
+        "cmmaje3hx01gtzpoihjcvjptu",
+        "cmmaje3hx01guzpoiechy1whe",
+        "cmmaje3hx01gvzpoinofug5xg",
+        "cmmaje3hx01gwzpoiatqyb70y",
+        "cmmaje3hx01gxzpoij3zyzwru",
+        "cmmaje3hx01gyzpoi60z7x71q",
+        "cmmaje3hx01gzzpoie9fs1zh7",
+        "cmmaje3hx01h0zpoil7g2id09",
+        "cmmaje3hx01h1zpoihe5guccv",
+        "cmmaje3hx01h2zpoikvfikf4n",
+        "cmmaje3hx01h3zpoi947smn9y",
+        "cmmaje3hx01h4zpoi6g1vfb1z",
+        "cmmaje3hx01h5zpoi2nl0l3rx",
+        "cmmaje3hx01h6zpoihi0h0rk7",
+        "cmmaje3hx01h7zpoi9y7u6j6n",
+        "cmmaje3hx01h8zpoi7q7bvzf4",
+        "cmmaje3hx01h9zpoiirv5901h",
+        "cmmaje3hx01hazpoid6x5ts7l",
+        "cmmaje3hx01hbzpoi3cu49kws",
+        "cmmaje3hx01hczpoidkyqwip4",
+        "cmmaje3hx01hdzpoi31xy3jfj",
+        "cmmaje3hx01hezpoirbd275td",
+        "cmmaje3hx01hfzpoi0uvtomkn",
+        "cmmaje3hx01hgzpoiktbp7poj",
+        "cmmaje3hx01hhzpoiuqsg7ixb",
+        "cmmaje3hx01hizpoi0cfy4jwu",
+        "cmmaje3hx01hjzpoijwnxmvnb",
+        "cmmaje3hx01hkzpoigyau7yp2",
+        "cmmaje3hx01hlzpoiqz4sj6g1",
+        "cmmaje46v01hmzpoiljmiwonn",
+        "cmmaje46v01hnzpoijer0y8ws",
+        "cmmaje46v01hozpoixgm61sos",
+        "cmmaje46v01hpzpoip3v8bvyz",
+        "cmmaje46v01hqzpoibbcugbm1",
+        "demo_sa_21661a06ea3ae90",
+        "demo_sa_2adc581c625f575",
+        "demo_sa_324de1054907496",
+        "demo_sa_54025566ce18f3d",
+        "demo_sa_56a6a8b14718ad4",
+        "demo_sa_56f6154712fedb0",
+        "demo_sa_5a04499e8faff6d",
+        "demo_sa_5d6ee673369b544",
+        "demo_sa_5da5dbdcca4362a",
+        "demo_sa_62921e29c0865cf",
+        "demo_sa_69f5e9ede8e0103",
+        "demo_sa_7448da340bea802",
+        "demo_sa_7c93be7239b0592",
+        "demo_sa_7d941fe368a4f9b",
+        "demo_sa_8332bf6556606ab",
+        "demo_sa_8b9d2e031d4877c",
+        "demo_sa_9396ccf58b40cb7",
+        "demo_sa_947a52b1e78bf63",
+        "demo_sa_95d4acb89b4aa9a",
+        "demo_sa_9d748fda6d63b8a",
+        "demo_sa_a19ab7c78e0a7d7",
+        "demo_sa_a2f9a856311fd9e",
+        "demo_sa_bc0e097971c6a2a",
+        "demo_sa_c179b65d9023fce",
+        "demo_sa_c3e1251a4b3a6eb",
+        "demo_sa_cc5c7ff568c876b",
+        "demo_sa_dcd8ed876f23832",
+        "demo_sa_e81754b38a6edfe",
+        "demo_sa_ee78a5528b6f6f4",
+        "demo_sa_fbb614b4b56dd42",
+        "n6sdkngcomps42fii",
+        "stiixkw08mps64nwd"
+      ],
+      "top_values": [
+        [
+          "cmmaje46v01hpzpoip3v8bvyz",
+          1
+        ],
+        [
+          "cmmaje3hx01grzpoi8knewxvz",
+          1
+        ],
+        [
+          "cmmaje3hx01gszpoiwftcphgf",
+          1
+        ],
+        [
+          "cmmaje3hx01gtzpoihjcvjptu",
+          1
+        ],
+        [
+          "cmmaje3hx01guzpoiechy1whe",
+          1
+        ],
+        [
+          "cmmaje3hx01gvzpoinofug5xg",
+          1
+        ],
+        [
+          "cmmaje3hx01gwzpoiatqyb70y",
+          1
+        ],
+        [
+          "cmmaje3hx01gxzpoij3zyzwru",
+          1
+        ],
+        [
+          "cmmaje3hx01gyzpoi60z7x71q",
+          1
+        ],
+        [
+          "cmmaje3hx01gzzpoie9fs1zh7",
+          1
+        ],
+        [
+          "cmmaje3hx01h0zpoil7g2id09",
+          1
+        ],
+        [
+          "cmmaje3hx01h1zpoihe5guccv",
+          1
+        ],
+        [
+          "cmmaje3hx01h2zpoikvfikf4n",
+          1
+        ],
+        [
+          "cmmaje3hx01h3zpoi947smn9y",
+          1
+        ],
+        [
+          "cmmaje3hx01h4zpoi6g1vfb1z",
+          1
+        ],
+        [
+          "cmmaje3hx01h5zpoi2nl0l3rx",
+          1
+        ],
+        [
+          "cmmaje3hx01h6zpoihi0h0rk7",
+          1
+        ],
+        [
+          "cmmaje3hx01h7zpoi9y7u6j6n",
+          1
+        ],
+        [
+          "cmmaje3hx01h8zpoi7q7bvzf4",
+          1
+        ],
+        [
+          "cmmaje3hx01h9zpoiirv5901h",
+          1
+        ],
+        [
+          "cmmaje3hx01hazpoid6x5ts7l",
+          1
+        ],
+        [
+          "cmmaje3hx01hbzpoi3cu49kws",
+          1
+        ],
+        [
+          "cmmaje3hx01hczpoidkyqwip4",
+          1
+        ],
+        [
+          "cmmaje3hx01hdzpoi31xy3jfj",
+          1
+        ],
+        [
+          "cmmaje3hx01hezpoirbd275td",
+          1
+        ],
+        [
+          "cmmaje3hx01hfzpoi0uvtomkn",
+          1
+        ],
+        [
+          "cmmaje3hx01hgzpoiktbp7poj",
+          1
+        ],
+        [
+          "cmmaje3hx01hhzpoiuqsg7ixb",
+          1
+        ],
+        [
+          "cmmaje3hx01hizpoi0cfy4jwu",
+          1
+        ],
+        [
+          "cmmaje3hx01hjzpoijwnxmvnb",
+          1
+        ],
+        [
+          "cmmaje3hx01hkzpoigyau7yp2",
+          1
+        ],
+        [
+          "cmmaje3hx01hlzpoiqz4sj6g1",
+          1
+        ],
+        [
+          "cmmaje46v01hmzpoiljmiwonn",
+          1
+        ],
+        [
+          "cmmaje46v01hnzpoijer0y8ws",
+          1
+        ],
+        [
+          "cmmaje46v01hozpoixgm61sos",
+          1
+        ],
+        [
+          "demo_sa_c3e1251a4b3a6eb",
+          1
+        ],
+        [
+          "demo_sa_9396ccf58b40cb7",
+          1
+        ],
+        [
+          "demo_sa_947a52b1e78bf63",
+          1
+        ],
+        [
+          "demo_sa_95d4acb89b4aa9a",
+          1
+        ],
+        [
+          "demo_sa_9d748fda6d63b8a",
+          1
+        ],
+        [
+          "demo_sa_a19ab7c78e0a7d7",
+          1
+        ],
+        [
+          "demo_sa_a2f9a856311fd9e",
+          1
+        ],
+        [
+          "demo_sa_bc0e097971c6a2a",
+          1
+        ],
+        [
+          "demo_sa_c179b65d9023fce",
+          1
+        ],
+        [
+          "demo_sa_ee78a5528b6f6f4",
+          1
+        ],
+        [
+          "stiixkw08mps64nwd",
+          1
+        ],
+        [
+          "n6sdkngcomps42fii",
+          1
+        ],
+        [
+          "demo_sa_fbb614b4b56dd42",
+          1
+        ],
+        [
+          "demo_sa_dcd8ed876f23832",
+          1
+        ],
+        [
+          "demo_sa_cc5c7ff568c876b",
+          1
+        ]
+      ],
+      "sample_values": [
+        "cmmaje46v01hpzpoip3v8bvyz",
+        "cmmaje3hx01grzpoi8knewxvz",
+        "cmmaje3hx01gszpoiwftcphgf",
+        "cmmaje3hx01gtzpoihjcvjptu",
+        "cmmaje3hx01guzpoiechy1whe",
+        "cmmaje3hx01gvzpoinofug5xg",
+        "cmmaje3hx01gwzpoiatqyb70y",
+        "cmmaje3hx01gxzpoij3zyzwru",
+        "cmmaje3hx01gyzpoi60z7x71q",
+        "cmmaje3hx01gzzpoie9fs1zh7"
+      ],
+      "notes": [
+        "primary-key"
+      ]
+    },
+    {
+      "name": "customerName",
+      "declared_type": "varchar(255)",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 137,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 30,
+      "distinct_pct": 21.9,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "",
+      "max_value": "Valley Meade",
+      "min_length": 0,
+      "max_length": 19,
+      "avg_length": 12.26,
+      "pattern_hints": [],
+      "distinct_values": [
+        "",
+        "31 North",
+        "Cambridge",
+        "Demo Customer 01",
+        "Demo Customer 02",
+        "Demo Customer 03",
+        "Demo Customer 04",
+        "Demo Customer 05",
+        "Demo Customer 06",
+        "Demo Customer 07",
+        "Demo Customer 08",
+        "Demo Customer 09",
+        "Demo Customer 10",
+        "Demo Customer 11",
+        "Demo Customer 12",
+        "Forbin's Reserve",
+        "Freedom Flower, LLC",
+        "Garcia's",
+        "GMCW",
+        "Kushies",
+        "Magic Mann",
+        "Milton Remedies",
+        "MothaPlant",
+        "Mountain Girl",
+        "Pine Grove Organics",
+        "Rimeline",
+        "Rolling Twenties",
+        "Sunday Drive",
+        "Sweetspot",
+        "Valley Meade"
+      ],
+      "top_values": [
+        [
+          "Garcia's",
+          9
+        ],
+        [
+          "Valley Meade",
+          8
+        ],
+        [
+          "GMCW",
+          8
+        ],
+        [
+          "Sunday Drive",
+          7
+        ],
+        [
+          "Rolling Twenties",
+          7
+        ],
+        [
+          "Kushies",
+          7
+        ],
+        [
+          "Pine Grove Organics",
+          7
+        ],
+        [
+          "Milton Remedies",
+          7
+        ],
+        [
+          "MothaPlant",
+          7
+        ],
+        [
+          "Freedom Flower, LLC",
+          6
+        ],
+        [
+          "Sweetspot",
+          6
+        ],
+        [
+          "Mountain Girl",
+          5
+        ],
+        [
+          "Demo Customer 06",
+          5
+        ],
+        [
+          "Rimeline",
+          5
+        ],
+        [
+          "Cambridge",
+          5
+        ],
+        [
+          "Magic Mann",
+          4
+        ],
+        [
+          "Forbin's Reserve",
+          4
+        ],
+        [
+          "Demo Customer 04",
+          4
+        ],
+        [
+          "Demo Customer 01",
+          4
+        ],
+        [
+          "Demo Customer 10",
+          3
+        ],
+        [
+          "Demo Customer 08",
+          3
+        ],
+        [
+          "Demo Customer 03",
+          3
+        ],
+        [
+          "31 North",
+          3
+        ],
+        [
+          "",
+          2
+        ],
+        [
+          "Demo Customer 11",
+          2
+        ],
+        [
+          "Demo Customer 05",
+          2
+        ],
+        [
+          "Demo Customer 12",
+          1
+        ],
+        [
+          "Demo Customer 09",
+          1
+        ],
+        [
+          "Demo Customer 07",
+          1
+        ],
+        [
+          "Demo Customer 02",
+          1
+        ]
+      ],
+      "sample_values": [
+        "Garcia's",
+        "Valley Meade",
+        "GMCW",
+        "Sunday Drive",
+        "Rolling Twenties",
+        "Kushies",
+        "Pine Grove Organics",
+        "Milton Remedies",
+        "MothaPlant",
+        "Freedom Flower, LLC"
+      ],
+      "notes": [
+        "indexed"
+      ]
+    },
+    {
+      "name": "category",
+      "declared_type": "varchar(100)",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 137,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 6,
+      "distinct_pct": 4.38,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "DORMANT",
+      "max_value": "RESTOCK",
+      "min_length": 6,
+      "max_length": 11,
+      "avg_length": 6.47,
+      "pattern_hints": [],
+      "distinct_values": [
+        "DORMANT",
+        "FULL LINEUP",
+        "MARKET",
+        "NEW PRODUCT",
+        "Reorder",
+        "RESTOCK"
+      ],
+      "top_values": [
+        [
+          "MARKET",
+          100
+        ],
+        [
+          "RESTOCK",
+          19
+        ],
+        [
+          "DORMANT",
+          9
+        ],
+        [
+          "NEW PRODUCT",
+          6
+        ],
+        [
+          "Reorder",
+          2
+        ],
+        [
+          "FULL LINEUP",
+          1
+        ]
+      ],
+      "sample_values": [
+        "MARKET",
+        "RESTOCK",
+        "DORMANT",
+        "NEW PRODUCT",
+        "Reorder",
+        "FULL LINEUP"
+      ],
+      "notes": [
+        "indexed"
+      ]
+    },
+    {
+      "name": "priority",
+      "declared_type": "int",
+      "inferred_kind": "integer",
+      "nullable": false,
+      "total_rows": 137,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 3,
+      "distinct_pct": 2.19,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": 1,
+      "max_value": 3,
+      "min_length": 1,
+      "max_length": 1,
+      "avg_length": 1.0,
+      "pattern_hints": [
+        "integer-as-text"
+      ],
+      "distinct_values": [
+        1,
+        2,
+        3
+      ],
+      "top_values": [
+        [
+          1,
+          67
+        ],
+        [
+          3,
+          43
+        ],
+        [
+          2,
+          27
+        ]
+      ],
+      "sample_values": [
+        1,
+        3,
+        2
+      ],
+      "notes": []
+    },
+    {
+      "name": "description",
+      "declared_type": "text",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 137,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 99,
+      "distinct_pct": 72.26,
+      "is_unique": false,
+      "is_low_cardinality": false,
+      "min_value": "",
+      "max_value": "Vaporizer: 78 competitor SKUs vs 0 Rhize. Top brands: Forbins Finest (10), Tumbleweed Sugar Co. (9), Nectar (7)",
+      "min_length": 0,
+      "max_length": 141,
+      "avg_length": 88.67,
+      "pattern_hints": [],
+      "distinct_values": [
+        "",
+        "1 units of Papaya Juice, last order 8 days ago",
+        "1 units of Sherb Cream Pie, last order 8 days ago",
+        "2 units of , last order 7 days ago",
+        "2 units of Battery, last order 49 days ago",
+        "2 units of Melted Strawberries, last order 8 days ago",
+        "2 units of Papaya Juice, last order 8 days ago",
+        "3 units of Melted Strawberries, last order 8 days ago",
+        "3 units of Papaya Juice, last order 103 days ago",
+        "3 units of Papaya Juice, last order 8 days ago",
+        "3 units of Strawberry Guava, last order 8 days ago",
+        "4 units of , last order 7 days ago",
+        "4 units of Melted Strawberries, last order 8 days ago",
+        "5 units of Candied Oranges, last order 8 days ago",
+        "5 units of Honey Banana, last order 8 days ago",
+        "5 units of Melted Strawberries, last order 7 days ago",
+        "5 units of Sour Diesel, last order 8 days ago",
+        "Concentrate: 13 competitor SKUs vs 0 Rhize. Top brands: Sugar House Solventless (4), Sunset Lake Cannabis (2), Cannabis Haven (2)",
+        "Concentrate: 17 competitor SKUs vs 2 Rhize. Top brands: Stone Leaf Cannabis (5), Apollo Legacy (2), Old Growth Vermont (2)",
+        "Concentrate: 19 competitor SKUs vs 0 Rhize. Top brands: Vermont Kind Craft Cannabis (4), Northwoods Extracts (4), Doughboi Farms (3)",
+        "Concentrate: 30 competitor SKUs vs 3 Rhize. Top brands: Sugar Shack Melts (7), Tilia (3), Last Minute Farm (2)",
+        "Concentrate: 32 competitor SKUs vs 0 Rhize. Top brands: The Hashstead (7), Bern Legacy Cannabis (5), Wicked Windy (2)",
+        "Concentrate: 34 competitor SKUs vs 1 Rhize. Top brands: Sugar House Solventless (7), Vermont Kind Craft Cannabis (5), Stone Leaf Cannabis (5)",
+        "Edible: 18 competitor SKUs vs 0 Rhize. Top brands: Upstate Elevator Operators (6), VTreatz (5), Pinnacle Valley Farms (4)",
+        "Edible: 24 competitor SKUs vs 0 Rhize. Top brands: Upstate Elevator Supply Co. (6), Pinnacle Valley Farms (4), Somewhere On The Mountain (3)",
+        "Edible: 33 competitor SKUs vs 0 Rhize. Top brands: Haute & Heady (11), Taunik (8), Pinnacle Valley Farms (4)",
+        "Edible: 33 competitor SKUs vs 0 Rhize. Top brands: Upstate Elevator Operators (10), Taunik (7), Rosie's Confections (7)",
+        "Edible: 34 competitor SKUs vs 0 Rhize. Top brands: Upstate Elevator Operators (7), Cannabis Collective (5), Green River Cannabis (5)",
+        "Edible: 34 competitor SKUs vs 0 Rhize. Top brands: VTreatz (8), Taunik (7), Pinnacle Valley Farms (6)",
+        "Edible: 38 competitor SKUs vs 0 Rhize. Top brands: Haute & Heady (9), Upstate Elevator Operators (6), Rosie's Confections (4)",
+        "Edible: 42 competitor SKUs vs 0 Rhize. Top brands: Haute & Heady (8), Highly Rooted (5), YUT (5)",
+        "Edible: 45 competitor SKUs vs 0 Rhize. Top brands: Mountain Girl Cannabis (5), Heltah Seltzah (5), Highly Rooted (4)",
+        "Edible: 45 competitor SKUs vs 0 Rhize. Top brands: Upstate Elevator Operators (11), Highly Rooted (9), Tir Na Nog (5)",
+        "Edible: 48 competitor SKUs vs 0 Rhize. Top brands: Highly Rooted (8), Taunik (5), Forbins Finest (4)",
+        "Edible: 50 competitor SKUs vs 0 Rhize. Top brands: Magic Mann (20), Taunik (5), VTreatz (4)",
+        "Edible: 54 competitor SKUs vs 0 Rhize. Top brands: Upstate Elevator Operators (9), Taunik (9), Stone Leaf Cannabis (8)",
+        "Edible: 72 competitor SKUs vs 0 Rhize. Top brands: Upstate Elevator Operators (10), Haute & Heady (9), Pinnacle Valley Farms (7)",
+        "Edible: 76 competitor SKUs vs 0 Rhize. Top brands: Unknown (7), Haute & Heady (6), Highly Rooted (6)",
+        "Flower: 12 competitor SKUs vs 0 Rhize. Top brands: North Node Gardens (4), Last Minute Farm (3), Oski Cultivation (2)",
+        "Flower: 13 competitor SKUs vs 0 Rhize. Top brands: Florist (5), Treetop Alliance (2), Bern Living Organics (2)",
+        "Flower: 18 competitor SKUs vs 2 Rhize. Top brands: Bushy Beard Cultivation (6), Mr. Z (3), Pinnacle Valley Farms (2)",
+        "Flower: 19 competitor SKUs vs 2 Rhize. Top brands: Grateful Grow (3), Mr. Tree (3), Birdland (2)",
+        "Flower: 21 competitor SKUs vs 0 Rhize. Top brands: Freedom Flower (15), Pot Deli (3), Bright Valley Organics (2)",
+        "Flower: 27 competitor SKUs vs 3 Rhize. Top brands: Astro Labs (4), Smoke Ranch Redemption (3), Satori (2)",
+        "Flower: 29 competitor SKUs vs 0 Rhize. Top brands: Vermont Select (5), Island Pond Cannabis (3), Geebees (3)",
+        "Flower: 33 competitor SKUs vs 2 Rhize. Top brands: Clovis (4), Unknown (4), Sacred Leaf (3)",
+        "Flower: 33 competitor SKUs vs 3 Rhize. Top brands: Astro Labs (3), Pinnacle Valley Farms (3), Pine Rock Cultivation (3)",
+        "Flower: 35 competitor SKUs vs 6 Rhize. Top brands: Forbins Finest (6), Mr. Tree (5), Green Mountain Scientific (4)",
+        "Flower: 36 competitor SKUs vs 2 Rhize. Top brands: Magic Mann (18), High Altitude (3), Geebees (2)",
+        "Flower: 37 competitor SKUs vs 0 Rhize. Top brands: Rebel Grown (5), Pinnacle Valley Farms (5), Emerald Visions (4)",
+        "Flower: 40 competitor SKUs vs 0 Rhize. Top brands: Demeters (8), Mr. Tree (6), Sunset Lake Cannabis (4)",
+        "Flower: 48 competitor SKUs vs 3 Rhize. Top brands: Forbins Finest (13), Old Growth Vermont (7), Smoke Ranch Redemption (5)",
+        "Flower: 52 competitor SKUs vs 3 Rhize. Top brands: Tilia (6), North Node Gardens (5), Mr. Z (5)",
+        "Flower: 79 competitor SKUs vs 1 Rhize. Top brands: Forbins Finest (21), Bern Legacy Cannabis (5), Bushy Beard Cultivation (5)",
+        "Flower: 92 competitor SKUs vs 0 Rhize. Top brands: Florist (8), Flower First (7), Tao Labs (6)",
+        "Last order 103 days ago",
+        "Last order 12 days ago",
+        "Last order 125 days ago",
+        "Last order 33 days ago",
+        "Last order 70 days ago",
+        "Last order 90 days ago",
+        "Never ordered Berry Fizz",
+        "Never ordered Melted Strawberries",
+        "No Rhize concentrate but 5 competitor SKUs",
+        "No Rhize concentrate but 9 competitor SKUs",
+        "No Rhize edible but 7 competitor SKUs",
+        "No Rhize edible but 9 competitor SKUs",
+        "No Rhize vaporizer but 8 competitor SKUs",
+        "No Rhize vaporizer but 9 competitor SKUs",
+        "Only 2 Rhize units in stock",
+        "Preroll: 109 competitor SKUs vs 0 Rhize. Top brands: Clean Cannabis Company (12), Forest City (12), Forbins Finest (11)",
+        "Preroll: 11 competitor SKUs vs 0 Rhize. Top brands: Pinnacle Valley Farms (5), North Node Gardens (2), Cloud 9 Cultivation (2)",
+        "Preroll: 115 competitor SKUs vs 0 Rhize. Top brands: Forbins Finest (18), Smoke Ranch Redemption (9), Old Growth Vermont (8)",
+        "Preroll: 12 competitor SKUs vs 1 Rhize. Top brands: Florist (5), Green Fish Family Farm (2), Northern Craft Cannabis (2)",
+        "Preroll: 17 competitor SKUs vs 0 Rhize. Top brands: Freedom Flower (13), Dream (2), Cola Crafting (1)",
+        "Preroll: 27 competitor SKUs vs 0 Rhize. Top brands: Old Growth Vermont (3), Forbins Finest (3), Birdland (2)",
+        "Preroll: 27 competitor SKUs vs 4 Rhize. Top brands: Pinnacle Valley Farms (5), Satori (4), Weed Connection (3)",
+        "Preroll: 41 competitor SKUs vs 0 Rhize. Top brands: Emerald Visions (8), Depot Cultivators (7), Pinnacle Valley Farms (6)",
+        "Preroll: 42 competitor SKUs vs 4 Rhize. Top brands: Old Growth Vermont (7), Smoke Ranch (5), North Node Gardens (4)",
+        "Preroll: 47 competitor SKUs vs 1 Rhize. Top brands: Magic Mann (25), Family Tree Cannabis Co. (4), Grass Queen (3)",
+        "Preroll: 56 competitor SKUs vs 3 Rhize. Top brands: Forbins Finest (9), Sunset Lake Cannabis (6), Mr. Tree (6)",
+        "Preroll: 60 competitor SKUs vs 0 Rhize. Top brands: Forbins Finest (23), Old Growth Vermont (9), Pinnacle Valley Farms (5)",
+        "Preroll: 63 competitor SKUs vs 0 Rhize. Top brands: TerpSlurper Farms (8), Rebel Grown (7), Pinnacle Valley Farms (7)",
+        "Preroll: 78 competitor SKUs vs 0 Rhize. Top brands: Mr. Tree (9), Green Castle (8), Smoke Ranch (7)",
+        "Preroll: 82 competitor SKUs vs 2 Rhize. Top brands: Pinnacle Valley Farms (13), Bushy Beard Cultivation (12), Shindig & G's (9)",
+        "Preroll: 83 competitor SKUs vs 5 Rhize. Top brands: Forbins Finest (11), Pinnacle Valley Farms (10), Mr. Z (8)",
+        "Preroll: 85 competitor SKUs vs 2 Rhize. Top brands: Vermont Kind Craft Cannabis (11), Mountain Girl Cannabis (8), PermaGanix (8)",
+        "Vaporizer: 10 competitor SKUs vs 0 Rhize. Top brands: Sunkissed Farm (3), Valley organics (3), Fall forward (2)",
+        "Vaporizer: 14 competitor SKUs vs 0 Rhize. Top brands: Gaston Weed Company (12), Unknown (1), Pinnacle Valley Farms (1)",
+        "Vaporizer: 15 competitor SKUs vs 1 Rhize. Top brands: Magic Mann (10), Northwoods Extracts (2), Satori (1)",
+        "Vaporizer: 16 competitor SKUs vs 0 Rhize. Top brands: Forbins Finest (9), Trichome Ranch (1), Medicine Man Botanicals (1)",
+        "Vaporizer: 28 competitor SKUs vs 3 Rhize. Top brands: Sunkissed Farm (7), Forbins Finest (5), Clean Cannabis Company (3)",
+        "Vaporizer: 35 competitor SKUs vs 0 Rhize. Top brands: Kingdom Canna (7), Northwoods Extracts (5), Vermont Kind Craft Cannabis (4)",
+        "Vaporizer: 41 competitor SKUs vs 2 Rhize. Top brands: Dirigo Cannabis (5), Vermont Kind Craft Cannabis (4), The High Prophet (4)",
+        "Vaporizer: 43 competitor SKUs vs 0 Rhize. Top brands: Evidence Room (19), Mountain Girl Cannabis (8), Satori (7)",
+        "Vaporizer: 48 competitor SKUs vs 2 Rhize. Top brands: Northwoods Extracts (7), Blue Sage (6), Doughboi Farms (5)",
+        "Vaporizer: 53 competitor SKUs vs 2 Rhize. Top brands: Valley Organics (8), Doughboi Farms (6), Treetop Alchemy (5)",
+        "Vaporizer: 60 competitor SKUs vs 0 Rhize. Top brands: Tumbleweed Sugar Co. (9), Valley Organics (8), Mountain Girl Cannabis (8)",
+        "Vaporizer: 78 competitor SKUs vs 0 Rhize. Top brands: Forbins Finest (10), Tumbleweed Sugar Co. (9), Nectar (7)"
+      ],
+      "top_values": [
+        [
+          "Never ordered Berry Fizz",
+          5
+        ],
+        [
+          "Vaporizer: 60 competitor SKUs vs 0 Rhize. Top brands: Tumbleweed Sugar Co. (9), Valley Organics (8), Mountain Girl Cannabis (8)",
+          2
+        ],
+        [
+          "Last order 125 days ago",
+          2
+        ],
+        [
+          "Flower: 92 competitor SKUs vs 0 Rhize. Top brands: Florist (8), Flower First (7), Tao Labs (6)",
+          2
+        ],
+        [
+          "Preroll: 109 competitor SKUs vs 0 Rhize. Top brands: Clean Cannabis Company (12), Forest City (12), Forbins Finest (11)",
+          2
+        ],
+        [
+          "Vaporizer: 78 competitor SKUs vs 0 Rhize. Top brands: Forbins Finest (10), Tumbleweed Sugar Co. (9), Nectar (7)",
+          2
+        ],
+        [
+          "Edible: 76 competitor SKUs vs 0 Rhize. Top brands: Unknown (7), Haute & Heady (6), Highly Rooted (6)",
+          2
+        ],
+        [
+          "Concentrate: 32 competitor SKUs vs 0 Rhize. Top brands: The Hashstead (7), Bern Legacy Cannabis (5), Wicked Windy (2)",
+          2
+        ],
+        [
+          "Last order 70 days ago",
+          2
+        ],
+        [
+          "Edible: 33 competitor SKUs vs 0 Rhize. Top brands: Haute & Heady (11), Taunik (8), Pinnacle Valley Farms (4)",
+          2
+        ],
+        [
+          "Flower: 27 competitor SKUs vs 3 Rhize. Top brands: Astro Labs (4), Smoke Ranch Redemption (3), Satori (2)",
+          2
+        ],
+        [
+          "Preroll: 27 competitor SKUs vs 4 Rhize. Top brands: Pinnacle Valley Farms (5), Satori (4), Weed Connection (3)",
+          2
+        ],
+        [
+          "Flower: 33 competitor SKUs vs 2 Rhize. Top brands: Clovis (4), Unknown (4), Sacred Leaf (3)",
+          2
+        ],
+        [
+          "Edible: 24 competitor SKUs vs 0 Rhize. Top brands: Upstate Elevator Supply Co. (6), Pinnacle Valley Farms (4), Somewhere On The Mountain (3)",
+          2
+        ],
+        [
+          "Flower: 35 competitor SKUs vs 6 Rhize. Top brands: Forbins Finest (6), Mr. Tree (5), Green Mountain Scientific (4)",
+          2
+        ],
+        [
+          "Preroll: 83 competitor SKUs vs 5 Rhize. Top brands: Forbins Finest (11), Pinnacle Valley Farms (10), Mr. Z (8)",
+          2
+        ],
+        [
+          "Vaporizer: 28 competitor SKUs vs 3 Rhize. Top brands: Sunkissed Farm (7), Forbins Finest (5), Clean Cannabis Company (3)",
+          2
+        ],
+        [
+          "No Rhize concentrate but 5 competitor SKUs",
+          2
+        ],
+        [
+          "4 units of Melted Strawberries, last order 8 days ago",
+          2
+        ],
+        [
+          "1 units of Papaya Juice, last order 8 days ago",
+          2
+        ],
+        [
+          "",
+          2
+        ],
+        [
+          "Preroll: 47 competitor SKUs vs 1 Rhize. Top brands: Magic Mann (25), Family Tree Cannabis Co. (4), Grass Queen (3)",
+          2
+        ],
+        [
+          "Edible: 34 competitor SKUs vs 0 Rhize. Top brands: Upstate Elevator Operators (7), Cannabis Collective (5), Green River Cannabis (5)",
+          2
+        ],
+        [
+          "Vaporizer: 53 competitor SKUs vs 2 Rhize. Top brands: Valley Organics (8), Doughboi Farms (6), Treetop Alchemy (5)",
+          2
+        ],
+        [
+          "Preroll: 56 competitor SKUs vs 3 Rhize. Top brands: Forbins Finest (9), Sunset Lake Cannabis (6), Mr. Tree (6)",
+          2
+        ],
+        [
+          "Edible: 48 competitor SKUs vs 0 Rhize. Top brands: Highly Rooted (8), Taunik (5), Forbins Finest (4)",
+          2
+        ],
+        [
+          "Flower: 48 competitor SKUs vs 3 Rhize. Top brands: Forbins Finest (13), Old Growth Vermont (7), Smoke Ranch Redemption (5)",
+          2
+        ],
+        [
+          "Preroll: 60 competitor SKUs vs 0 Rhize. Top brands: Forbins Finest (23), Old Growth Vermont (9), Pinnacle Valley Farms (5)",
+          2
+        ],
+        [
+          "Edible: 54 competitor SKUs vs 0 Rhize. Top brands: Upstate Elevator Operators (9), Taunik (9), Stone Leaf Cannabis (8)",
+          2
+        ],
+        [
+          "2 units of Battery, last order 49 days ago",
+          2
+        ],
+        [
+          "Flower: 37 competitor SKUs vs 0 Rhize. Top brands: Rebel Grown (5), Pinnacle Valley Farms (5), Emerald Visions (4)",
+          2
+        ],
+        [
+          "Edible: 50 competitor SKUs vs 0 Rhize. Top brands: Magic Mann (20), Taunik (5), VTreatz (4)",
+          2
+        ],
+        [
+          "Last order 103 days ago",
+          2
+        ],
+        [
+          "Flower: 36 competitor SKUs vs 2 Rhize. Top brands: Magic Mann (18), High Altitude (3), Geebees (2)",
+          2
+        ],
+        [
+          "Preroll: 42 competitor SKUs vs 4 Rhize. Top brands: Old Growth Vermont (7), Smoke Ranch (5), North Node Gardens (4)",
+          2
+        ],
+        [
+          "Preroll: 41 competitor SKUs vs 0 Rhize. Top brands: Emerald Visions (8), Depot Cultivators (7), Pinnacle Valley Farms (6)",
+          1
+        ],
+        [
+          "No Rhize vaporizer but 9 competitor SKUs",
+          1
+        ],
+        [
+          "Edible: 33 competitor SKUs vs 0 Rhize. Top brands: Upstate Elevator Operators (10), Taunik (7), Rosie's Confections (7)",
+          1
+        ],
+        [
+          "Last order 33 days ago",
+          1
+        ],
+        [
+          "No Rhize vaporizer but 8 competitor SKUs",
+          1
+        ],
+        [
+          "5 units of Sour Diesel, last order 8 days ago",
+          1
+        ],
+        [
+          "Edible: 45 competitor SKUs vs 0 Rhize. Top brands: Upstate Elevator Operators (11), Highly Rooted (9), Tir Na Nog (5)",
+          1
+        ],
+        [
+          "Preroll: 82 competitor SKUs vs 2 Rhize. Top brands: Pinnacle Valley Farms (13), Bushy Beard Cultivation (12), Shindig & G's (9)",
+          1
+        ],
+        [
+          "Vaporizer: 35 competitor SKUs vs 0 Rhize. Top brands: Kingdom Canna (7), Northwoods Extracts (5), Vermont Kind Craft Cannabis (4)",
+          1
+        ],
+        [
+          "Concentrate: 19 competitor SKUs vs 0 Rhize. Top brands: Vermont Kind Craft Cannabis (4), Northwoods Extracts (4), Doughboi Farms (3)",
+          1
+        ],
+        [
+          "Flower: 29 competitor SKUs vs 0 Rhize. Top brands: Vermont Select (5), Island Pond Cannabis (3), Geebees (3)",
+          1
+        ],
+        [
+          "2 units of Papaya Juice, last order 8 days ago",
+          1
+        ],
+        [
+          "3 units of Strawberry Guava, last order 8 days ago",
+          1
+        ],
+        [
+          "3 units of Papaya Juice, last order 103 days ago",
+          1
+        ],
+        [
+          "No Rhize edible but 9 competitor SKUs",
+          1
+        ]
+      ],
+      "sample_values": [
+        "Never ordered Berry Fizz",
+        "Vaporizer: 60 competitor SKUs vs 0 Rhize. Top brands: Tumbleweed Sugar Co. (9), Valley Organics (8), Mountain Girl Cannabis (8)",
+        "Last order 125 days ago",
+        "Flower: 92 competitor SKUs vs 0 Rhize. Top brands: Florist (8), Flower First (7), Tao Labs (6)",
+        "Preroll: 109 competitor SKUs vs 0 Rhize. Top brands: Clean Cannabis Company (12), Forest City (12), Forbins Finest (11)",
+        "Vaporizer: 78 competitor SKUs vs 0 Rhize. Top brands: Forbins Finest (10), Tumbleweed Sugar Co. (9), Nectar (7)",
+        "Edible: 76 competitor SKUs vs 0 Rhize. Top brands: Unknown (7), Haute & Heady (6), Highly Rooted (6)",
+        "Concentrate: 32 competitor SKUs vs 0 Rhize. Top brands: The Hashstead (7), Bern Legacy Cannabis (5), Wicked Windy (2)",
+        "Last order 70 days ago",
+        "Edible: 33 competitor SKUs vs 0 Rhize. Top brands: Haute & Heady (11), Taunik (8), Pinnacle Valley Farms (4)"
+      ],
+      "notes": []
+    },
+    {
+      "name": "status",
+      "declared_type": "varchar(50)",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 137,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 1,
+      "distinct_pct": 0.73,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "New",
+      "max_value": "New",
+      "min_length": 3,
+      "max_length": 3,
+      "avg_length": 3.0,
+      "pattern_hints": [],
+      "distinct_values": [
+        "New"
+      ],
+      "top_values": [
+        [
+          "New",
+          137
+        ]
+      ],
+      "sample_values": [
+        "New"
+      ],
+      "notes": [
+        "indexed"
+      ]
+    },
+    {
+      "name": "notes",
+      "declared_type": "text",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 137,
+      "null_count": 137,
+      "null_pct": 100.0,
+      "distinct_count": 0,
+      "distinct_pct": 0.0,
+      "is_unique": false,
+      "is_low_cardinality": false,
+      "min_value": null,
+      "max_value": null,
+      "min_length": null,
+      "max_length": null,
+      "avg_length": null,
+      "pattern_hints": [],
+      "distinct_values": null,
+      "top_values": [],
+      "sample_values": [],
+      "notes": []
+    },
+    {
+      "name": "offerSent",
+      "declared_type": "tinyint(1)",
+      "inferred_kind": "integer",
+      "nullable": false,
+      "total_rows": 137,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 1,
+      "distinct_pct": 0.73,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": 0,
+      "max_value": 0,
+      "min_length": 1,
+      "max_length": 1,
+      "avg_length": 1.0,
+      "pattern_hints": [
+        "boolean-token",
+        "integer-as-text"
+      ],
+      "distinct_values": [
+        0
+      ],
+      "top_values": [
+        [
+          0,
+          137
+        ]
+      ],
+      "sample_values": [
+        0
+      ],
+      "notes": []
+    },
+    {
+      "name": "lastUpdated",
+      "declared_type": "datetime",
+      "inferred_kind": "datetime",
+      "nullable": true,
+      "total_rows": 137,
+      "null_count": 135,
+      "null_pct": 98.54,
+      "distinct_count": 2,
+      "distinct_pct": 100.0,
+      "is_unique": true,
+      "is_low_cardinality": true,
+      "min_value": "2026-05-30T08:50:53",
+      "max_value": "2026-05-30T09:48:36",
+      "min_length": 19,
+      "max_length": 19,
+      "avg_length": 19.0,
+      "pattern_hints": [
+        "datetime-string"
+      ],
+      "distinct_values": [
+        "2026-05-30T08:50:53",
+        "2026-05-30T09:48:36"
+      ],
+      "top_values": [
+        [
+          "2026-05-30T08:50:53",
+          1
+        ],
+        [
+          "2026-05-30T09:48:36",
+          1
+        ]
+      ],
+      "sample_values": [
+        "2026-05-30T08:50:53",
+        "2026-05-30T09:48:36"
+      ],
+      "notes": []
+    },
+    {
+      "name": "createdAt",
+      "declared_type": "datetime",
+      "inferred_kind": "datetime",
+      "nullable": false,
+      "total_rows": 137,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 5,
+      "distinct_pct": 3.65,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "2026-03-03T06:10:53",
+      "max_value": "2026-05-30T09:48:36",
+      "min_length": 19,
+      "max_length": 19,
+      "avg_length": 19.0,
+      "pattern_hints": [
+        "datetime-string"
+      ],
+      "distinct_values": [
+        "2026-03-03T06:10:53",
+        "2026-03-03T11:40:53",
+        "2026-03-03T11:40:54",
+        "2026-05-30T08:50:53",
+        "2026-05-30T09:48:36"
+      ],
+      "top_values": [
+        [
+          "2026-03-03T11:40:53",
+          100
+        ],
+        [
+          "2026-03-03T06:10:53",
+          30
+        ],
+        [
+          "2026-03-03T11:40:54",
+          5
+        ],
+        [
+          "2026-05-30T08:50:53",
+          1
+        ],
+        [
+          "2026-05-30T09:48:36",
+          1
+        ]
+      ],
+      "sample_values": [
+        "2026-03-03T11:40:53",
+        "2026-03-03T06:10:53",
+        "2026-03-03T11:40:54",
+        "2026-05-30T08:50:53",
+        "2026-05-30T09:48:36"
+      ],
+      "notes": []
+    },
+    {
+      "name": "tenantid",
+      "declared_type": "int",
+      "inferred_kind": "integer",
+      "nullable": false,
+      "total_rows": 137,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "distinct_pct": 1.46,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": 1,
+      "max_value": 99,
+      "min_length": 1,
+      "max_length": 2,
+      "avg_length": 1.22,
+      "pattern_hints": [
+        "boolean-token",
+        "integer-as-text"
+      ],
+      "distinct_values": [
+        1,
+        99
+      ],
+      "top_values": [
+        [
+          1,
+          107
+        ],
+        [
+          99,
+          30
+        ]
+      ],
+      "sample_values": [
+        1,
+        99
+      ],
+      "notes": [
+        "indexed"
+      ]
+    },
+    {
+      "name": "brand_id",
+      "declared_type": "varchar(36)",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 137,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "distinct_pct": 1.46,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "ca323241-ef74-425f-aa67-239247ccd0e9",
+      "max_value": "cmmakqdsn0037qsoig4b4yo9t",
+      "min_length": 25,
+      "max_length": 36,
+      "avg_length": 27.41,
+      "pattern_hints": [
+        "uuid"
+      ],
+      "distinct_values": [
+        "ca323241-ef74-425f-aa67-239247ccd0e9",
+        "cmmakqdsn0037qsoig4b4yo9t"
+      ],
+      "top_values": [
+        [
+          "cmmakqdsn0037qsoig4b4yo9t",
+          107
+        ],
+        [
+          "ca323241-ef74-425f-aa67-239247ccd0e9",
+          30
+        ]
+      ],
+      "sample_values": [
+        "cmmakqdsn0037qsoig4b4yo9t",
+        "ca323241-ef74-425f-aa67-239247ccd0e9"
+      ],
+      "notes": []
+    }
+  ],
+  "sample_rows": [
+    {
+      "id": "cmmaje3hw01euzpoixg4i4rqs",
+      "customername": "31 North",
+      "category": "MARKET",
+      "priority": 1,
+      "description": "Edible: 34 competitor SKUs vs 0 Rhize. Top brands: Upstate Elevator Operators (7), Cannabis Collective (5), Green River Cannabis (5)",
+      "status": "New",
+      "notes": null,
+      "offersent": 0,
+      "lastupdated": null,
+      "createdat": "2026-03-03T11:40:53",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    },
+    {
+      "id": "cmmaje3hw01evzpoil58v4kn3",
+      "customername": "Cambridge",
+      "category": "MARKET",
+      "priority": 1,
+      "description": "Flower: 33 competitor SKUs vs 2 Rhize. Top brands: Clovis (4), Unknown (4), Sacred Leaf (3)",
+      "status": "New",
+      "notes": null,
+      "offersent": 0,
+      "lastupdated": null,
+      "createdat": "2026-03-03T11:40:53",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    },
+    {
+      "id": "cmmaje3hw01ewzpoi7nsfx5yq",
+      "customername": "Cambridge",
+      "category": "MARKET",
+      "priority": 1,
+      "description": "Vaporizer: 53 competitor SKUs vs 2 Rhize. Top brands: Valley Organics (8), Doughboi Farms (6), Treetop Alchemy (5)",
+      "status": "New",
+      "notes": null,
+      "offersent": 0,
+      "lastupdated": null,
+      "createdat": "2026-03-03T11:40:53",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    },
+    {
+      "id": "cmmaje3hw01exzpoiupwru32j",
+      "customername": "Cambridge",
+      "category": "MARKET",
+      "priority": 1,
+      "description": "Preroll: 56 competitor SKUs vs 3 Rhize. Top brands: Forbins Finest (9), Sunset Lake Cannabis (6), Mr. Tree (6)",
+      "status": "New",
+      "notes": null,
+      "offersent": 0,
+      "lastupdated": null,
+      "createdat": "2026-03-03T11:40:53",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    },
+    {
+      "id": "cmmaje3hw01eyzpoigoc3uk08",
+      "customername": "Cambridge",
+      "category": "MARKET",
+      "priority": 1,
+      "description": "Edible: 48 competitor SKUs vs 0 Rhize. Top brands: Highly Rooted (8), Taunik (5), Forbins Finest (4)",
+      "status": "New",
+      "notes": null,
+      "offersent": 0,
+      "lastupdated": null,
+      "createdat": "2026-03-03T11:40:53",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    }
+  ],
+  "notes": []
+}

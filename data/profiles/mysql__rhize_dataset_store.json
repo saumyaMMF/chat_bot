@@ -1,0 +1,3824 @@
+{
+  "engine": "mysql",
+  "schema": null,
+  "table": "rhize_dataset_store",
+  "row_count": 60982,
+  "column_count": 10,
+  "primary_key": [
+    "id"
+  ],
+  "indexes": [
+    {
+      "name": "idx_dataset_store_tenantid_date",
+      "unique": false,
+      "columns": [
+        "tenantid",
+        "date"
+      ]
+    },
+    {
+      "name": "PRIMARY",
+      "unique": true,
+      "columns": [
+        "id"
+      ]
+    }
+  ],
+  "columns": [
+    {
+      "name": "id",
+      "declared_type": "int",
+      "inferred_kind": "integer",
+      "nullable": false,
+      "total_rows": 60982,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 60982,
+      "distinct_pct": 100.0,
+      "is_unique": true,
+      "is_low_cardinality": false,
+      "min_value": 1,
+      "max_value": 70897,
+      "min_length": 1,
+      "max_length": 5,
+      "avg_length": 4.82,
+      "pattern_hints": [
+        "integer-as-text"
+      ],
+      "distinct_values": null,
+      "top_values": [
+        [
+          39,
+          1
+        ],
+        [
+          27,
+          1
+        ],
+        [
+          28,
+          1
+        ],
+        [
+          29,
+          1
+        ],
+        [
+          30,
+          1
+        ],
+        [
+          31,
+          1
+        ],
+        [
+          32,
+          1
+        ],
+        [
+          33,
+          1
+        ],
+        [
+          34,
+          1
+        ],
+        [
+          35,
+          1
+        ],
+        [
+          36,
+          1
+        ],
+        [
+          37,
+          1
+        ],
+        [
+          38,
+          1
+        ],
+        [
+          26,
+          1
+        ],
+        [
+          40,
+          1
+        ],
+        [
+          41,
+          1
+        ],
+        [
+          42,
+          1
+        ],
+        [
+          43,
+          1
+        ],
+        [
+          44,
+          1
+        ],
+        [
+          45,
+          1
+        ],
+        [
+          46,
+          1
+        ],
+        [
+          47,
+          1
+        ],
+        [
+          48,
+          1
+        ],
+        [
+          49,
+          1
+        ],
+        [
+          50,
+          1
+        ],
+        [
+          70897,
+          1
+        ],
+        [
+          14,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          11,
+          1
+        ],
+        [
+          12,
+          1
+        ],
+        [
+          13,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          15,
+          1
+        ],
+        [
+          16,
+          1
+        ],
+        [
+          17,
+          1
+        ],
+        [
+          18,
+          1
+        ],
+        [
+          19,
+          1
+        ],
+        [
+          20,
+          1
+        ],
+        [
+          21,
+          1
+        ],
+        [
+          22,
+          1
+        ],
+        [
+          23,
+          1
+        ],
+        [
+          24,
+          1
+        ]
+      ],
+      "sample_values": [
+        39,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "notes": [
+        "primary-key",
+        "auto-increment"
+      ]
+    },
+    {
+      "name": "date",
+      "declared_type": "text",
+      "inferred_kind": "date",
+      "nullable": true,
+      "total_rows": 60982,
+      "null_count": 938,
+      "null_pct": 1.54,
+      "distinct_count": 566,
+      "distinct_pct": 0.94,
+      "is_unique": false,
+      "is_low_cardinality": false,
+      "min_value": "2024-07-10",
+      "max_value": "2026-06-08",
+      "min_length": 10,
+      "max_length": 10,
+      "avg_length": 10.0,
+      "pattern_hints": [
+        "date-string-YYYY-MM-DD"
+      ],
+      "distinct_values": [
+        "2024-07-10",
+        "2024-07-11",
+        "2024-07-13",
+        "2024-07-14",
+        "2024-07-15",
+        "2024-07-16",
+        "2024-07-17",
+        "2024-07-18",
+        "2024-07-19",
+        "2024-07-22",
+        "2024-07-24",
+        "2024-07-25",
+        "2024-07-28",
+        "2024-07-29",
+        "2024-08-01",
+        "2024-08-03",
+        "2024-08-28",
+        "2024-08-30",
+        "2024-10-26",
+        "2024-10-30",
+        "2024-11-01",
+        "2024-11-06",
+        "2024-11-07",
+        "2024-11-08",
+        "2024-11-09",
+        "2024-11-10",
+        "2024-11-11",
+        "2024-11-12",
+        "2024-11-13",
+        "2024-11-14",
+        "2024-11-15",
+        "2024-11-16",
+        "2024-11-17",
+        "2024-11-18",
+        "2024-11-19",
+        "2024-11-20",
+        "2024-11-22",
+        "2024-11-23",
+        "2024-11-24",
+        "2024-11-25",
+        "2024-11-26",
+        "2024-11-27",
+        "2024-11-28",
+        "2024-11-29",
+        "2024-11-30",
+        "2024-12-01",
+        "2024-12-02",
+        "2024-12-03",
+        "2024-12-04",
+        "2024-12-05",
+        "2024-12-06",
+        "2024-12-07",
+        "2024-12-08",
+        "2024-12-09",
+        "2024-12-10",
+        "2024-12-11",
+        "2024-12-12",
+        "2024-12-13",
+        "2024-12-14",
+        "2024-12-15",
+        "2024-12-16",
+        "2024-12-17",
+        "2024-12-18",
+        "2024-12-19",
+        "2024-12-20",
+        "2024-12-21",
+        "2024-12-22",
+        "2024-12-23",
+        "2024-12-24",
+        "2024-12-25",
+        "2024-12-26",
+        "2024-12-27",
+        "2024-12-28",
+        "2024-12-29",
+        "2024-12-30",
+        "2024-12-31",
+        "2025-01-01",
+        "2025-01-02",
+        "2025-01-03",
+        "2025-01-04",
+        "2025-01-05",
+        "2025-01-06",
+        "2025-01-07",
+        "2025-01-08",
+        "2025-01-09",
+        "2025-01-10",
+        "2025-01-11",
+        "2025-01-12",
+        "2025-01-13",
+        "2025-01-14",
+        "2025-01-15",
+        "2025-01-16",
+        "2025-01-17",
+        "2025-01-18",
+        "2025-01-19",
+        "2025-01-20",
+        "2025-01-21",
+        "2025-01-22",
+        "2025-01-23",
+        "2025-01-24",
+        "2025-01-25",
+        "2025-01-26",
+        "2025-01-27",
+        "2025-01-28",
+        "2025-01-29",
+        "2025-01-30",
+        "2025-01-31",
+        "2025-02-01",
+        "2025-02-02",
+        "2025-02-03",
+        "2025-02-04",
+        "2025-02-05",
+        "2025-02-06",
+        "2025-02-07",
+        "2025-02-08",
+        "2025-02-09",
+        "2025-02-10",
+        "2025-02-11",
+        "2025-02-12",
+        "2025-02-13",
+        "2025-02-14",
+        "2025-02-15",
+        "2025-02-16",
+        "2025-02-17",
+        "2025-02-18",
+        "2025-02-19",
+        "2025-02-20",
+        "2025-02-21",
+        "2025-02-22",
+        "2025-02-23",
+        "2025-02-24",
+        "2025-02-25",
+        "2025-02-26",
+        "2025-02-27",
+        "2025-02-28",
+        "2025-03-01",
+        "2025-03-02",
+        "2025-03-03",
+        "2025-03-04",
+        "2025-03-05",
+        "2025-03-06",
+        "2025-03-07",
+        "2025-03-08",
+        "2025-03-09",
+        "2025-03-10",
+        "2025-03-11",
+        "2025-03-12",
+        "2025-03-13",
+        "2025-03-14",
+        "2025-03-15",
+        "2025-03-16",
+        "2025-03-17",
+        "2025-03-18",
+        "2025-03-19",
+        "2025-03-20",
+        "2025-03-21",
+        "2025-03-22",
+        "2025-03-23",
+        "2025-03-24",
+        "2025-03-25",
+        "2025-03-26",
+        "2025-03-27",
+        "2025-03-28",
+        "2025-03-29",
+        "2025-03-30",
+        "2025-03-31",
+        "2025-04-01",
+        "2025-04-02",
+        "2025-04-03",
+        "2025-04-04",
+        "2025-04-05",
+        "2025-04-06",
+        "2025-04-07",
+        "2025-04-08",
+        "2025-04-09",
+        "2025-04-10",
+        "2025-04-11",
+        "2025-04-12",
+        "2025-04-13",
+        "2025-04-14",
+        "2025-04-15",
+        "2025-04-16",
+        "2025-04-17",
+        "2025-04-18",
+        "2025-04-19",
+        "2025-04-20",
+        "2025-04-21",
+        "2025-04-22",
+        "2025-04-25",
+        "2025-04-26",
+        "2025-04-27",
+        "2025-04-28",
+        "2025-04-29",
+        "2025-04-30",
+        "2025-05-01",
+        "2025-05-02",
+        "2025-05-03",
+        "2025-05-04",
+        "2025-05-05",
+        "2025-05-06",
+        "2025-05-07",
+        "2025-05-08",
+        "2025-05-09",
+        "2025-05-10",
+        "2025-05-11",
+        "2025-05-12",
+        "2025-05-13",
+        "2025-05-14",
+        "2025-05-15",
+        "2025-05-16",
+        "2025-05-17",
+        "2025-05-18",
+        "2025-05-19",
+        "2025-05-20",
+        "2025-05-21",
+        "2025-05-22",
+        "2025-05-23",
+        "2025-05-24",
+        "2025-05-25",
+        "2025-05-26",
+        "2025-05-27",
+        "2025-05-28",
+        "2025-05-29",
+        "2025-05-30",
+        "2025-05-31",
+        "2025-06-01",
+        "2025-06-02",
+        "2025-06-03",
+        "2025-06-04",
+        "2025-06-05",
+        "2025-06-06",
+        "2025-06-07",
+        "2025-06-08",
+        "2025-06-09",
+        "2025-06-10",
+        "2025-06-11",
+        "2025-06-12",
+        "2025-06-13",
+        "2025-06-14",
+        "2025-06-15",
+        "2025-06-16",
+        "2025-06-17",
+        "2025-06-18",
+        "2025-06-19",
+        "2025-06-20",
+        "2025-06-21",
+        "2025-06-22",
+        "2025-06-23",
+        "2025-06-24",
+        "2025-06-25",
+        "2025-06-26",
+        "2025-06-27",
+        "2025-06-28",
+        "2025-06-29",
+        "2025-06-30",
+        "2025-07-01",
+        "2025-07-02",
+        "2025-07-03",
+        "2025-07-04",
+        "2025-07-05",
+        "2025-07-06",
+        "2025-07-07",
+        "2025-07-08",
+        "2025-07-09",
+        "2025-07-11",
+        "2025-07-14",
+        "2025-07-15",
+        "2025-07-16",
+        "2025-07-17",
+        "2025-07-18",
+        "2025-07-19",
+        "2025-07-20",
+        "2025-07-21",
+        "2025-07-23",
+        "2025-07-24",
+        "2025-07-25",
+        "2025-07-28",
+        "2025-07-29",
+        "2025-07-30",
+        "2025-07-31",
+        "2025-08-01",
+        "2025-08-02",
+        "2025-08-04",
+        "2025-08-05",
+        "2025-08-06",
+        "2025-08-07",
+        "2025-08-08",
+        "2025-08-12",
+        "2025-08-13",
+        "2025-08-14",
+        "2025-08-15",
+        "2025-08-16",
+        "2025-08-17",
+        "2025-08-18",
+        "2025-08-19",
+        "2025-08-20",
+        "2025-08-21",
+        "2025-08-22",
+        "2025-08-23",
+        "2025-08-24",
+        "2025-08-25",
+        "2025-08-26",
+        "2025-08-27",
+        "2025-08-28",
+        "2025-08-29",
+        "2025-08-30",
+        "2025-08-31",
+        "2025-09-01",
+        "2025-09-02",
+        "2025-09-03",
+        "2025-09-04",
+        "2025-09-05",
+        "2025-09-06",
+        "2025-09-07",
+        "2025-09-08",
+        "2025-09-09",
+        "2025-09-10",
+        "2025-09-11",
+        "2025-09-12",
+        "2025-09-13",
+        "2025-09-14",
+        "2025-09-15",
+        "2025-09-16",
+        "2025-09-17",
+        "2025-09-18",
+        "2025-09-19",
+        "2025-09-20",
+        "2025-09-21",
+        "2025-09-22",
+        "2025-09-23",
+        "2025-09-24",
+        "2025-09-25",
+        "2025-09-26",
+        "2025-09-27",
+        "2025-09-28",
+        "2025-09-29",
+        "2025-09-30",
+        "2025-10-01",
+        "2025-10-02",
+        "2025-10-03",
+        "2025-10-04",
+        "2025-10-05",
+        "2025-10-06",
+        "2025-10-07",
+        "2025-10-08",
+        "2025-10-09",
+        "2025-10-10",
+        "2025-10-11",
+        "2025-10-12",
+        "2025-10-13",
+        "2025-10-14",
+        "2025-10-15",
+        "2025-10-16",
+        "2025-10-17",
+        "2025-10-18",
+        "2025-10-19",
+        "2025-10-20",
+        "2025-10-21",
+        "2025-10-22",
+        "2025-10-23",
+        "2025-10-24",
+        "2025-10-25",
+        "2025-10-26",
+        "2025-10-27",
+        "2025-10-28",
+        "2025-10-29",
+        "2025-10-30",
+        "2025-10-31",
+        "2025-11-01",
+        "2025-11-02",
+        "2025-11-03",
+        "2025-11-04",
+        "2025-11-05",
+        "2025-11-06",
+        "2025-11-07",
+        "2025-11-08",
+        "2025-11-09",
+        "2025-11-10",
+        "2025-11-11",
+        "2025-11-12",
+        "2025-11-13",
+        "2025-11-14",
+        "2025-11-15",
+        "2025-11-16",
+        "2025-11-17",
+        "2025-11-18",
+        "2025-11-19",
+        "2025-11-20",
+        "2025-11-21",
+        "2025-11-22",
+        "2025-11-23",
+        "2025-11-24",
+        "2025-11-25",
+        "2025-11-26",
+        "2025-11-27",
+        "2025-11-28",
+        "2025-11-29",
+        "2025-11-30",
+        "2025-12-01",
+        "2025-12-02",
+        "2025-12-03",
+        "2025-12-04",
+        "2025-12-05",
+        "2025-12-06",
+        "2025-12-07",
+        "2025-12-08",
+        "2025-12-09",
+        "2025-12-10",
+        "2025-12-11",
+        "2025-12-12",
+        "2025-12-15",
+        "2025-12-16",
+        "2025-12-17",
+        "2025-12-18",
+        "2025-12-19",
+        "2025-12-20",
+        "2025-12-21",
+        "2025-12-22",
+        "2025-12-23",
+        "2026-01-07",
+        "2026-01-08",
+        "2026-01-09",
+        "2026-01-11",
+        "2026-01-12",
+        "2026-01-13",
+        "2026-01-14",
+        "2026-01-15",
+        "2026-01-16",
+        "2026-01-17",
+        "2026-01-18",
+        "2026-01-19",
+        "2026-01-20",
+        "2026-01-21",
+        "2026-01-22",
+        "2026-01-23",
+        "2026-01-24",
+        "2026-01-25",
+        "2026-01-27",
+        "2026-01-28",
+        "2026-01-29",
+        "2026-01-30",
+        "2026-01-31",
+        "2026-02-01",
+        "2026-02-02",
+        "2026-02-03",
+        "2026-02-04",
+        "2026-02-05",
+        "2026-02-06",
+        "2026-02-07",
+        "2026-02-08",
+        "2026-02-09",
+        "2026-02-10",
+        "2026-02-11",
+        "2026-02-12",
+        "2026-02-13",
+        "2026-02-14",
+        "2026-02-15",
+        "2026-02-16",
+        "2026-02-17",
+        "2026-02-18",
+        "2026-02-19",
+        "2026-02-20",
+        "2026-02-21",
+        "2026-02-22",
+        "2026-02-23",
+        "2026-02-24",
+        "2026-02-25",
+        "2026-02-26",
+        "2026-02-27",
+        "2026-02-28",
+        "2026-03-01",
+        "2026-03-02",
+        "2026-03-03",
+        "2026-03-04",
+        "2026-03-05",
+        "2026-03-06",
+        "2026-03-07",
+        "2026-03-08",
+        "2026-03-09",
+        "2026-03-10",
+        "2026-03-11",
+        "2026-03-12",
+        "2026-03-13",
+        "2026-03-14",
+        "2026-03-15",
+        "2026-03-16",
+        "2026-03-17",
+        "2026-03-18",
+        "2026-03-19",
+        "2026-03-20",
+        "2026-03-21",
+        "2026-03-22",
+        "2026-03-23",
+        "2026-03-24",
+        "2026-03-25",
+        "2026-03-26",
+        "2026-03-27",
+        "2026-03-28",
+        "2026-03-29",
+        "2026-03-30",
+        "2026-03-31",
+        "2026-04-01",
+        "2026-04-02",
+        "2026-04-03",
+        "2026-04-04",
+        "2026-04-05",
+        "2026-04-06",
+        "2026-04-07",
+        "2026-04-08",
+        "2026-04-09",
+        "2026-04-10",
+        "2026-04-11",
+        "2026-04-12",
+        "2026-04-13",
+        "2026-04-14",
+        "2026-04-15",
+        "2026-04-16",
+        "2026-04-17",
+        "2026-04-18",
+        "2026-04-19",
+        "2026-04-20",
+        "2026-04-21",
+        "2026-04-22",
+        "2026-04-23",
+        "2026-04-24",
+        "2026-04-25",
+        "2026-04-26",
+        "2026-04-27",
+        "2026-04-28",
+        "2026-04-29",
+        "2026-04-30",
+        "2026-05-01",
+        "2026-05-02",
+        "2026-05-03",
+        "2026-05-04",
+        "2026-05-05",
+        "2026-05-07",
+        "2026-05-08",
+        "2026-05-09",
+        "2026-05-10",
+        "2026-05-11",
+        "2026-05-12",
+        "2026-05-16",
+        "2026-05-17",
+        "2026-05-18",
+        "2026-05-19",
+        "2026-05-20",
+        "2026-05-21",
+        "2026-05-22",
+        "2026-05-23",
+        "2026-05-24",
+        "2026-05-25",
+        "2026-05-26",
+        "2026-05-27",
+        "2026-05-28",
+        "2026-05-29",
+        "2026-05-30",
+        "2026-05-31",
+        "2026-06-01",
+        "2026-06-02",
+        "2026-06-03",
+        "2026-06-04",
+        "2026-06-05",
+        "2026-06-06",
+        "2026-06-07",
+        "2026-06-08"
+      ],
+      "top_values": [
+        [
+          "2025-11-15",
+          206
+        ],
+        [
+          "2025-08-30",
+          202
+        ],
+        [
+          "2025-11-08",
+          200
+        ],
+        [
+          "2025-11-01",
+          199
+        ],
+        [
+          "2025-11-02",
+          198
+        ],
+        [
+          "2025-11-03",
+          198
+        ],
+        [
+          "2025-09-06",
+          198
+        ],
+        [
+          "2025-11-05",
+          197
+        ],
+        [
+          "2025-09-14",
+          197
+        ],
+        [
+          "2025-11-04",
+          196
+        ],
+        [
+          "2025-11-06",
+          196
+        ],
+        [
+          "2025-09-13",
+          196
+        ],
+        [
+          "2025-08-31",
+          194
+        ],
+        [
+          "2025-09-15",
+          194
+        ],
+        [
+          "2025-11-10",
+          193
+        ],
+        [
+          "2025-09-07",
+          193
+        ],
+        [
+          "2025-10-25",
+          193
+        ],
+        [
+          "2025-12-15",
+          192
+        ],
+        [
+          "2025-11-11",
+          191
+        ],
+        [
+          "2025-09-05",
+          191
+        ],
+        [
+          "2025-09-01",
+          190
+        ],
+        [
+          "2025-09-08",
+          189
+        ],
+        [
+          "2025-11-12",
+          189
+        ],
+        [
+          "2025-09-16",
+          188
+        ],
+        [
+          "2025-08-24",
+          187
+        ],
+        [
+          "2025-10-31",
+          187
+        ],
+        [
+          "2025-11-22",
+          187
+        ],
+        [
+          "2025-11-14",
+          186
+        ],
+        [
+          "2025-11-18",
+          186
+        ],
+        [
+          "2025-09-02",
+          185
+        ],
+        [
+          "2025-09-09",
+          185
+        ],
+        [
+          "2025-10-26",
+          185
+        ],
+        [
+          "2025-11-13",
+          184
+        ],
+        [
+          "2025-11-21",
+          184
+        ],
+        [
+          "2025-08-29",
+          183
+        ],
+        [
+          "2025-09-03",
+          183
+        ],
+        [
+          "2025-08-16",
+          182
+        ],
+        [
+          "2025-09-04",
+          181
+        ],
+        [
+          "2025-09-12",
+          181
+        ],
+        [
+          "2025-11-20",
+          181
+        ],
+        [
+          "2025-09-17",
+          181
+        ],
+        [
+          "2025-11-23",
+          181
+        ],
+        [
+          "2025-08-23",
+          180
+        ],
+        [
+          "2025-10-04",
+          180
+        ],
+        [
+          "2025-08-25",
+          180
+        ],
+        [
+          "2025-09-10",
+          180
+        ],
+        [
+          "2025-11-24",
+          179
+        ],
+        [
+          "2025-08-28",
+          179
+        ],
+        [
+          "2025-10-27",
+          179
+        ],
+        [
+          "2025-12-18",
+          178
+        ]
+      ],
+      "sample_values": [
+        "2025-11-15",
+        "2025-08-30",
+        "2025-11-08",
+        "2025-11-01",
+        "2025-11-02",
+        "2025-11-03",
+        "2025-09-06",
+        "2025-11-05",
+        "2025-09-14",
+        "2025-11-04"
+      ],
+      "notes": []
+    },
+    {
+      "name": "Product_Name",
+      "declared_type": "text",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 60982,
+      "null_count": 102,
+      "null_pct": 0.17,
+      "distinct_count": 108,
+      "distinct_pct": 0.18,
+      "is_unique": false,
+      "is_low_cardinality": false,
+      "min_value": "",
+      "max_value": "Variety I 1/ Rolls I",
+      "min_length": 0,
+      "max_length": 48,
+      "avg_length": 11.74,
+      "pattern_hints": [],
+      "distinct_values": [
+        "",
+        "- death star - pre roll",
+        "- eastside og - live rosin cart - .5g",
+        "- variety pack - pre-roll pack (7ct) - .5g ea",
+        ".",
+        ". Melted Strawberries Black Maple Berry Fizz",
+        "'25",
+        "'26",
+        "(7X0.) Variety",
+        "7X Rolls",
+        "Animal Face",
+        "Battery",
+        "Berry Fizz",
+        "Berry Fizz 8Th",
+        "Berry Fizz From",
+        "Berry Fizz From Cannabis Company",
+        "Black Maple",
+        "Black Maple ()",
+        "Black Maple 3.5",
+        "Black Maple 8Th",
+        "Black Maple Cannabis",
+        "Blackout Truffle",
+        "Bop Gun",
+        "bop gun  1g pre-roll",
+        "bop gun .5g live rosin cart",
+        "bop gun 1g pre roll",
+        "Candied Oranges",
+        "Cannabis Battery",
+        "cannabis company  grape pie  bulk",
+        "Cannabis Company Ea)",
+        "Cannabis Company G13 Skunk Indica Hybrid",
+        "Cannabis Company G13 Skunk Indoor Bulk",
+        "Cannabis Company Lavender Piff Indoor Bulk",
+        "Cannabis Company Melted Strawberries",
+        "Cannabis Company Sherb Cream Pie",
+        "Cannabis Company Sour Diesel Indica Hybrid",
+        "Cannabis Company Strawberry Guava",
+        "Deathstar",
+        "Donkey Butter",
+        "Dulce de Uva",
+        "Dulce De Uva . ()",
+        "Dulce De Uva 1/8",
+        "Dulce De Uva Cannabis",
+        "Eastside OG",
+        "eastside og 1g pre roll ()",
+        "eastside og live rosin cartridge",
+        "Forbidden Fruit",
+        "G 13",
+        "G-13 Skunk",
+        "G13",
+        "G13 Skunk",
+        "GMO",
+        "Gmo ()",
+        "Grape Pie",
+        "Honey Banana",
+        "Honey Banana Hash",
+        "Honeybanana Bucket",
+        "Ice Cream Cake",
+        "ice cream cake flower - deli",
+        "Ice Cream Candy",
+        "Lavender Piff",
+        "Lem Og",
+        "live rosin vape cartridge - 1/2g     eastside og",
+        "Mellows",
+        "Mellowz",
+        "Melted Stawberries",
+        "Melted Strawberries",
+        "Melted Strawberries .",
+        "Melted Strawberries . ()",
+        "Melted Strawberries Bucket",
+        "Melted Strawberries Bulk Cannabis",
+        "Melted Strawberries Vape",
+        "Melted Strawberrys",
+        "Moroccan Peaches",
+        "Multi",
+        "Multi #6 Indica X.",
+        "Multi 7X Rolls Cannabis",
+        "Multi Pack",
+        "multi pack  7x.5g",
+        "Multi Pack #6 Indica",
+        "multi-pack (db-mp-ds)",
+        "Multipack",
+        "Papaya Juice",
+        "Papaya Juice .",
+        "Papaya Juice . Vape",
+        "Papaya Juice 1/8",
+        "Papaya Juice Cannabis",
+        "Papaya Juice Hash",
+        "Raspberry",
+        "Shake",
+        "Sherb Cream Pie",
+        "Sherb Cream Pie 8Th",
+        "Skunk",
+        "Sour Diesel",
+        "Sour Diesel Bulk",
+        "Straw Guava",
+        "Strawberry Guava",
+        "Strawberry Guava .",
+        "Strawberry Guava . Vape",
+        "Strawberry Guava Cannabis",
+        "Strawberry Guava Vape",
+        "Strawberry Guava Vape (Live Rosin)",
+        "StrawGuava",
+        "Strawguava Bucket",
+        "The Hive",
+        "Tropical Summer",
+        "Tropical Summer Variety Rolls",
+        "Variety I 1/ Rolls I"
+      ],
+      "top_values": [
+        [
+          "Dulce de Uva",
+          8242
+        ],
+        [
+          "Papaya Juice",
+          6622
+        ],
+        [
+          "GMO",
+          6132
+        ],
+        [
+          "Melted Strawberries",
+          4948
+        ],
+        [
+          "Donkey Butter",
+          4494
+        ],
+        [
+          "Strawberry Guava",
+          3662
+        ],
+        [
+          "Black Maple",
+          3627
+        ],
+        [
+          "Honey Banana",
+          3193
+        ],
+        [
+          "Multipack",
+          2962
+        ],
+        [
+          "Sherb Cream Pie",
+          2158
+        ],
+        [
+          "Moroccan Peaches",
+          2053
+        ],
+        [
+          "Deathstar",
+          1519
+        ],
+        [
+          "Battery",
+          1208
+        ],
+        [
+          "Berry Fizz",
+          1104
+        ],
+        [
+          "Animal Face",
+          967
+        ],
+        [
+          "Blackout Truffle",
+          930
+        ],
+        [
+          "Tropical Summer",
+          914
+        ],
+        [
+          "Eastside OG",
+          891
+        ],
+        [
+          "Bop Gun",
+          798
+        ],
+        [
+          "Grape Pie",
+          742
+        ],
+        [
+          "G13 Skunk",
+          719
+        ],
+        [
+          "Candied Oranges",
+          579
+        ],
+        [
+          "Sour Diesel",
+          570
+        ],
+        [
+          "Lavender Piff",
+          479
+        ],
+        [
+          "G13",
+          235
+        ],
+        [
+          "Raspberry",
+          202
+        ],
+        [
+          "The Hive",
+          171
+        ],
+        [
+          "Mellowz",
+          150
+        ],
+        [
+          "Forbidden Fruit",
+          122
+        ],
+        [
+          "Shake",
+          83
+        ],
+        [
+          "Ice Cream Cake",
+          73
+        ],
+        [
+          "Skunk",
+          25
+        ],
+        [
+          "Cannabis Company Strawberry Guava",
+          10
+        ],
+        [
+          "Papaya Juice Cannabis",
+          10
+        ],
+        [
+          "Dulce De Uva Cannabis",
+          10
+        ],
+        [
+          "Papaya Juice .",
+          8
+        ],
+        [
+          "Sherb Cream Pie 8Th",
+          7
+        ],
+        [
+          "Black Maple 8Th",
+          7
+        ],
+        [
+          "Berry Fizz 8Th",
+          7
+        ],
+        [
+          "Tropical Summer Variety Rolls",
+          6
+        ],
+        [
+          "Berry Fizz From Cannabis Company",
+          6
+        ],
+        [
+          "Cannabis Battery",
+          6
+        ],
+        [
+          "Variety I 1/ Rolls I",
+          6
+        ],
+        [
+          "Melted Stawberries",
+          6
+        ],
+        [
+          "Mellows",
+          6
+        ],
+        [
+          "'26",
+          6
+        ],
+        [
+          "'25",
+          6
+        ],
+        [
+          "Gmo ()",
+          6
+        ],
+        [
+          "Cannabis Company Melted Strawberries",
+          5
+        ],
+        [
+          "Black Maple ()",
+          5
+        ]
+      ],
+      "sample_values": [
+        "Dulce de Uva",
+        "Papaya Juice",
+        "GMO",
+        "Melted Strawberries",
+        "Donkey Butter",
+        "Strawberry Guava",
+        "Black Maple",
+        "Honey Banana",
+        "Multipack",
+        "Sherb Cream Pie"
+      ],
+      "notes": []
+    },
+    {
+      "name": "Category",
+      "declared_type": "text",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 60982,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 5,
+      "distinct_pct": 0.01,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "Accessory",
+      "max_value": "Unknown",
+      "min_length": 5,
+      "max_length": 9,
+      "avg_length": 5.6,
+      "pattern_hints": [],
+      "distinct_values": [
+        "Accessory",
+        "Edibles",
+        "Flower",
+        "Rosin",
+        "Unknown"
+      ],
+      "top_values": [
+        [
+          "Flower",
+          31614
+        ],
+        [
+          "Rosin",
+          28047
+        ],
+        [
+          "Accessory",
+          1137
+        ],
+        [
+          "Edibles",
+          173
+        ],
+        [
+          "Unknown",
+          11
+        ]
+      ],
+      "sample_values": [
+        "Flower",
+        "Rosin",
+        "Accessory",
+        "Edibles",
+        "Unknown"
+      ],
+      "notes": []
+    },
+    {
+      "name": "Type",
+      "declared_type": "text",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 60982,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 16,
+      "distinct_pct": 0.03,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "Accessory",
+      "max_value": "Unknown",
+      "min_length": 3,
+      "max_length": 18,
+      "avg_length": 7.66,
+      "pattern_hints": [],
+      "distinct_values": [
+        "Accessory",
+        "Bulk",
+        "Cart",
+        "Edibles",
+        "Flower Bulk",
+        "Flower Bulk(Shake)",
+        "Flower Jar",
+        "Flower Jars",
+        "Flower Multipack",
+        "Jar",
+        "Multipack",
+        "Nan",
+        "Preroll",
+        "Preroll Multipack",
+        "Rosin Jar",
+        "Unknown"
+      ],
+      "top_values": [
+        [
+          "Rosin Jar",
+          18247
+        ],
+        [
+          "Preroll",
+          15312
+        ],
+        [
+          "Flower Jar",
+          8050
+        ],
+        [
+          "Jar",
+          6350
+        ],
+        [
+          "Cart",
+          5693
+        ],
+        [
+          "Flower Bulk",
+          4383
+        ],
+        [
+          "Accessory",
+          1137
+        ],
+        [
+          "Bulk",
+          1044
+        ],
+        [
+          "Preroll Multipack",
+          339
+        ],
+        [
+          "Edibles",
+          173
+        ],
+        [
+          "Flower Multipack",
+          155
+        ],
+        [
+          "Flower Bulk(Shake)",
+          58
+        ],
+        [
+          "Flower Jars",
+          30
+        ],
+        [
+          "Nan",
+          7
+        ],
+        [
+          "Unknown",
+          2
+        ],
+        [
+          "Multipack",
+          2
+        ]
+      ],
+      "sample_values": [
+        "Rosin Jar",
+        "Preroll",
+        "Flower Jar",
+        "Jar",
+        "Cart",
+        "Flower Bulk",
+        "Accessory",
+        "Bulk",
+        "Preroll Multipack",
+        "Edibles"
+      ],
+      "notes": []
+    },
+    {
+      "name": "Company_Name",
+      "declared_type": "text",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 60982,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 928,
+      "distinct_pct": 1.52,
+      "is_unique": false,
+      "is_low_cardinality": false,
+      "min_value": "31 North",
+      "max_value": "Valleymeade",
+      "min_length": 4,
+      "max_length": 173,
+      "avg_length": 15.16,
+      "pattern_hints": [],
+      "distinct_values": [
+        "31 North",
+        "31 North, Cambridge, Forbin's Reserve, Garcia's, Gram Central, Mountain Girl, Polestar, The Bud Stop, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Cambridge, Forbin's Reserve, Garcia's, Gram Central, Mountain Girl, Polestar, The Bud Stop, The Gas Station, Valleymeade",
+        "31 North, Cambridge, Forbin's Reserve, Garcia's, Gram Central, Polestar, Rimeline, The Bud Stop, The Gas Station, The Tea House",
+        "31 North, Cambridge, Forbin's Reserve, Garcia's, Gram Central, Rimeline, The Gas Station, The Tea House",
+        "31 North, Cambridge, Forbin's Reserve, Garcia's, Polestar, Sweet Spot, The Bud Stop, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Cambridge, Forbin's Reserve, Gram Central, Polestar, Rimeline, Sweet Spot, The Bud Stop, The Gas Station, The Tea House",
+        "31 North, Cambridge, Forbin's Reserve, Gram Central, Polestar, Rimeline, Sweet Spot, The Gas Station, The Tea House",
+        "31 North, Cambridge, Forbin's Reserve, Gram Central, Polestar, Rimeline, The Bud Stop, The Gas Station, The Tea House",
+        "31 North, Cambridge, Garcia's, Gram Central, Mountain Girl, Polestar, The Bud Stop, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Cambridge, Garcia's, Gram Central, Mountain Girl, Polestar, The Bud Stop, The Gas Station, Valleymeade",
+        "31 North, Cambridge, Garcia's, Mountain Girl, Polestar, The Bud Stop, The Gas Station, The Tea House",
+        "31 North, Cambridge, Gram Central, Polestar, Rimeline, Sweet Spot, The Tea House",
+        "31 North, Cambridge, Gram Central, Polestar, Rimeline, The Tea House",
+        "31 North, Cambridge, Mountain Girl, Polestar, Somewhere on the Mountain, The Bud Stop, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Cambridge, Polestar, Rimeline, Sweet Spot, The Gas Station",
+        "31 North, Cambridge, Polestar, The Gas Station, Valleymeade",
+        "31 North, Domecity",
+        "31 North, Domecity, Forbin's Reserve, Gram Central, Milton Remedies, Polestar, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Domecity, Forbin's Reserve, Gram Central, Mothaplant, Polestar, Poultney Cannabis Supply, The Gas Station, Valleymeade",
+        "31 North, Domecity, Forbin's Reserve, Gram Central, Polestar, Poultney Cannabis Supply, The Gas Station, Valleymeade",
+        "31 North, Domecity, Forbin's Reserve, Gram Central, Polestar, Sweet Spot, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Domecity, Forbin's Reserve, Gram Central, Polestar, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Domecity, Forbin's Reserve, Gram Central, Polestar, The Gas Station, Valleymeade",
+        "31 North, Domecity, Forbin's Reserve, Mothaplant, Polestar, Valleymeade",
+        "31 North, Domecity, Forbin's Reserve, Polestar, Sweet Spot, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Domecity, Forbin's Reserve, Polestar, Sweet Spot, The Gas Station, Valleymeade",
+        "31 North, Domecity, Forbin's Reserve, Polestar, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Domecity, Garcia's, Polestar, Valleymeade",
+        "31 North, Domecity, GMCW, Garcia's, Polestar, Valleymeade",
+        "31 North, Domecity, GMCW, Gram Central, Polestar, Somewhere on the Mountain",
+        "31 North, Domecity, Gram Central",
+        "31 North, Domecity, Gram Central, Milton Remedies, Polestar, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Domecity, Gram Central, Milton Remedies, Polestar, Valleymeade",
+        "31 North, Domecity, Gram Central, Mothaplant, Polestar, Poultney Cannabis Supply, Sweet Spot, The Tea House, Valleymeade",
+        "31 North, Domecity, Gram Central, Mothaplant, Polestar, Poultney Cannabis Supply, Sweet Spot, Valleymeade",
+        "31 North, Domecity, Gram Central, Mothaplant, Polestar, Poultney Cannabis Supply, The Gas Station, Valleymeade",
+        "31 North, Domecity, Gram Central, Mothaplant, Polestar, Poultney Cannabis Supply, The Tea House, Valleymeade",
+        "31 North, Domecity, Gram Central, Mothaplant, Polestar, Poultney Cannabis Supply, Valleymeade",
+        "31 North, Domecity, Gram Central, Polestar",
+        "31 North, Domecity, Gram Central, Polestar, Poultney Cannabis Supply, The Gas Station, Valleymeade",
+        "31 North, Domecity, Gram Central, Polestar, Somewhere on the Mountain",
+        "31 North, Domecity, Gram Central, Polestar, Somewhere on the Mountain, Valleymeade",
+        "31 North, Domecity, Gram Central, Polestar, The Gas Station, The Tea House",
+        "31 North, Domecity, Gram Central, Polestar, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Domecity, Gram Central, Polestar, Valleymeade",
+        "31 North, Domecity, Gram Central, The Tea House",
+        "31 North, Domecity, Gram Central, The Tea House, Valleymeade",
+        "31 North, Domecity, Mothaplant, Polestar, Poultney Cannabis Supply, The Tea House, Valleymeade",
+        "31 North, Domecity, Mothaplant, Polestar, Valleymeade",
+        "31 North, Domecity, Mothaplant, Valleymeade",
+        "31 North, Domecity, Polestar, Poultney Cannabis Supply, The Tea House",
+        "31 North, Domecity, Polestar, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Domecity, Polestar, The Tea House",
+        "31 North, Domecity, Poultney Cannabis Supply",
+        "31 North, Domecity, Poultney Cannabis Supply, The Tea House",
+        "31 North, Domecity, The Tea House",
+        "31 North, Domecity, Valleymeade",
+        "31 North, Forbin's Reserve, Garcia's, Gram Central, Mountain Girl, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Forbin's Reserve, Garcia's, Gram Central, Mountain Girl, Polestar, Rimeline, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Forbin's Reserve, Garcia's, Gram Central, Mountain Girl, Polestar, The Bud Stop, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Forbin's Reserve, Garcia's, Gram Central, Mountain Girl, Polestar, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Forbin's Reserve, Garcia's, Gram Central, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Forbin's Reserve, Garcia's, Gram Central, Polestar, Rimeline, The Gas Station, The Tea House",
+        "31 North, Forbin's Reserve, Garcia's, Gram Central, Polestar, Rimeline, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Forbin's Reserve, Garcia's, Gram Central, Polestar, The Gas Station, Valleymeade",
+        "31 North, Forbin's Reserve, Garcia's, Gram Central, Rimeline, The Gas Station, The Tea House",
+        "31 North, Forbin's Reserve, Garcia's, Mountain Girl, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Gas Station, The Tea House",
+        "31 North, Forbin's Reserve, Garcia's, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Forbin's Reserve, Garcia's, Polestar, Somewhere on the Mountain, The Tea House, Valleymeade",
+        "31 North, Forbin's Reserve, Garcia's, Polestar, Sweet Spot, The Bud Stop, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Forbin's Reserve, Garcia's, Polestar, The Bud Stop, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Forbin's Reserve, Garcia's, Polestar, The Bud Stop, The Gas Station, Valleymeade",
+        "31 North, Forbin's Reserve, Garcia's, Polestar, The Gas Station, Valleymeade",
+        "31 North, Forbin's Reserve, Gram Central, Polestar, Somewhere on the Mountain, Sweet Spot, Valleymeade",
+        "31 North, Forbin's Reserve, Gram Central, Polestar, Somewhere on the Mountain, Valleymeade",
+        "31 North, Forbin's Reserve, Gram Central, Polestar, The Bud Stop, The Gas Station, The Tea House",
+        "31 North, Forbin's Reserve, Gram Central, Somewhere on the Mountain, Valleymeade",
+        "31 North, Forbin's Reserve, Polestar, Poultney Cannabis Supply",
+        "31 North, Forbin's Reserve, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain",
+        "31 North, Forbin's Reserve, Polestar, Poultney Cannabis Supply, Sweet Spot",
+        "31 North, Forbin's Reserve, Polestar, The Gas Station",
+        "31 North, Forbin's Reserve, Polestar, The Tea House, Valleymeade",
+        "31 North, Forbin's Reserve, Poultney Cannabis Supply",
+        "31 North, Freedom Flower, GMCW, LLC, Pine Grove Organics",
+        "31 North, Garcia's, Gram Central, Mountain Girl, Polestar, The Bud Stop, The Gas Station, Valleymeade",
+        "31 North, Garcia's, Gram Central, Mountain Girl, Polestar, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Garcia's, Gram Central, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain",
+        "31 North, Garcia's, Gram Central, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Garcia's, Gram Central, Polestar, The Gas Station, Valleymeade",
+        "31 North, Garcia's, Gram Central, Polestar, The Tea House, Valleymeade",
+        "31 North, Garcia's, Gram Central, Polestar, Valleymeade",
+        "31 North, Garcia's, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Gas Station",
+        "31 North, Garcia's, Polestar, The Gas Station",
+        "31 North, Garcia's, Valleymeade",
+        "31 North, GMCW",
+        "31 North, GMCW, Gram Central, Mothaplant, Valleymeade",
+        "31 North, GMCW, Gram Central, Polestar, Somewhere on the Mountain",
+        "31 North, GMCW, Polestar, Somewhere on the Mountain",
+        "31 North, Gram Central, Mothaplant, Valleymeade",
+        "31 North, Gram Central, Polestar, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "31 North, Gram Central, Polestar, Somewhere on the Mountain, Valleymeade",
+        "31 North, Mountain Girl, Polestar, Somewhere on the Mountain, Sweet Spot, The Bud Stop",
+        "31 North, Mountain Girl, Polestar, Somewhere on the Mountain, Sweet Spot, The Bud Stop, The Gas Station",
+        "31 North, Mountain Girl, Polestar, Somewhere on the Mountain, The Bud Stop",
+        "31 North, Mountain Girl, Polestar, Somewhere on the Mountain, The Bud Stop, The Gas Station",
+        "31 North, Mountain Girl, Polestar, Somewhere on the Mountain, The Bud Stop, The Gas Station, The Tea House, Valleymeade",
+        "31 North, Mountain Girl, Polestar, Somewhere on the Mountain, The Bud Stop, The Gas Station, Valleymeade",
+        "31 North, Pine Grove Organics",
+        "31 North, Polestar",
+        "31 North, Polestar, Poultney Cannabis Supply, The Tea House",
+        "31 North, Polestar, Rolling Twenties, The Gas Station, Valleymeade",
+        "31 North, Polestar, Somewhere on the Mountain",
+        "31 North, Polestar, Somewhere on the Mountain, Sweet Spot, The Bud Stop, The Gas Station",
+        "31 North, Polestar, Somewhere on the Mountain, Sweet Spot, The Bud Stop, The Gas Station, Valleymeade",
+        "31 North, Polestar, Somewhere on the Mountain, The Bud Stop",
+        "31 North, Polestar, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "31 North, Polestar, Somewhere on the Mountain, The Gas Station",
+        "31 North, Polestar, Somewhere on the Mountain, Valleymeade",
+        "31 North, Polestar, The Bud Stop, The Gas Station",
+        "31 North, Polestar, The Bud Stop, The Gas Station, Valleymeade",
+        "31 North, Polestar, The Gas Station",
+        "31 North, Polestar, Valleymeade",
+        "31 North, Somewhere on the Mountain",
+        "31 North, The Gas Station",
+        "31 North, Valleymeade",
+        "Cambridge",
+        "Cambridge, Domecity, Forbin's Reserve, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Cambridge, Domecity, Garcia's, Magic Mann, Mothaplant, Somewhere on the Mountain",
+        "Cambridge, Domecity, Garcia's, Magic Mann, Somewhere on the Mountain",
+        "Cambridge, Domecity, Garcia's, Mothaplant, Polestar, Somewhere on the Mountain, Sweet Spot, Valleymeade",
+        "Cambridge, Domecity, Garcia's, Mothaplant, Polestar, Somewhere on the Mountain, Valleymeade",
+        "Cambridge, Domecity, Garcia's, Mothaplant, Polestar, Valleymeade",
+        "Cambridge, Domecity, Garcia's, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Cambridge, Domecity, Garcia's, Poultney Cannabis Supply, Rimeline, Somewhere on the Mountain, Valleymeade",
+        "Cambridge, Domecity, Garcia's, Somewhere on the Mountain, Sweet Spot, The Tea House",
+        "Cambridge, Domecity, GMCW, Garcia's, Polestar, Poultney Cannabis Supply, Rimeline, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Cambridge, Domecity, GMCW, Garcia's, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Cambridge, Domecity, GMCW, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Cambridge, Domecity, Magic Mann, Mothaplant, Somewhere on the Mountain",
+        "Cambridge, Domecity, Magic Mann, Mothaplant, Somewhere on the Mountain, Sunday Drive, Valleymeade",
+        "Cambridge, Domecity, Magic Mann, Mothaplant, Somewhere on the Mountain, Valleymeade",
+        "Cambridge, Domecity, Magic Mann, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Cambridge, Domecity, Mothaplant, Polestar, Somewhere on the Mountain, Sweet Spot, Valleymeade",
+        "Cambridge, Domecity, Mothaplant, Polestar, Valleymeade",
+        "Cambridge, Domecity, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Cambridge, Domecity, Polestar, The Tea House",
+        "Cambridge, Domecity, Poultney Cannabis Supply, Rimeline, Somewhere on the Mountain, Valleymeade",
+        "Cambridge, Domecity, Somewhere on the Mountain, Sweet Spot, The Tea House",
+        "Cambridge, Forbin's Reserve, Garcia's, Gram Central, Mountain Girl, Polestar, The Bud Stop, The Gas Station, The Tea House, Valleymeade",
+        "Cambridge, Forbin's Reserve, Garcia's, Mountain Girl, Polestar, Somewhere on the Mountain, The Bud Stop, The Gas Station, Valleymeade",
+        "Cambridge, Forbin's Reserve, Garcia's, Mountain Girl, Polestar, Sweet Spot, The Bud Stop, The Gas Station, Valleymeade",
+        "Cambridge, Forbin's Reserve, Garcia's, Mountain Girl, Polestar, The Bud Stop, The Gas Station, Valleymeade",
+        "Cambridge, Forbin's Reserve, Garcia's, Mountain Girl, Polestar, The Tea House",
+        "Cambridge, Forbin's Reserve, Mountain Girl, Polestar, The Tea House",
+        "Cambridge, Forbin's Reserve, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, The Tea House, Valleymeade",
+        "Cambridge, Forbin's Reserve, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Cambridge, Forbin's Reserve, Polestar, Poultney Cannabis Supply, The Bud Stop, The Tea House, Valleymeade",
+        "Cambridge, Forbin's Reserve, Polestar, The Tea House",
+        "Cambridge, Freedom Flower, Garcia's, LLC, Magic Mann, Sunday Drive, The Tea House, Valleymeade",
+        "Cambridge, Freedom Flower, Garcia's, LLC, Polestar, Sunday Drive, Valleymeade",
+        "Cambridge, Freedom Flower, Garcia's, LLC, Sunday Drive, The Tea House, Valleymeade",
+        "Cambridge, Freedom Flower, Gram Central, LLC",
+        "Cambridge, Freedom Flower, LLC",
+        "Cambridge, Freedom Flower, LLC, Magic Mann, Mothaplant, Polestar, Sunday Drive, Valleymeade",
+        "Cambridge, Freedom Flower, LLC, Magic Mann, Sunday Drive, The Tea House, Valleymeade",
+        "Cambridge, Freedom Flower, LLC, Polestar, Sunday Drive, Valleymeade",
+        "Cambridge, Freedom Flower, LLC, Somewhere on the Mountain",
+        "Cambridge, Freedom Flower, LLC, Somewhere on the Mountain, Sunday Drive, The Tea House, Valleymeade",
+        "Cambridge, Freedom Flower, LLC, Somewhere on the Mountain, The Tea House, Valleymeade",
+        "Cambridge, Freedom Flower, LLC, Somewhere on the Mountain, Valleymeade",
+        "Cambridge, Freedom Flower, LLC, Sunday Drive, The Tea House, Valleymeade",
+        "Cambridge, Garcia's",
+        "Cambridge, Garcia's, Magic Mann, Mountain Girl, Polestar, The Bud Stop",
+        "Cambridge, Garcia's, Magic Mann, Mountain Girl, Polestar, The Bud Stop, The Gas Station",
+        "Cambridge, Garcia's, Magic Mann, Polestar, Sweet Spot, The Gas Station, The Tea House, Valleymeade",
+        "Cambridge, Garcia's, Magic Mann, Polestar, The Bud Stop, The Gas Station",
+        "Cambridge, Garcia's, Magic Mann, The Tea House",
+        "Cambridge, Garcia's, Mothaplant, Polestar, Somewhere on the Mountain, Valleymeade",
+        "Cambridge, Garcia's, Mountain Girl, Polestar, Somewhere on the Mountain, The Bud Stop, The Gas Station, Valleymeade",
+        "Cambridge, Garcia's, Mountain Girl, Polestar, Sweet Spot, The Bud Stop, The Gas Station, Valleymeade",
+        "Cambridge, Garcia's, Mountain Girl, Polestar, Sweet Spot, The Bud Stop, Valleymeade",
+        "Cambridge, Garcia's, Mountain Girl, Polestar, The Bud Stop",
+        "Cambridge, Garcia's, Mountain Girl, Polestar, The Bud Stop, The Gas Station, Valleymeade",
+        "Cambridge, Garcia's, Mountain Girl, Polestar, The Gas Station, Valleymeade",
+        "Cambridge, Garcia's, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Cambridge, Garcia's, Polestar, Rimeline, The Bud Stop",
+        "Cambridge, Garcia's, Rimeline",
+        "Cambridge, Garcia's, Rimeline, The Gas Station",
+        "Cambridge, Garcia's, Sweet Spot",
+        "Cambridge, Garcia's, The Gas Station",
+        "Cambridge, GMCW, Kushies, Polestar, Sweet Spot, The Bud Stop, The Gas Station",
+        "Cambridge, GMCW, Magic Mann, Mothaplant, Polestar, Somewhere on the Mountain, Sunday Drive, Valleymeade",
+        "Cambridge, GMCW, Magic Mann, Mothaplant, Polestar, Sunday Drive, Valleymeade",
+        "Cambridge, GMCW, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Cambridge, Gram Central",
+        "Cambridge, Gram Central, Kushies, The Bud Stop",
+        "Cambridge, Gram Central, Mothaplant",
+        "Cambridge, Gram Central, Mothaplant, Mountain Girl, The Tea House",
+        "Cambridge, Gram Central, Mountain Girl, The Tea House",
+        "Cambridge, Gram Central, The Tea House",
+        "Cambridge, Kushies, Polestar, The Bud Stop, The Gas Station",
+        "Cambridge, Magic Mann, Mothaplant, Mountain Girl, Polestar, The Bud Stop, Valleymeade",
+        "Cambridge, Magic Mann, Mothaplant, Polestar, Somewhere on the Mountain, Sunday Drive, Valleymeade",
+        "Cambridge, Magic Mann, Mothaplant, Polestar, The Bud Stop, Valleymeade",
+        "Cambridge, Mothaplant",
+        "Cambridge, Mountain Girl, Polestar, Somewhere on the Mountain, The Bud Stop, The Gas Station, The Tea House, Valleymeade",
+        "Cambridge, Mountain Girl, Polestar, Somewhere on the Mountain, The Bud Stop, The Gas Station, Valleymeade",
+        "Cambridge, Polestar",
+        "Cambridge, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, The Tea House, Valleymeade",
+        "Cambridge, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Cambridge, Polestar, Poultney Cannabis Supply, The Bud Stop, The Tea House, Valleymeade",
+        "Cambridge, Polestar, Poultney Cannabis Supply, The Bud Stop, Valleymeade",
+        "Cambridge, Polestar, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Cambridge, Polestar, The Bud Stop",
+        "Cambridge, Polestar, The Bud Stop, The Gas Station",
+        "Cambridge, Polestar, The Bud Stop, The Gas Station, Valleymeade",
+        "Cambridge, Polestar, The Bud Stop, Valleymeade",
+        "Cambridge, Polestar, The Gas Station, The Tea House",
+        "Cambridge, Polestar, The Tea House",
+        "Cambridge, Poultney Cannabis Supply, Somewhere on the Mountain, Sweet Spot, The Tea House",
+        "Cambridge, Rimeline",
+        "Cambridge, Rimeline, Sweet Spot, The Gas Station",
+        "Cambridge, Rimeline, The Gas Station",
+        "Cambridge, Somewhere on the Mountain, Sweet Spot, The Tea House",
+        "Cambridge, Somewhere on the Mountain, The Tea House",
+        "Cambridge, Sweet Spot",
+        "Cambridge, The Gas Station",
+        "Cambridge, The Tea House",
+        "Cloud9",
+        "Demo Dispensary 01",
+        "Demo Dispensary 02",
+        "Demo Dispensary 03",
+        "Demo Dispensary 05",
+        "Demo Dispensary 06",
+        "Demo Dispensary 08",
+        "Demo Dispensary 09",
+        "Demo Dispensary 100",
+        "Demo Dispensary 101",
+        "Demo Dispensary 102",
+        "Demo Dispensary 103",
+        "Demo Dispensary 104",
+        "Demo Dispensary 105",
+        "Demo Dispensary 106",
+        "Demo Dispensary 107",
+        "Demo Dispensary 108",
+        "Demo Dispensary 109",
+        "Demo Dispensary 110",
+        "Demo Dispensary 111",
+        "Demo Dispensary 112",
+        "Demo Dispensary 113",
+        "Demo Dispensary 114",
+        "Demo Dispensary 115",
+        "Demo Dispensary 116",
+        "Demo Dispensary 117",
+        "Demo Dispensary 118",
+        "Demo Dispensary 119",
+        "Demo Dispensary 12",
+        "Demo Dispensary 120",
+        "Demo Dispensary 121",
+        "Demo Dispensary 122",
+        "Demo Dispensary 123",
+        "Demo Dispensary 124",
+        "Demo Dispensary 125",
+        "Demo Dispensary 126",
+        "Demo Dispensary 127",
+        "Demo Dispensary 128",
+        "Demo Dispensary 129",
+        "Demo Dispensary 13",
+        "Demo Dispensary 130",
+        "Demo Dispensary 131",
+        "Demo Dispensary 132",
+        "Demo Dispensary 133",
+        "Demo Dispensary 134",
+        "Demo Dispensary 135",
+        "Demo Dispensary 136",
+        "Demo Dispensary 137",
+        "Demo Dispensary 138",
+        "Demo Dispensary 139",
+        "Demo Dispensary 14",
+        "Demo Dispensary 140",
+        "Demo Dispensary 141",
+        "Demo Dispensary 15",
+        "Demo Dispensary 16",
+        "Demo Dispensary 17",
+        "Demo Dispensary 18",
+        "Demo Dispensary 19",
+        "Demo Dispensary 20",
+        "Demo Dispensary 21",
+        "Demo Dispensary 22",
+        "Demo Dispensary 23",
+        "Demo Dispensary 24",
+        "Demo Dispensary 25",
+        "Demo Dispensary 26",
+        "Demo Dispensary 27",
+        "Demo Dispensary 28",
+        "Demo Dispensary 29",
+        "Demo Dispensary 30",
+        "Demo Dispensary 31",
+        "Demo Dispensary 32",
+        "Demo Dispensary 33",
+        "Demo Dispensary 34",
+        "Demo Dispensary 35",
+        "Demo Dispensary 36",
+        "Demo Dispensary 37",
+        "Demo Dispensary 38",
+        "Demo Dispensary 39",
+        "Demo Dispensary 40",
+        "Demo Dispensary 41",
+        "Demo Dispensary 42",
+        "Demo Dispensary 43",
+        "Demo Dispensary 44",
+        "Demo Dispensary 45",
+        "Demo Dispensary 46",
+        "Demo Dispensary 47",
+        "Demo Dispensary 48",
+        "Demo Dispensary 49",
+        "Demo Dispensary 50",
+        "Demo Dispensary 51",
+        "Demo Dispensary 52",
+        "Demo Dispensary 53",
+        "Demo Dispensary 54",
+        "Demo Dispensary 55",
+        "Demo Dispensary 56",
+        "Demo Dispensary 57",
+        "Demo Dispensary 58",
+        "Demo Dispensary 59",
+        "Demo Dispensary 60",
+        "Demo Dispensary 61",
+        "Demo Dispensary 62",
+        "Demo Dispensary 63",
+        "Demo Dispensary 64",
+        "Demo Dispensary 65",
+        "Demo Dispensary 66",
+        "Demo Dispensary 67",
+        "Demo Dispensary 68",
+        "Demo Dispensary 69",
+        "Demo Dispensary 70",
+        "Demo Dispensary 71",
+        "Demo Dispensary 72",
+        "Demo Dispensary 73",
+        "Demo Dispensary 74",
+        "Demo Dispensary 75",
+        "Demo Dispensary 76",
+        "Demo Dispensary 77",
+        "Demo Dispensary 78",
+        "Demo Dispensary 79",
+        "Demo Dispensary 80",
+        "Demo Dispensary 81",
+        "Demo Dispensary 82",
+        "Demo Dispensary 83",
+        "Demo Dispensary 84",
+        "Demo Dispensary 85",
+        "Demo Dispensary 86",
+        "Demo Dispensary 87",
+        "Demo Dispensary 88",
+        "Demo Dispensary 89",
+        "Demo Dispensary 90",
+        "Demo Dispensary 91",
+        "Demo Dispensary 92",
+        "Demo Dispensary 93",
+        "Demo Dispensary 94",
+        "Demo Dispensary 95",
+        "Demo Dispensary 96",
+        "Demo Dispensary 97",
+        "Demo Dispensary 98",
+        "Demo Dispensary 99",
+        "Domecity",
+        "Domecity, Forbin's Reserve, Garcia's",
+        "Domecity, Forbin's Reserve, Garcia's, Magic Mann, Mothaplant, Polestar, Sweet Spot, The Gas Station",
+        "Domecity, Forbin's Reserve, Garcia's, Magic Mann, Mothaplant, Polestar, The Gas Station, The Tea House",
+        "Domecity, Forbin's Reserve, Garcia's, Magic Mann, Polestar, Sweet Spot, The Gas Station",
+        "Domecity, Forbin's Reserve, GMCW, Gram Central, Milton Remedies, Polestar, Poultney Cannabis Supply",
+        "Domecity, Forbin's Reserve, GMCW, Gram Central, Milton Remedies, Polestar, The Bud Stop, The Tea House",
+        "Domecity, Forbin's Reserve, GMCW, Gram Central, Mountain Girl, Polestar, Poultney Cannabis Supply",
+        "Domecity, Forbin's Reserve, GMCW, Gram Central, Polestar",
+        "Domecity, Forbin's Reserve, GMCW, Gram Central, Polestar, The Bud Stop, The Tea House",
+        "Domecity, Forbin's Reserve, GMCW, Milton Remedies, Polestar, The Gas Station",
+        "Domecity, Forbin's Reserve, GMCW, Polestar, The Gas Station",
+        "Domecity, Forbin's Reserve, Gram Central",
+        "Domecity, Forbin's Reserve, Gram Central, Mountain Girl, Polestar",
+        "Domecity, Forbin's Reserve, Gram Central, Mountain Girl, Polestar, Poultney Cannabis Supply, The Bud Stop",
+        "Domecity, Forbin's Reserve, Gram Central, Mountain Girl, Polestar, Sweet Spot",
+        "Domecity, Forbin's Reserve, Gram Central, Polestar",
+        "Domecity, Forbin's Reserve, Gram Central, Polestar, Poultney Cannabis Supply, The Bud Stop",
+        "Domecity, Forbin's Reserve, Gram Central, Polestar, Sweet Spot, The Gas Station, The Tea House, Valleymeade",
+        "Domecity, Forbin's Reserve, Gram Central, Polestar, Sweet Spot, The Tea House, Valleymeade",
+        "Domecity, Forbin's Reserve, Gram Central, Polestar, The Gas Station, Valleymeade",
+        "Domecity, Forbin's Reserve, Polestar",
+        "Domecity, Forbin's Reserve, Polestar, Sweet Spot, The Gas Station, The Tea House, Valleymeade",
+        "Domecity, Forbin's Reserve, Polestar, The Bud Stop",
+        "Domecity, Forbin's Reserve, Polestar, The Gas Station, The Tea House, Valleymeade",
+        "Domecity, Forbin's Reserve, The Bud Stop",
+        "Domecity, Freedom Flower, Garcia's, Gram Central, LLC, Milton Remedies, Polestar",
+        "Domecity, Freedom Flower, Garcia's, Gram Central, LLC, Polestar, The Tea House",
+        "Domecity, Freedom Flower, Garcia's, LLC, Polestar, The Tea House",
+        "Domecity, Freedom Flower, Gram Central, LLC, Milton Remedies, Mothaplant, Polestar",
+        "Domecity, Freedom Flower, Gram Central, LLC, Milton Remedies, Polestar",
+        "Domecity, Freedom Flower, Gram Central, LLC, Milton Remedies, Polestar, Sweet Spot",
+        "Domecity, Freedom Flower, Gram Central, LLC, Polestar, Sweet Spot",
+        "Domecity, Freedom Flower, Gram Central, LLC, Polestar, Sweet Spot, The Tea House",
+        "Domecity, Freedom Flower, Gram Central, LLC, Sweet Spot",
+        "Domecity, Freedom Flower, LLC",
+        "Domecity, Freedom Flower, LLC, Sweet Spot",
+        "Domecity, Freedom Flower, LLC, The Tea House",
+        "Domecity, Garcia's",
+        "Domecity, Garcia's, Magic Mann",
+        "Domecity, Garcia's, Magic Mann, Mothaplant, Polestar, Sweet Spot, The Gas Station, The Tea House",
+        "Domecity, Garcia's, Magic Mann, Mothaplant, Somewhere on the Mountain, Sweet Spot, The Tea House",
+        "Domecity, Garcia's, Magic Mann, Polestar, Sweet Spot",
+        "Domecity, Garcia's, Magic Mann, Somewhere on the Mountain",
+        "Domecity, Garcia's, Magic Mann, Somewhere on the Mountain, Sweet Spot, The Tea House",
+        "Domecity, Garcia's, Magic Mann, The Tea House",
+        "Domecity, Garcia's, Polestar, Poultney Cannabis Supply",
+        "Domecity, Garcia's, Polestar, Poultney Cannabis Supply, Rimeline, Somewhere on the Mountain, Valleymeade",
+        "Domecity, Garcia's, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain",
+        "Domecity, Garcia's, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, Sweet Spot",
+        "Domecity, Garcia's, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Domecity, Garcia's, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, Valleymeade",
+        "Domecity, Garcia's, Polestar, Poultney Cannabis Supply, Sweet Spot",
+        "Domecity, Garcia's, Polestar, Somewhere on the Mountain, The Bud Stop",
+        "Domecity, Garcia's, Polestar, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Domecity, Garcia's, Polestar, Sweet Spot",
+        "Domecity, Garcia's, Polestar, The Bud Stop",
+        "Domecity, Garcia's, Polestar, The Bud Stop, Valleymeade",
+        "Domecity, Garcia's, Poultney Cannabis Supply, Sweet Spot, The Bud Stop, The Gas Station, Valleymeade",
+        "Domecity, Garcia's, Poultney Cannabis Supply, Sweet Spot, The Tea House, Valleymeade",
+        "Domecity, Garcia's, Poultney Cannabis Supply, The Bud Stop, The Gas Station",
+        "Domecity, Garcia's, Poultney Cannabis Supply, The Bud Stop, The Gas Station, Valleymeade",
+        "Domecity, Garcia's, Somewhere on the Mountain",
+        "Domecity, Garcia's, Somewhere on the Mountain, The Bud Stop",
+        "Domecity, Garcia's, Sweet Spot, The Bud Stop, The Gas Station, Valleymeade",
+        "Domecity, Garcia's, Sweet Spot, The Tea House",
+        "Domecity, Garcia's, Sweet Spot, The Tea House, Valleymeade",
+        "Domecity, Garcia's, The Bud Stop",
+        "Domecity, Garcia's, The Tea House",
+        "Domecity, GMCW, Garcia's, Magic Mann, Polestar",
+        "Domecity, GMCW, Garcia's, Magic Mann, Polestar, Sweet Spot",
+        "Domecity, GMCW, Garcia's, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Domecity, GMCW, Garcia's, Polestar, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Domecity, GMCW, Garcia's, Polestar, Sweet Spot",
+        "Domecity, GMCW, Gram Central, Milton Remedies, Polestar",
+        "Domecity, GMCW, Gram Central, Polestar",
+        "Domecity, GMCW, Gram Central, Polestar, The Bud Stop, The Tea House",
+        "Domecity, Gram Central",
+        "Domecity, Gram Central, Milton Remedies, Polestar, Somewhere on the Mountain, Valleymeade",
+        "Domecity, Gram Central, Milton Remedies, Polestar, The Gas Station, Valleymeade",
+        "Domecity, Gram Central, Milton Remedies, Polestar, Valleymeade",
+        "Domecity, Gram Central, Milton Remedies, Valleymeade",
+        "Domecity, Gram Central, Mothaplant, Polestar",
+        "Domecity, Gram Central, Mountain Girl, Polestar, Sweet Spot",
+        "Domecity, Gram Central, Polestar",
+        "Domecity, Gram Central, Polestar, Poultney Cannabis Supply",
+        "Domecity, Gram Central, Polestar, Poultney Cannabis Supply, Sweet Spot, The Bud Stop, The Gas Station",
+        "Domecity, Gram Central, Polestar, Poultney Cannabis Supply, Sweet Spot, The Gas Station",
+        "Domecity, Gram Central, Polestar, Poultney Cannabis Supply, The Bud Stop, The Tea House",
+        "Domecity, Gram Central, Polestar, Poultney Cannabis Supply, The Gas Station",
+        "Domecity, Gram Central, Polestar, Somewhere on the Mountain, Valleymeade",
+        "Domecity, Gram Central, Polestar, Sweet Spot, Valleymeade",
+        "Domecity, Gram Central, Polestar, The Bud Stop",
+        "Domecity, Gram Central, Polestar, The Bud Stop, The Tea House",
+        "Domecity, Gram Central, Polestar, The Gas Station, Valleymeade",
+        "Domecity, Gram Central, Polestar, The Tea House",
+        "Domecity, Gram Central, Sweet Spot, The Bud Stop",
+        "Domecity, Gram Central, Sweet Spot, The Bud Stop, The Gas Station, The Tea House",
+        "Domecity, Gram Central, Sweet Spot, The Bud Stop, The Tea House",
+        "Domecity, Gram Central, Sweet Spot, The Gas Station, The Tea House",
+        "Domecity, Gram Central, The Bud Stop",
+        "Domecity, Gram Central, The Bud Stop, The Tea House",
+        "Domecity, Gram Central, Valleymeade",
+        "Domecity, Magic Mann",
+        "Domecity, Magic Mann, Mothaplant, Polestar, Sweet Spot, The Bud Stop, The Gas Station, The Tea House",
+        "Domecity, Magic Mann, Mothaplant, Polestar, Sweet Spot, The Gas Station, The Tea House",
+        "Domecity, Magic Mann, Polestar",
+        "Domecity, Magic Mann, Polestar, Sweet Spot, The Bud Stop, The Gas Station, The Tea House",
+        "Domecity, Magic Mann, Poultney Cannabis Supply, Somewhere on the Mountain, Sweet Spot, The Tea House",
+        "Domecity, Magic Mann, Somewhere on the Mountain, Sweet Spot, The Tea House",
+        "Domecity, Magic Mann, Sweet Spot",
+        "Domecity, Magic Mann, Sweet Spot, The Bud Stop, The Gas Station, The Tea House",
+        "Domecity, Milton Remedies, Mothaplant, Polestar, Somewhere on the Mountain, Sweet Spot, Valleymeade",
+        "Domecity, Milton Remedies, Mothaplant, Polestar, Somewhere on the Mountain, Valleymeade",
+        "Domecity, Milton Remedies, Mothaplant, Polestar, Sweet Spot, The Gas Station, Valleymeade",
+        "Domecity, Milton Remedies, Valleymeade",
+        "Domecity, Mothaplant, Polestar, Somewhere on the Mountain, Sweet Spot, Valleymeade",
+        "Domecity, Mothaplant, Polestar, Somewhere on the Mountain, Valleymeade",
+        "Domecity, Mothaplant, Polestar, Sweet Spot, The Bud Stop, The Gas Station, Valleymeade",
+        "Domecity, Mothaplant, Polestar, Sweet Spot, The Gas Station, Valleymeade",
+        "Domecity, Mothaplant, Polestar, The Gas Station, Valleymeade",
+        "Domecity, Mothaplant, Polestar, Valleymeade",
+        "Domecity, Mothaplant, Poultney Cannabis Supply, Sweet Spot, The Bud Stop, The Gas Station, Valleymeade",
+        "Domecity, Mothaplant, Poultney Cannabis Supply, The Bud Stop, The Gas Station, Valleymeade",
+        "Domecity, Mothaplant, Poultney Cannabis Supply, The Bud Stop, Valleymeade",
+        "Domecity, Mothaplant, Valleymeade",
+        "Domecity, Mountain Girl, Polestar",
+        "Domecity, Mountain Girl, Polestar, Sweet Spot",
+        "Domecity, Mountain Girl, Poultney Cannabis Supply",
+        "Domecity, Polestar",
+        "Domecity, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, The Tea House, Valleymeade",
+        "Domecity, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Domecity, Polestar, Poultney Cannabis Supply, Sweet Spot, The Bud Stop, The Gas Station",
+        "Domecity, Polestar, Poultney Cannabis Supply, The Bud Stop, Valleymeade",
+        "Domecity, Polestar, Somewhere on the Mountain",
+        "Domecity, Polestar, Somewhere on the Mountain, The Bud Stop",
+        "Domecity, Polestar, Sweet Spot",
+        "Domecity, Polestar, Sweet Spot, The Bud Stop, The Gas Station",
+        "Domecity, Polestar, Sweet Spot, Valleymeade",
+        "Domecity, Polestar, The Bud Stop",
+        "Domecity, Polestar, The Bud Stop, The Tea House",
+        "Domecity, Polestar, The Bud Stop, Valleymeade",
+        "Domecity, Polestar, The Gas Station, The Tea House, Valleymeade",
+        "Domecity, Polestar, The Gas Station, Valleymeade",
+        "Domecity, Polestar, The Tea House",
+        "Domecity, Polestar, Valleymeade",
+        "Domecity, Poultney Cannabis Supply",
+        "Domecity, Poultney Cannabis Supply, Rimeline, Somewhere on the Mountain, Valleymeade",
+        "Domecity, Poultney Cannabis Supply, Somewhere on the Mountain",
+        "Domecity, Poultney Cannabis Supply, Somewhere on the Mountain, Sweet Spot, The Tea House",
+        "Domecity, Poultney Cannabis Supply, Somewhere on the Mountain, The Tea House",
+        "Domecity, Poultney Cannabis Supply, The Bud Stop, Valleymeade",
+        "Domecity, Somewhere on the Mountain, Sweet Spot, The Tea House",
+        "Domecity, Sweet Spot, The Bud Stop, The Gas Station, The Tea House",
+        "Domecity, Sweet Spot, The Gas Station, The Tea House",
+        "Domecity, Sweet Spot, The Tea House",
+        "Domecity, Sweet Spot, Valleymeade",
+        "Domecity, The Bud Stop",
+        "Domecity, The Gas Station",
+        "Domecity, The Tea House",
+        "Domecity, Valleymeade",
+        "Flora",
+        "Forbin's Reserve",
+        "Forbin's Reserve, Freedom Flower, LLC",
+        "Forbin's Reserve, Freedom Flower, LLC, Sweet Spot",
+        "Forbin's Reserve, Garcia's",
+        "Forbin's Reserve, Garcia's, Gram Central, Milton Remedies, Mountain Girl, Polestar, Somewhere on the Mountain, Sweet Spot, The Bud Stop, The Gas Station",
+        "Forbin's Reserve, Garcia's, Gram Central, Milton Remedies, Mountain Girl, Polestar, Somewhere on the Mountain, Sweet Spot, The Gas Station",
+        "Forbin's Reserve, Garcia's, Gram Central, Mountain Girl, Polestar, Somewhere on the Mountain, Sweet Spot, The Bud Stop, The Gas Station",
+        "Forbin's Reserve, Garcia's, Gram Central, Mountain Girl, Polestar, The Gas Station, The Tea House, Valleymeade",
+        "Forbin's Reserve, Garcia's, Milton Remedies, Mountain Girl, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, Sweet Spot",
+        "Forbin's Reserve, Garcia's, Milton Remedies, Mountain Girl, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, Sweet Spot, The Gas Station",
+        "Forbin's Reserve, Garcia's, Milton Remedies, Mountain Girl, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Gas Station",
+        "Forbin's Reserve, Garcia's, Mountain Girl, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Gas Station",
+        "Forbin's Reserve, Garcia's, Mountain Girl, Polestar, Poultney Cannabis Supply, The Gas Station",
+        "Forbin's Reserve, Garcia's, The Gas Station",
+        "Forbin's Reserve, GMCW, Gram Central, Magic Mann, Mountain Girl, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Forbin's Reserve, GMCW, Gram Central, Magic Mann, The Bud Stop, The Tea House",
+        "Forbin's Reserve, GMCW, Gram Central, The Bud Stop, The Tea House",
+        "Forbin's Reserve, GMCW, Milton Remedies, Polestar, Poultney Cannabis Supply, Rimeline, The Bud Stop",
+        "Forbin's Reserve, GMCW, Milton Remedies, Polestar, The Gas Station",
+        "Forbin's Reserve, GMCW, Polestar, Poultney Cannabis Supply, Rimeline, The Bud Stop",
+        "Forbin's Reserve, GMCW, Polestar, The Gas Station",
+        "Forbin's Reserve, GMCW, The Bud Stop",
+        "Forbin's Reserve, Gram Central, Magic Mann, Mountain Girl, Polestar",
+        "Forbin's Reserve, Gram Central, Magic Mann, Mountain Girl, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, Valleymeade",
+        "Forbin's Reserve, Gram Central, Magic Mann, Mountain Girl, Polestar, Sunday Drive, The Bud Stop, Valleymeade",
+        "Forbin's Reserve, Gram Central, Magic Mann, Mountain Girl, Polestar, The Bud Stop",
+        "Forbin's Reserve, Gram Central, Magic Mann, Mountain Girl, Polestar, The Tea House",
+        "Forbin's Reserve, Gram Central, Milton Remedies, Polestar, Poultney Cannabis Supply",
+        "Forbin's Reserve, Gram Central, Milton Remedies, Polestar, Poultney Cannabis Supply, The Bud Stop, The Tea House",
+        "Forbin's Reserve, Gram Central, Mountain Girl",
+        "Forbin's Reserve, Gram Central, Mountain Girl, Polestar, Poultney Cannabis Supply",
+        "Forbin's Reserve, Gram Central, Mountain Girl, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, Valleymeade",
+        "Forbin's Reserve, Gram Central, Mountain Girl, Polestar, Poultney Cannabis Supply, The Bud Stop",
+        "Forbin's Reserve, Gram Central, Mountain Girl, Polestar, Sunday Drive, The Bud Stop, Valleymeade",
+        "Forbin's Reserve, Gram Central, Mountain Girl, The Bud Stop",
+        "Forbin's Reserve, Gram Central, Mountain Girl, The Bud Stop, The Tea House",
+        "Forbin's Reserve, Gram Central, Mountain Girl, The Tea House",
+        "Forbin's Reserve, Gram Central, Polestar",
+        "Forbin's Reserve, Gram Central, Polestar, Poultney Cannabis Supply",
+        "Forbin's Reserve, Gram Central, Polestar, Poultney Cannabis Supply, The Bud Stop",
+        "Forbin's Reserve, Gram Central, Polestar, Poultney Cannabis Supply, The Bud Stop, The Tea House",
+        "Forbin's Reserve, Gram Central, Polestar, Somewhere on the Mountain, Sweet Spot, The Tea House, Valleymeade",
+        "Forbin's Reserve, Gram Central, Polestar, Sweet Spot, The Tea House, Valleymeade",
+        "Forbin's Reserve, Gram Central, Polestar, The Bud Stop, The Tea House",
+        "Forbin's Reserve, Gram Central, Polestar, The Tea House, Valleymeade",
+        "Forbin's Reserve, Gram Central, Sweet Spot, The Gas Station",
+        "Forbin's Reserve, Magic Mann",
+        "Forbin's Reserve, Magic Mann, Polestar, Poultney Cannabis Supply, The Bud Stop, The Tea House",
+        "Forbin's Reserve, Magic Mann, Polestar, The Bud Stop",
+        "Forbin's Reserve, Magic Mann, Polestar, The Bud Stop, The Tea House",
+        "Forbin's Reserve, Magic Mann, The Tea House",
+        "Forbin's Reserve, Mountain Girl, Polestar",
+        "Forbin's Reserve, Mountain Girl, Polestar, Poultney Cannabis Supply",
+        "Forbin's Reserve, Mountain Girl, Polestar, Poultney Cannabis Supply, Sweet Spot",
+        "Forbin's Reserve, Mountain Girl, Polestar, Somewhere on the Mountain, The Bud Stop, The Gas Station",
+        "Forbin's Reserve, Mountain Girl, The Bud Stop",
+        "Forbin's Reserve, Mountain Girl, The Bud Stop, The Tea House",
+        "Forbin's Reserve, Polestar",
+        "Forbin's Reserve, Polestar, Poultney Cannabis Supply",
+        "Forbin's Reserve, Polestar, Poultney Cannabis Supply, Sweet Spot",
+        "Forbin's Reserve, Polestar, Poultney Cannabis Supply, The Bud Stop",
+        "Forbin's Reserve, Polestar, Poultney Cannabis Supply, The Bud Stop, The Gas Station",
+        "Forbin's Reserve, Polestar, Poultney Cannabis Supply, The Bud Stop, The Tea House",
+        "Forbin's Reserve, Polestar, Somewhere on the Mountain",
+        "Forbin's Reserve, Polestar, Somewhere on the Mountain, The Bud Stop",
+        "Forbin's Reserve, Polestar, The Bud Stop",
+        "Forbin's Reserve, Polestar, The Bud Stop, The Tea House",
+        "Forbin's Reserve, Polestar, The Tea House, Valleymeade",
+        "Forbin's Reserve, Polestar, Valleymeade",
+        "Forbin's Reserve, Poultney Cannabis Supply, Somewhere on the Mountain",
+        "Forbin's Reserve, Poultney Cannabis Supply, Somewhere on the Mountain, Valleymeade",
+        "Forbin's Reserve, Poultney Cannabis Supply, The Bud Stop",
+        "Forbin's Reserve, Poultney Cannabis Supply, Valleymeade",
+        "Forbin's Reserve, Somewhere on the Mountain",
+        "Forbin's Reserve, Sweet Spot",
+        "Forbin's Reserve, The Bud Stop, The Gas Station",
+        "Freedom Flower, LLC",
+        "Freedom Flower, LLC, Magic Mann, Sunday Drive",
+        "Freedom Flower, LLC, Pine Grove Organics",
+        "Freedom Flower, LLC, Polestar",
+        "Freedom Flower, LLC, Polestar, Sunday Drive",
+        "Freedom Flower, LLC, Polestar, The Tea House",
+        "Freedom Flower, LLC, Somewhere on the Mountain, The Tea House, Valleymeade",
+        "Freedom Flower, LLC, Sunday Drive",
+        "Freedom Flower, LLC, Sweet Spot",
+        "Freedom Flower, LLC, The Tea House",
+        "Freedom Flower, LLC, Valleymeade",
+        "Garcia's",
+        "Garcia's, Gram Central",
+        "Garcia's, Gram Central, Milton Remedies, Polestar",
+        "Garcia's, Gram Central, Mountain Girl, Polestar, Somewhere on the Mountain, Sweet Spot, The Bud Stop, The Gas Station",
+        "Garcia's, Gram Central, Mountain Girl, Polestar, The Bud Stop, The Gas Station, The Tea House, Valleymeade",
+        "Garcia's, Gram Central, Mountain Girl, Polestar, The Bud Stop, The Gas Station, Valleymeade",
+        "Garcia's, Gram Central, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain",
+        "Garcia's, Gram Central, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, Sweet Spot, The Bud Stop, The Gas Station",
+        "Garcia's, Gram Central, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Gas Station",
+        "Garcia's, Gram Central, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Gas Station, Valleymeade",
+        "Garcia's, Gram Central, Polestar, The Gas Station",
+        "Garcia's, Gram Central, Poultney Cannabis Supply, Somewhere on the Mountain, The Gas Station, Valleymeade",
+        "Garcia's, Kushies, Polestar, Somewhere on the Mountain, Sweet Spot, The Bud Stop, The Gas Station, Valleymeade",
+        "Garcia's, Magic Mann",
+        "Garcia's, Magic Mann, Mothaplant",
+        "Garcia's, Magic Mann, Mothaplant, Sweet Spot",
+        "Garcia's, Magic Mann, Mountain Girl, Polestar, The Gas Station, Valleymeade",
+        "Garcia's, Magic Mann, Mountain Girl, The Gas Station, Valleymeade",
+        "Garcia's, Magic Mann, Polestar, The Bud Stop, The Gas Station",
+        "Garcia's, Magic Mann, The Tea House",
+        "Garcia's, Milton Remedies, Mothaplant, Mountain Girl",
+        "Garcia's, Milton Remedies, Mothaplant, Mountain Girl, The Bud Stop",
+        "Garcia's, Milton Remedies, Mothaplant, Poultney Cannabis Supply, The Bud Stop",
+        "Garcia's, Milton Remedies, Mothaplant, The Bud Stop",
+        "Garcia's, Milton Remedies, Polestar",
+        "Garcia's, Mothaplant",
+        "Garcia's, Mothaplant, Polestar",
+        "Garcia's, Mothaplant, Polestar, Poultney Cannabis Supply, The Bud Stop",
+        "Garcia's, Mothaplant, Poultney Cannabis Supply, The Bud Stop",
+        "Garcia's, Mothaplant, Sweet Spot",
+        "Garcia's, Mothaplant, Sweet Spot, The Gas Station",
+        "Garcia's, Mountain Girl, Polestar, Poultney Cannabis Supply, The Gas Station",
+        "Garcia's, Mountain Girl, Polestar, Somewhere on the Mountain, The Gas Station, Valleymeade",
+        "Garcia's, Mountain Girl, Polestar, The Gas Station",
+        "Garcia's, Mountain Girl, Polestar, The Gas Station, Valleymeade",
+        "Garcia's, Polestar",
+        "Garcia's, Polestar, Poultney Cannabis Supply",
+        "Garcia's, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain",
+        "Garcia's, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, Sweet Spot, The Bud Stop, The Gas Station",
+        "Garcia's, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop",
+        "Garcia's, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, The Gas Station",
+        "Garcia's, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Gas Station",
+        "Garcia's, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, Valleymeade",
+        "Garcia's, Polestar, Poultney Cannabis Supply, The Gas Station",
+        "Garcia's, Polestar, Rimeline",
+        "Garcia's, Polestar, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Garcia's, Polestar, Somewhere on the Mountain, Valleymeade",
+        "Garcia's, Polestar, Sweet Spot",
+        "Garcia's, Polestar, Sweet Spot, The Bud Stop",
+        "Garcia's, Polestar, Sweet Spot, The Bud Stop, The Gas Station, Valleymeade",
+        "Garcia's, Polestar, Sweet Spot, The Gas Station, Valleymeade",
+        "Garcia's, Polestar, The Bud Stop",
+        "Garcia's, Polestar, The Bud Stop, The Gas Station",
+        "Garcia's, Polestar, The Bud Stop, The Gas Station, Valleymeade",
+        "Garcia's, Polestar, The Bud Stop, Valleymeade",
+        "Garcia's, Polestar, The Gas Station",
+        "Garcia's, Polestar, The Gas Station, The Tea House",
+        "Garcia's, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, The Gas Station",
+        "Garcia's, Poultney Cannabis Supply, Somewhere on the Mountain, Valleymeade",
+        "Garcia's, Poultney Cannabis Supply, Sweet Spot, The Tea House, Valleymeade",
+        "Garcia's, Poultney Cannabis Supply, The Tea House, Valleymeade",
+        "Garcia's, Poultney Cannabis Supply, Valleymeade",
+        "Garcia's, Rimeline",
+        "Garcia's, Rimeline, Sweet Spot",
+        "Garcia's, Rimeline, Sweet Spot, The Gas Station",
+        "Garcia's, Rimeline, The Gas Station",
+        "Garcia's, Somewhere on the Mountain",
+        "Garcia's, Sunday Drive",
+        "Garcia's, Sweet Spot",
+        "Garcia's, Sweet Spot, The Gas Station",
+        "Garcia's, The Bud Stop",
+        "Garcia's, The Gas Station",
+        "Garcia's, The Tea House",
+        "GMCW",
+        "GMCW, Garcia's, Gram Central, Polestar, Poultney Cannabis Supply, The Gas Station",
+        "GMCW, Garcia's, Milton Remedies, Mothaplant, Polestar, Poultney Cannabis Supply, The Bud Stop",
+        "GMCW, Garcia's, Mothaplant, Polestar, Poultney Cannabis Supply, Rimeline, The Bud Stop",
+        "GMCW, Garcia's, Mothaplant, Polestar, Poultney Cannabis Supply, The Bud Stop",
+        "GMCW, Garcia's, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "GMCW, Garcia's, Polestar, Poultney Cannabis Supply, The Gas Station",
+        "GMCW, Gram Central",
+        "GMCW, Gram Central, Magic Mann, Mountain Girl, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "GMCW, Gram Central, Magic Mann, The Bud Stop, The Tea House",
+        "GMCW, Gram Central, Mothaplant, Valleymeade",
+        "GMCW, Gram Central, Mountain Girl, Polestar, Poultney Cannabis Supply",
+        "GMCW, Gram Central, Mountain Girl, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "GMCW, Gram Central, Mountain Girl, Polestar, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "GMCW, Gram Central, Polestar, Poultney Cannabis Supply, The Bud Stop",
+        "GMCW, Gram Central, Polestar, Poultney Cannabis Supply, The Bud Stop, Valleymeade",
+        "GMCW, Gram Central, Polestar, Somewhere on the Mountain",
+        "GMCW, Gram Central, Polestar, Somewhere on the Mountain, The Bud Stop, The Gas Station, Valleymeade",
+        "GMCW, Gram Central, Polestar, Somewhere on the Mountain, The Gas Station, Valleymeade",
+        "GMCW, Gram Central, Polestar, The Bud Stop, The Gas Station, Valleymeade",
+        "GMCW, Gram Central, Polestar, The Bud Stop, The Tea House",
+        "GMCW, Gram Central, Polestar, The Tea House",
+        "GMCW, Gram Central, Polestar, Valleymeade",
+        "GMCW, Magic Mann, Mothaplant, Somewhere on the Mountain, The Tea House",
+        "GMCW, Magic Mann, Mothaplant, The Bud Stop",
+        "GMCW, Magic Mann, Mothaplant, The Tea House",
+        "GMCW, Magic Mann, Mountain Girl, Rolling Twenties, The Tea House",
+        "GMCW, Magic Mann, Polestar, Somewhere on the Mountain, Valleymeade",
+        "GMCW, Magic Mann, The Bud Stop",
+        "GMCW, Mountain Girl, Rolling Twenties, The Tea House",
+        "GMCW, Mountain Girl, The Tea House",
+        "GMCW, Pine Grove Organics",
+        "GMCW, Polestar",
+        "GMCW, Polestar, Rimeline",
+        "GMCW, Polestar, Rimeline, The Gas Station",
+        "GMCW, Polestar, Somewhere on the Mountain",
+        "GMCW, Polestar, The Bud Stop",
+        "GMCW, Polestar, The Bud Stop, The Gas Station, Valleymeade",
+        "GMCW, Polestar, The Bud Stop, The Tea House",
+        "GMCW, Polestar, The Gas Station",
+        "GMCW, The Bud Stop",
+        "GMCW, The Tea House",
+        "Gram Central",
+        "Gram Central, Magic Mann",
+        "Gram Central, Magic Mann, Mountain Girl, Polestar, Sunday Drive, The Bud Stop, Valleymeade",
+        "Gram Central, Magic Mann, Mountain Girl, Polestar, The Tea House",
+        "Gram Central, Magic Mann, Polestar",
+        "Gram Central, Magic Mann, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Gram Central, Magic Mann, Polestar, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Gram Central, Magic Mann, Polestar, The Bud Stop, The Tea House",
+        "Gram Central, Magic Mann, Polestar, The Bud Stop, Valleymeade",
+        "Gram Central, Magic Mann, The Bud Stop",
+        "Gram Central, Milton Remedies, Mountain Girl, Polestar, Poultney Cannabis Supply",
+        "Gram Central, Milton Remedies, Mountain Girl, Polestar, Poultney Cannabis Supply, The Tea House",
+        "Gram Central, Milton Remedies, Mountain Girl, Polestar, Poultney Cannabis Supply, The Tea House, Valleymeade",
+        "Gram Central, Milton Remedies, Polestar, Poultney Cannabis Supply",
+        "Gram Central, Milton Remedies, Polestar, Poultney Cannabis Supply, The Bud Stop, The Tea House",
+        "Gram Central, Milton Remedies, Poultney Cannabis Supply",
+        "Gram Central, Mothaplant, Polestar",
+        "Gram Central, Mothaplant, Polestar, Valleymeade",
+        "Gram Central, Mothaplant, Valleymeade",
+        "Gram Central, Mountain Girl",
+        "Gram Central, Mountain Girl, Polestar",
+        "Gram Central, Mountain Girl, Polestar, Poultney Cannabis Supply",
+        "Gram Central, Mountain Girl, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, Valleymeade",
+        "Gram Central, Mountain Girl, Polestar, Poultney Cannabis Supply, The Bud Stop",
+        "Gram Central, Mountain Girl, Polestar, Poultney Cannabis Supply, The Bud Stop, The Tea House",
+        "Gram Central, Mountain Girl, Polestar, Poultney Cannabis Supply, The Tea House, Valleymeade",
+        "Gram Central, Mountain Girl, Polestar, Sunday Drive",
+        "Gram Central, Mountain Girl, Polestar, Sunday Drive, The Bud Stop",
+        "Gram Central, Mountain Girl, Polestar, The Bud Stop",
+        "Gram Central, Mountain Girl, Poultney Cannabis Supply",
+        "Gram Central, Mountain Girl, Poultney Cannabis Supply, Somewhere on the Mountain, Valleymeade",
+        "Gram Central, Mountain Girl, The Bud Stop",
+        "Gram Central, Mountain Girl, The Tea House",
+        "Gram Central, Mountain Girl, The Tea House, Valleymeade",
+        "Gram Central, Polestar",
+        "Gram Central, Polestar, Poultney Cannabis Supply",
+        "Gram Central, Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Gram Central, Polestar, Poultney Cannabis Supply, The Bud Stop",
+        "Gram Central, Polestar, Poultney Cannabis Supply, The Bud Stop, The Tea House",
+        "Gram Central, Polestar, Somewhere on the Mountain",
+        "Gram Central, Polestar, Somewhere on the Mountain, The Bud Stop",
+        "Gram Central, Polestar, Somewhere on the Mountain, The Bud Stop, The Gas Station, Valleymeade",
+        "Gram Central, Polestar, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Gram Central, Polestar, Somewhere on the Mountain, The Gas Station",
+        "Gram Central, Polestar, Somewhere on the Mountain, The Gas Station, Valleymeade",
+        "Gram Central, Polestar, Somewhere on the Mountain, Valleymeade",
+        "Gram Central, Polestar, Sunday Drive",
+        "Gram Central, Polestar, Sunday Drive, The Bud Stop",
+        "Gram Central, Polestar, Sunday Drive, The Bud Stop, Valleymeade",
+        "Gram Central, Polestar, Sunday Drive, The Gas Station",
+        "Gram Central, Polestar, Sweet Spot, Valleymeade",
+        "Gram Central, Polestar, The Bud Stop",
+        "Gram Central, Polestar, The Bud Stop, The Tea House",
+        "Gram Central, Polestar, The Bud Stop, Valleymeade",
+        "Gram Central, Polestar, The Gas Station",
+        "Gram Central, Polestar, The Gas Station, Valleymeade",
+        "Gram Central, Polestar, Valleymeade",
+        "Gram Central, Poultney Cannabis Supply, Somewhere on the Mountain, The Gas Station, Valleymeade",
+        "Gram Central, Poultney Cannabis Supply, The Bud Stop",
+        "Gram Central, Somewhere on the Mountain, The Bud Stop, The Tea House, Valleymeade",
+        "Gram Central, The Bud Stop",
+        "Gram Central, The Bud Stop, The Tea House",
+        "Gram Central, The Bud Stop, The Tea House, Valleymeade",
+        "Gram Central, The Bud Stop, Valleymeade",
+        "Gram Central, The Gas Station, Valleymeade",
+        "Gram Central, The Tea House",
+        "Gram Central, Valleymeade",
+        "Higher Elevation",
+        "Kushies",
+        "Kushies, Polestar",
+        "Kushies, Polestar, The Bud Stop, The Gas Station",
+        "Kushies, Polestar, The Gas Station",
+        "Magic Mann",
+        "Magic Mann, Mothaplant",
+        "Magic Mann, Mothaplant, Mountain Girl, Polestar",
+        "Magic Mann, Mothaplant, Mountain Girl, Polestar, The Bud Stop, Valleymeade",
+        "Magic Mann, Mothaplant, Mountain Girl, Polestar, Valleymeade",
+        "Magic Mann, Mothaplant, Somewhere on the Mountain, Sweet Spot, The Tea House",
+        "Magic Mann, Mothaplant, Somewhere on the Mountain, The Tea House",
+        "Magic Mann, Mothaplant, Sweet Spot",
+        "Magic Mann, Mothaplant, The Bud Stop",
+        "Magic Mann, Polestar, Somewhere on the Mountain, The Bud Stop",
+        "Magic Mann, Polestar, The Bud Stop",
+        "Magic Mann, Polestar, The Bud Stop, The Tea House",
+        "Magic Mann, Rolling Twenties",
+        "Magic Mann, The Bud Stop",
+        "Magic Mann, The Tea House",
+        "Milton Remedies",
+        "Milton Remedies, Mothaplant",
+        "Milton Remedies, Poultney Cannabis Supply",
+        "Milton Remedies, Poultney Cannabis Supply, Somewhere on the Mountain",
+        "Mothaplant",
+        "Mothaplant, Mountain Girl",
+        "Mothaplant, Mountain Girl, Polestar",
+        "Mothaplant, Polestar",
+        "Mothaplant, Polestar, Sweet Spot, The Bud Stop, The Gas Station, Valleymeade",
+        "Mothaplant, Polestar, The Bud Stop",
+        "Mothaplant, Polestar, Valleymeade",
+        "Mothaplant, Poultney Cannabis Supply, The Bud Stop",
+        "Mothaplant, Poultney Cannabis Supply, The Bud Stop, Valleymeade",
+        "Mothaplant, Sweet Spot",
+        "Mothaplant, Sweet Spot, The Gas Station",
+        "Mothaplant, The Gas Station",
+        "Mountain Girl",
+        "Mountain Girl, Polestar",
+        "Mountain Girl, Polestar, Poultney Cannabis Supply, The Tea House, Valleymeade",
+        "Mountain Girl, Polestar, Rolling Twenties, Somewhere on the Mountain",
+        "Mountain Girl, Polestar, Somewhere on the Mountain, The Bud Stop, The Gas Station",
+        "Mountain Girl, Polestar, Sweet Spot",
+        "Mountain Girl, Polestar, The Bud Stop, The Tea House, Valleymeade",
+        "Mountain Girl, Polestar, The Tea House, Valleymeade",
+        "Mountain Girl, Rolling Twenties, The Tea House",
+        "Mountain Girl, Sweet Spot",
+        "Mountain Girl, The Tea House",
+        "Pine Grove Organics",
+        "Polestar",
+        "Polestar, Poultney Cannabis Supply",
+        "Polestar, Poultney Cannabis Supply, Somewhere on the Mountain",
+        "Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, Sweet Spot, The Bud Stop, Valleymeade",
+        "Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop",
+        "Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, The Tea House, Valleymeade",
+        "Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, Valleymeade",
+        "Polestar, Poultney Cannabis Supply, The Bud Stop",
+        "Polestar, Poultney Cannabis Supply, The Bud Stop, The Gas Station",
+        "Polestar, Poultney Cannabis Supply, The Bud Stop, The Gas Station, Valleymeade",
+        "Polestar, Poultney Cannabis Supply, The Bud Stop, Valleymeade",
+        "Polestar, Poultney Cannabis Supply, The Gas Station",
+        "Polestar, Poultney Cannabis Supply, Valleymeade",
+        "Polestar, Rolling Twenties",
+        "Polestar, Rolling Twenties, Somewhere on the Mountain",
+        "Polestar, Rolling Twenties, The Bud Stop, Valleymeade",
+        "Polestar, Rolling Twenties, The Gas Station, Valleymeade",
+        "Polestar, Somewhere on the Mountain",
+        "Polestar, Somewhere on the Mountain, Sweet Spot, The Bud Stop, The Gas Station",
+        "Polestar, Somewhere on the Mountain, Sweet Spot, The Bud Stop, The Gas Station, Valleymeade",
+        "Polestar, Somewhere on the Mountain, The Bud Stop",
+        "Polestar, Somewhere on the Mountain, The Bud Stop, The Gas Station",
+        "Polestar, Somewhere on the Mountain, The Bud Stop, The Gas Station, Valleymeade",
+        "Polestar, Somewhere on the Mountain, The Bud Stop, Valleymeade",
+        "Polestar, Somewhere on the Mountain, The Gas Station, The Tea House, Valleymeade",
+        "Polestar, Somewhere on the Mountain, Valleymeade",
+        "Polestar, Sunday Drive",
+        "Polestar, Sunday Drive, The Bud Stop",
+        "Polestar, Sunday Drive, The Gas Station",
+        "Polestar, Sweet Spot",
+        "Polestar, Sweet Spot, The Bud Stop, The Gas Station",
+        "Polestar, Sweet Spot, The Bud Stop, The Gas Station, Valleymeade",
+        "Polestar, Sweet Spot, The Gas Station",
+        "Polestar, Sweet Spot, The Gas Station, Valleymeade",
+        "Polestar, Sweet Spot, Valleymeade",
+        "Polestar, The Bud Stop",
+        "Polestar, The Bud Stop, The Gas Station",
+        "Polestar, The Bud Stop, The Gas Station, Valleymeade",
+        "Polestar, The Bud Stop, The Tea House",
+        "Polestar, The Bud Stop, The Tea House, Valleymeade",
+        "Polestar, The Bud Stop, Valleymeade",
+        "Polestar, The Gas Station",
+        "Polestar, The Gas Station, The Tea House",
+        "Polestar, The Gas Station, The Tea House, Valleymeade",
+        "Polestar, The Gas Station, Valleymeade",
+        "Polestar, The Tea House",
+        "Polestar, Valleymeade",
+        "Poultney Cannabis Supply",
+        "Poultney Cannabis Supply, Somewhere on the Mountain",
+        "Poultney Cannabis Supply, Somewhere on the Mountain, Sweet Spot",
+        "Poultney Cannabis Supply, Somewhere on the Mountain, Sweet Spot, The Tea House",
+        "Poultney Cannabis Supply, Somewhere on the Mountain, The Gas Station, Valleymeade",
+        "Poultney Cannabis Supply, Somewhere on the Mountain, The Tea House",
+        "Poultney Cannabis Supply, Somewhere on the Mountain, Valleymeade",
+        "Poultney Cannabis Supply, The Bud Stop",
+        "Poultney Cannabis Supply, The Bud Stop, Valleymeade",
+        "Poultney Cannabis Supply, The Gas Station",
+        "Poultney Cannabis Supply, Valleymeade",
+        "Rimeline",
+        "Rimeline, Sweet Spot, The Gas Station",
+        "Rimeline, The Gas Station",
+        "Rolling Twenties",
+        "Rolling Twenties, The Bud Stop, Valleymeade",
+        "Rolling Twenties, Valleymeade",
+        "Something Wicked Cannabis",
+        "Somewhere on the Mountain",
+        "Somewhere on the Mountain, The Tea House",
+        "Somewhere on the Mountain, Valleymeade",
+        "Sunday Drive",
+        "Sweet Spot",
+        "Sweet Spot, The Gas Station",
+        "Sweet Spot, The Tea House",
+        "Sweet Spot, Valleymeade",
+        "The Bud Stop",
+        "The Bud Stop, The Tea House",
+        "The Bud Stop, The Tea House, Valleymeade",
+        "The Bud Stop, Valleymeade",
+        "The Gas Station",
+        "The Tea House",
+        "The Tea House, Valleymeade",
+        "Valleymeade"
+      ],
+      "top_values": [
+        [
+          "Polestar",
+          9565
+        ],
+        [
+          "The Bud Stop",
+          5709
+        ],
+        [
+          "Valleymeade",
+          4771
+        ],
+        [
+          "Garcia's",
+          4732
+        ],
+        [
+          "Cambridge",
+          3658
+        ],
+        [
+          "Gram Central",
+          2876
+        ],
+        [
+          "Forbin's Reserve",
+          2025
+        ],
+        [
+          "Mothaplant",
+          1956
+        ],
+        [
+          "Sweet Spot",
+          1867
+        ],
+        [
+          "The Tea House",
+          1866
+        ],
+        [
+          "Freedom Flower, LLC",
+          1709
+        ],
+        [
+          "31 North",
+          1706
+        ],
+        [
+          "The Gas Station",
+          1676
+        ],
+        [
+          "Somewhere on the Mountain",
+          1608
+        ],
+        [
+          "GMCW",
+          1560
+        ],
+        [
+          "Magic Mann",
+          1106
+        ],
+        [
+          "Pine Grove Organics",
+          1007
+        ],
+        [
+          "Kushies",
+          943
+        ],
+        [
+          "Rimeline",
+          892
+        ],
+        [
+          "Milton Remedies",
+          710
+        ],
+        [
+          "Higher Elevation",
+          570
+        ],
+        [
+          "Sunday Drive",
+          474
+        ],
+        [
+          "Cloud9",
+          442
+        ],
+        [
+          "Mountain Girl",
+          414
+        ],
+        [
+          "Polestar, Valleymeade",
+          207
+        ],
+        [
+          "Rolling Twenties",
+          206
+        ],
+        [
+          "Polestar, The Gas Station",
+          202
+        ],
+        [
+          "The Bud Stop, Valleymeade",
+          126
+        ],
+        [
+          "Polestar, The Bud Stop, Valleymeade",
+          97
+        ],
+        [
+          "Freedom Flower, LLC, The Tea House",
+          96
+        ],
+        [
+          "Garcia's, Magic Mann",
+          94
+        ],
+        [
+          "Garcia's, Mothaplant",
+          84
+        ],
+        [
+          "Poultney Cannabis Supply",
+          71
+        ],
+        [
+          "Poultney Cannabis Supply, Somewhere on the Mountain",
+          68
+        ],
+        [
+          "Polestar, Sweet Spot, The Gas Station",
+          64
+        ],
+        [
+          "Polestar, The Bud Stop, The Gas Station",
+          64
+        ],
+        [
+          "31 North, Polestar, The Gas Station",
+          62
+        ],
+        [
+          "Forbin's Reserve, Polestar, The Bud Stop",
+          61
+        ],
+        [
+          "Mothaplant, Polestar, Valleymeade",
+          57
+        ],
+        [
+          "Garcia's, Rimeline",
+          55
+        ],
+        [
+          "Flora",
+          55
+        ],
+        [
+          "Cambridge, Garcia's, The Gas Station",
+          48
+        ],
+        [
+          "Gram Central, The Bud Stop",
+          46
+        ],
+        [
+          "Poultney Cannabis Supply, Somewhere on the Mountain, Valleymeade",
+          46
+        ],
+        [
+          "Polestar, Poultney Cannabis Supply, Somewhere on the Mountain, Valleymeade",
+          45
+        ],
+        [
+          "Polestar, The Bud Stop",
+          44
+        ],
+        [
+          "Garcia's, The Gas Station",
+          42
+        ],
+        [
+          "Gram Central, Polestar",
+          41
+        ],
+        [
+          "Domecity, Polestar, The Tea House",
+          40
+        ],
+        [
+          "Domecity, Garcia's",
+          40
+        ]
+      ],
+      "sample_values": [
+        "Polestar",
+        "The Bud Stop",
+        "Valleymeade",
+        "Garcia's",
+        "Cambridge",
+        "Gram Central",
+        "Forbin's Reserve",
+        "Mothaplant",
+        "Sweet Spot",
+        "The Tea House"
+      ],
+      "notes": []
+    },
+    {
+      "name": "SKU",
+      "declared_type": "text",
+      "inferred_kind": "text",
+      "nullable": true,
+      "total_rows": 60982,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 249,
+      "distinct_pct": 0.41,
+      "is_unique": false,
+      "is_low_cardinality": false,
+      "min_value": "-flower-preroll",
+      "max_value": "varietyi1/rollsi-rosin-jar-3",
+      "min_length": 7,
+      "max_length": 50,
+      "avg_length": 23.76,
+      "pattern_hints": [],
+      "distinct_values": [
+        "-flower-preroll",
+        ".-rosin-jar-3",
+        ".meltedstrawberriesblackmapleberryfizz-rosin-jar-3",
+        "'25-rosin-jar-3",
+        "'26-rosin-jar-3",
+        "(7x0.)variety-rosin-jar-3",
+        "7xrolls-rosin-jar-3",
+        "animalface-flower-jar",
+        "animalface-flower-preroll",
+        "animalface-rosin-cart",
+        "animalface-rosin-jar-.5",
+        "animalface-rosin-jar-1",
+        "battery-accessory",
+        "battery-rosin-jar-.5",
+        "battery-rosin-jar-1",
+        "berryfizz-flower-bulk",
+        "berryfizz-flower-jar",
+        "berryfizz-flower-preroll",
+        "berryfizz-rosin-cart",
+        "berryfizz-rosin-jar-.5",
+        "berryfizz-rosin-jar-1",
+        "berryfizz-rosin-jar-2",
+        "berryfizz-rosin-jar-3",
+        "berryfizz8th-flower-jar",
+        "berryfizzfrom-flower-jar",
+        "berryfizzfromcannabiscompany-flower-jar",
+        "blackmaple-flower-bulk",
+        "blackmaple-flower-jar",
+        "blackmaple-flower-preroll",
+        "blackmaple-rosin-cart",
+        "blackmaple-rosin-jar-1",
+        "blackmaple-rosin-jar-2",
+        "blackmaple-rosin-jar-3",
+        "blackmaple()-flower-jar",
+        "blackmaple3.5-flower-jar",
+        "blackmaple8th-flower-jar",
+        "blackmaplecannabis-rosin-jar-1",
+        "blackouttruffle-flower-jar",
+        "blackouttruffle-flower-preroll",
+        "blackouttruffle-rosin-cart",
+        "blackouttruffle-rosin-jar-.5",
+        "blackouttruffle-rosin-jar-1",
+        "blackouttruffle-rosin-jar-\u00bdgram",
+        "bopgun-flower-bulk",
+        "bopgun-flower-jar",
+        "bopgun-flower-preroll",
+        "bopgun-rosin-cart",
+        "bopgun-rosin-jar-.5",
+        "candiedoranges-flower-bulk",
+        "candiedoranges-flower-jar",
+        "candiedoranges-flower-preroll",
+        "candiedoranges-rosin-jar-1",
+        "candiedoranges1gliverosinlimited-rosin-jar-1",
+        "cannabisbattery-rosin-jar-/",
+        "cannabiscompanyea)-rosin-jar-3",
+        "cannabiscompanyg13skunkindicahybrid-rosin-jar-1",
+        "cannabiscompanyg13skunkindoorbulk-flower-jar",
+        "cannabiscompanylavenderpiffindoorbulk-flower-jar",
+        "cannabiscompanymeltedstrawberries-rosin-jar-.5",
+        "cannabiscompanysherbcreampie-rosin-jar-1",
+        "cannabiscompanysourdieselindicahybrid-rosin-jar-1",
+        "cannabiscompanystrawberryguava-rosin-jar-.5",
+        "cannabiscompanystrawberryguava-rosin-jar-1",
+        "deathstar-flower-bulk",
+        "deathstar-flower-bulk-shake",
+        "deathstar-flower-jar",
+        "deathstar-flower-preroll",
+        "deathstar-flower-preroll-multipack",
+        "deathstar-rosin-jar-1",
+        "donkeybutter-flower-bulk",
+        "donkeybutter-flower-jar",
+        "donkeybutter-flower-multipack",
+        "donkeybutter-flower-preroll",
+        "donkeybutter-flower-preroll-multipack",
+        "donkeybutter-preroll-multipack",
+        "donkeybutter-prerollmultipack",
+        "donkeybutter-rosin-jar-1",
+        "donkeybutter-rosin-jar-2",
+        "dulcedeuva-flower-bulk",
+        "dulcedeuva-flower-jar",
+        "dulcedeuva-flower-preroll",
+        "dulcedeuva-flower-preroll-multipack",
+        "dulcedeuva-prerollmultipack",
+        "dulcedeuva-rosin-cart",
+        "dulcedeuva-rosin-jar",
+        "dulcedeuva-rosin-jar-.5",
+        "dulcedeuva-rosin-jar-1",
+        "dulcedeuva-rosin-jar-\u00bdgram",
+        "dulcedeuva-rosin-jar-2",
+        "dulcedeuva-rosin-jar-3",
+        "dulcedeuva.()-rosin-jar-.5",
+        "dulcedeuva1/8-flower-jar",
+        "dulcedeuvacannabis-rosin-jar-.5",
+        "dulcedeuvacannabis-rosin-jar-1",
+        "eastsideog-flower-jar",
+        "eastsideog-flower-preroll",
+        "eastsideog-rosin-cart",
+        "eastsideog-rosin-jar-.5",
+        "eastsideog-rosin-jar-1",
+        "eastsideog-rosin-jar-\u00bdg",
+        "forbiddenfruit-flower-jar",
+        "forbiddenfruit-flower-preroll",
+        "forbiddenfruit-rosin-cart",
+        "forbiddenfruit-rosin-jar-.5",
+        "g13-flower-jar",
+        "g13-flower-preroll",
+        "g13-rosin-jar-1",
+        "g13-rosin-jar-2",
+        "g13-rosin-jar-3",
+        "g13skunk-flower-bulk",
+        "g13skunk-flower-jar",
+        "g13skunk-flower-preroll",
+        "g13skunk-rosin-cart",
+        "g13skunk-rosin-jar-.5",
+        "g13skunk-rosin-jar-1",
+        "g13skunk-rosin-jar-2",
+        "gmo-flower-bulk",
+        "gmo-flower-jar",
+        "gmo-flower-preroll",
+        "gmo-rosin-cart",
+        "gmo-rosin-jar-.5",
+        "gmo-rosin-jar-1",
+        "gmo-rosin-jar-\u00bdg",
+        "gmo-rosin-jar-\u00bdgram",
+        "gmo-rosin-jar-2",
+        "gmo-rosin-jar-3",
+        "gmo-rosin-jar-unit",
+        "gmo()-flower-jar",
+        "grapepie-flower-bulk",
+        "grapepie-flower-jar",
+        "grapepie-flower-preroll",
+        "grapepie-rosin-cart",
+        "grapepie-rosin-jar-.5",
+        "grapepie-rosin-jar-\u00bdg",
+        "honeybanana-flower-bulk",
+        "honeybanana-flower-jar",
+        "honeybanana-flower-preroll",
+        "honeybanana-rosin-jar-1",
+        "honeybanana-rosin-jar-2",
+        "honeybanana-rosin-jar-3",
+        "honeybananabucket-rosin-jar-3",
+        "honeybananahash-rosin-jar-1",
+        "icecreamcake-flower-jar",
+        "icecreamcandy-flower-jar",
+        "lavenderpiff-flower-bulk",
+        "lavenderpiff-flower-jar",
+        "lavenderpiff-flower-preroll",
+        "lavenderpiff-rosin-jar-1",
+        "lemog-rosin-jar-1",
+        "liverosin1grhizecandiedoranges-rosin-jar-1",
+        "mellows-flower-preroll",
+        "mellows-rosin-jar-1",
+        "mellowz-flower-bulk",
+        "mellowz-flower-jar",
+        "mellowz-flower-preroll",
+        "mellowz-rosin-jar-1",
+        "meltedstawberries-rosin-jar-1",
+        "meltedstraberriesrosinfromrhize-rosin-jar",
+        "meltedstrawberries-flower-bulk",
+        "meltedstrawberries-flower-jar",
+        "meltedstrawberries-flower-preroll",
+        "meltedstrawberries-rosin-cart",
+        "meltedstrawberries-rosin-jar",
+        "meltedstrawberries-rosin-jar-.5",
+        "meltedstrawberries-rosin-jar-1",
+        "meltedstrawberries-rosin-jar-\u00bdgram",
+        "meltedstrawberries-rosin-jar-2",
+        "meltedstrawberries-rosin-jar-3",
+        "meltedstrawberries.-rosin-jar-.5",
+        "meltedstrawberries.()-rosin-jar-.5",
+        "meltedstrawberriesbucket-rosin-jar-3",
+        "meltedstrawberriesbulkcannabis-flower-jar",
+        "meltedstrawberriesvape-rosin-cart",
+        "meltedstrawberrys-flower-jar",
+        "moroccanpeaches-flower-preroll",
+        "moroccanpeaches-rosin-cart",
+        "moroccanpeaches-rosin-jar-1",
+        "moroccanpeaches-rosin-jar-2",
+        "moroccanpeaches-rosin-jar-3",
+        "multi-rosin-jar-3",
+        "multi#6indicax.-rosin-jar-3",
+        "multi7xrollscannabis-rosin-jar-3",
+        "multipack-flower-preroll",
+        "multipack-flower-preroll-multipack",
+        "multipack-rosin-jar-3",
+        "multipack#6indica-rosin-jar-3",
+        "nan-flower-bulk",
+        "nan-flower-jar",
+        "nan-flower-preroll",
+        "nan-nan",
+        "nan-rosin-jar-.5",
+        "nan-rosin-jar-/",
+        "nan-rosin-jar-1",
+        "nan-rosin-jar-3",
+        "papayajuice-flower-bulk",
+        "papayajuice-flower-jar",
+        "papayajuice-flower-preroll",
+        "papayajuice-rosin-cart",
+        "papayajuice-rosin-jar-.5",
+        "papayajuice-rosin-jar-1",
+        "papayajuice-rosin-jar-1/2",
+        "papayajuice-rosin-jar-\u00bdgram",
+        "papayajuice-rosin-jar-2",
+        "papayajuice-rosin-jar-3",
+        "papayajuice.-rosin-cart",
+        "papayajuice.-rosin-jar-.5",
+        "papayajuice.vape-rosin-cart",
+        "papayajuice1/8-flower-jar",
+        "papayajuicecannabis-rosin-jar-.5",
+        "papayajuicecannabis-rosin-jar-1",
+        "papayajuicehash-rosin-jar-1",
+        "raspberry-edibles",
+        "raspberry-rosin-jar",
+        "shake-flower-bulk",
+        "shake-flower-bulk-shake",
+        "sherbcreampie-flower-bulk",
+        "sherbcreampie-flower-jar",
+        "sherbcreampie-flower-preroll",
+        "sherbcreampie-rosin-jar-1",
+        "sherbcreampie8th-flower-jar",
+        "skunk-flower-bulk",
+        "skunk-flower-jar",
+        "sourdiesel-flower-bulk",
+        "sourdiesel-flower-jar",
+        "sourdiesel-flower-preroll",
+        "sourdiesel-rosin-jar-1",
+        "sourdieselbulk-flower-jar",
+        "strawberryguava-flower-bulk",
+        "strawberryguava-flower-jar",
+        "strawberryguava-flower-preroll",
+        "strawberryguava-rosin-cart",
+        "strawberryguava-rosin-jar-.5",
+        "strawberryguava-rosin-jar-1",
+        "strawberryguava-rosin-jar-2",
+        "strawberryguava-rosin-jar-3",
+        "strawberryguava-rosin-jar-a",
+        "strawberryguava.-rosin-jar-.5",
+        "strawberryguava.vape-rosin-cart",
+        "strawberryguavacannabis-rosin-jar-1",
+        "strawberryguavavape-rosin-jar-.5",
+        "strawberryguavavape(liverosin)-rosin-jar-.5",
+        "strawguava-rosin-jar-3",
+        "strawguavabucket-rosin-jar-3",
+        "thehive-flower-jar",
+        "tropicalsummer-flower-preroll",
+        "tropicalsummer-flower-preroll-multipack",
+        "tropicalsummer-rosin-cart",
+        "tropicalsummervarietyrolls-rosin-jar-3",
+        "varietyi1/rollsi-rosin-jar-3"
+      ],
+      "top_values": [
+        [
+          "gmo-rosin-jar-1",
+          2700
+        ],
+        [
+          "multipack-flower-preroll-multipack",
+          2134
+        ],
+        [
+          "dulcedeuva-rosin-jar-1",
+          1987
+        ],
+        [
+          "donkeybutter-rosin-jar-1",
+          1836
+        ],
+        [
+          "honeybanana-rosin-jar-1",
+          1545
+        ],
+        [
+          "papayajuice-rosin-jar-1",
+          1507
+        ],
+        [
+          "meltedstrawberries-rosin-jar-1",
+          1482
+        ],
+        [
+          "dulcedeuva-rosin-cart",
+          1370
+        ],
+        [
+          "donkeybutter-flower-jar",
+          1299
+        ],
+        [
+          "dulcedeuva-flower-preroll",
+          1289
+        ],
+        [
+          "dulcedeuva-flower-jar",
+          1268
+        ],
+        [
+          "meltedstrawberries-rosin-cart",
+          1212
+        ],
+        [
+          "blackmaple-rosin-jar-1",
+          1169
+        ],
+        [
+          "deathstar-flower-preroll",
+          1154
+        ],
+        [
+          "strawberryguava-flower-jar",
+          1138
+        ],
+        [
+          "battery-accessory",
+          1137
+        ],
+        [
+          "papayajuice-flower-preroll",
+          1098
+        ],
+        [
+          "papayajuice-rosin-cart",
+          1092
+        ],
+        [
+          "blackmaple-flower-preroll",
+          1084
+        ],
+        [
+          "papayajuice-flower-jar",
+          1056
+        ],
+        [
+          "moroccanpeaches-flower-preroll",
+          1017
+        ],
+        [
+          "meltedstrawberries-flower-jar",
+          1014
+        ],
+        [
+          "donkeybutter-flower-preroll",
+          927
+        ],
+        [
+          "sherbcreampie-flower-preroll",
+          921
+        ],
+        [
+          "strawberryguava-rosin-jar-1",
+          897
+        ],
+        [
+          "sherbcreampie-flower-jar",
+          860
+        ],
+        [
+          "multipack-flower-preroll",
+          820
+        ],
+        [
+          "gmo-flower-preroll",
+          786
+        ],
+        [
+          "strawberryguava-flower-preroll",
+          784
+        ],
+        [
+          "dulcedeuva-flower-bulk",
+          773
+        ],
+        [
+          "papayajuice-flower-bulk",
+          770
+        ],
+        [
+          "moroccanpeaches-rosin-jar-1",
+          730
+        ],
+        [
+          "blackmaple-flower-jar",
+          728
+        ],
+        [
+          "papayajuice-rosin-jar-.5",
+          646
+        ],
+        [
+          "honeybanana-flower-bulk",
+          624
+        ],
+        [
+          "gmo-flower-bulk",
+          603
+        ],
+        [
+          "dulcedeuva-rosin-jar-2",
+          595
+        ],
+        [
+          "honeybanana-flower-jar",
+          544
+        ],
+        [
+          "gmo-flower-jar",
+          520
+        ],
+        [
+          "tropicalsummer-flower-preroll",
+          488
+        ],
+        [
+          "grapepie-flower-bulk",
+          470
+        ],
+        [
+          "gmo-rosin-cart",
+          459
+        ],
+        [
+          "gmo-rosin-jar-2",
+          459
+        ],
+        [
+          "dulcedeuva-rosin-jar-.5",
+          426
+        ],
+        [
+          "tropicalsummer-flower-preroll-multipack",
+          412
+        ],
+        [
+          "blackouttruffle-rosin-cart",
+          401
+        ],
+        [
+          "animalface-rosin-cart",
+          389
+        ],
+        [
+          "strawberryguava-rosin-cart",
+          382
+        ],
+        [
+          "blackouttruffle-rosin-jar-.5",
+          377
+        ],
+        [
+          "sherbcreampie-flower-bulk",
+          370
+        ]
+      ],
+      "sample_values": [
+        "gmo-rosin-jar-1",
+        "multipack-flower-preroll-multipack",
+        "dulcedeuva-rosin-jar-1",
+        "donkeybutter-rosin-jar-1",
+        "honeybanana-rosin-jar-1",
+        "papayajuice-rosin-jar-1",
+        "meltedstrawberries-rosin-jar-1",
+        "dulcedeuva-rosin-cart",
+        "donkeybutter-flower-jar",
+        "dulcedeuva-flower-preroll"
+      ],
+      "notes": []
+    },
+    {
+      "name": "created_at",
+      "declared_type": "timestamp",
+      "inferred_kind": "datetime",
+      "nullable": true,
+      "total_rows": 60982,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 202,
+      "distinct_pct": 0.33,
+      "is_unique": false,
+      "is_low_cardinality": false,
+      "min_value": "2025-12-23T07:56:20",
+      "max_value": "2026-06-08T02:33:29",
+      "min_length": 19,
+      "max_length": 19,
+      "avg_length": 19.0,
+      "pattern_hints": [
+        "datetime-string"
+      ],
+      "distinct_values": [
+        "2025-12-23T07:56:20",
+        "2025-12-23T07:56:32",
+        "2025-12-23T07:56:33",
+        "2025-12-23T07:56:34",
+        "2025-12-23T07:56:40",
+        "2025-12-23T07:56:46",
+        "2025-12-23T07:56:59",
+        "2025-12-23T07:57:00",
+        "2025-12-23T07:57:04",
+        "2025-12-23T07:57:05",
+        "2025-12-23T07:57:13",
+        "2025-12-23T07:57:18",
+        "2025-12-23T07:57:20",
+        "2025-12-23T07:57:23",
+        "2025-12-23T07:57:27",
+        "2025-12-23T07:57:30",
+        "2025-12-23T07:57:36",
+        "2025-12-23T07:57:37",
+        "2025-12-23T07:57:41",
+        "2025-12-23T07:58:09",
+        "2025-12-23T07:58:10",
+        "2025-12-23T07:58:12",
+        "2025-12-23T07:58:13",
+        "2025-12-23T07:58:17",
+        "2025-12-23T07:58:22",
+        "2025-12-23T07:58:23",
+        "2025-12-23T07:58:29",
+        "2025-12-23T07:58:45",
+        "2025-12-23T07:58:46",
+        "2025-12-23T07:58:59",
+        "2025-12-23T07:59:00",
+        "2025-12-23T07:59:01",
+        "2025-12-24T06:06:38",
+        "2025-12-24T10:00:00",
+        "2025-12-24T10:37:48",
+        "2025-12-24T12:13:56",
+        "2025-12-25T06:07:02",
+        "2025-12-25T07:11:31",
+        "2025-12-26T06:06:34",
+        "2025-12-27T06:06:46",
+        "2025-12-28T06:06:52",
+        "2025-12-30T06:06:58",
+        "2025-12-31T06:07:19",
+        "2026-01-01T06:07:23",
+        "2026-01-02T06:06:59",
+        "2026-01-03T06:06:57",
+        "2026-01-04T06:07:12",
+        "2026-01-05T06:07:14",
+        "2026-01-06T06:07:17",
+        "2026-01-07T06:07:30",
+        "2026-01-08T06:07:25",
+        "2026-01-09T08:47:31",
+        "2026-01-11T22:13:57",
+        "2026-01-12T06:03:28",
+        "2026-01-13T06:03:29",
+        "2026-01-14T06:03:24",
+        "2026-01-15T06:03:34",
+        "2026-01-16T06:03:43",
+        "2026-01-17T06:03:55",
+        "2026-01-18T06:04:20",
+        "2026-01-19T06:04:26",
+        "2026-01-20T06:03:27",
+        "2026-01-21T06:04:20",
+        "2026-01-22T06:05:49",
+        "2026-01-23T06:07:07",
+        "2026-01-24T06:07:01",
+        "2026-01-25T06:06:46",
+        "2026-01-27T06:07:03",
+        "2026-01-27T07:52:39",
+        "2026-01-28T06:04:50",
+        "2026-01-29T06:04:25",
+        "2026-01-30T06:04:21",
+        "2026-01-31T06:04:40",
+        "2026-02-01T06:04:30",
+        "2026-02-02T06:04:38",
+        "2026-02-03T06:05:04",
+        "2026-02-04T06:04:41",
+        "2026-02-05T06:04:43",
+        "2026-02-06T06:05:04",
+        "2026-02-07T06:05:13",
+        "2026-02-08T06:05:24",
+        "2026-02-09T06:05:04",
+        "2026-02-09T12:52:05",
+        "2026-02-10T06:04:46",
+        "2026-02-11T06:04:56",
+        "2026-02-12T06:05:25",
+        "2026-02-13T06:05:35",
+        "2026-02-14T06:04:06",
+        "2026-02-15T06:04:07",
+        "2026-02-16T06:04:04",
+        "2026-02-17T06:04:03",
+        "2026-02-18T06:04:26",
+        "2026-02-19T06:04:41",
+        "2026-02-20T06:04:11",
+        "2026-02-21T06:03:58",
+        "2026-02-22T06:04:12",
+        "2026-02-23T06:04:12",
+        "2026-02-24T06:04:40",
+        "2026-02-25T06:25:22",
+        "2026-02-25T06:47:54",
+        "2026-02-26T05:30:45",
+        "2026-02-27T05:30:50",
+        "2026-02-28T05:31:11",
+        "2026-03-01T05:30:40",
+        "2026-03-02T05:30:47",
+        "2026-03-03T05:30:52",
+        "2026-03-04T05:30:47",
+        "2026-03-05T05:30:46",
+        "2026-03-06T05:30:44",
+        "2026-03-07T05:30:49",
+        "2026-03-08T05:30:53",
+        "2026-03-09T04:30:52",
+        "2026-03-10T04:30:56",
+        "2026-03-11T04:30:50",
+        "2026-03-12T04:30:51",
+        "2026-03-13T04:30:49",
+        "2026-03-14T04:30:52",
+        "2026-03-15T04:30:52",
+        "2026-03-16T04:30:47",
+        "2026-03-17T04:30:41",
+        "2026-03-18T04:30:41",
+        "2026-03-19T04:30:44",
+        "2026-03-20T04:30:40",
+        "2026-03-21T04:30:43",
+        "2026-03-22T04:30:43",
+        "2026-03-23T04:30:40",
+        "2026-03-24T04:30:41",
+        "2026-03-25T04:30:45",
+        "2026-03-26T04:30:42",
+        "2026-03-27T04:30:48",
+        "2026-03-28T04:30:43",
+        "2026-03-29T04:30:42",
+        "2026-03-30T04:30:50",
+        "2026-03-30T09:29:06",
+        "2026-03-31T04:30:39",
+        "2026-04-01T04:30:41",
+        "2026-04-02T04:30:48",
+        "2026-04-03T04:30:41",
+        "2026-04-04T04:30:59",
+        "2026-04-05T04:30:55",
+        "2026-04-06T04:31:02",
+        "2026-04-07T04:30:56",
+        "2026-04-08T04:30:56",
+        "2026-04-09T04:31:01",
+        "2026-04-10T04:31:10",
+        "2026-04-11T04:31:04",
+        "2026-04-12T04:31:03",
+        "2026-04-13T04:31:05",
+        "2026-04-14T04:30:57",
+        "2026-04-15T04:31:08",
+        "2026-04-16T04:30:59",
+        "2026-04-17T04:31:02",
+        "2026-04-18T04:31:17",
+        "2026-04-19T04:31:08",
+        "2026-04-20T04:31:13",
+        "2026-04-21T04:30:55",
+        "2026-04-22T04:30:55",
+        "2026-04-23T04:30:51",
+        "2026-04-24T04:30:42",
+        "2026-04-25T04:30:44",
+        "2026-04-26T04:30:41",
+        "2026-04-27T04:30:42",
+        "2026-04-28T04:30:46",
+        "2026-04-29T04:30:41",
+        "2026-04-30T04:30:45",
+        "2026-05-01T04:30:42",
+        "2026-05-02T04:30:51",
+        "2026-05-03T04:30:41",
+        "2026-05-04T04:30:41",
+        "2026-05-05T04:30:42",
+        "2026-05-07T04:30:33",
+        "2026-05-08T04:30:50",
+        "2026-05-09T04:30:46",
+        "2026-05-10T04:30:42",
+        "2026-05-11T04:30:41",
+        "2026-05-12T04:30:45",
+        "2026-05-16T04:30:49",
+        "2026-05-17T04:30:50",
+        "2026-05-18T04:31:01",
+        "2026-05-19T04:31:08",
+        "2026-05-20T04:31:06",
+        "2026-05-21T04:31:20",
+        "2026-05-22T04:30:41",
+        "2026-05-23T04:30:52",
+        "2026-05-24T04:30:50",
+        "2026-05-25T04:30:49",
+        "2026-06-01T09:52:34",
+        "2026-06-01T09:52:43",
+        "2026-06-01T09:52:51",
+        "2026-06-01T09:52:58",
+        "2026-06-01T09:53:06",
+        "2026-06-01T09:53:14",
+        "2026-06-01T09:57:08",
+        "2026-06-02T02:35:26",
+        "2026-06-03T02:34:29",
+        "2026-06-04T02:34:30",
+        "2026-06-04T11:10:09",
+        "2026-06-04T11:10:10",
+        "2026-06-05T02:35:23",
+        "2026-06-06T02:33:43",
+        "2026-06-07T02:34:14",
+        "2026-06-08T02:33:29"
+      ],
+      "top_values": [
+        [
+          "2025-12-23T07:58:10",
+          4315
+        ],
+        [
+          "2025-12-23T07:56:59",
+          4000
+        ],
+        [
+          "2025-12-23T07:58:09",
+          4000
+        ],
+        [
+          "2025-12-23T07:56:32",
+          3479
+        ],
+        [
+          "2025-12-23T07:58:46",
+          3298
+        ],
+        [
+          "2025-12-23T07:58:59",
+          3000
+        ],
+        [
+          "2025-12-23T07:57:13",
+          2752
+        ],
+        [
+          "2025-12-23T07:58:45",
+          2000
+        ],
+        [
+          "2025-12-23T07:56:40",
+          1941
+        ],
+        [
+          "2025-12-23T07:58:29",
+          1780
+        ],
+        [
+          "2025-12-23T07:57:36",
+          1753
+        ],
+        [
+          "2025-12-23T07:56:20",
+          1665
+        ],
+        [
+          "2025-12-23T07:59:00",
+          1556
+        ],
+        [
+          "2025-12-23T07:57:18",
+          1530
+        ],
+        [
+          "2025-12-23T07:58:17",
+          1450
+        ],
+        [
+          "2025-12-23T07:56:46",
+          1373
+        ],
+        [
+          "2025-12-23T07:57:27",
+          1052
+        ],
+        [
+          "2025-12-23T07:58:22",
+          1000
+        ],
+        [
+          "2025-12-23T07:57:04",
+          1000
+        ],
+        [
+          "2025-12-23T07:57:41",
+          994
+        ],
+        [
+          "2025-12-23T07:57:23",
+          943
+        ],
+        [
+          "2025-12-23T07:58:12",
+          919
+        ],
+        [
+          "2025-12-23T07:58:23",
+          823
+        ],
+        [
+          "2025-12-23T07:57:30",
+          710
+        ],
+        [
+          "2025-12-23T07:57:20",
+          570
+        ],
+        [
+          "2025-12-23T07:59:01",
+          454
+        ],
+        [
+          "2025-12-23T07:57:05",
+          453
+        ],
+        [
+          "2025-12-23T07:56:33",
+          442
+        ],
+        [
+          "2026-06-04T11:10:10",
+          400
+        ],
+        [
+          "2025-12-23T07:57:37",
+          364
+        ],
+        [
+          "2025-12-23T07:57:00",
+          132
+        ],
+        [
+          "2026-01-23T06:07:07",
+          104
+        ],
+        [
+          "2026-06-04T11:10:09",
+          100
+        ],
+        [
+          "2026-01-24T06:07:01",
+          97
+        ],
+        [
+          "2026-01-28T06:04:50",
+          95
+        ],
+        [
+          "2026-01-25T06:06:46",
+          87
+        ],
+        [
+          "2026-01-27T07:52:39",
+          86
+        ],
+        [
+          "2026-01-27T06:07:03",
+          84
+        ],
+        [
+          "2026-03-30T09:29:06",
+          72
+        ],
+        [
+          "2026-04-11T04:31:04",
+          71
+        ],
+        [
+          "2026-04-10T04:31:10",
+          70
+        ],
+        [
+          "2026-03-04T05:30:47",
+          70
+        ],
+        [
+          "2026-02-28T05:31:11",
+          70
+        ],
+        [
+          "2026-03-01T05:30:40",
+          70
+        ],
+        [
+          "2026-03-03T05:30:52",
+          70
+        ],
+        [
+          "2026-03-02T05:30:47",
+          70
+        ],
+        [
+          "2026-04-12T04:31:03",
+          69
+        ],
+        [
+          "2026-04-04T04:30:59",
+          69
+        ],
+        [
+          "2026-03-08T05:30:53",
+          68
+        ],
+        [
+          "2026-03-05T05:30:46",
+          68
+        ]
+      ],
+      "sample_values": [
+        "2025-12-23T07:58:10",
+        "2025-12-23T07:56:59",
+        "2025-12-23T07:58:09",
+        "2025-12-23T07:56:32",
+        "2025-12-23T07:58:46",
+        "2025-12-23T07:58:59",
+        "2025-12-23T07:57:13",
+        "2025-12-23T07:58:45",
+        "2025-12-23T07:56:40",
+        "2025-12-23T07:58:29"
+      ],
+      "notes": []
+    },
+    {
+      "name": "tenantid",
+      "declared_type": "int",
+      "inferred_kind": "integer",
+      "nullable": false,
+      "total_rows": 60982,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "distinct_pct": 0.0,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": 1,
+      "max_value": 99,
+      "min_length": 1,
+      "max_length": 2,
+      "avg_length": 1.01,
+      "pattern_hints": [
+        "boolean-token",
+        "integer-as-text"
+      ],
+      "distinct_values": [
+        1,
+        99
+      ],
+      "top_values": [
+        [
+          1,
+          60482
+        ],
+        [
+          99,
+          500
+        ]
+      ],
+      "sample_values": [
+        1,
+        99
+      ],
+      "notes": [
+        "indexed"
+      ]
+    },
+    {
+      "name": "brand_id",
+      "declared_type": "varchar(36)",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 60982,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "distinct_pct": 0.0,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "ca323241-ef74-425f-aa67-239247ccd0e9",
+      "max_value": "cmmakqdsn0037qsoig4b4yo9t",
+      "min_length": 25,
+      "max_length": 36,
+      "avg_length": 25.09,
+      "pattern_hints": [
+        "uuid"
+      ],
+      "distinct_values": [
+        "ca323241-ef74-425f-aa67-239247ccd0e9",
+        "cmmakqdsn0037qsoig4b4yo9t"
+      ],
+      "top_values": [
+        [
+          "cmmakqdsn0037qsoig4b4yo9t",
+          60482
+        ],
+        [
+          "ca323241-ef74-425f-aa67-239247ccd0e9",
+          500
+        ]
+      ],
+      "sample_values": [
+        "cmmakqdsn0037qsoig4b4yo9t",
+        "ca323241-ef74-425f-aa67-239247ccd0e9"
+      ],
+      "notes": []
+    }
+  ],
+  "sample_rows": [
+    {
+      "id": 1,
+      "date": "2024-12-06",
+      "product_name": "Animal Face",
+      "category": "Rosin",
+      "type": "Cart",
+      "company_name": "31 North",
+      "sku": "animalface-rosin-cart",
+      "created_at": "2025-12-23T07:56:20",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    },
+    {
+      "id": 2,
+      "date": "2024-12-06",
+      "product_name": "Blackout Truffle",
+      "category": "Rosin",
+      "type": "Rosin Jar",
+      "company_name": "31 North",
+      "sku": "blackouttruffle-rosin-jar-\u00bdgram",
+      "created_at": "2025-12-23T07:56:20",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    },
+    {
+      "id": 3,
+      "date": "2024-12-06",
+      "product_name": "Dulce de Uva",
+      "category": "Flower",
+      "type": "Flower Jar",
+      "company_name": "31 North",
+      "sku": "dulcedeuva-flower-jar",
+      "created_at": "2025-12-23T07:56:20",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    },
+    {
+      "id": 4,
+      "date": "2024-12-06",
+      "product_name": "Blackout Truffle",
+      "category": "Rosin",
+      "type": "Cart",
+      "company_name": "31 North",
+      "sku": "blackouttruffle-rosin-cart",
+      "created_at": "2025-12-23T07:56:20",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    },
+    {
+      "id": 5,
+      "date": "2024-12-06",
+      "product_name": "Grape Pie",
+      "category": "Flower",
+      "type": "Flower Bulk",
+      "company_name": "31 North",
+      "sku": "grapepie-flower-bulk",
+      "created_at": "2025-12-23T07:56:20",
+      "tenantid": 1,
+      "brand_id": "cmmakqdsn0037qsoig4b4yo9t"
+    }
+  ],
+  "notes": []
+}

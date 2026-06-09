@@ -1,0 +1,384 @@
+{
+  "engine": "postgres",
+  "schema": "public",
+  "table": "category_map",
+  "row_count": 47,
+  "column_count": 2,
+  "primary_key": [
+    "raw_lower"
+  ],
+  "indexes": [
+    {
+      "name": "category_map_pkey",
+      "unique": true,
+      "columns": [
+        "raw_lower"
+      ]
+    },
+    {
+      "name": "category_map_raw_lower_idx",
+      "unique": false,
+      "columns": [
+        "raw_lower"
+      ]
+    }
+  ],
+  "columns": [
+    {
+      "name": "raw_lower",
+      "declared_type": "text",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 47,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 47,
+      "distinct_pct": 100.0,
+      "is_unique": true,
+      "is_low_cardinality": true,
+      "min_value": "accessories",
+      "max_value": "vaporizers",
+      "min_length": 3,
+      "max_length": 25,
+      "avg_length": 12.26,
+      "pattern_hints": [],
+      "distinct_values": [
+        "accessories",
+        "beverage",
+        "cartridge",
+        "carts",
+        "cbd",
+        "concentrate",
+        "concentrates",
+        "concentrates (med)",
+        "distillate edibles",
+        "edible",
+        "edibles",
+        "edibles (med)",
+        "flower",
+        "flower (except deli)",
+        "flower (med)",
+        "formlulated edibles",
+        "infused pre-roll",
+        "infused preroll",
+        "infused pre-rolls",
+        "infused pre-roll (single)",
+        "live rosin edibles",
+        "pre-packed-flower",
+        "pre-packed flowers",
+        "pre-roll",
+        "preroll",
+        "pre-roll (infused)",
+        "pre roll (multi-pack)",
+        "pre-roll (multi-pack)",
+        "pre rolls",
+        "pre-rolls",
+        "prerolls",
+        "pre roll (single)",
+        "pre-rolls (single)",
+        "rosin",
+        "thc vape",
+        "tinctures",
+        "topicals",
+        "uncategorized",
+        "vape",
+        "vape batteries",
+        "vape/cart",
+        "vape cart & concentrate",
+        "vape-carts",
+        "vapecarts",
+        "vape pens",
+        "vapes",
+        "vaporizers"
+      ],
+      "top_values": [
+        [
+          "pre-roll (infused)",
+          1
+        ],
+        [
+          "vape cart & concentrate",
+          1
+        ],
+        [
+          "pre-rolls (single)",
+          1
+        ],
+        [
+          "concentrate",
+          1
+        ],
+        [
+          "vapecarts",
+          1
+        ],
+        [
+          "flower (med)",
+          1
+        ],
+        [
+          "edibles",
+          1
+        ],
+        [
+          "flower (except deli)",
+          1
+        ],
+        [
+          "infused pre-roll (single)",
+          1
+        ],
+        [
+          "preroll",
+          1
+        ],
+        [
+          "concentrates (med)",
+          1
+        ],
+        [
+          "pre roll (single)",
+          1
+        ],
+        [
+          "vaporizers",
+          1
+        ],
+        [
+          "infused pre-rolls",
+          1
+        ],
+        [
+          "vape",
+          1
+        ],
+        [
+          "pre-roll (multi-pack)",
+          1
+        ],
+        [
+          "thc vape",
+          1
+        ],
+        [
+          "vape/cart",
+          1
+        ],
+        [
+          "edible",
+          1
+        ],
+        [
+          "infused preroll",
+          1
+        ],
+        [
+          "infused pre-roll",
+          1
+        ],
+        [
+          "vape-carts",
+          1
+        ],
+        [
+          "formlulated edibles",
+          1
+        ],
+        [
+          "pre-packed-flower",
+          1
+        ],
+        [
+          "vapes",
+          1
+        ],
+        [
+          "accessories",
+          1
+        ],
+        [
+          "topicals",
+          1
+        ],
+        [
+          "vape batteries",
+          1
+        ],
+        [
+          "uncategorized",
+          1
+        ],
+        [
+          "distillate edibles",
+          1
+        ],
+        [
+          "cbd",
+          1
+        ],
+        [
+          "rosin",
+          1
+        ],
+        [
+          "pre roll (multi-pack)",
+          1
+        ],
+        [
+          "pre-packed flowers",
+          1
+        ],
+        [
+          "flower",
+          1
+        ],
+        [
+          "pre rolls",
+          1
+        ],
+        [
+          "vape pens",
+          1
+        ],
+        [
+          "carts",
+          1
+        ],
+        [
+          "tinctures",
+          1
+        ],
+        [
+          "concentrates",
+          1
+        ],
+        [
+          "cartridge",
+          1
+        ],
+        [
+          "beverage",
+          1
+        ],
+        [
+          "pre-rolls",
+          1
+        ],
+        [
+          "pre-roll",
+          1
+        ],
+        [
+          "prerolls",
+          1
+        ],
+        [
+          "live rosin edibles",
+          1
+        ],
+        [
+          "edibles (med)",
+          1
+        ]
+      ],
+      "sample_values": [
+        "pre-roll (infused)",
+        "vape cart & concentrate",
+        "pre-rolls (single)",
+        "concentrate",
+        "vapecarts",
+        "flower (med)",
+        "edibles",
+        "flower (except deli)",
+        "infused pre-roll (single)",
+        "preroll"
+      ],
+      "notes": []
+    },
+    {
+      "name": "category_norm",
+      "declared_type": "text",
+      "inferred_kind": "text",
+      "nullable": false,
+      "total_rows": 47,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 6,
+      "distinct_pct": 12.77,
+      "is_unique": false,
+      "is_low_cardinality": true,
+      "min_value": "Concentrate",
+      "max_value": "Vape",
+      "min_length": 4,
+      "max_length": 11,
+      "avg_length": 6.09,
+      "pattern_hints": [],
+      "distinct_values": [
+        "Concentrate",
+        "Edible",
+        "Flower",
+        "Other",
+        "PreRoll",
+        "Vape"
+      ],
+      "top_values": [
+        [
+          "PreRoll",
+          14
+        ],
+        [
+          "Vape",
+          12
+        ],
+        [
+          "Other",
+          6
+        ],
+        [
+          "Edible",
+          6
+        ],
+        [
+          "Flower",
+          5
+        ],
+        [
+          "Concentrate",
+          4
+        ]
+      ],
+      "sample_values": [
+        "PreRoll",
+        "Vape",
+        "Other",
+        "Edible",
+        "Flower",
+        "Concentrate"
+      ],
+      "notes": []
+    }
+  ],
+  "sample_rows": [
+    {
+      "raw_lower": "flower",
+      "category_norm": "Flower"
+    },
+    {
+      "raw_lower": "flower (except deli)",
+      "category_norm": "Flower"
+    },
+    {
+      "raw_lower": "flower (med)",
+      "category_norm": "Flower"
+    },
+    {
+      "raw_lower": "pre-packed flowers",
+      "category_norm": "Flower"
+    },
+    {
+      "raw_lower": "pre-packed-flower",
+      "category_norm": "Flower"
+    }
+  ],
+  "notes": []
+}
