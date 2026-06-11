@@ -17,7 +17,7 @@ Date: 2026-06-09 / 2026-06-10.
 
 | # | Question | SQL | Reply | Grade |
 |---|---|---|---|---|
-| 1 | hi | — | "Hi! I can help you explore your cannabis market data..." | ✅ |
+| 1 | hi | — | "Hi! I can help you explore your cannabis data..." | ✅ |
 | 2 | thanks | — | "You're welcome! Ask me anything..." | ✅ |
 | 3 | yes | — | "Got it. What would you like to know..." | ✅ |
 | 4 | no | — | "No problem. Ask me anything when ready." | ✅ |

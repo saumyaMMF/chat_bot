@@ -40,7 +40,7 @@ MAX_ATTEMPTS = 2  # 1 initial + 1 execution-feedback retry. On CPU 7B each
 _GREETING_PATTERNS: list[tuple[re.Pattern[str], str]] = [
     (
         re.compile(r"^\s*(hi|hello|hey|yo|hiya|howdy|good (morning|afternoon|evening))[\s!.?]*$", re.I),
-        "Hi! I can help you explore your cannabis market data — competitor brands, prices, categories, and trends. What would you like to know?",
+        "Hi! I can help you explore your cannabis data — competitor brands, prices, categories, and trends. What would you like to know?",
     ),
     (
         re.compile(r"^\s*(thanks|thank you|thx|ty|cheers|appreciate it)[\s!.?]*$", re.I),
@@ -138,6 +138,17 @@ _INFRA_ERROR_RX = re.compile(
     re.I,
 )
 
+# Log-redaction helper. Replaces SQL string literals with '?' so log lines
+# don't carry customer names, brand strings, or other tenant PII that comes
+# from the user's question via LIKE / equality filters. Keeps the SQL shape
+# fully readable for debugging.
+_SQL_LITERAL_RX = re.compile(r"'(?:''|[^'])*'")
+
+
+def _redact_sql_literals(sql: str) -> str:
+    return _SQL_LITERAL_RX.sub("'?'", sql)
+
+
 _SQL_FENCE_RX = re.compile(r"```(?:sql)?\s*([\s\S]*?)```", re.I)
 _CHAT_PREFIX_RX = re.compile(r"^CHAT:\s*([\s\S]*)", re.I)
 _REFUSE_PREFIX_RX = re.compile(r"REFUSE:\s*([\s\S]*)", re.I)
@@ -210,26 +221,50 @@ _FREE_TEXT_COLS = (
 )
 
 
+_FREE_TEXT_COLS_LC = frozenset(c.lower() for c in _FREE_TEXT_COLS)
+
+
 def rewrite_eq_to_ilike_on_text_cols(sql: str) -> str:
     """Rewrite ``<col> = '<lit>'`` to ``lower(<col>) LIKE lower('%<lit>%')``
-    for the columns in ``_FREE_TEXT_COLS``. Numeric/date equality is
-    unaffected (only quoted-string literals match)."""
-    out = sql
-    for col in _FREE_TEXT_COLS:
-        # `<alias?.>col = '<value-with-''-escape>'`, case-insensitive on col,
-        # whitespace tolerant around `=`.
-        rx = re.compile(
-            rf"(\b(?:[A-Za-z_][A-Za-z0-9_]*\.)?)({col})(\s*=\s*)'((?:''|[^'])*)'",
-            re.I,
-        )
+    for the columns in ``_FREE_TEXT_COLS``. AST-based via sqlglot — safer
+    than the prior regex which could mis-fire on column names embedded in
+    function calls or aliases.
 
-        def _sub(m: re.Match[str]) -> str:
-            alias, c, _eq, value = m.group(1), m.group(2), m.group(3), m.group(4)
-            stripped = re.sub(r"^%+|%+$", "", value)  # drop pre-escaped wildcards
-            return f"lower({alias}{c}) LIKE lower('%{stripped}%')"
+    Falls back to returning the input unchanged if parsing fails (rare —
+    Gate C already accepted the SQL) so we never break execution over a
+    cosmetic rewrite.
+    """
+    if not sql:
+        return sql
+    try:
+        from sqlglot import exp, parse_one
+        tree = parse_one(sql)
+    except Exception:
+        return sql
 
-        out = rx.sub(_sub, out)
-    return out
+    def _transform(node):  # type: ignore[no-untyped-def]
+        if not isinstance(node, exp.EQ):
+            return node
+        left = node.this
+        right = node.expression
+        # Must be column = string-literal. Bail otherwise (numeric eq, date
+        # eq, expr = expr).
+        if not isinstance(left, exp.Column) or not isinstance(right, exp.Literal):
+            return node
+        if not right.is_string:
+            return node
+        col_name = (left.name or "").lower()
+        if col_name not in _FREE_TEXT_COLS_LC:
+            return node
+        value = right.this or ""
+        # Drop pre-escaped wildcards so we don't end up with `%%X%%`.
+        value = value.strip("%")
+        new_lhs = exp.Lower(this=left.copy())
+        new_rhs = exp.Lower(this=exp.Literal.string(f"%{value}%"))
+        return exp.Like(this=new_lhs, expression=new_rhs)
+
+    transformed = tree.transform(_transform)
+    return transformed.sql()
 
 
 # ── Disambiguated-entity fast-path ───────────────────────────────────────────
@@ -598,7 +633,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
                     final_sql = rewrite_eq_to_ilike_on_text_cols(
                         enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
                     )
-                    log.info("[chat] companies-with-entity fast-path: entity=%r", raw_entity)
+                    log.info("[chat] companies-with-entity fast-path: entity=<redacted>")
                     res = await run_readonly_mysql(
                         final_sql,
                         RunMysqlContext(timeout_ms=settings.statement_timeout_ms),
@@ -651,7 +686,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
                     final_sql = rewrite_eq_to_ilike_on_text_cols(
                         enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
                     )
-                    log.info("[chat] qty-of-entity fast-path: entity=%r", raw_entity)
+                    log.info("[chat] qty-of-entity fast-path: entity=<redacted>")
                     res = await run_readonly_mysql(
                         final_sql,
                         RunMysqlContext(timeout_ms=settings.statement_timeout_ms),
@@ -713,7 +748,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
                 final_sql = rewrite_eq_to_ilike_on_text_cols(
                     enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
                 )
-                log.info("[chat] unit-of-entity fast-path: entity=%r", unit_entity)
+                log.info("[chat] unit-of-entity fast-path: entity=<redacted>")
                 res = await run_readonly_mysql(
                     final_sql,
                     RunMysqlContext(timeout_ms=settings.statement_timeout_ms),
@@ -805,9 +840,9 @@ async def run_chat(input: ChatInput) -> ChatResult:
             final_sql = rewrite_eq_to_ilike_on_text_cols(
                 enforce_limit(verdict.sql, max_rows=settings.row_limit)
             )
-            log.info("[chat] fast-path (%s=%s): %s",
-                     entity.column, entity.value,
-                     re.sub(r"\s+", " ", final_sql)[:300])
+            log.info("[chat] fast-path (%s=<redacted>): %s",
+                     entity.column,
+                     _redact_sql_literals(re.sub(r"\s+", " ", final_sql))[:300])
             try:
                 result = await run_readonly(
                     final_sql,
@@ -1110,7 +1145,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
 
         log.info("[chat] question: %s", input.question)
         log.info("[chat] engine:   %s", route.engine)
-        log.info("[chat] SQL: %s", re.sub(r"\s+", " ", final_sql)[:500])
+        log.info("[chat] SQL: %s", _redact_sql_literals(re.sub(r"\s+", " ", final_sql))[:500])
 
         log.info("[chat] >> stage=db-exec engine=%s start", route.engine)
         t_db = _time.perf_counter()

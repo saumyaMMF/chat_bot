@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import re
 import sys
 import time as _time
 
@@ -17,13 +18,61 @@ if sys.platform == "win32":
 from contextlib import asynccontextmanager
 from typing import Any
 
-from fastapi import Depends, FastAPI, Header, HTTPException
+from collections import deque
+from fastapi import Depends, FastAPI, Header, HTTPException, Request
 from pydantic import BaseModel, Field, field_validator
 
 from app.chatbot.chat_service import ChatInput, PrevTurn, run_chat
 from app.chatbot.readonly_db import close_pool
 from app.chatbot.readonly_db_mysql import close_pool as close_pool_mysql
 from app.config import get_settings
+
+
+# Optional HMAC body-sig auth (rolling out via CHATBOT_HMAC_REQUIRED). Two
+# headers: X-Chat-Timestamp (unix-seconds) + X-Chat-Signature (hex sha256
+# HMAC over `<ts>.<raw_body>` using CHATBOT_SERVICE_TOKEN). Verified before
+# bearer so a forged bearer alone is not enough once enforcement turns on.
+# Reuses the existing service_token as the shared secret (no new env var
+# while rolling out). Skew window = 5 minutes.
+HMAC_SKEW_SECONDS = 300
+
+
+async def require_hmac(request: Request) -> None:
+    """If the client sent HMAC headers, validate them. Optional unless
+    CHATBOT_HMAC_REQUIRED=1 (env). Constant-time compare on the digest."""
+    import hashlib
+    import hmac as _hmac
+    import os
+
+    sig = request.headers.get("x-chat-signature")
+    ts = request.headers.get("x-chat-timestamp")
+    required = os.environ.get("CHATBOT_HMAC_REQUIRED", "").strip() == "1"
+
+    if not sig or not ts:
+        if required:
+            raise HTTPException(status_code=401, detail="HMAC headers required")
+        return
+
+    secret = get_settings().service_token
+    if not secret:
+        # No secret configured — can't validate. Refuse rather than skip.
+        raise HTTPException(status_code=500, detail="Server HMAC secret unconfigured")
+
+    try:
+        ts_i = int(ts)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail="Invalid X-Chat-Timestamp") from exc
+
+    import time as _t
+    now = int(_t.time())
+    if abs(now - ts_i) > HMAC_SKEW_SECONDS:
+        raise HTTPException(status_code=401, detail="Timestamp skew exceeds window")
+
+    body = await request.body()  # cached by starlette; subsequent Body() reads reuse it
+    msg = f"{ts}.".encode("utf-8") + body
+    expected = _hmac.new(secret.encode("utf-8"), msg, hashlib.sha256).hexdigest()
+    if not _hmac.compare_digest(sig.lower(), expected):
+        raise HTTPException(status_code=403, detail="HMAC signature mismatch")
 
 
 async def require_service_token(authorization: str | None = Header(default=None)) -> None:
@@ -77,6 +126,59 @@ for _n in ("uvicorn", "uvicorn.error", "uvicorn.access"):
     _lg.propagate = False
 
 MAX_QUESTION_LEN = 1_000
+MAX_IDENTITY_LEN = 80
+MAX_HISTORY_ANSWER_LEN = 4_000
+
+# Prompt-injection heuristic: catches "X:\nSYSTEM OVERRIDE", "X\n\nIGNORE PRIOR",
+# Markdown section breaks, or "X: KIND value" patterns the model might treat as
+# a new directive. Applied to identity strings AND history fields.
+_INJECTION_RX = re.compile(
+    r"[\r\n]"                                     # any newline = inject break
+    r"|[\x00-\x08\x0b-\x1f]"                     # control chars
+    r"|:\s*[A-Z][A-Z0-9_ ]{2,}\b"                # ": SYSTEM OVERRIDE" pattern
+    r"|\b(ignore|disregard|override|forget)\b\s+(prior|previous|above|all)"
+    r"|^[\s\-=*_#]{3,}",                          # markdown section break
+    re.IGNORECASE,
+)
+
+
+def _sanitize_identity(value: str | None, *, field: str) -> str | None:
+    """Strip newlines, cap length, reject if structure suggests prompt injection.
+
+    Identity strings (brand_name, display_name) land inside SECTION 2 of the
+    system prompt verbatim. A `\\n\\nSYSTEM: ...` string would be interpreted
+    by the LLM as a new directive. We reject those rather than escape, because
+    a legitimate brand name doesn't contain newlines or "ignore prior" text.
+    """
+    if value is None:
+        return None
+    if not isinstance(value, str):
+        raise ValueError(f"{field} must be a string")
+    v = value.strip()
+    if not v:
+        return None
+    if len(v) > MAX_IDENTITY_LEN:
+        raise ValueError(f"{field} exceeds {MAX_IDENTITY_LEN} chars")
+    if _INJECTION_RX.search(v):
+        raise ValueError(f"{field} contains disallowed control or directive pattern")
+    return v
+
+
+def _sanitize_history_text(value: str, *, field: str, max_len: int) -> str:
+    """Same idea, applied to history.question / history.answer / history.sql.
+    history.sql is also passed through this so a malicious client can't sneak
+    a fake assistant turn carrying directives in the SQL slot."""
+    if not isinstance(value, str):
+        return ""
+    v = value.replace("\r", "").strip()
+    if len(v) > max_len:
+        v = v[:max_len]
+    if _INJECTION_RX.search(v):
+        # Don't reject — just neutralize. Stripping newlines defangs the
+        # multi-line directive pattern. Strip any " IGNORE PRIOR " phrase.
+        v = re.sub(r"[\r\n]+", " ", v)
+        v = _INJECTION_RX.sub(" ", v)
+    return v
 
 
 @asynccontextmanager
@@ -86,22 +188,75 @@ async def lifespan(app: FastAPI):
     await close_pool_mysql()
 
 
+# In-house sliding-window rate limiter — no deps, single-process. Keyed by
+# (X-Forwarded-For first hop OR direct client IP). Behind a reverse proxy
+# Cloudflare/Nginx MUST forward XFF. /chat is the only expensive endpoint
+# (Ollama 40-90s CPU per call) so we cap it at 10 req/min/IP. For multi-worker
+# deployments swap this for Redis-backed; single-worker is fine here.
+_RATE_LIMIT_WINDOW_S = 60.0
+_RATE_LIMIT_MAX = 10
+_rate_buckets: dict[str, deque[float]] = {}
+
+
+def _client_ip(req: Request) -> str:
+    xff = req.headers.get("x-forwarded-for", "")
+    if xff:
+        return xff.split(",", 1)[0].strip()
+    return req.client.host if req.client else "unknown"
+
+
+def rate_limit(req: Request) -> None:
+    """Reject if this client exceeded `_RATE_LIMIT_MAX` /chat calls in the
+    last `_RATE_LIMIT_WINDOW_S` seconds."""
+    ip = _client_ip(req)
+    now = _time.monotonic()
+    bucket = _rate_buckets.setdefault(ip, deque())
+    cutoff = now - _RATE_LIMIT_WINDOW_S
+    while bucket and bucket[0] < cutoff:
+        bucket.popleft()
+    if len(bucket) >= _RATE_LIMIT_MAX:
+        retry_after = int(_RATE_LIMIT_WINDOW_S - (now - bucket[0])) + 1
+        raise HTTPException(
+            status_code=429,
+            detail=f"Rate limit exceeded ({_RATE_LIMIT_MAX}/{int(_RATE_LIMIT_WINDOW_S)}s). Retry in {retry_after}s.",
+            headers={"Retry-After": str(retry_after)},
+        )
+    bucket.append(now)
+
+
 app = FastAPI(title="rhize-chatbot", version="0.1.0", lifespan=lifespan)
 
 
 class HistoryTurn(BaseModel):
     question: str = Field(..., min_length=1, max_length=MAX_QUESTION_LEN)
-    answer: str = ""
-    sql: str | None = None
+    answer: str = Field(default="", max_length=MAX_HISTORY_ANSWER_LEN)
+    sql: str | None = Field(default=None, max_length=MAX_HISTORY_ANSWER_LEN)
+
+    @field_validator("question")
+    @classmethod
+    def _q(cls, v: str) -> str:
+        return _sanitize_history_text(v, field="history.question", max_len=MAX_QUESTION_LEN)
+
+    @field_validator("answer")
+    @classmethod
+    def _a(cls, v: str) -> str:
+        return _sanitize_history_text(v, field="history.answer", max_len=MAX_HISTORY_ANSWER_LEN)
+
+    @field_validator("sql")
+    @classmethod
+    def _s(cls, v: str | None) -> str | None:
+        if v is None:
+            return None
+        return _sanitize_history_text(v, field="history.sql", max_len=MAX_HISTORY_ANSWER_LEN)
 
 
 class ChatRequest(BaseModel):
     question: str = Field(..., min_length=1, max_length=MAX_QUESTION_LEN)
     tenant_id: int = Field(..., ge=0)
     states: list[str] = Field(default_factory=list)
-    brand_name: str | None = None
-    display_name: str | None = None
-    session_id: str | None = None
+    brand_name: str | None = Field(default=None, max_length=MAX_IDENTITY_LEN)
+    display_name: str | None = Field(default=None, max_length=MAX_IDENTITY_LEN)
+    session_id: str | None = Field(default=None, max_length=128)
     # Cap at 10 to bound prompt growth — chat_service trims to last 5 anyway.
     history: list[HistoryTurn] = Field(default_factory=list, max_length=10)
 
@@ -111,13 +266,46 @@ class ChatRequest(BaseModel):
         v = v.strip()
         if not v:
             raise ValueError("question is required")
-        return v
+        # Question goes into the LAST user-role slot — not the system prompt —
+        # so it's lower-risk than identity strings. Just neutralize newlines.
+        return _sanitize_history_text(v, field="question", max_len=MAX_QUESTION_LEN)
 
     @field_validator("states")
     @classmethod
     def _states(cls, v: list[str]) -> list[str]:
-        cleaned = [s.strip().upper() for s in v if s and s.strip()]
+        cleaned: list[str] = []
+        for s in v:
+            if not s or not isinstance(s, str):
+                continue
+            s2 = s.strip().upper()
+            # US state codes are 2 alpha chars. Reject anything else — prevents
+            # `app.states` from carrying smuggled tokens to set_config().
+            if re.fullmatch(r"[A-Z]{2}", s2):
+                cleaned.append(s2)
         return cleaned
+
+    @field_validator("brand_name")
+    @classmethod
+    def _brand(cls, v: str | None) -> str | None:
+        return _sanitize_identity(v, field="brand_name")
+
+    @field_validator("display_name")
+    @classmethod
+    def _display(cls, v: str | None) -> str | None:
+        return _sanitize_identity(v, field="display_name")
+
+    @field_validator("session_id")
+    @classmethod
+    def _sid(cls, v: str | None) -> str | None:
+        if v is None:
+            return None
+        v2 = v.strip()
+        if not v2:
+            return None
+        # Session id ends up in turn-log only; still constrain to safe chars.
+        if not re.fullmatch(r"[A-Za-z0-9_\-:.]{1,128}", v2):
+            raise ValueError("session_id contains disallowed characters")
+        return v2
 
 
 class ClarifyOptionOut(BaseModel):
@@ -204,7 +392,15 @@ async def warmup() -> dict[str, Any]:
     }
 
 
-@app.post("/chat", response_model=ChatResponse, dependencies=[Depends(require_service_token)])
+@app.post(
+    "/chat",
+    response_model=ChatResponse,
+    dependencies=[
+        Depends(require_hmac),
+        Depends(require_service_token),
+        Depends(rate_limit),
+    ],
+)
 async def chat(req: ChatRequest) -> ChatResponse:
     try:
         result = await run_chat(

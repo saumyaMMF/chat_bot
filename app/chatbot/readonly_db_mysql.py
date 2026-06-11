@@ -78,15 +78,20 @@ def _parse_dsn(url: str) -> dict[str, Any]:
         ctx = ssl_module.create_default_context()
         # DigitalOcean managed MySQL uses its own CA for the cluster cert.
         # Default ctx (CERT_REQUIRED + check_hostname) rejects unless the DO
-        # CA is in the system store, which it usually is not on Windows dev
-        # boxes. Disable strict verification — the TCP path is already
-        # encrypted and the credentials guard authn. To re-enable strict
-        # mode in prod (e.g. when running inside DO infra with the CA
-        # available), set CHATBOT_MYSQL_SSL_STRICT=1.
+        # CA is in the system store. As of the 2026-06-11 review, default is
+        # STRICT (verify cert + hostname). To disable strict verification on
+        # a dev box where the DO CA isn't installed, set CHATBOT_MYSQL_SSL_STRICT=0
+        # (the TLS handshake will still encrypt traffic — only cert verification
+        # is skipped).
         import os
-        if not os.environ.get("CHATBOT_MYSQL_SSL_STRICT"):
+        strict_env = os.environ.get("CHATBOT_MYSQL_SSL_STRICT", "1").strip()
+        if strict_env in ("0", "false", "no"):
             ctx.check_hostname = False
             ctx.verify_mode = ssl_module.CERT_NONE
+            log.warning(
+                "MySQL TLS cert verification DISABLED (CHATBOT_MYSQL_SSL_STRICT=%s)",
+                strict_env,
+            )
         cfg["ssl"] = ctx
     return cfg
 

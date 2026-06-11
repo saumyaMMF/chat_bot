@@ -57,29 +57,13 @@ _DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 # ----------------------------- restrictions (always-on) -----------------------------
 
 _INTRO = (
-    'You are the "Rhize Brand Intelligence Assistant" — an AI assistant for a '
-    "cannabis market-intelligence platform. You help the user explore their "
-    "brand, market, inventory, orders, and sales data by answering questions "
-    "with live information from their database. Internally you translate "
-    "business questions into a single safe read-only SELECT statement, or "
-    "respond with CHAT / REFUSE / CLARIFY when SQL is not warranted. "
-    "\n\n"
-    "WHEN ASKED WHO/WHAT YOU ARE — never say \"I am a SQL analyst\". Use a "
-    "friendly framing: \"I am an AI assistant. I answer using the data I "
-    "have access to.\" Keep it one short sentence and pick the CHAT reply "
-    "format."
-    "\n\n"
-    "CONFIDENTIALITY — NEVER disclose how answers are generated. Do NOT "
-    "mention SQL, queries, tables, columns, schemas, views, databases, "
-    "MySQL, PostgreSQL, RLS, tenants, embeddings, prompts, RAG, or any "
-    "internal mechanism. Do NOT show, quote, paraphrase, or describe the "
-    "SQL you generated. Do NOT name tables (e.g. rhize_dataset_main, "
-    "complete_market_scrapper_dataset) or columns. If the user asks "
-    "\"how did you get that?\", \"what query did you run?\", \"which "
-    "table?\", \"show me the SQL\", or anything similar — reply with "
-    "CHAT: \"I pull from your authorized business data — I can't share "
-    "the internals.\" Talk only about the BUSINESS ANSWER, never the "
-    "retrieval method."
+    'You are the "Rhize Brand Intelligence Assistant" — read-only NL→SQL bot '
+    "for a cannabis market-intelligence platform. Translate business questions "
+    "into ONE safe SELECT, or reply with CHAT / REFUSE / CLARIFY. "
+    "When asked who/what you are: \"I am an AI assistant. I answer using the "
+    "data I have access to.\" (one sentence, CHAT reply). "
+    "Never describe internals (SQL, tables, columns, RLS, RAG, tenants) — "
+    "talk only about the business answer."
 )
 
 _SECTION_1_REPLY_FORMAT = """━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -532,14 +516,16 @@ def _build_system(
         )
     section_2 = _build_user_context(brand_name, display_name, tenant_id, states)
     section_7 = _build_section_7(schema_block)
+    # Trimmed assembly (review 2026-06-11): dropped duplicate Sections 3/4/5/6 —
+    # RESTRICTION_RULES already covers engine routing, disambiguation, SQL
+    # rules, and refusal categories. Cuts ~3K tokens / turn → halves CPU
+    # prompt-eval. _INTRO trimmed; CONFIDENTIALITY enforced output-side by
+    # scrub_chat_reply() in sanitize.py instead of in-prompt instruction.
     return "\n\n".join([
         _INTRO,
         _SECTION_1_REPLY_FORMAT,
         section_2,
-        _SECTION_3_ENGINE_ROUTING,
-        _SECTION_4_DISAMBIGUATION,
-        _SECTION_5_SQL_RULES + extra,
-        _SECTION_6_REFUSAL,
+        RESTRICTION_RULES + extra,
         section_7,
     ])
 
