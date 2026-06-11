@@ -102,12 +102,32 @@ DEFAULT → MySQL (rhize_* tables)
   ┌─────────────────────────────────┬─────────────────────────────────────────┐
   │ Phrase                          │ Table / approach                        │
   ├─────────────────────────────────┼─────────────────────────────────────────┤
-  │ revenue, my revenue, our revenue│ rhize_dataset_main (cast Revenue, group │
-  │                                 │ by date)                                │
+  │ REVENUE — 3-way split (MEMORIZE THIS, DO NOT CONFLATE):                    │
+  │  • "revenue" (bare, "my revenue", "our revenue", "total revenue",         │
+  │    "highest revenue day", "best revenue date", "revenue this week",       │
+  │    "which day had most revenue", "revenue trend", "revenue last N days")  │
+  │      → rhize_orders   (real money from completed orders)                  │
+  │      SELECT SUM(subtotal) FROM rhize_orders                                │
+  │      WHERE status='Completed' AND date >= ...                              │
+  │      For "which day / what date" → GROUP BY date ORDER BY SUM(subtotal)   │
+  │      DESC LIMIT 1. Do NOT use MAX(date); MAX(date) is the latest date,    │
+  │      not the highest-revenue date.                                         │
+  │  • "store revenue", "revenue by store", "per-store revenue",               │
+  │    "dispensary revenue", "scrape revenue", "catalog revenue"               │
+  │      → rhize_dataset_main  (own catalog scrape — dirty TEXT)              │
+  │      SUM(CAST(REGEXP_REPLACE(Revenue,'[^0-9.]','') AS DECIMAL(12,2)))      │
+  │  • "market revenue", "competitor revenue", "industry revenue",             │
+  │    "revenue across the market"                                             │
+  │      → PostgreSQL chatbot_mv_market_daily (see SECTION 3 routing)          │
+  │  Default when ambiguous = rhize_orders. NEVER guess.                       │
   │ sales                           │ rhize_orders WHERE status='Completed'   │
   │ orders                          │ rhize_orders                            │
   │ open balance                    │ rhize_orders WHERE status<>'Completed'  │
-  │ inventory, stock                │ rhize_live_inventory                    │
+  │ inventory, stock (generic)      │ rhize_live_inventory                    │
+  │ live units of <product/brand>   │ rhize_dataset_main                       │
+  │ stock of <product/brand>        │   SUM(`Today's_Quantity_Total`)         │
+  │ how much/many units of X        │   WHERE lower(Product_Name) LIKE         │
+  │                                 │     lower('%X%') OR lower(Brand_Name)... │
   │ lots, expiring                  │ rhize_product_lots                      │
   │ stores, partners                │ rhize_stores                            │
   │ sales actions, CRM              │ rhize_sales_actions                     │
@@ -258,6 +278,13 @@ RESTRICTION_RULES = """RESTRICTIONS (HARD — every reply must obey, no exceptio
   `mysql.*`, `sys.*`, `performance_schema.*`) — is rejected.
 - Default LIMIT 500 unless the answer is a single aggregate; LIMIT 10 for
   "top X" without an explicit count.
+- UNIT / WEIGHT INTEGRITY: NEVER name a unit, weight, or pack size in your
+  reply (grams, pounds, ounces, kilos, lbs, oz, kg, prerolls, packs, etc.)
+  unless that exact string came from a SQL result row. `Today's_Quantity_Total`
+  is a UNIT COUNT (rows / SKUs / pieces), NOT a weight — never convert it to
+  pounds or grams. If the user asks "in what unit / what size / how heavy",
+  emit SQL that SELECTs the `Unit` column from `rhize_dataset_main` (or `unit`
+  from `complete_market_scrapper_dataset`). Do NOT guess.
 
 ENGINE ROUTING — pick ONE engine per query, do NOT mix tables across engines.
 
@@ -277,6 +304,8 @@ market data when the question EXPLICITLY signals market / competitor scope.
     "orders"                   → rhize_orders
     "open balance"             → rhize_orders WHERE status <> 'Completed'
     "inventory", "stock"       → rhize_live_inventory
+    "live units of <X>"        → rhize_dataset_main SUM(`Today's_Quantity_Total`) WHERE lower(Product_Name) LIKE lower('%X%')
+    "stock of <X>"             → rhize_dataset_main SUM(`Today's_Quantity_Total`) WHERE lower(Product_Name) LIKE lower('%X%')
     "lots", "expiring"         → rhize_product_lots
     "stores", "partners"       → rhize_stores
     "sales actions", "CRM"     → rhize_sales_actions

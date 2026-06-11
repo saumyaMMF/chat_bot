@@ -104,12 +104,22 @@ def validate_columns(sql: str) -> ColumnCheckResult:
     for t in in_scope:
         allowed |= cols_by_table[t]
 
+    # Collect all SELECT-list aliases — `SUM(x) AS revenue` means later
+    # references to `revenue` (e.g. ORDER BY revenue) are alias refs, NOT
+    # real columns. The 3B model uses aliases heavily; without this skip
+    # the guard rejects perfectly-valid SQL.
+    aliases: set[str] = set()
+    for a in tree.find_all(exp.Alias):
+        alias_name = (a.alias or "").lower()
+        if alias_name:
+            aliases.add(alias_name)
+
     bad: dict[str, list[str]] = {}
     for col in tree.find_all(exp.Column):
         name = (col.name or "").lower()
         if not name or name == "*":
             continue
-        if name in allowed:
+        if name in allowed or name in aliases:
             continue
         # Hint: any other table that DOES have this column.
         hints = [f"{t}.{name}" for t, cs in cols_by_table.items() if name in cs]

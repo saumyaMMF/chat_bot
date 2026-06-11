@@ -1,0 +1,522 @@
+{
+  "_comment": "Curated schema docs for the chatbot's schema-RAG. Each entry is embedded once at ingest, then retrieved by KNN at request time and injected into the prompt. `restrictions` are merged into the always-on rules block AND surfaced alongside the retrieved chunk so the model sees them in context.",
+  "dialect": "mixed",
+  "items": [
+    {
+      "id": "table:complete_market_scrapper_dataset",
+      "kind": "table",
+      "table_name": "complete_market_scrapper_dataset",
+      "definition": "this table stores the complete market scrapper dataset which is scrapped multiple time like 4 times a day. Base fact table: one row per (date, state, company, product, unit). Scraped market/competitor listings. RLS-filtered by state. Use this table only for SKU-level detail (product_name, price, THC, flag, days_on_shelf). For brand/company/category aggregates, use chatbot_mv_market_daily — it's ~480x smaller per day.",
+      "restrictions": "Never filter by state manually — RLS does it. Never write to this table. SCOPE: market/competitor data only, NOT own-business data."
+    },
+    {
+      "id": "table:chatbot_mv_market_daily",
+      "kind": "view",
+      "table_name": "chatbot_mv_market_daily",
+      "definition": "this stores the compressed view of the complete market scrapper dataset which is combinded based on the daily materialized view. Security-barrier view over the daily materialized view. Pre-aggregated per (date, brand, company, category, state). Columns: date (DATE), category, brand, company, revenue (NUMERIC), quantity, sku_count, state. Use this for top brands/companies/categories, market share, category mix, multi-day trends.",
+      "restrictions": "Prefer this view over the base table whenever the answer aggregates by brand/company/category. No SKU-level fields here."
+    },
+    {
+      "id": "col:complete_market_scrapper_dataset.date",
+      "kind": "column",
+      "table_name": "complete_market_scrapper_dataset",
+      "column_name": "date",
+      "data_type": "TEXT",
+      "definition": "ISO YYYY-MM-DD string. Sorts chronologically as text. Latest snapshot: WHERE date = (SELECT MAX(date) FROM complete_market_scrapper_dataset). Last N days: WHERE date >= to_char(CURRENT_DATE - INTERVAL 'N days', 'YYYY-MM-DD').",
+      "restrictions": "Text not DATE — don't pass directly to date arithmetic; use to_char or cast."
+    },
+    {
+      "id": "col:complete_market_scrapper_dataset.state",
+      "kind": "column",
+      "table_name": "complete_market_scrapper_dataset",
+      "column_name": "state",
+      "data_type": "VARCHAR",
+      "definition": "US state code (VT, MA, etc).",
+      "restrictions": "RLS-scoped automatically. Never add WHERE state = ... manually."
+    },
+    {
+      "id": "col:complete_market_scrapper_dataset.brand",
+      "kind": "column",
+      "table_name": "complete_market_scrapper_dataset",
+      "column_name": "brand",
+      "data_type": "TEXT",
+      "definition": "Brand name (free-text). Use AND brand IS NOT NULL AND brand <> '' when grouping by brand to avoid blank buckets.",
+      "restrictions": "Exclude blanks for any GROUP BY brand."
+    },
+    {
+      "id": "col:complete_market_scrapper_dataset.company",
+      "kind": "column",
+      "table_name": "complete_market_scrapper_dataset",
+      "column_name": "company",
+      "data_type": "TEXT",
+      "definition": "Retailer/dispensary name (free-text). Same blank-filter rule as brand.",
+      "restrictions": "Exclude blanks for any GROUP BY company."
+    },
+    {
+      "id": "col:complete_market_scrapper_dataset.category",
+      "kind": "column",
+      "table_name": "complete_market_scrapper_dataset",
+      "column_name": "category",
+      "data_type": "TEXT",
+      "definition": "58 raw variants. Always normalize with the CASE block: WHEN lower(category) LIKE '%flower%' OR lower(category) IN ('pre-packed flowers','pre-packed-flower') THEN 'Flower' WHEN lower(category) LIKE '%pre%roll%' OR lower(category) IN ('preroll','prerolls') THEN 'PreRoll' WHEN lower(category) LIKE '%vape%' OR lower(category) IN ('cartridge','carts','vapecarts','vape-carts','vape pens') THEN 'Vape' WHEN lower(category) LIKE '%concentrate%' THEN 'Concentrate' WHEN lower(category) LIKE '%edible%' THEN 'Edible' ELSE 'Other' END AS category_norm",
+      "restrictions": "NEVER write category = 'Flower'. Always normalize via the CASE above."
+    },
+    {
+      "id": "col:complete_market_scrapper_dataset.product_name",
+      "kind": "column",
+      "table_name": "complete_market_scrapper_dataset",
+      "column_name": "product_name",
+      "data_type": "TEXT",
+      "definition": "SKU display name. Use the base table (not the view) when product_name is needed.",
+      "restrictions": "Exclude blanks when ranking."
+    },
+    {
+      "id": "col:complete_market_scrapper_dataset.unit",
+      "kind": "column",
+      "table_name": "complete_market_scrapper_dataset",
+      "column_name": "unit",
+      "data_type": "TEXT",
+      "definition": "Pack size token: 1g, 3.5g (eighth), 7g, 28g, 1pk.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:complete_market_scrapper_dataset.price",
+      "kind": "column",
+      "table_name": "complete_market_scrapper_dataset",
+      "column_name": "price",
+      "data_type": "TEXT",
+      "definition": "Raw displayed price ($63.00 or 45). Inconsistent — prefer price_num.",
+      "restrictions": "Use COALESCE(price_num, NULLIF(regexp_replace(price,'[^0-9.]','','g'),'')::numeric) AS price_n for numeric work."
+    },
+    {
+      "id": "col:complete_market_scrapper_dataset.price_num",
+      "kind": "column",
+      "table_name": "complete_market_scrapper_dataset",
+      "column_name": "price_num",
+      "data_type": "DOUBLE PRECISION",
+      "definition": "Numeric price. ~15% NULL — always wrap in COALESCE(price_num, NULLIF(regexp_replace(price,'[^0-9.]','','g'),'')::numeric).",
+      "restrictions": "Filter > 0 before averaging."
+    },
+    {
+      "id": "col:complete_market_scrapper_dataset.thc",
+      "kind": "column",
+      "table_name": "complete_market_scrapper_dataset",
+      "column_name": "thc",
+      "data_type": "TEXT",
+      "definition": "Noisy: 24%, 100mg, 'THC -', ''. Cast: CASE WHEN thc ~ '^[0-9]+(\\.[0-9]+)?%?$' THEN regexp_replace(thc,'[^0-9.]','','g')::numeric END AS thc_num, then filter thc_num BETWEEN 0 AND 100.",
+      "restrictions": "Always cast + range-filter before averaging."
+    },
+    {
+      "id": "col:complete_market_scrapper_dataset.quantity",
+      "kind": "column",
+      "table_name": "complete_market_scrapper_dataset",
+      "column_name": "quantity",
+      "data_type": "INTEGER",
+      "definition": "Units listed on the scrape day.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:complete_market_scrapper_dataset.previous_quantity",
+      "kind": "column",
+      "table_name": "complete_market_scrapper_dataset",
+      "column_name": "previous_quantity",
+      "data_type": "INTEGER",
+      "definition": "quantity from the previous scrape. Used to derive sell-through.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:complete_market_scrapper_dataset.change",
+      "kind": "column",
+      "table_name": "complete_market_scrapper_dataset",
+      "column_name": "change",
+      "data_type": "DOUBLE PRECISION",
+      "definition": "Pre-baked units sold (pack-size normalized). Use for sell-through.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:complete_market_scrapper_dataset.revenue",
+      "kind": "column",
+      "table_name": "complete_market_scrapper_dataset",
+      "column_name": "revenue",
+      "data_type": "DOUBLE PRECISION",
+      "definition": "price_num * |change|. Inferred market sell-through, NOT POS revenue.",
+      "restrictions": "Default ranking metric for top/best/biggest."
+    },
+    {
+      "id": "col:complete_market_scrapper_dataset.flag",
+      "kind": "column",
+      "table_name": "complete_market_scrapper_dataset",
+      "column_name": "flag",
+      "data_type": "TEXT",
+      "definition": "added | no change | removed | NULL (15%). Use flag = 'added' / flag = 'removed' for new/dropped products.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:complete_market_scrapper_dataset.days_on_shelf",
+      "kind": "column",
+      "table_name": "complete_market_scrapper_dataset",
+      "column_name": "days_on_shelf",
+      "data_type": "INTEGER",
+      "definition": "Days since first seen. 38% NULL — filter IS NOT NULL when sorting/aggregating. ASC = fastest moving; DESC = stale.",
+      "restrictions": "Always WHERE days_on_shelf IS NOT NULL when sorted/aggregated."
+    },
+    {
+      "id": "col:complete_market_scrapper_dataset.first_seen",
+      "kind": "column",
+      "table_name": "complete_market_scrapper_dataset",
+      "column_name": "first_seen",
+      "data_type": "TIMESTAMP",
+      "definition": "First scrape timestamp for the SKU.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:complete_market_scrapper_dataset.created_at",
+      "kind": "column",
+      "table_name": "complete_market_scrapper_dataset",
+      "column_name": "created_at",
+      "data_type": "TIMESTAMP",
+      "definition": "Row ingestion timestamp.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:chatbot_mv_market_daily.date",
+      "kind": "column",
+      "table_name": "chatbot_mv_market_daily",
+      "column_name": "date",
+      "data_type": "DATE",
+      "definition": "Real DATE — date arithmetic works directly. WHERE date >= CURRENT_DATE - INTERVAL '14 days'.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:chatbot_mv_market_daily.brand",
+      "kind": "column",
+      "table_name": "chatbot_mv_market_daily",
+      "column_name": "brand",
+      "data_type": "TEXT",
+      "definition": "Brand grouping key. Exclude blanks: brand IS NOT NULL AND brand <> ''.",
+      "restrictions": "Exclude blanks for any GROUP BY brand."
+    },
+    {
+      "id": "col:chatbot_mv_market_daily.company",
+      "kind": "column",
+      "table_name": "chatbot_mv_market_daily",
+      "column_name": "company",
+      "data_type": "TEXT",
+      "definition": "Retailer grouping key.",
+      "restrictions": "Exclude blanks for any GROUP BY company."
+    },
+    {
+      "id": "col:chatbot_mv_market_daily.category",
+      "kind": "column",
+      "table_name": "chatbot_mv_market_daily",
+      "column_name": "category",
+      "data_type": "TEXT",
+      "definition": "Same 58 raw variants — normalize via the standard CASE block.",
+      "restrictions": "NEVER write category = 'Flower'. Always normalize."
+    },
+    {
+      "id": "col:chatbot_mv_market_daily.revenue",
+      "kind": "column",
+      "table_name": "chatbot_mv_market_daily",
+      "column_name": "revenue",
+      "data_type": "NUMERIC",
+      "definition": "Daily sum of base-table revenue per (brand, company, category, state).",
+      "restrictions": "Default ranking metric."
+    },
+    {
+      "id": "col:chatbot_mv_market_daily.quantity",
+      "kind": "column",
+      "table_name": "chatbot_mv_market_daily",
+      "column_name": "quantity",
+      "data_type": "NUMERIC",
+      "definition": "Daily sum of base-table quantity.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:chatbot_mv_market_daily.sku_count",
+      "kind": "column",
+      "table_name": "chatbot_mv_market_daily",
+      "column_name": "sku_count",
+      "data_type": "INTEGER",
+      "definition": "Distinct SKUs per grouping. Use SUM(sku_count) when grouping by brand for 'most products listed'.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:chatbot_mv_market_daily.state",
+      "kind": "column",
+      "table_name": "chatbot_mv_market_daily",
+      "column_name": "state",
+      "data_type": "TEXT",
+      "definition": "US state code. RLS-scoped.",
+      "restrictions": "Never filter by state manually."
+    },
+    {
+      "id": "table:rhize_orders",
+      "kind": "table",
+      "table_name": "rhize_orders",
+      "definition": "it stores the history of user's product orders. MySQL tenant ops table — one row per order line item. Columns include date (DATETIME), customerName, productName, qty, unitPrice, subtotal, status ('Completed'|'Pending'|'Cancelled'), openBalance, brand_id, tenantid. Use for: open orders, completed orders, customer revenue, sales by product. The user's OWN orders.",
+      "restrictions": "Tenant predicate is auto-injected — never write tenantid yourself. Do NOT scope by brand_id (collides cross-tenant). Use ANSI single-quotes for strings."
+    },
+    {
+      "id": "table:rhize_live_inventory",
+      "kind": "table",
+      "table_name": "rhize_live_inventory",
+      "definition": "it stores the current on-hand inventory snapshot. MySQL tenant ops table — current on-hand inventory snapshot. One row per (productName, tenant). Columns: productName, strain, productType, lotNumber, current_qty, pending, remaining, lbs, updatedAt, tenantid. Use for: low stock, what's in stock, on-hand units by product.",
+      "restrictions": "Tenant predicate is auto-injected. Latest snapshot only — no history."
+    },
+    {
+      "id": "table:rhize_product_lots",
+      "kind": "table",
+      "table_name": "rhize_product_lots",
+      "definition": "it stores the lot tracking information. MySQL tenant ops table — lot tracking. One row per (lotNumber, tenant). Columns: strain, lotNumber, thc, tac, terps, expirationDate, internalLotId, ccbLotNumber, tenantid. Use for: THC by strain, expiring lots, lot metadata.",
+      "restrictions": "Tenant predicate is auto-injected."
+    },
+    {
+      "id": "table:rhize_brands",
+      "kind": "table",
+      "table_name": "rhize_brands",
+      "definition": "it stores all brand registry information in overall market not the user's own. Columns: id (cuid), name, isRhize (tinyint — 1 = the user's OWN brand, 0 = competitor brand in their catalog), createdAt, tenantid. Use for: the tenant's own brand (isRhize=1), brand catalog list. Unique on (tenantid, name).",
+      "restrictions": "Tenant predicate is auto-injected. For the user's OWN brand identity filter `WHERE isRhize = 1`."
+    },
+    {
+      "id": "table:rhize_stores",
+      "kind": "table",
+      "table_name": "rhize_stores",
+      "definition": "it stores the tenant's retail store registry. Columns: name, slug, licenseNumber, address, city, phone, contactName, isPartner (tinyint — 1 = partner agreement), tier, tenantid. Use for: partner stores, retail accounts, store directory.",
+      "restrictions": "Tenant predicate is auto-injected."
+    },
+    {
+      "id": "table:rhize_partner_stores",
+      "kind": "table",
+      "table_name": "rhize_partner_stores",
+      "definition": "it stores the tenant's partner store roster (minimal). Columns: customer_name, created_at, updated_at, tenantid. Use for: partner customer list.",
+      "restrictions": "Tenant predicate is auto-injected."
+    },
+    {
+      "id": "table:rhize_strain_info",
+      "kind": "table",
+      "table_name": "rhize_strain_info",
+      "definition": "MySQL tenant strain metadata. Columns: strain, effectTag (RELAX, ENERGIZE, etc), genetics1, genetics2, breeder, flavor1/2/3, tenantid. Use for: strain genetics, flavor profile, effect tags.",
+      "restrictions": "Tenant predicate is auto-injected."
+    },
+    {
+      "id": "table:rhize_sales_actions",
+      "kind": "table",
+      "table_name": "rhize_sales_actions",
+      "definition": "MySQL tenant CRM action queue. Columns: customerName, category (MARKET, OUTREACH, etc), priority (int, 1=highest), description, status (New, In Progress, Done), notes, offerSent, lastUpdated, tenantid. Use for: open sales actions, follow-ups, CRM queue.",
+      "restrictions": "Tenant predicate is auto-injected."
+    },
+    {
+      "id": "table:rhize_dataset_main",
+      "kind": "table",
+      "table_name": "rhize_dataset_main",
+      "definition": "MySQL tenant sales aggregate table — the tenant's OWN sales / revenue data. Legacy: all numeric columns stored as TEXT — must CAST(col AS DECIMAL(10,2)) for math. Columns: Company_Name, Product_Name, Category, Type, Days, Flag (Added/Removed/No Change), Unit, Price, Discount_Price_Data, `Today's_Quantity_Total`, `1d`, `3d`, `7d`, `14d`, THC, SKU, Change, Revenue, date (TEXT YYYY-MM-DD), tenantid, brand_id. Use for: 'my revenue', 'my sales', daily totals, top products by tenant.",
+      "restrictions": "Tenant predicate is auto-injected. Backtick digit-leading columns (`1d`, `3d`, `7d`, `14d`, `Today's_Quantity_Total`). Cast Price / Revenue to DECIMAL for math. `date` is TEXT — compare lexicographically or DATE_FORMAT a date-arithmetic expression."
+    },
+    {
+      "id": "table:rhize_dataset_store",
+      "kind": "table",
+      "table_name": "rhize_dataset_store",
+      "definition": "MySQL tenant per-store data (slimmer than dataset_main). Columns: date (TEXT), Product_Name, Category, Type, Company_Name (store), SKU, tenantid, brand_id. Use for: per-store breakdown of the tenant's products.",
+      "restrictions": "Tenant predicate is auto-injected. `date` is TEXT YYYY-MM-DD."
+    },
+    {
+      "id": "col:rhize_orders.status",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "status",
+      "data_type": "VARCHAR",
+      "definition": "Order status: 'Completed', 'Pending', 'Cancelled'. Common filters: WHERE status = 'Completed' (revenue), WHERE status <> 'Completed' (open).",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_orders.date",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "date",
+      "data_type": "DATETIME",
+      "definition": "Order date. Compare directly to CURRENT_DATE / DATE_SUB(...). Last 30 days: WHERE date >= DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY).",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_orders.customerName",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "customerName",
+      "data_type": "VARCHAR",
+      "definition": "Retail store name on the order. Use lower(customerName) LIKE lower('%X%') for case-insensitive partial match. Group by customerName for top-customers-by-revenue queries.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_orders.subtotal",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "subtotal",
+      "data_type": "DOUBLE",
+      "definition": "Line revenue (qty × unitPrice). SUM(subtotal) for total revenue. Combine with WHERE status = 'Completed' for realized revenue.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_orders.openBalance",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "openBalance",
+      "data_type": "DOUBLE",
+      "definition": "Unpaid balance per line. SUM(openBalance) for total AR. Usually filter status <> 'Completed' for outstanding.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_orders.qty",
+      "kind": "column",
+      "table_name": "rhize_orders",
+      "column_name": "qty",
+      "data_type": "DOUBLE",
+      "definition": "Units sold on this line.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_live_inventory.current_qty",
+      "kind": "column",
+      "table_name": "rhize_live_inventory",
+      "column_name": "current_qty",
+      "data_type": "DOUBLE",
+      "definition": "On-hand units. Low stock: WHERE current_qty < N. ORDER BY current_qty ASC.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_live_inventory.productName",
+      "kind": "column",
+      "table_name": "rhize_live_inventory",
+      "column_name": "productName",
+      "data_type": "VARCHAR",
+      "definition": "Product name. Unique per (productName, tenant).",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_live_inventory.remaining",
+      "kind": "column",
+      "table_name": "rhize_live_inventory",
+      "column_name": "remaining",
+      "data_type": "DOUBLE",
+      "definition": "current_qty - pending. Available-to-sell units.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_product_lots.thc",
+      "kind": "column",
+      "table_name": "rhize_product_lots",
+      "column_name": "thc",
+      "data_type": "DOUBLE",
+      "definition": "THC percentage. Already numeric (no cast needed). NULL-safe: WHERE thc IS NOT NULL when averaging.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_product_lots.expirationDate",
+      "kind": "column",
+      "table_name": "rhize_product_lots",
+      "column_name": "expirationDate",
+      "data_type": "DATETIME",
+      "definition": "Lot expiry. Expiring soon: WHERE expirationDate BETWEEN CURRENT_DATE AND DATE_ADD(CURRENT_DATE, INTERVAL 30 DAY).",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_product_lots.strain",
+      "kind": "column",
+      "table_name": "rhize_product_lots",
+      "column_name": "strain",
+      "data_type": "VARCHAR",
+      "definition": "Strain name. Aggregates: AVG(thc) GROUP BY strain.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_brands.isRhize",
+      "kind": "column",
+      "table_name": "rhize_brands",
+      "column_name": "isRhize",
+      "data_type": "TINYINT",
+      "definition": "Flag: 1 = the user's OWN brand, 0 = competitor in their catalog. For 'my brand' / 'my own brand' questions filter WHERE isRhize = 1.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_brands.name",
+      "kind": "column",
+      "table_name": "rhize_brands",
+      "column_name": "name",
+      "data_type": "VARCHAR",
+      "definition": "Brand name. Unique per (tenantid, name).",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_stores.isPartner",
+      "kind": "column",
+      "table_name": "rhize_stores",
+      "column_name": "isPartner",
+      "data_type": "TINYINT",
+      "definition": "Flag: 1 = partner store. For 'my partner stores' filter WHERE isPartner = 1.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_stores.city",
+      "kind": "column",
+      "table_name": "rhize_stores",
+      "column_name": "city",
+      "data_type": "VARCHAR",
+      "definition": "Store city.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_sales_actions.status",
+      "kind": "column",
+      "table_name": "rhize_sales_actions",
+      "column_name": "status",
+      "data_type": "VARCHAR",
+      "definition": "'New', 'In Progress', 'Done'. Open queue: WHERE status <> 'Done'.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_sales_actions.priority",
+      "kind": "column",
+      "table_name": "rhize_sales_actions",
+      "column_name": "priority",
+      "data_type": "INT",
+      "definition": "1 = highest. ORDER BY priority ASC.",
+      "restrictions": ""
+    },
+    {
+      "id": "col:rhize_dataset_main.Revenue",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "Revenue",
+      "data_type": "TEXT",
+      "definition": "Daily revenue, stored as TEXT. ALWAYS cast: CAST(Revenue AS DECIMAL(10,2)). SUM(CAST(Revenue AS DECIMAL(10,2))) for totals. This is the tenant's OWN revenue.",
+      "restrictions": "Cast to DECIMAL(10,2) for any math."
+    },
+    {
+      "id": "col:rhize_dataset_main.Price",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "Price",
+      "data_type": "TEXT",
+      "definition": "Unit price, stored as TEXT. Cast: CAST(Price AS DECIMAL(10,2)).",
+      "restrictions": "Cast to DECIMAL(10,2) for any math."
+    },
+    {
+      "id": "col:rhize_dataset_main.date",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "date",
+      "data_type": "TEXT",
+      "definition": "YYYY-MM-DD string. Compare as text (sorts chronologically). Last 7 days: WHERE date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 7 DAY, '%Y-%m-%d'). Latest: WHERE date = (SELECT MAX(date) FROM rhize_dataset_main).",
+      "restrictions": "Text not DATE — use DATE_FORMAT for date arithmetic comparisons."
+    },
+    {
+      "id": "col:rhize_dataset_main.Flag",
+      "kind": "column",
+      "table_name": "rhize_dataset_main",
+      "column_name": "Flag",
+      "data_type": "TEXT",
+      "definition": "'Added', 'Removed', 'No Change'. Today's new SKUs: WHERE Flag = 'Added' AND date = (SELECT MAX(date)…).",
+      "restrictions": ""
+    }
+  ]
+}

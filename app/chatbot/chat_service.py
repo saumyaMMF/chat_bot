@@ -197,7 +197,17 @@ def canonicalize_sql(sql: str) -> str:
 # path — this runs AFTER the guard accepts the query, narrowing the
 # rewrite surface to known-safe SELECTs. Single-quote escaping is
 # preserved: `''` inside the literal stays `''`.
-_FREE_TEXT_COLS = ("brand", "company")
+# Columns where exact-match equality is almost always wrong: free-text user
+# data with mixed casing, whitespace, hyphens, suffix codes ("HL-20"), etc.
+# Apply on BOTH engines — `productName` / `customerName` are MySQL,
+# `brand` / `company` exist on both. The rewrite swaps
+# `WHERE col = 'X'` → `WHERE lower(col) LIKE lower('%X%')` so a substring
+# query surfaces results without LLM having to remember LIKE.
+_FREE_TEXT_COLS = (
+    "brand", "company", "category_norm",
+    "Brand_Name", "Company_Name", "Product_Name",
+    "productName", "customerName", "strain",
+)
 
 
 def rewrite_eq_to_ilike_on_text_cols(sql: str) -> str:
@@ -232,6 +242,52 @@ def rewrite_eq_to_ilike_on_text_cols(sql: str) -> str:
 
 _ENTITY_PATTERN = re.compile(
     r"\b(brand|company|store|retailer|dispensary|category)\s+[\"']?([A-Za-z][A-Za-z0-9_'-]*)",
+    re.I,
+)
+
+# "which/how many companies have <X>" / "stores carrying <X>" — distinct
+# companies on the latest date that have ANY on-shelf qty for entity X.
+_COMPANIES_WITH_ENTITY_RX = re.compile(
+    r"\b("
+    r"(?:how\s+many|which|what|list)\s+(?:compan(?:y|ies)|stores?|dispensar(?:y|ies)|"
+    r"partners?|retailers?)\s+(?:has|have|carry|carrying|sell|sells|stock|stocking)"
+    r"|stores?\s+carrying"
+    r"|compan(?:y|ies)\s+(?:with|stocking|carrying)"
+    r")\s+([A-Za-z][A-Za-z0-9' -]{0,80}?)\s*[?.!,;]*\s*$",
+    re.I,
+)
+
+
+# "live units of <product>", "stock of <brand>", "quantity of <X>" — user
+# wants on-shelf qty per partner company for that specific entity. Always
+# routes to rhize_dataset_main (which tracks Today's_Quantity_Total per
+# Product_Name × Company_Name × date). Not rhize_live_inventory (own
+# warehouse stock — different concept).
+#
+# Captures the entity name (possibly multi-word, up to 5 tokens before
+# the next punctuation or sentence end).
+_QTY_OF_ENTITY_RX = re.compile(
+    r"\b(?:live\s+units?|units?|stock|quantity|qty)\s+of\s+"
+    r"([A-Za-z][A-Za-z0-9' -]{0,80}?)\s*[?.!,;]*\s*$",
+    re.I,
+)
+
+# "in/what/which unit/size/weight (is/are) <entity>"
+# Also bare "in which unit" / "what unit they have" (pronoun → last entity).
+# Captures optional entity; if absent, the pronoun-anchor path will fill from history.
+_UNIT_OF_ENTITY_RX = re.compile(
+    r"\b(?:what|which|in\s+which|in\s+what)\s+"
+    r"(?:unit|units|size|sizes|weight|weights|pack(?:\s*size)?)\b"
+    r"(?:[\s\S]{0,40}?\b(?:of|for)\s+"
+    r"(?P<entity>[A-Za-z][A-Za-z0-9' -]{0,80}?))?"
+    r"\s*[?.!,;]*\s*$",
+    re.I,
+)
+# Pronoun follow-up: "in which unit they are present", "what size is it"
+_UNIT_PRONOUN_RX = re.compile(
+    r"\b(?:what|which|in\s+which|in\s+what)\s+"
+    r"(?:unit|units|size|sizes|weight|weights|pack(?:\s*size)?)\b"
+    r"[\s\S]*\b(?:it|they|those|these|them)\b",
     re.I,
 )
 
@@ -366,6 +422,10 @@ class ChatResult:
     rows: list[dict[str, Any]] = field(default_factory=list)
     row_count: int = 0
     options: list[ClarifyOption] = field(default_factory=list)
+    # Eval/debug only: SQL the bot actually ran. ChatResult.sql is None for
+    # terminal answers (so the UI shows just the prose), but the eval harness
+    # still wants to see the query. Populated by _log() from sql_final.
+    sql_executed: str | None = None
 
 
 @dataclass
@@ -488,6 +548,9 @@ async def run_chat(input: ChatInput) -> ChatResult:
             ))
         except Exception as exc:  # never block chat
             log.warning("[chat] turn log failed: %s", exc)
+        # Surface the executed SQL on the result even when ChatResult.sql is
+        # cleared for terminal answers — eval harness reads this.
+        result.sql_executed = sql_final or result.sql
         return result
 
     greeting = _match_greeting(question)
@@ -507,6 +570,172 @@ async def run_chat(input: ChatInput) -> ChatResult:
     if identity:
         return _log(ChatResult(kind="chat", message=identity), "identity")
 
+    # "how many companies have X" / "stores carrying X" — distinct companies
+    # on latest date with on-shelf qty for entity X. Same routing logic as
+    # qty-of-entity but COUNT(DISTINCT Company_Name) instead of group-by.
+    companies_match = _COMPANIES_WITH_ENTITY_RX.search(question)
+    if companies_match:
+        raw_entity = companies_match.group(2).strip(" '\"").strip()
+        if raw_entity and len(raw_entity) >= 2 and raw_entity.lower() not in _ENTITY_STOPWORDS:
+            safe = raw_entity.replace("'", "''")
+            comp_sql = (
+                "SELECT Company_Name, "
+                "SUM(CAST(NULLIF(`Today's_Quantity_Total`, '') AS DECIMAL(12,2))) AS total_units "
+                "FROM rhize_dataset_main "
+                f"WHERE (lower(Product_Name) LIKE lower('%{safe}%') "
+                f"OR lower(Company_Name) LIKE lower('%{safe}%')) "
+                "AND date = (SELECT MAX(date) FROM rhize_dataset_main) "
+                "AND `Today's_Quantity_Total` IS NOT NULL "
+                "AND `Today's_Quantity_Total` <> '' "
+                "GROUP BY Company_Name "
+                "HAVING total_units > 0 "
+                "ORDER BY total_units DESC "
+                "LIMIT 100"
+            )
+            try:
+                verdict = validate_mysql_sql(comp_sql, input.tenant_id)
+                if verdict.ok:
+                    final_sql = rewrite_eq_to_ilike_on_text_cols(
+                        enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
+                    )
+                    log.info("[chat] companies-with-entity fast-path: entity=%r", raw_entity)
+                    res = await run_readonly_mysql(
+                        final_sql,
+                        RunMysqlContext(timeout_ms=settings.statement_timeout_ms),
+                    )
+                    clean = _drop_blank_dimension_rows(res.rows)
+                    ans = format_answer(input.question, final_sql, clean)
+                    terminal = is_terminal_answer(input.question, clean)
+                    return _log(
+                        ChatResult(
+                            kind="chat" if terminal else "result",
+                            message=ans,
+                            sql=None if terminal else final_sql,
+                            rows=[] if terminal else clean,
+                            row_count=0 if terminal else len(clean),
+                        ),
+                        "companies-with-entity",
+                        engine="mysql",
+                        sql_final=final_sql,
+                    )
+            except Exception as exc:
+                log.warning("[chat] companies-with-entity exec failed, falling through: %s", exc)
+
+    # "live units of <entity>" / "stock of <entity>" — explicit on-shelf
+    # qty question, always routes to rhize_dataset_main. Bypasses the LLM
+    # so the 3B model can't drag it back to rhize_live_inventory (own-
+    # warehouse stock — different concept). Same Gate C/D path as the
+    # rest, so safety invariants hold.
+    qty_of_match = _QTY_OF_ENTITY_RX.search(question)
+    if qty_of_match:
+        raw_entity = qty_of_match.group(1).strip(" '\"").strip()
+        if raw_entity and len(raw_entity) >= 2 and raw_entity.lower() not in _ENTITY_STOPWORDS:
+            safe = raw_entity.replace("'", "''")
+            qty_sql = (
+                "SELECT Company_Name, Product_Name, "
+                "SUM(CAST(NULLIF(`Today's_Quantity_Total`, '') AS DECIMAL(12,2))) AS total_units "
+                "FROM rhize_dataset_main "
+                f"WHERE (lower(Product_Name) LIKE lower('%{safe}%') "
+                f"OR lower(Company_Name) LIKE lower('%{safe}%')) "
+                "AND date = (SELECT MAX(date) FROM rhize_dataset_main) "
+                "AND `Today's_Quantity_Total` IS NOT NULL "
+                "AND `Today's_Quantity_Total` <> '' "
+                "GROUP BY Company_Name, Product_Name "
+                "HAVING total_units > 0 "
+                "ORDER BY total_units DESC "
+                "LIMIT 50"
+            )
+            try:
+                verdict = validate_mysql_sql(qty_sql, input.tenant_id)
+                if verdict.ok:
+                    final_sql = rewrite_eq_to_ilike_on_text_cols(
+                        enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
+                    )
+                    log.info("[chat] qty-of-entity fast-path: entity=%r", raw_entity)
+                    res = await run_readonly_mysql(
+                        final_sql,
+                        RunMysqlContext(timeout_ms=settings.statement_timeout_ms),
+                    )
+                    clean = _drop_blank_dimension_rows(res.rows)
+                    ans = format_answer(input.question, final_sql, clean)
+                    terminal = is_terminal_answer(input.question, clean)
+                    return _log(
+                        ChatResult(
+                            kind="chat" if terminal else "result",
+                            message=ans,
+                            sql=None if terminal else final_sql,
+                            rows=[] if terminal else clean,
+                            row_count=0 if terminal else len(clean),
+                        ),
+                        "qty-of-entity",
+                        engine="mysql",
+                        sql_final=final_sql,
+                    )
+            except Exception as exc:
+                log.warning("[chat] qty-of-entity exec failed, falling through: %s", exc)
+
+    # "what unit / which size / in which unit" — pack-size pivot question.
+    # Bypasses the LLM so a 3B model can't invent "pounds" / "ounces" when
+    # the column literally holds enum values like 1g, 3.5g, 7g, 1pk.
+    # Entity comes from the question itself, or from last history turn when
+    # the user used a pronoun ("they / it / those").
+    unit_entity: str | None = None
+    m_unit = _UNIT_OF_ENTITY_RX.search(question)
+    if m_unit:
+        ent = (m_unit.group("entity") or "").strip(" '\"").strip()
+        if ent and len(ent) >= 2 and ent.lower() not in _ENTITY_STOPWORDS:
+            unit_entity = ent
+    if unit_entity is None and _UNIT_PRONOUN_RX.search(question) and input.history:
+        # Last turn's question often holds the entity ("the quantity Mellowz have today").
+        # Grab the longest capitalized token from it as a heuristic.
+        prior = input.history[-1].question or ""
+        import re as _re
+        cands = _re.findall(r"[A-Z][A-Za-z0-9]{2,40}", prior)
+        # Drop common stopword-like tokens that pass the capitalization filter.
+        cands = [c for c in cands if c.lower() not in _ENTITY_STOPWORDS]
+        if cands:
+            unit_entity = max(cands, key=len)
+    if unit_entity:
+        safe_unit = unit_entity.replace("'", "''")
+        unit_sql = (
+            "SELECT DISTINCT Unit "
+            "FROM rhize_dataset_main "
+            f"WHERE (lower(Product_Name) LIKE lower('%{safe_unit}%') "
+            f"OR lower(Company_Name) LIKE lower('%{safe_unit}%')) "
+            "AND date = (SELECT MAX(date) FROM rhize_dataset_main) "
+            "AND Unit IS NOT NULL AND Unit <> '' "
+            "ORDER BY Unit "
+            "LIMIT 50"
+        )
+        try:
+            verdict = validate_mysql_sql(unit_sql, input.tenant_id)
+            if verdict.ok:
+                final_sql = rewrite_eq_to_ilike_on_text_cols(
+                    enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
+                )
+                log.info("[chat] unit-of-entity fast-path: entity=%r", unit_entity)
+                res = await run_readonly_mysql(
+                    final_sql,
+                    RunMysqlContext(timeout_ms=settings.statement_timeout_ms),
+                )
+                clean = _drop_blank_dimension_rows(res.rows)
+                ans = format_answer(input.question, final_sql, clean)
+                terminal = is_terminal_answer(input.question, clean)
+                return _log(
+                    ChatResult(
+                        kind="chat" if terminal else "result",
+                        message=ans,
+                        sql=None if terminal else final_sql,
+                        rows=[] if terminal else clean,
+                        row_count=0 if terminal else len(clean),
+                    ),
+                    "unit-of-entity",
+                    engine="mysql",
+                    sql_final=final_sql,
+                )
+        except Exception as exc:
+            log.warning("[chat] unit-of-entity exec failed, falling through: %s", exc)
+
     # Pronoun-anchor fast-path. "how many of them", "show 5 of those" —
     # 3B model can't bind anaphora reliably. Reuse last turn's SQL FROM/
     # WHERE deterministically. Runs the same Gate C/D as everything else.
@@ -516,7 +745,9 @@ async def run_chat(input: ChatInput) -> ChatResult:
             if anchor.dialect == "mysql":
                 verdict = validate_mysql_sql(anchor.sql, input.tenant_id)
                 if verdict.ok:
-                    final_sql = enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
+                    final_sql = rewrite_eq_to_ilike_on_text_cols(
+                        enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
+                    )
                     res = await run_readonly_mysql(
                         final_sql,
                         RunMysqlContext(timeout_ms=settings.statement_timeout_ms),
@@ -642,7 +873,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
 
     if settings.fast_path_enabled:
         fp_dialect = _resolve_dialect()
-        log.info("[chat] ▶ stage=fast-path-lookup dialect=%s threshold=%.3f",
+        log.info("[chat] >> stage=fast-path-lookup dialect=%s threshold=%.3f",
                  fp_dialect, settings.fast_path_distance_threshold)
         t_fp = _time.perf_counter()
         try:
@@ -654,7 +885,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
         except Exception as exc:
             log.warning("[chat] fast-path lookup error, falling through: %s", exc)
             hit = None
-        log.info("[chat] ✔ stage=fast-path-lookup done in %.2fs hit=%s",
+        log.info("[chat] OK stage=fast-path-lookup done in %.2fs hit=%s",
                  _time.perf_counter() - t_fp,
                  f"{hit.id}@d={hit.distance:.4f}" if hit else "MISS")
         if hit is not None and hit.is_literal:
@@ -673,7 +904,9 @@ async def run_chat(input: ChatInput) -> ChatResult:
                     verdict = validate_mysql_sql(cached_sql, input.tenant_id)
                     if not verdict.ok:
                         raise RuntimeError(f"cached SQL rejected: {verdict.reason}")
-                    final_sql = enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
+                    final_sql = rewrite_eq_to_ilike_on_text_cols(
+                        enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
+                    )
                     result = await run_readonly_mysql(
                         final_sql,
                         RunMysqlContext(timeout_ms=settings.statement_timeout_ms),
@@ -718,7 +951,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
                 hit.id, hit.distance,
             )
 
-    log.info("[chat] ▶ stage=rag-retrieval start")
+    log.info("[chat] >> stage=rag-retrieval start")
     t0 = _time.perf_counter()
     messages: list[ChatMessage] = await build_messages(
         question,
@@ -728,17 +961,17 @@ async def run_chat(input: ChatInput) -> ChatResult:
         states=input.states,
         history=input.history,
     )
-    log.info("[chat] ✔ stage=rag-retrieval done in %.2fs (messages=%d)",
+    log.info("[chat] OK stage=rag-retrieval done in %.2fs (messages=%d)",
              _time.perf_counter() - t0, len(messages))
     last_sql: str | None = None
     last_error = "The query could not be generated or executed."
 
     for attempt in range(1, MAX_ATTEMPTS + 1):
-        log.info("[chat] ▶ stage=llm-call attempt=%d start", attempt)
+        log.info("[chat] >> stage=llm-call attempt=%d start", attempt)
         t_llm = _time.perf_counter()
         try:
             reply = await chat_complete(messages)
-            log.info("[chat] ✔ stage=llm-call attempt=%d done in %.2fs (chars=%d)",
+            log.info("[chat] OK stage=llm-call attempt=%d done in %.2fs (chars=%d)",
                      attempt, _time.perf_counter() - t_llm, len(reply or ""))
         except LLMError as exc:
             log.error("[chat] LLM error: %s", exc)
@@ -829,7 +1062,9 @@ async def run_chat(input: ChatInput) -> ChatResult:
                 messages.append(ChatMessage(role="assistant", content=sql))
                 messages.append(build_retry_message(sql, f"Rejected by safety check: {verdict.reason}"))
                 continue
-            final_sql = enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
+            final_sql = rewrite_eq_to_ilike_on_text_cols(
+                enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
+            )
 
         # Column existence pre-check — catches hallucinated cols before the
         # DB round-trip. Feed REAL columns back so attempt 2 is informed,
@@ -840,7 +1075,21 @@ async def run_chat(input: ChatInput) -> ChatResult:
             last_sql = final_sql
             last_error = col_check.reason
             log.info("[chat] column pre-check rejected: %s", col_check.reason)
+            # Collect every table mentioned in the SQL — both the in-scope
+            # FROM tables AND any table where a hint pointed to. When the
+            # bad column exists nowhere (no hints), the FROM tables still
+            # need their real columns surfaced so the LLM retry has ground
+            # truth to work with.
+            from sqlglot import exp as _sqlglot_exp, parse_one as _parse_one
             tables_in_play: set[str] = set()
+            try:
+                _tree = _parse_one(final_sql)
+                for t in _tree.find_all(_sqlglot_exp.Table):
+                    name = (t.name or "").lower()
+                    if name and real_columns_for(name):
+                        tables_in_play.add(name)
+            except Exception:
+                pass
             for bad, hints in (col_check.suggestions or {}).items():
                 for h in hints:
                     tables_in_play.add(h.split(".", 1)[0])
@@ -863,7 +1112,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
         log.info("[chat] engine:   %s", route.engine)
         log.info("[chat] SQL: %s", re.sub(r"\s+", " ", final_sql)[:500])
 
-        log.info("[chat] ▶ stage=db-exec engine=%s start", route.engine)
+        log.info("[chat] >> stage=db-exec engine=%s start", route.engine)
         t_db = _time.perf_counter()
         try:
             if route.engine == "pg":
@@ -880,7 +1129,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
                     final_sql,
                     RunMysqlContext(timeout_ms=settings.statement_timeout_ms),
                 )
-            log.info("[chat] ✔ stage=db-exec engine=%s done in %.2fs (rows=%d)",
+            log.info("[chat] OK stage=db-exec engine=%s done in %.2fs (rows=%d)",
                      route.engine, _time.perf_counter() - t_db, result.row_count)
         except Exception as exc:
             msg = str(exc)

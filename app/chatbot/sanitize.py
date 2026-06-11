@@ -40,11 +40,17 @@ _TABLE_NAME_RX = re.compile(
     r")\b`?",
     re.I,
 )
+# Match ONLY SQL terms that are unambiguous internals.
+# `FROM`/`WHERE`/`JOIN`/`SELECT` are excluded — they're common English words
+# (lowercase "from your data", "where you ...") and replacing them mangles
+# legit prose. The phrases we keep are either uppercase-tech-y or specific
+# enough to never appear as English.
 _SQL_TERM_RX = re.compile(
     r"\b("
-    r"SQL|query|queries|SELECT|FROM|WHERE|JOIN|GROUP\s+BY|ORDER\s+BY|LIMIT|"
-    r"row-level\s+security|RLS|pgvector|embeddings?|tenant\s*id|"
-    r"schema|column|columns|table|tables|database|view|views|"
+    r"\bSQL\b|\bSELECT\s+statement|GROUP\s+BY|ORDER\s+BY|"
+    r"row-level\s+security|\bRLS\b|pgvector|embeddings?|"
+    r"tenant\s*id|tenantid|"
+    r"schema|column\s+name|table\s+name|database\s+(schema|column|table)|"
     r"MySQL|PostgreSQL|Postgres"
     r")\b",
     re.I,

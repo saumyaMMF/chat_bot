@@ -8,11 +8,43 @@
     },
     {
       "question": "revenue last 30 days",
-      "sql": "SELECT date, SUM(CAST(Revenue AS DECIMAL(10,2))) AS revenue FROM rhize_dataset_main WHERE date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 30 DAY, '%Y-%m-%d') GROUP BY date ORDER BY date DESC"
+      "sql": "SELECT date, SUM(subtotal) AS revenue FROM rhize_orders WHERE status = 'Completed' AND date >= DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY) GROUP BY date ORDER BY date DESC"
     },
     {
       "question": "total revenue past 30 days",
-      "sql": "SELECT SUM(CAST(Revenue AS DECIMAL(10,2))) AS total_revenue FROM rhize_dataset_main WHERE date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 30 DAY, '%Y-%m-%d')"
+      "sql": "SELECT SUM(subtotal) AS total_revenue FROM rhize_orders WHERE status = 'Completed' AND date >= DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY)"
+    },
+    {
+      "question": "my total revenue last 7 days",
+      "sql": "SELECT SUM(subtotal) AS total_revenue FROM rhize_orders WHERE status = 'Completed' AND date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)"
+    },
+    {
+      "question": "which day had highest revenue last 8 days",
+      "sql": "SELECT date, SUM(subtotal) AS revenue FROM rhize_orders WHERE status = 'Completed' AND date >= DATE_SUB(CURRENT_DATE, INTERVAL 8 DAY) GROUP BY date ORDER BY revenue DESC LIMIT 1"
+    },
+    {
+      "question": "on what date did I make the most revenue this week",
+      "sql": "SELECT date, SUM(subtotal) AS revenue FROM rhize_orders WHERE status = 'Completed' AND date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY) GROUP BY date ORDER BY revenue DESC LIMIT 1"
+    },
+    {
+      "question": "best revenue day last 30 days",
+      "sql": "SELECT date, SUM(subtotal) AS revenue FROM rhize_orders WHERE status = 'Completed' AND date >= DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY) GROUP BY date ORDER BY revenue DESC LIMIT 1"
+    },
+    {
+      "question": "lowest revenue day this month",
+      "sql": "SELECT date, SUM(subtotal) AS revenue FROM rhize_orders WHERE status = 'Completed' AND date >= DATE_FORMAT(CURRENT_DATE, '%Y-%m-01') GROUP BY date ORDER BY revenue ASC LIMIT 1"
+    },
+    {
+      "question": "store revenue last 30 days",
+      "sql": "SELECT Company_Name AS store, SUM(CAST(REGEXP_REPLACE(Revenue, '[^0-9.]', '') AS DECIMAL(12,2))) AS revenue FROM rhize_dataset_main WHERE date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 30 DAY, '%Y-%m-%d') GROUP BY Company_Name ORDER BY revenue DESC LIMIT 20"
+    },
+    {
+      "question": "revenue by store this week",
+      "sql": "SELECT Company_Name AS store, SUM(CAST(REGEXP_REPLACE(Revenue, '[^0-9.]', '') AS DECIMAL(12,2))) AS revenue FROM rhize_dataset_main WHERE date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 7 DAY, '%Y-%m-%d') GROUP BY Company_Name ORDER BY revenue DESC LIMIT 20"
+    },
+    {
+      "question": "catalog revenue today",
+      "sql": "SELECT SUM(CAST(REGEXP_REPLACE(Revenue, '[^0-9.]', '') AS DECIMAL(12,2))) AS catalog_revenue FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main)"
     },
     {
       "question": "sales last week",
@@ -32,7 +64,15 @@
     },
     {
       "question": "revenue trend",
-      "sql": "SELECT date, SUM(CAST(Revenue AS DECIMAL(10,2))) AS revenue FROM rhize_dataset_main WHERE date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 30 DAY, '%Y-%m-%d') GROUP BY date ORDER BY date"
+      "sql": "SELECT date, SUM(subtotal) AS revenue FROM rhize_orders WHERE status = 'Completed' AND date >= DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY) GROUP BY date ORDER BY date"
+    },
+    {
+      "question": "store revenue trend last 14 days",
+      "sql": "SELECT date, SUM(CAST(REGEXP_REPLACE(Revenue, '[^0-9.]', '') AS DECIMAL(12,2))) AS store_revenue FROM rhize_dataset_main WHERE date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 14 DAY, '%Y-%m-%d') GROUP BY date ORDER BY date"
+    },
+    {
+      "question": "market revenue trend last 30 days",
+      "sql": "SELECT date, SUM(revenue) AS market_revenue FROM chatbot_mv_market_daily WHERE date >= CURRENT_DATE - INTERVAL '30 days' GROUP BY date ORDER BY date"
     },
     {
       "question": "total revenue past 30 days in market",

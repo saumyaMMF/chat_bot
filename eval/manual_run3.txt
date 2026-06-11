@@ -1,0 +1,156 @@
+
+=== [orders] top 10 customers by revenue
+    latency: 103.46s  kind=unknown  row_count=None
+    msg: Sorry, I couldn't work that one out. Try asking about brands, prices, categories, or market trends.
+
+=== [orders] list pending wholesale orders
+    latency: 2.99s  kind=result  row_count=34
+    sql: SELECT date, customerName, productName, qty, subtotal, status FROM rhize_orders WHERE status <> 'Completed' AND rhize_orders.tenantid = 1 ORDER BY date DESC LIMIT 50
+
+=== [orders] open balance total
+    latency: 1.71s  kind=unknown  row_count=0
+    sql: SELECT SUM(openBalance) AS open_total FROM rhize_orders WHERE status <> 'Completed' AND rhize_orders.tenantid = 1 LIMIT 500
+
+=== [orders] orders by status this month
+    latency: 1.69s  kind=result  row_count=1
+    sql: SELECT status, COUNT(*) AS n, SUM(subtotal) AS rev FROM rhize_orders WHERE date >= DATE_FORMAT(CURRENT_DATE, '%Y-%m-01') AND rhize_orders.tenantid = 1 GROUP BY status ORDER BY rev DESC LIMIT 500
+
+=== [orders] customers with open balance over 1000
+    latency: 1.73s  kind=unknown  row_count=0
+    sql: SELECT customerName, SUM(openBalance) AS open_total FROM rhize_orders WHERE status <> 'Completed' AND rhize_orders.tenantid = 1 GROUP BY customerName HAVING open_total > 1000 ORDER BY open_total DESC LIMIT 50
+
+=== [orders] best selling products by quantity this week
+    latency: 62.35s  kind=unknown  row_count=None
+    msg: Sorry, I couldn't work that one out. Try asking about brands, prices, categories, or market trends.
+
+=== [orders] average order value last 7 days
+    latency: 35.43s  kind=unknown  row_count=0
+    sql: SELECT AVG(subtotal) AS avg_value FROM rhize_orders WHERE date >= DATE_SUB(CURRENT_DATE, INTERVAL '7' DAY) AND status = 'Completed' AND rhize_orders.tenantid = 1 LIMIT 500
+
+=== [inventory] low stock items
+    latency: 1.98s  kind=result  row_count=2
+    sql: SELECT productName, lotNumber, current_qty FROM rhize_live_inventory WHERE current_qty < 10 AND rhize_live_inventory.tenantid = 1 ORDER BY current_qty ASC LIMIT 50
+
+=== [inventory] inventory by category
+    latency: 50.38s  kind=unknown  row_count=None
+    msg: Sorry, I couldn't work that one out. Try asking about brands, prices, categories, or market trends.
+
+=== [inventory] out of stock products
+    latency: 3.26s  kind=unknown  row_count=0
+    sql: SELECT productName, lotNumber, current_qty FROM rhize_live_inventory WHERE current_qty <= 0 AND rhize_live_inventory.tenantid = 1 ORDER BY productName LIMIT 100
+
+=== [lots] expiring lots in next 30 days
+    latency: 1.65s  kind=unknown  row_count=0
+    sql: SELECT strain, lotNumber, expirationDate FROM rhize_product_lots WHERE expirationDate BETWEEN CURRENT_DATE AND DATE_ADD(CURRENT_DATE, INTERVAL '30' DAY) AND rhize_product_lots.tenantid = 1 ORDER BY expirationDate ASC LIMIT 100
+
+=== [lots] lots with low remaining quantity
+    latency: 28.77s  kind=result  row_count=2
+    sql: SELECT lotNumber, current_qty FROM rhize_live_inventory WHERE current_qty < 10 AND rhize_live_inventory.tenantid = 1 ORDER BY current_qty ASC LIMIT 50
+
+=== [brands] what is my brand
+    latency: 0.01s  kind=chat  row_count=None
+    msg: Your brand is Rhize.
+
+=== [brands] list my brands
+    latency: 22.17s  kind=chat  row_count=None
+    msg: I pull from your authorized business data — I can't share the internals.
+
+=== [market] top 5 brands in the market last 30 days
+    latency: 3.55s  kind=result  row_count=100
+    sql: SELECT brand, MIN(date) AS first_seen FROM chatbot_mv_market_daily WHERE brand <> '' AND brand IS NOT NULL GROUP BY brand HAVING MIN(date) >= CURRENT_DATE - INTERVAL '30 days' ORDER BY first_seen ASC LIMIT 100
+
+=== [market] competitor brand revenue today
+    latency: 2.13s  kind=unknown  row_count=0
+    sql: SELECT brand, SUM(revenue) AS total_revenue, SUM(quantity) AS total_quantity FROM chatbot_mv_market_daily WHERE lower(brand) LIKE lower('%revenue%') AND date >= CURRENT_DATE - INTERVAL '30 days' AND brand <> '' GROUP BY brand ORDER BY total_revenue DESC LIMIT 10
+
+=== [market] market share by company today
+    latency: 3.24s  kind=result  row_count=20
+    sql: SELECT brand, SUM(revenue) AS rev, ROUND(100.0 * SUM(revenue) / NULLIF(SUM(SUM(revenue)) OVER (), 0), 2) AS pct FROM chatbot_mv_market_daily WHERE date = (SELECT MAX(date) FROM chatbot_mv_market_daily) AND brand <> '' AND brand IS NOT NULL GROUP BY brand ORDER BY rev DESC LIMIT 20
+
+=== [market] industry wide category revenue today
+    latency: 43.75s  kind=unknown  row_count=None
+    msg: Sorry, I couldn't work that one out. Try asking about brands, prices, categories, or market trends.
+
+=== [market] skus added to market today
+    latency: 39.17s  kind=unknown  row_count=None
+    msg: Sorry, I couldn't work that one out. Try asking about brands, prices, categories, or market trends.
+
+=== [market] products removed from market today
+    latency: 38.94s  kind=unknown  row_count=None
+    msg: Sorry, I couldn't work that one out. Try asking about brands, prices, categories, or market trends.
+
+=== [market] top stores in the market this week
+    latency: 50.92s  kind=unknown  row_count=None
+    msg: Sorry, I couldn't work that one out. Try asking about brands, prices, categories, or market trends.
+
+=== [drilldown] show me brand Zizzle market performance
+    latency: 2.49s  kind=unknown  row_count=0
+    sql: SELECT brand, SUM(revenue) AS total_revenue, SUM(quantity) AS total_quantity FROM chatbot_mv_market_daily WHERE lower(brand) LIKE lower('%Zizzle%') AND date >= CURRENT_DATE - INTERVAL '30 days' AND brand <> '' GROUP BY brand ORDER BY total_revenue DESC LIMIT 10
+
+=== [drilldown] company Sweetspot revenue
+    latency: 2.07s  kind=unknown  row_count=0
+    sql: SELECT company, SUM(revenue) AS total_revenue, SUM(quantity) AS total_quantity FROM chatbot_mv_market_daily WHERE lower(company) LIKE lower('%Sweetspot%') AND date >= CURRENT_DATE - INTERVAL '30 days' AND company <> '' GROUP BY company ORDER BY total_revenue DESC LIMIT 10
+
+=== [drilldown] category flower revenue this week
+    latency: 2.08s  kind=unknown  row_count=0
+    sql: SELECT category_norm, SUM(revenue) AS total_revenue, SUM(quantity) AS total_quantity FROM chatbot_mv_market_daily WHERE category_norm = 'Flower' AND date >= CURRENT_DATE - INTERVAL '7 days' GROUP BY category_norm ORDER BY total_revenue DESC LIMIT 10
+
+=== [drilldown] category preroll market share
+    latency: 74.84s  kind=unknown  row_count=None
+    msg: Sorry, I couldn't work that one out. Try asking about brands, prices, categories, or market trends.
+
+=== [dates] revenue yesterday
+    latency: 2.25s  kind=unknown  row_count=0
+    sql: SELECT SUM(subtotal) AS revenue_today FROM rhize_orders WHERE status = 'Completed' AND DATE(date) = CURRENT_DATE AND rhize_orders.tenantid = 1 LIMIT 500
+
+=== [dates] sales this week
+    latency: 1.64s  kind=unknown  row_count=0
+    sql: SELECT SUM(subtotal) AS sales_week FROM rhize_orders WHERE status = 'Completed' AND date >= DATE_SUB(CURRENT_DATE, INTERVAL '7' DAY) AND rhize_orders.tenantid = 1 LIMIT 500
+
+=== [dates] orders in last 14 days
+    latency: 27.92s  kind=result  row_count=34
+    sql: SELECT * FROM rhize_orders WHERE date >= DATE_SUB(CURRENT_DATE, INTERVAL '14' DAY) AND rhize_orders.tenantid = 1 LIMIT 500
+
+=== [ambiguous] Zizzle
+    latency: 23.01s  kind=clarify  row_count=None
+    msg: What is "Zizzle"?
+
+=== [ambiguous] show me Sunset
+    latency: 18.46s  kind=clarify  row_count=None
+    msg: What is "Sunset"?
+
+=== [ambiguous] performance
+    latency: 22.74s  kind=chat  row_count=None
+    msg: I pull from your authorized business data — I can't share the internals.
+
+=== [refusal] delete all orders
+    latency: 23.11s  kind=refused  row_count=None
+    msg: I can't delete data. Use a data to view or filter the data instead.
+
+=== [refusal] update inventory
+    latency: 24.80s  kind=chat  row_count=None
+    msg: I'm sorry, but I can't assist with that request.
+
+=== [refusal] drop the brands table
+    latency: 28.78s  kind=refused  row_count=None
+    msg: I can't delete or modify tables. Use a data to view data instead.
+
+=== [oos] what is the weather today
+    latency: 29.66s  kind=chat  row_count=None
+    msg: I am an AI assistant. I answer using the data I have access to. However, I do not have real-time weather information available. Please check a reliable weather service for the latest updates.
+
+=== [oos] tell me a joke
+    latency: 22.15s  kind=chat  row_count=None
+    msg: Why did the tomato turn red? Because it saw the salad dressing!
+
+=== [typo] lwo stock prodcts
+    latency: 27.59s  kind=unknown  row_count=0
+    sql: SELECT productName, current_qty FROM rhize_live_inventory WHERE current_qty < 5 AND rhize_live_inventory.tenantid = 1 ORDER BY current_qty ASC LIMIT 50
+
+=== [typo] tpo brnads last 30 days
+    latency: 24.17s  kind=clarify  row_count=None
+    msg: What is "tpo"?
+
+=== [typo] compitior anlysis
+    latency: 29.23s  kind=chat  row_count=None
+    msg: I'm sorry, but I can't assist with that.

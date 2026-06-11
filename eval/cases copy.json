@@ -1,0 +1,1583 @@
+{
+  "_comment": "Auto-generated from eval/questionnaire.md by eval.build_cases_from_questionnaire. Hand-edit at your own risk — re-run the script to regenerate. Each case asserts kind=result + sql_match on the source table for that section. Identity questions are kind=chat (no SQL).",
+  "tenant_id": 1,
+  "states": [
+    "CA"
+  ],
+  "brand_name": "Rhize",
+  "display_name": "Rhize",
+  "cases": [
+    {
+      "id": "rhize_dataset_main-01",
+      "tag": "sql-rhize_dataset_main",
+      "question": "what's my total revenue last 7 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_main"
+    },
+    {
+      "id": "rhize_dataset_main-02",
+      "tag": "sql-rhize_dataset_main",
+      "question": "top 10 products by revenue last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_main"
+    },
+    {
+      "id": "rhize_dataset_main-03",
+      "tag": "sql-rhize_dataset_main",
+      "question": "which products had quantity change yesterday",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_main"
+    },
+    {
+      "id": "rhize_dataset_main-04",
+      "tag": "sql-rhize_dataset_main",
+      "question": "show me products with revenue above 500 today",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_main"
+    },
+    {
+      "id": "rhize_dataset_main-05",
+      "tag": "sql-rhize_dataset_main",
+      "question": "average price by category last week",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_main"
+    },
+    {
+      "id": "rhize_dataset_main-06",
+      "tag": "sql-rhize_dataset_main",
+      "question": "how many SKUs i sold today",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_main"
+    },
+    {
+      "id": "rhize_dataset_main-07",
+      "tag": "sql-rhize_dataset_main",
+      "question": "list newly added products today",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_main"
+    },
+    {
+      "id": "rhize_dataset_main-08",
+      "tag": "sql-rhize_dataset_main",
+      "question": "products removed from my catalog today",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_main"
+    },
+    {
+      "id": "rhize_dataset_main-09",
+      "tag": "sql-rhize_dataset_main",
+      "question": "what's my revenue trend last 14 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_main"
+    },
+    {
+      "id": "rhize_dataset_main-10",
+      "tag": "sql-rhize_dataset_main",
+      "question": "top company by revenue last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_main"
+    },
+    {
+      "id": "rhize_dataset_main-11",
+      "tag": "sql-rhize_dataset_main",
+      "question": "which products have THC above 25 percent",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_main"
+    },
+    {
+      "id": "rhize_dataset_main-12",
+      "tag": "sql-rhize_dataset_main",
+      "question": "count products by category on latest date",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_main"
+    },
+    {
+      "id": "rhize_dataset_main-13",
+      "tag": "sql-rhize_dataset_main",
+      "question": "show me daily revenue for last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_main"
+    },
+    {
+      "id": "rhize_dataset_main-14",
+      "tag": "sql-rhize_dataset_main",
+      "question": "live units of brand Rimeline",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_main"
+    },
+    {
+      "id": "rhize_dataset_main-15",
+      "tag": "sql-rhize_dataset_main",
+      "question": "stock of product Berry Fizz",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_main"
+    },
+    {
+      "id": "rhize_orders-01",
+      "tag": "sql-rhize_orders",
+      "question": "how many orders today",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_orders"
+    },
+    {
+      "id": "rhize_orders-02",
+      "tag": "sql-rhize_orders",
+      "question": "total completed sales last 7 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_orders"
+    },
+    {
+      "id": "rhize_orders-03",
+      "tag": "sql-rhize_orders",
+      "question": "top 10 customers by revenue last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_orders"
+    },
+    {
+      "id": "rhize_orders-04",
+      "tag": "sql-rhize_orders",
+      "question": "list pending wholesale orders",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_orders"
+    },
+    {
+      "id": "rhize_orders-05",
+      "tag": "sql-rhize_orders",
+      "question": "open balance total",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_orders"
+    },
+    {
+      "id": "rhize_orders-06",
+      "tag": "sql-rhize_orders",
+      "question": "orders by status this month",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_orders"
+    },
+    {
+      "id": "rhize_orders-07",
+      "tag": "sql-rhize_orders",
+      "question": "customers with open balance over 1000",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_orders"
+    },
+    {
+      "id": "rhize_orders-08",
+      "tag": "sql-rhize_orders",
+      "question": "best selling products by quantity last 7 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_orders"
+    },
+    {
+      "id": "rhize_orders-09",
+      "tag": "sql-rhize_orders",
+      "question": "average order value last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_orders"
+    },
+    {
+      "id": "rhize_orders-10",
+      "tag": "sql-rhize_orders",
+      "question": "revenue by payment type this month",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_orders"
+    },
+    {
+      "id": "rhize_orders-11",
+      "tag": "sql-rhize_orders",
+      "question": "show me orders for customer Joe last 14 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_orders"
+    },
+    {
+      "id": "rhize_orders-12",
+      "tag": "sql-rhize_orders",
+      "question": "orders count by store last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_orders"
+    },
+    {
+      "id": "rhize_orders-13",
+      "tag": "sql-rhize_orders",
+      "question": "list cancelled orders this week",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_orders"
+    },
+    {
+      "id": "rhize_orders-14",
+      "tag": "sql-rhize_orders",
+      "question": "total delivery this month",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_orders"
+    },
+    {
+      "id": "rhize_orders-15",
+      "tag": "sql-rhize_orders",
+      "question": "customers who ordered more than 10 times last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_orders"
+    },
+    {
+      "id": "rhize_live_inventory-01",
+      "tag": "sql-rhize_live_inventory",
+      "question": "how many products in stock",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_live_inventory"
+    },
+    {
+      "id": "rhize_live_inventory-02",
+      "tag": "sql-rhize_live_inventory",
+      "question": "low stock items",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_live_inventory"
+    },
+    {
+      "id": "rhize_live_inventory-03",
+      "tag": "sql-rhize_live_inventory",
+      "question": "out of stock products",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_live_inventory"
+    },
+    {
+      "id": "rhize_live_inventory-04",
+      "tag": "sql-rhize_live_inventory",
+      "question": "total units on hand by product",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_live_inventory"
+    },
+    {
+      "id": "rhize_live_inventory-05",
+      "tag": "sql-rhize_live_inventory",
+      "question": "inventory value by lot",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_live_inventory"
+    },
+    {
+      "id": "rhize_live_inventory-06",
+      "tag": "sql-rhize_live_inventory",
+      "question": "which lots have remaining quantity below 5",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_live_inventory"
+    },
+    {
+      "id": "rhize_live_inventory-07",
+      "tag": "sql-rhize_live_inventory",
+      "question": "show inventory for strain Dulce De Uva",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_live_inventory"
+    },
+    {
+      "id": "rhize_live_inventory-08",
+      "tag": "sql-rhize_live_inventory",
+      "question": "how many flower jars are in stock",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_live_inventory"
+    },
+    {
+      "id": "rhize_live_inventory-09",
+      "tag": "sql-rhize_live_inventory",
+      "question": "list all trim inventory",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_live_inventory"
+    },
+    {
+      "id": "rhize_live_inventory-10",
+      "tag": "sql-rhize_live_inventory",
+      "question": "products with no movement",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_live_inventory"
+    },
+    {
+      "id": "rhize_live_inventory-11",
+      "tag": "sql-rhize_live_inventory",
+      "question": "inventory by productType",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_live_inventory"
+    },
+    {
+      "id": "rhize_live_inventory-12",
+      "tag": "sql-rhize_live_inventory",
+      "question": "lots ranked by remaining quantity",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_live_inventory"
+    },
+    {
+      "id": "rhize_live_inventory-13",
+      "tag": "sql-rhize_live_inventory",
+      "question": "count lots per product",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_live_inventory"
+    },
+    {
+      "id": "rhize_live_inventory-14",
+      "tag": "sql-rhize_live_inventory",
+      "question": "show inventory updated in last 7 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_live_inventory"
+    },
+    {
+      "id": "rhize_live_inventory-15",
+      "tag": "sql-rhize_live_inventory",
+      "question": "accessories in stock",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_live_inventory"
+    },
+    {
+      "id": "rhize_product_lots-01",
+      "tag": "sql-rhize_product_lots",
+      "question": "lots expiring next 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_product_lots"
+    },
+    {
+      "id": "rhize_product_lots-02",
+      "tag": "sql-rhize_product_lots",
+      "question": "lots expiring this week",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_product_lots"
+    },
+    {
+      "id": "rhize_product_lots-03",
+      "tag": "sql-rhize_product_lots",
+      "question": "how many lots do i have",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_product_lots"
+    },
+    {
+      "id": "rhize_product_lots-04",
+      "tag": "sql-rhize_product_lots",
+      "question": "lots created last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_product_lots"
+    },
+    {
+      "id": "rhize_product_lots-05",
+      "tag": "sql-rhize_product_lots",
+      "question": "expired lots this month",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_product_lots"
+    },
+    {
+      "id": "rhize_product_lots-06",
+      "tag": "sql-rhize_product_lots",
+      "question": "lots by strain",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_product_lots"
+    },
+    {
+      "id": "rhize_product_lots-07",
+      "tag": "sql-rhize_product_lots",
+      "question": "count of lots per product",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_product_lots"
+    },
+    {
+      "id": "rhize_product_lots-08",
+      "tag": "sql-rhize_product_lots",
+      "question": "lots with quantity under 10",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_product_lots"
+    },
+    {
+      "id": "rhize_product_lots-09",
+      "tag": "sql-rhize_product_lots",
+      "question": "lots that expire today",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_product_lots"
+    },
+    {
+      "id": "rhize_product_lots-10",
+      "tag": "sql-rhize_product_lots",
+      "question": "show me lot HL-20 details",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_product_lots"
+    },
+    {
+      "id": "rhize_product_lots-11",
+      "tag": "sql-rhize_product_lots",
+      "question": "list lots for strain Melted Strawberries",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_product_lots"
+    },
+    {
+      "id": "rhize_product_lots-12",
+      "tag": "sql-rhize_product_lots",
+      "question": "lots with the longest shelf life remaining",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_product_lots"
+    },
+    {
+      "id": "rhize_product_lots-13",
+      "tag": "sql-rhize_product_lots",
+      "question": "lots not yet shipped",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_product_lots"
+    },
+    {
+      "id": "rhize_product_lots-14",
+      "tag": "sql-rhize_product_lots",
+      "question": "recently received lots",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_product_lots"
+    },
+    {
+      "id": "rhize_product_lots-15",
+      "tag": "sql-rhize_product_lots",
+      "question": "lots grouped by month of expiration",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_product_lots"
+    },
+    {
+      "id": "rhize_stores-01",
+      "tag": "sql-rhize_stores",
+      "question": "my partner stores",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_stores"
+    },
+    {
+      "id": "rhize_stores-02",
+      "tag": "sql-rhize_stores",
+      "question": "count of partner stores",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_stores"
+    },
+    {
+      "id": "rhize_stores-03",
+      "tag": "sql-rhize_stores",
+      "question": "partner stores by city",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_stores"
+    },
+    {
+      "id": "rhize_stores-04",
+      "tag": "sql-rhize_stores",
+      "question": "list non-partner stores",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_stores"
+    },
+    {
+      "id": "rhize_stores-05",
+      "tag": "sql-rhize_stores",
+      "question": "partners by tier",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_stores"
+    },
+    {
+      "id": "rhize_stores-06",
+      "tag": "sql-rhize_stores",
+      "question": "stores in California",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_stores"
+    },
+    {
+      "id": "rhize_stores-07",
+      "tag": "sql-rhize_stores",
+      "question": "how many partners do i have",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_stores"
+    },
+    {
+      "id": "rhize_stores-08",
+      "tag": "sql-rhize_stores",
+      "question": "stores added last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_stores"
+    },
+    {
+      "id": "rhize_stores-09",
+      "tag": "sql-rhize_stores",
+      "question": "stores with no city set",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_stores"
+    },
+    {
+      "id": "rhize_stores-10",
+      "tag": "sql-rhize_stores",
+      "question": "partners ranked by tier",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_stores"
+    },
+    {
+      "id": "rhize_stores-11",
+      "tag": "sql-rhize_stores",
+      "question": "count partners by state",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_stores"
+    },
+    {
+      "id": "rhize_stores-12",
+      "tag": "sql-rhize_stores",
+      "question": "list inactive stores",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_stores"
+    },
+    {
+      "id": "rhize_stores-13",
+      "tag": "sql-rhize_stores",
+      "question": "partner store contacts",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_stores"
+    },
+    {
+      "id": "rhize_stores-14",
+      "tag": "sql-rhize_stores",
+      "question": "stores with license number set",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_stores"
+    },
+    {
+      "id": "rhize_stores-15",
+      "tag": "sql-rhize_stores",
+      "question": "how many premium tier partners",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_stores"
+    },
+    {
+      "id": "rhize_brands-01",
+      "tag": "sql-rhize_brands",
+      "question": "what is my brand",
+      "expected_kind": "chat"
+    },
+    {
+      "id": "rhize_brands-02",
+      "tag": "sql-rhize_brands",
+      "question": "list my brands",
+      "expected_kind": "chat"
+    },
+    {
+      "id": "rhize_brands-03",
+      "tag": "sql-rhize_brands",
+      "question": "how many brands do i own",
+      "expected_kind": "chat"
+    },
+    {
+      "id": "rhize_brands-04",
+      "tag": "sql-rhize_brands",
+      "question": "show me my Rhize brand",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_brands"
+    },
+    {
+      "id": "rhize_brands-05",
+      "tag": "sql-rhize_brands",
+      "question": "when was my brand created",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_brands"
+    },
+    {
+      "id": "rhize_brands-06",
+      "tag": "sql-rhize_brands",
+      "question": "brands updated last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_brands"
+    },
+    {
+      "id": "rhize_brands-07",
+      "tag": "sql-rhize_brands",
+      "question": "all brand IDs",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_brands"
+    },
+    {
+      "id": "rhize_brands-08",
+      "tag": "sql-rhize_brands",
+      "question": "brand by name Rhize",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_brands"
+    },
+    {
+      "id": "rhize_brands-09",
+      "tag": "sql-rhize_brands",
+      "question": "is Rhize active",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_brands"
+    },
+    {
+      "id": "rhize_brands-10",
+      "tag": "sql-rhize_brands",
+      "question": "how many isRhize brands",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_brands"
+    },
+    {
+      "id": "rhize_brands-11",
+      "tag": "sql-rhize_brands",
+      "question": "brand metadata for Rhize",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_brands"
+    },
+    {
+      "id": "rhize_brands-12",
+      "tag": "sql-rhize_brands",
+      "question": "brands ordered by createdAt",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_brands"
+    },
+    {
+      "id": "rhize_brands-13",
+      "tag": "sql-rhize_brands",
+      "question": "brand count by tenant",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_brands"
+    },
+    {
+      "id": "rhize_brands-14",
+      "tag": "sql-rhize_brands",
+      "question": "brand display name",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_brands"
+    },
+    {
+      "id": "rhize_brands-15",
+      "tag": "sql-rhize_brands",
+      "question": "brand slug list",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_brands"
+    },
+    {
+      "id": "rhize_sales_actions-01",
+      "tag": "sql-rhize_sales_actions",
+      "question": "sales actions last 7 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_sales_actions"
+    },
+    {
+      "id": "rhize_sales_actions-02",
+      "tag": "sql-rhize_sales_actions",
+      "question": "how many sales actions did i log this month",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_sales_actions"
+    },
+    {
+      "id": "rhize_sales_actions-03",
+      "tag": "sql-rhize_sales_actions",
+      "question": "sales actions by type",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_sales_actions"
+    },
+    {
+      "id": "rhize_sales_actions-04",
+      "tag": "sql-rhize_sales_actions",
+      "question": "recent customer outreach",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_sales_actions"
+    },
+    {
+      "id": "rhize_sales_actions-05",
+      "tag": "sql-rhize_sales_actions",
+      "question": "actions by salesperson last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_sales_actions"
+    },
+    {
+      "id": "rhize_sales_actions-06",
+      "tag": "sql-rhize_sales_actions",
+      "question": "count actions per store",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_sales_actions"
+    },
+    {
+      "id": "rhize_sales_actions-07",
+      "tag": "sql-rhize_sales_actions",
+      "question": "follow-ups due this week",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_sales_actions"
+    },
+    {
+      "id": "rhize_sales_actions-08",
+      "tag": "sql-rhize_sales_actions",
+      "question": "completed actions today",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_sales_actions"
+    },
+    {
+      "id": "rhize_sales_actions-09",
+      "tag": "sql-rhize_sales_actions",
+      "question": "actions for store Cambridgecannabiscompany",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_sales_actions"
+    },
+    {
+      "id": "rhize_sales_actions-10",
+      "tag": "sql-rhize_sales_actions",
+      "question": "high priority actions outstanding",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_sales_actions"
+    },
+    {
+      "id": "rhize_sales_actions-11",
+      "tag": "sql-rhize_sales_actions",
+      "question": "notes from sales actions last week",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_sales_actions"
+    },
+    {
+      "id": "rhize_sales_actions-12",
+      "tag": "sql-rhize_sales_actions",
+      "question": "action types breakdown this quarter",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_sales_actions"
+    },
+    {
+      "id": "rhize_sales_actions-13",
+      "tag": "sql-rhize_sales_actions",
+      "question": "actions created yesterday",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_sales_actions"
+    },
+    {
+      "id": "rhize_sales_actions-14",
+      "tag": "sql-rhize_sales_actions",
+      "question": "salespeople activity ranking",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_sales_actions"
+    },
+    {
+      "id": "rhize_sales_actions-15",
+      "tag": "sql-rhize_sales_actions",
+      "question": "customers contacted last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_sales_actions"
+    },
+    {
+      "id": "rhize_strain_info-01",
+      "tag": "sql-rhize_strain_info",
+      "question": "list all strains i carry",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_strain_info"
+    },
+    {
+      "id": "rhize_strain_info-02",
+      "tag": "sql-rhize_strain_info",
+      "question": "how many strains do i have",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_strain_info"
+    },
+    {
+      "id": "rhize_strain_info-03",
+      "tag": "sql-rhize_strain_info",
+      "question": "strains with THC above 25",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_strain_info"
+    },
+    {
+      "id": "rhize_strain_info-04",
+      "tag": "sql-rhize_strain_info",
+      "question": "strains by type indica",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_strain_info"
+    },
+    {
+      "id": "rhize_strain_info-05",
+      "tag": "sql-rhize_strain_info",
+      "question": "sativa strains list",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_strain_info"
+    },
+    {
+      "id": "rhize_strain_info-06",
+      "tag": "sql-rhize_strain_info",
+      "question": "hybrid strains count",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_strain_info"
+    },
+    {
+      "id": "rhize_strain_info-07",
+      "tag": "sql-rhize_strain_info",
+      "question": "strain Dulce De Uva details",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_strain_info"
+    },
+    {
+      "id": "rhize_strain_info-08",
+      "tag": "sql-rhize_strain_info",
+      "question": "strains added last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_strain_info"
+    },
+    {
+      "id": "rhize_strain_info-09",
+      "tag": "sql-rhize_strain_info",
+      "question": "strain count by type",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_strain_info"
+    },
+    {
+      "id": "rhize_strain_info-10",
+      "tag": "sql-rhize_strain_info",
+      "question": "strain effects for Berry Fizz",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_strain_info"
+    },
+    {
+      "id": "rhize_strain_info-11",
+      "tag": "sql-rhize_strain_info",
+      "question": "flavor profile of Melted Strawberries",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_strain_info"
+    },
+    {
+      "id": "rhize_strain_info-12",
+      "tag": "sql-rhize_strain_info",
+      "question": "terpenes in strain GMO",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_strain_info"
+    },
+    {
+      "id": "rhize_strain_info-13",
+      "tag": "sql-rhize_strain_info",
+      "question": "strains ranked by THC",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_strain_info"
+    },
+    {
+      "id": "rhize_strain_info-14",
+      "tag": "sql-rhize_strain_info",
+      "question": "CBD content per strain",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_strain_info"
+    },
+    {
+      "id": "rhize_strain_info-15",
+      "tag": "sql-rhize_strain_info",
+      "question": "strain types breakdown",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_strain_info"
+    },
+    {
+      "id": "rhize_dataset_store-01",
+      "tag": "sql-rhize_dataset_store",
+      "question": "revenue per store last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_store"
+    },
+    {
+      "id": "rhize_dataset_store-02",
+      "tag": "sql-rhize_dataset_store",
+      "question": "top store by revenue today",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_store"
+    },
+    {
+      "id": "rhize_dataset_store-03",
+      "tag": "sql-rhize_dataset_store",
+      "question": "store performance trend last 14 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_store"
+    },
+    {
+      "id": "rhize_dataset_store-04",
+      "tag": "sql-rhize_dataset_store",
+      "question": "which stores have zero sales today",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_store"
+    },
+    {
+      "id": "rhize_dataset_store-05",
+      "tag": "sql-rhize_dataset_store",
+      "question": "average store revenue this week",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_store"
+    },
+    {
+      "id": "rhize_dataset_store-06",
+      "tag": "sql-rhize_dataset_store",
+      "question": "count active stores yesterday",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_store"
+    },
+    {
+      "id": "rhize_dataset_store-07",
+      "tag": "sql-rhize_dataset_store",
+      "question": "stores by quantity sold last 7 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_store"
+    },
+    {
+      "id": "rhize_dataset_store-08",
+      "tag": "sql-rhize_dataset_store",
+      "question": "store ranking by revenue this month",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_store"
+    },
+    {
+      "id": "rhize_dataset_store-09",
+      "tag": "sql-rhize_dataset_store",
+      "question": "daily store revenue last 7 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_store"
+    },
+    {
+      "id": "rhize_dataset_store-10",
+      "tag": "sql-rhize_dataset_store",
+      "question": "stores with revenue drop week over week",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_store"
+    },
+    {
+      "id": "rhize_dataset_store-11",
+      "tag": "sql-rhize_dataset_store",
+      "question": "show store Domecity revenue last 14 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_store"
+    },
+    {
+      "id": "rhize_dataset_store-12",
+      "tag": "sql-rhize_dataset_store",
+      "question": "store revenue by category last 7 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_store"
+    },
+    {
+      "id": "rhize_dataset_store-13",
+      "tag": "sql-rhize_dataset_store",
+      "question": "count distinct stores selling today",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_store"
+    },
+    {
+      "id": "rhize_dataset_store-14",
+      "tag": "sql-rhize_dataset_store",
+      "question": "top 5 stores by quantity today",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_store"
+    },
+    {
+      "id": "rhize_dataset_store-15",
+      "tag": "sql-rhize_dataset_store",
+      "question": "store revenue contribution percent last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_store"
+    },
+    {
+      "id": "rhize_partner_stores-01",
+      "tag": "sql-rhize_partner_stores",
+      "question": "how many partner stores in pipeline",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_partner_stores"
+    },
+    {
+      "id": "rhize_partner_stores-02",
+      "tag": "sql-rhize_partner_stores",
+      "question": "partner stores by status",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_partner_stores"
+    },
+    {
+      "id": "rhize_partner_stores-03",
+      "tag": "sql-rhize_partner_stores",
+      "question": "recently onboarded partners",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_partner_stores"
+    },
+    {
+      "id": "rhize_partner_stores-04",
+      "tag": "sql-rhize_partner_stores",
+      "question": "partner stores pending approval",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_partner_stores"
+    },
+    {
+      "id": "rhize_partner_stores-05",
+      "tag": "sql-rhize_partner_stores",
+      "question": "count partners per state",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_partner_stores"
+    },
+    {
+      "id": "rhize_partner_stores-06",
+      "tag": "sql-rhize_partner_stores",
+      "question": "partner stores added last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_partner_stores"
+    },
+    {
+      "id": "rhize_partner_stores-07",
+      "tag": "sql-rhize_partner_stores",
+      "question": "list rejected partner applications",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_partner_stores"
+    },
+    {
+      "id": "rhize_partner_stores-08",
+      "tag": "sql-rhize_partner_stores",
+      "question": "active partner pipeline count",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_partner_stores"
+    },
+    {
+      "id": "rhize_partner_stores-09",
+      "tag": "sql-rhize_partner_stores",
+      "question": "partners contacted last 7 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_partner_stores"
+    },
+    {
+      "id": "rhize_partner_stores-10",
+      "tag": "sql-rhize_partner_stores",
+      "question": "partner store by city",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_partner_stores"
+    },
+    {
+      "id": "rhize_partner_stores-11",
+      "tag": "sql-rhize_partner_stores",
+      "question": "show partner Cambridgecannabiscompany details",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_partner_stores"
+    },
+    {
+      "id": "rhize_partner_stores-12",
+      "tag": "sql-rhize_partner_stores",
+      "question": "partners with active accounts",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_partner_stores"
+    },
+    {
+      "id": "rhize_partner_stores-13",
+      "tag": "sql-rhize_partner_stores",
+      "question": "count by partner status",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_partner_stores"
+    },
+    {
+      "id": "rhize_partner_stores-14",
+      "tag": "sql-rhize_partner_stores",
+      "question": "partners updated this month",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_partner_stores"
+    },
+    {
+      "id": "rhize_partner_stores-15",
+      "tag": "sql-rhize_partner_stores",
+      "question": "partner ranking by onboarding date",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_partner_stores"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-01",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "skus added to market today",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-02",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "products removed from market today",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-03",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "longest on-shelf SKU",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-04",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "how many SKUs in market today",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-05",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "SKU price changes last 7 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-06",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "products with days_on_shelf above 30",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-07",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "unique brands scraped today",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-08",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "category distribution of SKUs today",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-09",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "top SKUs by price today",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-10",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "flagged products this week",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-11",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "SKUs available in unit gram",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-12",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "show me product Berry Fizz across market",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-13",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "count SKUs per company today",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-14",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "SKU revenue ranking today",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-15",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "discount SKUs today",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    },
+    {
+      "id": "chatbot_mv_market_daily-01",
+      "tag": "sql-chatbot_mv_market_daily",
+      "question": "top 5 brands in market last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)chatbot_mv_market_daily"
+    },
+    {
+      "id": "chatbot_mv_market_daily-02",
+      "tag": "sql-chatbot_mv_market_daily",
+      "question": "market share by brand today",
+      "expected_kind": "result",
+      "sql_match": "(?i)chatbot_mv_market_daily"
+    },
+    {
+      "id": "chatbot_mv_market_daily-03",
+      "tag": "sql-chatbot_mv_market_daily",
+      "question": "market share by company today",
+      "expected_kind": "result",
+      "sql_match": "(?i)chatbot_mv_market_daily"
+    },
+    {
+      "id": "chatbot_mv_market_daily-04",
+      "tag": "sql-chatbot_mv_market_daily",
+      "question": "competitor brand revenue last 7 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)chatbot_mv_market_daily"
+    },
+    {
+      "id": "chatbot_mv_market_daily-05",
+      "tag": "sql-chatbot_mv_market_daily",
+      "question": "industry wide category revenue today",
+      "expected_kind": "result",
+      "sql_match": "(?i)chatbot_mv_market_daily"
+    },
+    {
+      "id": "chatbot_mv_market_daily-06",
+      "tag": "sql-chatbot_mv_market_daily",
+      "question": "top stores in market this week",
+      "expected_kind": "result",
+      "sql_match": "(?i)chatbot_mv_market_daily"
+    },
+    {
+      "id": "chatbot_mv_market_daily-07",
+      "tag": "sql-chatbot_mv_market_daily",
+      "question": "category revenue distribution today",
+      "expected_kind": "result",
+      "sql_match": "(?i)chatbot_mv_market_daily"
+    },
+    {
+      "id": "chatbot_mv_market_daily-08",
+      "tag": "sql-chatbot_mv_market_daily",
+      "question": "how is brand Zizzle doing in market",
+      "expected_kind": "result",
+      "sql_match": "(?i)chatbot_mv_market_daily"
+    },
+    {
+      "id": "chatbot_mv_market_daily-09",
+      "tag": "sql-chatbot_mv_market_daily",
+      "question": "company Sweetspot market revenue",
+      "expected_kind": "result",
+      "sql_match": "(?i)chatbot_mv_market_daily"
+    },
+    {
+      "id": "chatbot_mv_market_daily-10",
+      "tag": "sql-chatbot_mv_market_daily",
+      "question": "category preroll market share",
+      "expected_kind": "result",
+      "sql_match": "(?i)chatbot_mv_market_daily"
+    },
+    {
+      "id": "chatbot_mv_market_daily-11",
+      "tag": "sql-chatbot_mv_market_daily",
+      "question": "top 10 brands by quantity last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)chatbot_mv_market_daily"
+    },
+    {
+      "id": "chatbot_mv_market_daily-12",
+      "tag": "sql-chatbot_mv_market_daily",
+      "question": "brand revenue trend last 14 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)chatbot_mv_market_daily"
+    },
+    {
+      "id": "chatbot_mv_market_daily-13",
+      "tag": "sql-chatbot_mv_market_daily",
+      "question": "market total revenue today",
+      "expected_kind": "result",
+      "sql_match": "(?i)chatbot_mv_market_daily"
+    },
+    {
+      "id": "chatbot_mv_market_daily-14",
+      "tag": "sql-chatbot_mv_market_daily",
+      "question": "category flower revenue this week",
+      "expected_kind": "result",
+      "sql_match": "(?i)chatbot_mv_market_daily"
+    },
+    {
+      "id": "chatbot_mv_market_daily-15",
+      "tag": "sql-chatbot_mv_market_daily",
+      "question": "brands with most SKUs listed",
+      "expected_kind": "result",
+      "sql_match": "(?i)chatbot_mv_market_daily"
+    },
+    {
+      "id": "category_map-01",
+      "tag": "sql-category_map",
+      "question": "how many categories are defined",
+      "expected_kind": "result",
+      "sql_match": "(?i)category_map"
+    },
+    {
+      "id": "category_map-02",
+      "tag": "sql-category_map",
+      "question": "list all canonical categories",
+      "expected_kind": "result",
+      "sql_match": "(?i)category_map"
+    },
+    {
+      "id": "category_map-03",
+      "tag": "sql-category_map",
+      "question": "category mappings count",
+      "expected_kind": "result",
+      "sql_match": "(?i)category_map"
+    },
+    {
+      "id": "category_map-04",
+      "tag": "sql-category_map",
+      "question": "category aliases for Flower",
+      "expected_kind": "result",
+      "sql_match": "(?i)category_map"
+    },
+    {
+      "id": "category_map-05",
+      "tag": "sql-category_map",
+      "question": "mappings updated last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)category_map"
+    },
+    {
+      "id": "category_map-06",
+      "tag": "sql-category_map",
+      "question": "how many aliases per category",
+      "expected_kind": "result",
+      "sql_match": "(?i)category_map"
+    },
+    {
+      "id": "category_map-07",
+      "tag": "sql-category_map",
+      "question": "show me preroll category mappings",
+      "expected_kind": "result",
+      "sql_match": "(?i)category_map"
+    },
+    {
+      "id": "category_map-08",
+      "tag": "sql-category_map",
+      "question": "uncategorized aliases",
+      "expected_kind": "result",
+      "sql_match": "(?i)category_map"
+    },
+    {
+      "id": "category_map-09",
+      "tag": "sql-category_map",
+      "question": "duplicate category names",
+      "expected_kind": "result",
+      "sql_match": "(?i)category_map"
+    },
+    {
+      "id": "category_map-10",
+      "tag": "sql-category_map",
+      "question": "category vape mappings",
+      "expected_kind": "result",
+      "sql_match": "(?i)category_map"
+    },
+    {
+      "id": "category_map-11",
+      "tag": "sql-category_map",
+      "question": "concentrate aliases list",
+      "expected_kind": "result",
+      "sql_match": "(?i)category_map"
+    },
+    {
+      "id": "category_map-12",
+      "tag": "sql-category_map",
+      "question": "edible category mappings",
+      "expected_kind": "result",
+      "sql_match": "(?i)category_map"
+    },
+    {
+      "id": "category_map-13",
+      "tag": "sql-category_map",
+      "question": "mappings created today",
+      "expected_kind": "result",
+      "sql_match": "(?i)category_map"
+    },
+    {
+      "id": "category_map-14",
+      "tag": "sql-category_map",
+      "question": "mappings by canonical category",
+      "expected_kind": "result",
+      "sql_match": "(?i)category_map"
+    },
+    {
+      "id": "category_map-15",
+      "tag": "sql-category_map",
+      "question": "category mappings ordered by usage",
+      "expected_kind": "result",
+      "sql_match": "(?i)category_map"
+    },
+    {
+      "id": "Rhize_sales_data-01",
+      "tag": "sql-Rhize_sales_data",
+      "question": "legacy sales total last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)Rhize_sales_data"
+    },
+    {
+      "id": "Rhize_sales_data-02",
+      "tag": "sql-Rhize_sales_data",
+      "question": "legacy revenue trend last 14 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)Rhize_sales_data"
+    },
+    {
+      "id": "Rhize_sales_data-03",
+      "tag": "sql-Rhize_sales_data",
+      "question": "top legacy customer by revenue",
+      "expected_kind": "result",
+      "sql_match": "(?i)Rhize_sales_data"
+    },
+    {
+      "id": "Rhize_sales_data-04",
+      "tag": "sql-Rhize_sales_data",
+      "question": "legacy sales count today",
+      "expected_kind": "result",
+      "sql_match": "(?i)Rhize_sales_data"
+    },
+    {
+      "id": "Rhize_sales_data-05",
+      "tag": "sql-Rhize_sales_data",
+      "question": "legacy sales by product last 7 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)Rhize_sales_data"
+    },
+    {
+      "id": "Rhize_sales_data-06",
+      "tag": "sql-Rhize_sales_data",
+      "question": "average legacy order value last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)Rhize_sales_data"
+    },
+    {
+      "id": "Rhize_sales_data-07",
+      "tag": "sql-Rhize_sales_data",
+      "question": "legacy sales by store this month",
+      "expected_kind": "result",
+      "sql_match": "(?i)Rhize_sales_data"
+    },
+    {
+      "id": "Rhize_sales_data-08",
+      "tag": "sql-Rhize_sales_data",
+      "question": "legacy revenue per category last week",
+      "expected_kind": "result",
+      "sql_match": "(?i)Rhize_sales_data"
+    },
+    {
+      "id": "Rhize_sales_data-09",
+      "tag": "sql-Rhize_sales_data",
+      "question": "legacy sales ranked by quantity",
+      "expected_kind": "result",
+      "sql_match": "(?i)Rhize_sales_data"
+    },
+    {
+      "id": "Rhize_sales_data-10",
+      "tag": "sql-Rhize_sales_data",
+      "question": "legacy sales for brand Rhize last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)Rhize_sales_data"
+    },
+    {
+      "id": "Rhize_sales_data-11",
+      "tag": "sql-Rhize_sales_data",
+      "question": "legacy sales not yet completed",
+      "expected_kind": "result",
+      "sql_match": "(?i)Rhize_sales_data"
+    },
+    {
+      "id": "Rhize_sales_data-12",
+      "tag": "sql-Rhize_sales_data",
+      "question": "compare legacy vs current revenue last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)Rhize_sales_data"
+    },
+    {
+      "id": "Rhize_sales_data-13",
+      "tag": "sql-Rhize_sales_data",
+      "question": "legacy data freshness",
+      "expected_kind": "result",
+      "sql_match": "(?i)Rhize_sales_data"
+    },
+    {
+      "id": "Rhize_sales_data-14",
+      "tag": "sql-Rhize_sales_data",
+      "question": "legacy sales daily series",
+      "expected_kind": "result",
+      "sql_match": "(?i)Rhize_sales_data"
+    },
+    {
+      "id": "Rhize_sales_data-15",
+      "tag": "sql-Rhize_sales_data",
+      "question": "legacy sales total this year",
+      "expected_kind": "result",
+      "sql_match": "(?i)Rhize_sales_data"
+    },
+    {
+      "id": "rhize_user_states-01",
+      "tag": "sql-rhize_user_states",
+      "question": "how many states am i assigned",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_user_states"
+    },
+    {
+      "id": "rhize_user_states-02",
+      "tag": "sql-rhize_user_states",
+      "question": "list my assigned states",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_user_states"
+    },
+    {
+      "id": "rhize_user_states-03",
+      "tag": "sql-rhize_user_states",
+      "question": "which states do i have access to",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_user_states"
+    },
+    {
+      "id": "rhize_user_states-04",
+      "tag": "sql-rhize_user_states",
+      "question": "count users per state",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_user_states"
+    },
+    {
+      "id": "rhize_user_states-05",
+      "tag": "sql-rhize_user_states",
+      "question": "show all state assignments",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_user_states"
+    },
+    {
+      "id": "rhize_user_states-06",
+      "tag": "sql-rhize_user_states",
+      "question": "states active for my brand",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_user_states"
+    },
+    {
+      "id": "rhize_user_states-07",
+      "tag": "sql-rhize_user_states",
+      "question": "tenants with multiple states",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_user_states"
+    },
+    {
+      "id": "rhize_user_states-08",
+      "tag": "sql-rhize_user_states",
+      "question": "recently added state assignments",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_user_states"
+    },
+    {
+      "id": "rhize_user_states-09",
+      "tag": "sql-rhize_user_states",
+      "question": "inactive state assignments",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_user_states"
+    },
+    {
+      "id": "rhize_user_states-10",
+      "tag": "sql-rhize_user_states",
+      "question": "states without users",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_user_states"
+    },
+    {
+      "id": "rhize_user_states-11",
+      "tag": "sql-rhize_user_states",
+      "question": "state assignment changes last 30 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_user_states"
+    },
+    {
+      "id": "rhize_user_states-12",
+      "tag": "sql-rhize_user_states",
+      "question": "count distinct states overall",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_user_states"
+    },
+    {
+      "id": "rhize_user_states-13",
+      "tag": "sql-rhize_user_states",
+      "question": "my state codes",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_user_states"
+    },
+    {
+      "id": "rhize_user_states-14",
+      "tag": "sql-rhize_user_states",
+      "question": "state coverage by tenant",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_user_states"
+    },
+    {
+      "id": "rhize_user_states-15",
+      "tag": "sql-rhize_user_states",
+      "question": "user count per state",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_user_states"
+    }
+  ]
+}

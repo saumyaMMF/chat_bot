@@ -45,12 +45,30 @@ async def require_service_token(authorization: str | None = Header(default=None)
 
 _LOG_DIR = __import__("pathlib").Path(__file__).resolve().parents[1] / "logs"
 _LOG_DIR.mkdir(parents=True, exist_ok=True)
-_LOG_FMT = "%(asctime)s %(levelname)s %(name)s %(message)s"
+class _ShortName(logging.Filter):
+    """Trim noisy module paths so log lines fit on a screen."""
+    def filter(self, record: logging.LogRecord) -> bool:
+        n = record.name
+        if n.startswith("app.chatbot."):
+            record.name = n.rsplit(".", 1)[-1]
+        elif n == "app.chatbot":
+            record.name = "chatbot"
+        elif n.startswith("uvicorn"):
+            record.name = n.replace("uvicorn.", "uv.").replace("uvicorn", "uv")
+        return True
+
+_LOG_FMT = "%(asctime)s %(levelname).1s %(name)-12s | %(message)s"
+_DATE_FMT = "%H:%M:%S"
 _file_handler = logging.FileHandler(_LOG_DIR / "chatbot.log", encoding="utf-8")
-_file_handler.setFormatter(logging.Formatter(_LOG_FMT))
+_file_handler.setFormatter(logging.Formatter(_LOG_FMT, datefmt=_DATE_FMT))
+_file_handler.addFilter(_ShortName())
 _stream_handler = logging.StreamHandler()
-_stream_handler.setFormatter(logging.Formatter(_LOG_FMT))
+_stream_handler.setFormatter(logging.Formatter(_LOG_FMT, datefmt=_DATE_FMT))
+_stream_handler.addFilter(_ShortName())
 logging.basicConfig(level=logging.INFO, handlers=[_file_handler, _stream_handler], force=True)
+# httpx logs every embed/LLM call — drowns the real signal. Bump to WARNING.
+for _quiet in ("httpx", "httpcore", "watchfiles"):
+    logging.getLogger(_quiet).setLevel(logging.WARNING)
 # Pipe uvicorn's loggers into the same handlers so HTTP access lines land in
 # the file too — uvicorn installs its own handlers in lifespan startup.
 for _n in ("uvicorn", "uvicorn.error", "uvicorn.access"):

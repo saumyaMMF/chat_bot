@@ -118,7 +118,7 @@ async def run_one(case: dict[str, Any], cfg: dict[str, Any]) -> dict[str, Any]:
             "dt_ms": dt_ms,
             "kind": result.kind,
             "message": result.message[:200],
-            "sql": (result.sql or "")[:200],
+            "sql": (result.sql or getattr(result, "sql_executed", None) or "")[:300],
             "build_info": info_snapshot,
         }
 
@@ -135,6 +135,7 @@ async def run_one(case: dict[str, Any], cfg: dict[str, Any]) -> dict[str, Any]:
                 "dt_ms": dt_ms,
                 "kind": result.kind,
                 "message": (target or "")[:200],
+                "sql": (result.sql or getattr(result, "sql_executed", None) or "")[:300],
                 "build_info": info_snapshot,
             }
 
@@ -149,7 +150,7 @@ async def run_one(case: dict[str, Any], cfg: dict[str, Any]) -> dict[str, Any]:
                 "reason": f"sql shape did not match {case['sql_match']!r}",
                 "dt_ms": dt_ms,
                 "kind": result.kind,
-                "sql": (result.sql or "")[:300],
+                "sql": (result.sql or getattr(result, "sql_executed", None) or "")[:300],
                 "build_info": info_snapshot,
             }
 
@@ -160,6 +161,8 @@ async def run_one(case: dict[str, Any], cfg: dict[str, Any]) -> dict[str, Any]:
         "reason": "ok",
         "dt_ms": dt_ms,
         "kind": result.kind,
+        "sql": (result.sql or getattr(result, "sql_executed", None) or "")[:500],
+        "message": (result.message or "")[:300],
         "build_info": info_snapshot,
     }
 
@@ -198,11 +201,13 @@ async def main() -> int:
         verdicts.append(v)
         marker = "PASS" if v["pass"] else "FAIL"
         print(f"{marker}  {v['dt_ms']}ms  {v['reason'] if not v['pass'] else ''}")
+        # Always surface SQL + message so the user can eyeball what the bot
+        # actually generated, not just pass/fail.
+        if v.get("sql"):
+            print(f"        sql: {v['sql']!r}")
+        if v.get("message"):
+            print(f"        msg: {v['message']!r}")
         if not v["pass"]:
-            if v.get("message"):
-                print(f"        msg: {v['message']!r}")
-            if v.get("sql"):
-                print(f"        sql: {v['sql']!r}")
             bi = v.get("build_info", {})
             if not bi.get("example_retrieval_ok"):
                 print(f"        ! example retrieval FELL BACK: {bi.get('example_retrieval_reason')}")

@@ -1208,7 +1208,7 @@
       "id": "table:rhize_dataset_main",
       "kind": "table",
       "table_name": "rhize_dataset_main",
-      "definition": "Purpose: Tenant's OWN daily sales/revenue summary Data grain: One row per (Product_Name, date, tenant) approx. Use when: \"My revenue\", \"my sales\", daily totals, own top products, own product flags",
+      "definition": "Purpose: Tenant's OWN daily sales/revenue summary Data grain: One row per (Product_Name, date, tenant) approx. Use when: \"My revenue\", \"my sales\", daily totals, own top products, own product flags, **live units of a brand/product across partner companies** (\"live units of X\", \"stock of brand Y\", \"quantity of product Z\", \"how much Y left in the field\"), per-company breakdown of own products on shelf, today's quantity at each partner store. Use `` `Today's_Quantity_Total` `` (CAST to DECIMAL) as the live stock metric — this is the latest scraped on-shelf quantity per (Product_Name, Company_Name, date). Different from `rhize_live_inventory` (warehouse stock at the tenant's own facility).",
       "restrictions": "`tenantid` (INT) auto-injected"
     },
     {
@@ -1519,7 +1519,7 @@
       "id": "table:Rhize_sales_data",
       "kind": "table",
       "table_name": "Rhize_sales_data",
-      "definition": "Purpose: Flat export/snapshot of sales data synced from Google Sheets via `rhize_sync_log` Data grain: One row per order line item (similar to `rhize_orders` but all TEXT) Use when: Only when `rhize_orders` does not have the required data. Prefer `rhize_orders` for order queries Avoid when: General order queries — use `rhize_orders` (proper types, tenant-scoped)",
+      "definition": "Purpose: Flat export/snapshot of sales data synced from Google Sheets Data grain: One row per order line item (similar to `rhize_orders` but all TEXT) Use when: Only when `rhize_orders` does not have the required data. Prefer `rhize_orders` for order queries Avoid when: General order queries — use `rhize_orders` (proper types, tenant-scoped)",
       "restrictions": "No visible `tenantid` — scope may be implied by sync source"
     },
     {

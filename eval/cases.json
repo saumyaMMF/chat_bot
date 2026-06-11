@@ -1,37 +1,67 @@
 {
-  "_comment": "Eval cases for the NL->SQL chatbot. Each case asserts a 'kind' (result|chat|refusal|clarify|error) and optional regex predicates on the reply or generated SQL. Run with: python -m eval.run",
+  "_comment": "Auto-generated from eval/questionnaire.md by eval.build_cases_from_questionnaire. Hand-edit at your own risk — re-run the script to regenerate. Each case asserts kind=result + sql_match on the source table for that section. Identity questions are kind=chat (no SQL).",
   "tenant_id": 1,
-  "states": ["VT"],
+  "states": [
+    "CA"
+  ],
   "brand_name": "Rhize",
   "display_name": "Rhize",
   "cases": [
-    {"id": "identity-my-brand", "tag": "identity", "question": "my brand name", "expected_kind": "chat", "message_match": "rhize"},
-    {"id": "identity-who-am-i", "tag": "identity", "question": "who am i", "expected_kind": "chat", "message_match": "rhize"},
-
-    {"id": "greeting-hi", "tag": "greeting", "question": "hi", "expected_kind": "chat", "message_match": "market data"},
-    {"id": "greeting-thanks", "tag": "greeting", "question": "thanks!", "expected_kind": "chat", "message_match": "welcome"},
-    {"id": "greeting-help", "tag": "greeting", "question": "what can you do", "expected_kind": "chat", "message_match": "market"},
-
-    {"id": "sql-revenue-30d", "tag": "sql-shape", "question": "revenue last 30 days", "expected_kind": "result", "sql_match": "(?i)rhize_dataset_main.*30"},
-    {"id": "sql-top-customers", "tag": "sql-shape", "question": "top customers", "expected_kind": "result", "sql_match": "(?i)rhize_orders.*group by.*customer"},
-    {"id": "sql-top-products", "tag": "sql-shape", "question": "top products", "expected_kind": "result", "sql_match": "(?i)rhize_dataset_main.*group by.*product"},
-    {"id": "sql-inventory", "tag": "sql-shape", "question": "current inventory", "expected_kind": "result", "sql_match": "(?i)rhize_live_inventory"},
-    {"id": "sql-sales-week", "tag": "sql-shape", "question": "sales last week", "expected_kind": "result", "sql_match": "(?i)rhize_orders"},
-
-    {"id": "sql-market-brands", "tag": "sql-market", "question": "top brands in the market today", "expected_kind": "result", "sql_match": "(?i)chatbot_mv_market_daily.*brand"},
-    {"id": "sql-market-competitors", "tag": "sql-market", "question": "competitor brand revenue past 7 days", "expected_kind": "result", "sql_match": "(?i)chatbot_mv_market_daily"},
-
-    {"id": "refusal-delete", "tag": "refusal-dml", "question": "delete all orders", "expected_kind": "refusal", "message_match": "(?i)read-only|cannot"},
-    {"id": "refusal-drop", "tag": "refusal-dml", "question": "drop the products table", "expected_kind": "refusal", "message_match": "(?i)read-only|cannot"},
-    {"id": "refusal-update", "tag": "refusal-dml", "question": "update revenue to 1000", "expected_kind": "refusal", "message_match": "(?i)read-only|cannot"},
-    {"id": "refusal-other-state", "tag": "refusal-cross-state", "question": "show me California data", "expected_kind": "refusal", "message_match": "(?i)state|cannot"},
-    {"id": "refusal-weather", "tag": "refusal-off-topic", "question": "what's the weather today", "expected_kind": "refusal", "message_match": "(?i)market|ops|data"},
-    {"id": "refusal-joke", "tag": "refusal-off-topic", "question": "tell me a joke", "expected_kind": "refusal", "message_match": "(?i)market|ops|data"},
-
-    {"id": "sql-low-stock", "tag": "sql-shape", "question": "low stock items", "expected_kind": "result", "sql_match": "(?i)rhize_live_inventory"},
-    {"id": "sql-expiring-lots", "tag": "sql-shape", "question": "lots expiring soon", "expected_kind": "result", "sql_match": "(?i)rhize_product_lots"},
-    {"id": "sql-open-balance", "tag": "sql-shape", "question": "open balance", "expected_kind": "result", "sql_match": "(?i)rhize_orders.*status.*<>"},
-    {"id": "sql-revenue-by-category", "tag": "sql-shape", "question": "revenue by category last 30 days", "expected_kind": "result", "sql_match": "(?i)rhize_dataset_main.*category"},
-    {"id": "sql-sales-by-store", "tag": "sql-shape", "question": "sales by store", "expected_kind": "result", "sql_match": "(?i)rhize_(orders|stores)"}
+    {
+      "id": "rhize_dataset_main-01",
+      "tag": "sql-rhize_dataset_main",
+      "question": "at what date it has higher revernue between past 8 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)rhize_dataset_main"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-01",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "skus added to market today",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-02",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "products removed from market today",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-03",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "longest on-shelf SKU",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-04",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "how many SKUs in market today",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-05",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "SKU price changes last 7 days",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-06",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "products with days_on_shelf above 30",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    },
+    {
+      "id": "complete_market_scrapper_dataset-07",
+      "tag": "sql-complete_market_scrapper_dataset",
+      "question": "unique brands scraped today",
+      "expected_kind": "result",
+      "sql_match": "(?i)complete_market_scrapper_dataset"
+    }
   ]
 }

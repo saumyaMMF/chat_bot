@@ -364,7 +364,7 @@ Use `LEFT JOIN` + `COALESCE(cm.category_norm, 'Other')` if unmatched rows are po
 | **Data Grain** | One row per (Product_Name, date, tenant) approx. |
 | **Tenancy** | `tenantid` (INT) auto-injected |
 | **Legacy Warning** | All numeric columns stored as TEXT — must CAST to DECIMAL for any math |
-| **Use When** | "My revenue", "my sales", daily totals, own top products, own product flags |
+| **Use When** | "My revenue", "my sales", daily totals, own top products, own product flags, **live units of a brand/product across partner companies** ("live units of X", "stock of brand Y", "quantity of product Z", "how much Y left in the field"), per-company breakdown of own products on shelf, today's quantity at each partner store. Use `` `Today's_Quantity_Total` `` (CAST to DECIMAL) as the live stock metric — this is the latest scraped on-shelf quantity per (Product_Name, Company_Name, date). Different from `rhize_live_inventory` (warehouse stock at the tenant's own facility). |
 
 #### Columns
 
