@@ -13,7 +13,7 @@ from typing import Any, Literal
 
 from app.chatbot.llm_client import ChatMessage, LLMError, chat_complete
 from app.chatbot.normalize_question import normalize_question
-from app.chatbot.pronoun_anchor import try_pronoun_anchor
+from app.chatbot.pronoun_anchor import try_pronoun_anchor, try_window_anchor
 from app.chatbot.sanitize import sanitize_question, scrub_llm_prose
 from app.chatbot.prompt_builder import build_messages, build_retry_message
 from app.chatbot.answer_formatter import format_answer, is_terminal_answer
@@ -966,7 +966,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
     # Pronoun-anchor fast-path. "how many of them", "show 5 of those" —
     # 3B model can't bind anaphora reliably. Reuse last turn's SQL FROM/
     # WHERE deterministically. Runs the same Gate C/D as everything else.
-    anchor = try_pronoun_anchor(question, input.history)
+    anchor = try_window_anchor(question, input.history) or try_pronoun_anchor(question, input.history)
     if anchor is not None:
         try:
             if anchor.dialect == "mysql":

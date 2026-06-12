@@ -157,6 +157,78 @@ def _pick_list_columns(tree: exp.Select, *, qty_intent: bool = False,
     return ["*"]
 
 
+# Window-only follow-up: "and in past 300 days", "what about the last 60
+# days". The whole message is a time-window swap on the prior query.
+_WINDOW_ONLY_RX = re.compile(
+    r"^\s*(?:and|also|what about|how about|now)?\s*(?:in|for|within|over)?\s*"
+    r"(?:the)?\s*(?:past|last|previous)\s+(\d{1,4})\s+days?\s*[?.!]*\s*$",
+    re.I,
+)
+
+
+def try_window_anchor(question: str, history) -> AnchorResult | None:
+    """Follow-up that ONLY changes the time window → rewrite the prior SQL's
+    date window deterministically. The LLM reliably parrots the prior turn's
+    SQL verbatim for these (history precedent beats retrieved examples), so
+    answering them without the LLM is both faster and more correct."""
+    if not question or not history:
+        return None
+    m = _WINDOW_ONLY_RX.match(question.strip())
+    if not m:
+        return None
+    n = max(1, min(int(m.group(1)), 3650))
+
+    anchor = _last_anchorable_sql(history)
+    if anchor is None:
+        return None
+    prev_sql, dialect = anchor
+    out_dialect = "mysql" if dialect == "mysql" else "postgres"
+    try:
+        tree = parse_one(prev_sql, read=out_dialect)
+    except Exception:
+        return None
+    if not isinstance(tree, exp.Select):
+        return None
+
+    # Prior SQL already windows on an INTERVAL — swap the magnitude in place
+    # (regex: covers INTERVAL 30 DAY, INTERVAL '30' DAY, INTERVAL '30 days').
+    _iv_rx = re.compile(r"INTERVAL\s+'?(\d+)\s*(?:days?)?'?(\s+DAYS?)?", re.I)
+    if _iv_rx.search(prev_sql):
+        if out_dialect == "mysql":
+            new_sql = _iv_rx.sub(f"INTERVAL {n} DAY", prev_sql)
+        else:
+            new_sql = _iv_rx.sub(f"INTERVAL '{n} days'", prev_sql)
+        return AnchorResult(
+            sql=new_sql,
+            dialect=dialect,
+            explanation=f"window-anchor: INTERVAL swapped to {n} days",
+        )
+
+    # No window yet — AND one onto WHERE, anchored to the table's own
+    # MAX(date) so scrape lag doesn't skew the cutoff.
+    cloned = tree.copy()
+    tables = [t.name for t in cloned.find_all(exp.Table) if t.name]
+    if not tables:
+        return None
+    tbl = tables[0]
+    if out_dialect == "mysql":
+        pred = (f"date >= DATE_SUB((SELECT MAX(date) FROM {tbl}), "
+                f"INTERVAL {n} DAY)")
+    else:
+        pred = (f"date >= (SELECT MAX(date) FROM {tbl}) - "
+                f"INTERVAL '{n} days'")
+    try:
+        cloned = cloned.where(parse_one(pred, read=out_dialect))
+    except Exception:
+        return None
+
+    return AnchorResult(
+        sql=cloned.sql(dialect=out_dialect),
+        dialect=dialect,
+        explanation=f"window-anchor: prior SQL re-windowed to past {n} days",
+    )
+
+
 def try_pronoun_anchor(question: str, history) -> AnchorResult | None:
     """If ``question`` is a pronoun-only follow-up AND we have an anchorable
     last turn, return rewritten SQL. Else None.
