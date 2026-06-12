@@ -1145,6 +1145,23 @@ async def run_chat(input: ChatInput) -> ChatResult:
 
         parsed = extract_sql(reply)
         if parsed.chat:
+            # Parrot guard: a prose reply that echoes a prior turn's answer
+            # (or a history stub) is the 3B model copying the history block,
+            # not answering. Feed it back as a retry instead of showing it.
+            chat_text = parsed.chat.strip()
+            prior_answers = {
+                (getattr(h, "answer", None) or "").strip()
+                for h in (input.history or [])
+            }
+            prior_answers.discard("")
+            if chat_text in prior_answers or chat_text == "(answered)":
+                last_error = "Reply parroted a prior answer instead of addressing the question."
+                messages.append(ChatMessage(role="assistant", content=reply))
+                messages.append(build_retry_message(
+                    "(parroted prior answer)",
+                    "Do not repeat earlier answers. Answer the LAST question only — emit SQL, REFUSE, CLARIFY, or CHAT.",
+                ))
+                continue
             return _log(ChatResult(kind="chat", message=scrub_llm_prose(parsed.chat)), "none", attempts=attempt)
         if parsed.refusal:
             return _log(ChatResult(kind="refusal", message=scrub_llm_prose(parsed.refusal)), "none", attempts=attempt)

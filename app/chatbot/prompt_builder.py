@@ -664,19 +664,17 @@ async def build_messages(
                 sql = getattr(turn, "sql", None) or ""
                 if not q.strip():
                     continue
-                messages.append(ChatMessage(role="user", content=q.strip()))
+                # Only SQL-bearing turns are injected as user/assistant pairs.
                 # SQL is safe to ship (no row data — only the query the model
-                # itself wrote).
+                # itself wrote) and it reinforces the output format. Anything
+                # else — NL answers, stubs — gets parroted by the 3B model as
+                # the expected output shape ("Product count: 0", "(answered)").
+                # Answer-only turns contribute the question alone; entity
+                # names stay visible for pronoun resolution with no assistant
+                # text to copy.
+                messages.append(ChatMessage(role="user", content=q.strip()))
                 if sql:
                     messages.append(ChatMessage(role="assistant", content=sql.strip()))
-                else:
-                    # NL answers ("Product count: 0") are NEVER injected: the
-                    # history block mirrors the few-shot format, so a 3B model
-                    # treats a prose answer as the expected output shape and
-                    # parrots it verbatim for unrelated questions. A neutral
-                    # stub keeps the turn pair intact for pronoun anchoring
-                    # without giving the model prose to copy.
-                    messages.append(ChatMessage(role="assistant", content="(answered)"))
 
     messages.append(ChatMessage(role="user", content=question))
     return messages
