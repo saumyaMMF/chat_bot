@@ -1218,6 +1218,26 @@ async def run_chat(input: ChatInput) -> ChatResult:
             messages.append(build_retry_message(sql, last_error))
             continue
 
+        # Reverse guard — the question explicitly says market but the model
+        # reached for the tenant's own rhize_* tables (nearest retrieved
+        # example was tenant-side, "market" token lost). Without this, "how
+        # many active stores in market" silently counts partner stores.
+        # column_pin to a mysql table stays authoritative (overrides).
+        _mysql_pin = _pin is not None and _pin.engine == "mysql"
+        if route.engine == "mysql" and _market_ok and not _mysql_pin:
+            last_sql = sql
+            last_error = (
+                "The question asks about the MARKET, but the SQL targets the "
+                "user's own `rhize_*` MySQL tables. Re-emit against the "
+                "PostgreSQL market tables (chatbot_mv_market_daily: date, "
+                "brand, company, category_norm, revenue, quantity, sku_count, "
+                "state — `company` is the store)."
+            )
+            log.info("[chat] rejecting MySQL route — question has market signal")
+            messages.append(ChatMessage(role="assistant", content=sql))
+            messages.append(build_retry_message(sql, last_error))
+            continue
+
         # Strip tenant/state isolation predicates before validation. Prompt
         # forbids them; Gate B is the real boundary. Avoids burning a retry
         # on guard rejection when the model writes them anyway.

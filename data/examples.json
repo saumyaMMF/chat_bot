@@ -453,6 +453,14 @@
     {
       "question": "market revenue today",
       "sql": "SELECT SUM(revenue) AS total_revenue FROM chatbot_mv_market_daily WHERE date = (SELECT MAX(date) FROM chatbot_mv_market_daily)"
+    },
+    {
+      "question": "how many active stores today in market",
+      "sql": "SELECT COUNT(DISTINCT company) AS active_stores FROM chatbot_mv_market_daily WHERE date = (SELECT MAX(date) FROM chatbot_mv_market_daily) AND company IS NOT NULL AND company <> ''"
+    },
+    {
+      "question": "how many stores are there in the market",
+      "sql": "SELECT COUNT(DISTINCT company) AS market_stores FROM chatbot_mv_market_daily WHERE date = (SELECT MAX(date) FROM chatbot_mv_market_daily) AND company IS NOT NULL AND company <> ''"
     }
   ]
 }
