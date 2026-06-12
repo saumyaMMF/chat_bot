@@ -469,6 +469,14 @@
     {
       "question": "which stores went inactive in the market this week",
       "sql": "SELECT DISTINCT m.company AS inactive_store FROM chatbot_mv_market_daily m WHERE m.company IS NOT NULL AND m.company <> '' AND m.company NOT IN (SELECT company FROM chatbot_mv_market_daily WHERE date >= (SELECT MAX(date) FROM chatbot_mv_market_daily) - INTERVAL '7 days' AND company IS NOT NULL) ORDER BY inactive_store"
+    },
+    {
+      "question": "is sunday drive one of the inactive stores",
+      "sql": "SELECT CASE WHEN MAX(CASE WHEN date >= DATE_SUB((SELECT MAX(date) FROM rhize_dataset_main), INTERVAL 7 DAY) THEN 1 ELSE 0 END) = 1 THEN 'active (has data in past 7 days)' ELSE 'inactive (no data in past 7 days)' END AS status, MAX(date) AS last_seen FROM rhize_dataset_main WHERE LOWER(Company_Name) LIKE LOWER('%sunday drive%')"
+    },
+    {
+      "question": "when did we last get data from tea house",
+      "sql": "SELECT MAX(date) AS last_seen FROM rhize_dataset_main WHERE LOWER(Company_Name) LIKE LOWER('%tea house%')"
     }
   ]
 }
