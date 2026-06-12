@@ -485,6 +485,14 @@
     {
       "question": "how many days since tea house last had data",
       "sql": "SELECT MAX(date) AS last_seen, DATEDIFF((SELECT MAX(date) FROM rhize_dataset_main), MAX(date)) AS days_ago FROM rhize_dataset_main WHERE LOWER(Company_Name) LIKE LOWER('%tea house%')"
+    },
+    {
+      "question": "and before that when did sunday drive have data",
+      "sql": "SELECT DISTINCT date FROM rhize_dataset_main WHERE LOWER(Company_Name) LIKE LOWER('%sunday drive%') ORDER BY date DESC LIMIT 5"
+    },
+    {
+      "question": "show the last 5 dates tea house had data",
+      "sql": "SELECT DISTINCT date FROM rhize_dataset_main WHERE LOWER(Company_Name) LIKE LOWER('%tea house%') ORDER BY date DESC LIMIT 5"
     }
   ]
 }
