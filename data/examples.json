@@ -493,6 +493,14 @@
     {
       "question": "show the last 5 dates tea house had data",
       "sql": "SELECT DISTINCT date FROM rhize_dataset_main WHERE LOWER(Company_Name) LIKE LOWER('%tea house%') ORDER BY date DESC LIMIT 5"
+    },
+    {
+      "question": "does sunday drive have data in past 30 days, mention the date",
+      "sql": "SELECT CASE WHEN COUNT(*) > 0 THEN 'yes' ELSE 'no' END AS has_data, MAX(date) AS latest_date_in_window FROM rhize_dataset_main WHERE LOWER(Company_Name) LIKE LOWER('%sunday drive%') AND date >= DATE_SUB((SELECT MAX(date) FROM rhize_dataset_main), INTERVAL 30 DAY)"
+    },
+    {
+      "question": "does tea house have data in past 60 days",
+      "sql": "SELECT CASE WHEN COUNT(*) > 0 THEN 'yes' ELSE 'no' END AS has_data, MAX(date) AS latest_date_in_window FROM rhize_dataset_main WHERE LOWER(Company_Name) LIKE LOWER('%tea house%') AND date >= DATE_SUB((SELECT MAX(date) FROM rhize_dataset_main), INTERVAL 60 DAY)"
     }
   ]
 }
