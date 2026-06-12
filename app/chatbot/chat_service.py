@@ -506,6 +506,9 @@ def _detect_bare_entity(question: str) -> str | None:
         "that", "this", "it", "them", "those", "these", "one", "ones",
         "and", "or", "then", "before", "after", "earlier", "later",
         "again", "more", "next", "previous", "prior", "same", "about",
+        # ordinals / recency words — "second last", "the oldest"
+        "first", "second", "third", "last", "latest", "oldest", "newest",
+        "recent",
     }
     if any(w.lower() in _FOLLOWUP_TOKENS for w in words):
         return None
