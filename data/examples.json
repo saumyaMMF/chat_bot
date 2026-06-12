@@ -429,6 +429,18 @@
     {
       "question": "what products does valleymeade have",
       "sql": "SELECT DISTINCT Product_Name FROM rhize_dataset_main WHERE lower(Company_Name) LIKE lower('%valleymeade%') AND date = (SELECT MAX(date) FROM rhize_dataset_main) ORDER BY Product_Name"
+    },
+    {
+      "question": "top performing store in market",
+      "sql": "SELECT company AS store, SUM(revenue) AS total_revenue FROM chatbot_mv_market_daily WHERE date = (SELECT MAX(date) FROM chatbot_mv_market_daily) AND company IS NOT NULL AND company <> '' GROUP BY company ORDER BY total_revenue DESC LIMIT 10"
+    },
+    {
+      "question": "which stores sell the most in the market",
+      "sql": "SELECT company AS store, SUM(revenue) AS total_revenue FROM chatbot_mv_market_daily WHERE date >= (SELECT MAX(date) FROM chatbot_mv_market_daily) - INTERVAL '30 days' GROUP BY company ORDER BY total_revenue DESC LIMIT 10"
+    },
+    {
+      "question": "store with highest revenue in market this month",
+      "sql": "SELECT company AS store, SUM(revenue) AS total_revenue FROM chatbot_mv_market_daily WHERE date >= date_trunc('month', (SELECT MAX(date) FROM chatbot_mv_market_daily)) GROUP BY company ORDER BY total_revenue DESC LIMIT 5"
     }
   ]
 }
