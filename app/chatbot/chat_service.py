@@ -500,6 +500,15 @@ def _detect_bare_entity(question: str) -> str | None:
         return None
     if len(words) == 1 and words[0].lower() in _ENTITY_STOPWORDS:
         return None
+    # Follow-up phrases ("and before that", "what about them") are anaphora,
+    # not entity names — let the pronoun anchor / LLM see the session history.
+    _FOLLOWUP_TOKENS = {
+        "that", "this", "it", "them", "those", "these", "one", "ones",
+        "and", "or", "then", "before", "after", "earlier", "later",
+        "again", "more", "next", "previous", "prior", "same", "about",
+    }
+    if any(w.lower() in _FOLLOWUP_TOKENS for w in words):
+        return None
     return text
 
 
