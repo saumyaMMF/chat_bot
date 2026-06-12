@@ -437,6 +437,52 @@ _INTENT_WORDS_RX = re.compile(
 )
 
 
+# Bare category words — a one-word message naming a data category, not an
+# entity. The intent-word regex eats these (so the bare-entity gate skips),
+# but alone they carry no question; the LLM just guesses one. Map each to
+# clarify chips for its plausible intents.
+_BARE_CATEGORY_CLARIFY: dict[str, list[tuple[str, str]]] = {
+    "stores": [
+        ("STORES", "list of partner stores"),
+        ("PRODUCTS", "how many active stores"),
+        ("MARKET", "how many stores are there in the market"),
+    ],
+    "store": [
+        ("STORES", "list of partner stores"),
+        ("MARKET", "top performing store in market"),
+    ],
+    "brands": [
+        ("PRODUCTS", "list my brands"),
+        ("MARKET", "top brands in the market"),
+    ],
+    "products": [
+        ("PRODUCTS", "how many products do I have"),
+        ("MARKET", "top products in the market"),
+    ],
+    "orders": [
+        ("PRODUCTS", "my recent orders"),
+        ("UNITS", "total order revenue this month"),
+    ],
+    "revenue": [
+        ("PRODUCTS", "what is my revenue last 30 days"),
+        ("MARKET", "market revenue today"),
+    ],
+    "sales": [
+        ("PRODUCTS", "what is my revenue last 30 days"),
+        ("MARKET", "total market sales yesterday"),
+    ],
+    "inventory": [
+        ("UNITS", "my live inventory"),
+    ],
+}
+
+
+def _detect_bare_category(question: str) -> list[tuple[str, str]] | None:
+    """One-word category messages ('stores', 'revenue') → clarify chips."""
+    word = question.strip().strip(" ?!.\"'").lower()
+    return _BARE_CATEGORY_CLARIFY.get(word)
+
+
 def _detect_bare_entity(question: str) -> str | None:
     """Return the entity text when the message is a bare entity name with no
     expressed intent ("31 north", "tea house"), else None. Conservative:
@@ -712,6 +758,17 @@ async def run_chat(input: ChatInput) -> ChatResult:
     # question word). Sending it to the LLM produces garbage: the 3B model
     # either guesses a column or parrots the previous answer from session
     # history. Ask the user what they want instead — deterministic, no LLM.
+    bare_cat = _detect_bare_category(question)
+    if bare_cat:
+        return _log(
+            ChatResult(
+                kind="clarify",
+                message="What would you like to know?",
+                options=[ClarifyOption(kind=k, value=v) for k, v in bare_cat],
+            ),
+            "bare-category-clarify",
+        )
+
     bare = _detect_bare_entity(question)
     if bare:
         return _log(
