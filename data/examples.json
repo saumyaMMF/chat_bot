@@ -464,11 +464,11 @@
     },
     {
       "question": "how many stores were inactive in past 7 days",
-      "sql": "SELECT COUNT(DISTINCT d.Company_Name) AS inactive_stores FROM rhize_dataset_main d WHERE d.date >= DATE_SUB((SELECT MAX(date) FROM rhize_dataset_main), INTERVAL 7 DAY) AND d.Company_Name NOT IN (SELECT Company_Name FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND Company_Name IS NOT NULL) AND d.Company_Name IS NOT NULL"
+      "sql": "SELECT COUNT(DISTINCT a.Company_Name) AS inactive_stores FROM rhize_dataset_main a WHERE a.Company_Name IS NOT NULL AND a.Company_Name <> '' AND a.Company_Name NOT IN (SELECT Company_Name FROM rhize_dataset_main WHERE date >= DATE_SUB((SELECT MAX(date) FROM rhize_dataset_main), INTERVAL 7 DAY) AND Company_Name IS NOT NULL)"
     },
     {
       "question": "which stores went inactive in the market this week",
-      "sql": "SELECT DISTINCT m.company AS inactive_store FROM chatbot_mv_market_daily m WHERE m.date >= (SELECT MAX(date) FROM chatbot_mv_market_daily) - INTERVAL '7 days' AND m.company NOT IN (SELECT company FROM chatbot_mv_market_daily WHERE date = (SELECT MAX(date) FROM chatbot_mv_market_daily) AND company IS NOT NULL) AND m.company IS NOT NULL ORDER BY inactive_store"
+      "sql": "SELECT DISTINCT m.company AS inactive_store FROM chatbot_mv_market_daily m WHERE m.company IS NOT NULL AND m.company <> '' AND m.company NOT IN (SELECT company FROM chatbot_mv_market_daily WHERE date >= (SELECT MAX(date) FROM chatbot_mv_market_daily) - INTERVAL '7 days' AND company IS NOT NULL) ORDER BY inactive_store"
     }
   ]
 }
