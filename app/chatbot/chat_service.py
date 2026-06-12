@@ -164,6 +164,68 @@ def _engine_of_table(table: str) -> str:
 _ISOLATION_COLS = frozenset({"tenantid", "tenant_id", "state"})
 
 
+# "in feb 2026" must mean February only. The model writes the open range
+# `date >= '2026-02-01'` (no upper bound) → sums month-through-today.
+_MONTH_WORD_RX = re.compile(
+    r"\b(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|"
+    r"jul(?:y)?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|"
+    r"dec(?:ember)?)\b",
+    re.I,
+)
+_OPEN_MONTH_START_RX = re.compile(
+    r"date\s*>=\s*'(\d{4})-(\d{2})-01'", re.I,
+)
+
+
+def bound_open_month_range(question: str, sql: str) -> str:
+    """If the question names a calendar month and the SQL opens a range at
+    a month start without closing it, AND on the next-month upper bound."""
+    if not _MONTH_WORD_RX.search(question):
+        return sql
+    m = _OPEN_MONTH_START_RX.search(sql)
+    if not m:
+        return sql
+    # Already has an upper bound on date? Leave it alone.
+    if re.search(r"date\s*<", sql, re.I):
+        return sql
+    year, month = int(m.group(1)), int(m.group(2))
+    ny, nm = (year + 1, 1) if month == 12 else (year, month + 1)
+    upper = f"date < '{ny:04d}-{nm:02d}-01'"
+    start, end = m.span()
+    return f"{sql[:end]} AND {upper}{sql[end:]}"
+
+
+def fix_pg_dialect_slips(sql: str) -> str:
+    """Two recurring 3B-model Postgres slips, rewritten deterministically:
+
+    1. MySQL interval syntax: ``INTERVAL 7 DAYS`` / ``INTERVAL 7 DAY`` →
+       ``INTERVAL '7 days'`` (PG requires the quoted form).
+    2. complete_market_scrapper_dataset.date is TEXT; comparing it to a
+       date value (CURRENT_DATE, date arithmetic) raises
+       ``operator does not exist: text = date``. Wrap bare ``date``
+       comparisons against date-typed expressions in a cast.
+    """
+    out = re.sub(
+        r"INTERVAL\s+'?(\d+)'?\s+DAYS?\b(?!')", r"INTERVAL '\1 days'", sql,
+        flags=re.I)
+    # MySQL functions that don't exist in PG.
+    out = re.sub(r"\bCURDATE\(\)", "CURRENT_DATE", out, flags=re.I)
+    out = re.sub(
+        r"\bDATE_SUB\(\s*([^,()]+|\([^)]*\))\s*,\s*(INTERVAL\s+'[^']+')\s*\)",
+        r"(\1 - \2)", out, flags=re.I)
+    # MV revenue/quantity are numeric — the dirty-text REGEXP_REPLACE+CAST
+    # pattern belongs to MySQL's TEXT columns and errors on PG numerics.
+    out = re.sub(
+        r"CAST\(\s*REGEXP_REPLACE\(\s*(revenue|quantity)\s*,[^)]*\)\s*AS\s*"
+        r"(?:DECIMAL|NUMERIC)[^)]*\)\s*\)?",
+        r"\1", out, flags=re.I)
+    # date <op> CURRENT_DATE[ - INTERVAL ...] → CAST(date AS date) <op> ...
+    out = re.sub(
+        r"(?<![\w.])date(\s*(?:=|>=|<=|<|>)\s*)(CURRENT_DATE|NOW\(\))",
+        r"CAST(date AS date)\1\2", out, flags=re.I)
+    return out
+
+
 def strip_isolation_filters(sql: str) -> str:
     """Remove `tenantid=N`, `tenant_id=N`, `state='X'` predicates from WHERE.
     The prompt forbids them; Gate B (RLS / AST-injected predicate) is the
@@ -432,7 +494,9 @@ _INTENT_WORDS_RX = re.compile(
     r"revenue|sales?|sold|sell|price|prices|pricing|cost|costs|unit|units|"
     r"stock|quantity|qty|inventory|product|products|brand|brands|store|stores|"
     r"company|companies|categor\w*|order|orders|carry|carrying|have|has|had|"
-    r"doing|performance|performing|vs|versus|against)\b",
+    r"doing|performance|performing|vs|versus|against|"
+    r"sku|skus|market|added|removed|launched|new|sold|selling|"
+    r"today|yesterday|week|month|year|date|dates|when|change|changes)\b",
     re.I,
 )
 
@@ -770,6 +834,45 @@ async def run_chat(input: ChatInput) -> ChatResult:
     # question word). Sending it to the LLM produces garbage: the 3B model
     # either guesses a column or parrots the previous answer from session
     # history. Ask the user what they want instead — deterministic, no LLM.
+    # Inactive-stores deterministic fast-path. The 3B model reliably writes
+    # `date < cutoff` (has-old-data) instead of the anti-join the business
+    # definition requires (NO data within the window). Recurring eval
+    # failure across rounds — template it.
+    m_inact = re.search(
+        r"\bstores?\b.{0,40}\binactive\b.{0,40}?(?:past|last)\s+(\d{1,3})\s+days?"
+        r"|\binactive\b.{0,40}\bstores?\b.{0,40}?(?:past|last)\s+(\d{1,3})\s+days?",
+        question, re.I)
+    if m_inact and re.search(r"\bhow many|count|number\b", question, re.I):
+        n_days = int(m_inact.group(1) or m_inact.group(2) or 7)
+        n_days = max(1, min(n_days, 365))
+        # Single scan + GROUP BY: a store is inactive when its most recent
+        # row is older than the window. The NOT IN anti-join formulation
+        # scanned the table twice and blew the statement timeout.
+        inact_sql = (
+            "SELECT COUNT(*) AS inactive_stores FROM ("
+            "SELECT Company_Name, MAX(date) AS last_seen "
+            "FROM rhize_dataset_main "
+            "WHERE Company_Name IS NOT NULL AND Company_Name <> '' "
+            "GROUP BY Company_Name) t "
+            "WHERE t.last_seen < DATE_SUB("
+            f"(SELECT MAX(date) FROM rhize_dataset_main), INTERVAL {n_days} DAY)"
+        )
+        try:
+            verdict = validate_mysql_sql(inact_sql, input.tenant_id)
+            if verdict.ok:
+                final_sql = enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
+                log.info("[chat] inactive-stores fast-path: window=%sd", n_days)
+                res = await run_readonly_mysql(
+                    final_sql, RunMysqlContext(timeout_ms=settings.statement_timeout_ms))
+                clean = _drop_blank_dimension_rows(res.rows)
+                ans = format_answer(input.question, final_sql, clean)
+                return _log(
+                    ChatResult(kind="chat", message=ans, sql=final_sql,
+                               rows=clean, row_count=len(clean)),
+                    "inactive-stores", engine="mysql", sql_final=final_sql)
+        except Exception as exc:
+            log.warning("[chat] inactive-stores fast-path failed, falling through: %s", exc)
+
     bare_cat = _detect_bare_category(question)
     if bare_cat:
         return _log(
@@ -1311,8 +1414,10 @@ async def run_chat(input: ChatInput) -> ChatResult:
         # forbids them; Gate B is the real boundary. Avoids burning a retry
         # on guard rejection when the model writes them anyway.
         sql = strip_isolation_filters(sql)
+        sql = bound_open_month_range(input.question, sql)
 
         if route.engine == "pg":
+            sql = fix_pg_dialect_slips(sql)
             verdict = validate_sql(sql)
             if not verdict.ok:
                 last_sql = sql
@@ -1320,8 +1425,12 @@ async def run_chat(input: ChatInput) -> ChatResult:
                 messages.append(ChatMessage(role="assistant", content=sql))
                 messages.append(build_retry_message(sql, f"Rejected by safety check: {verdict.reason}"))
                 continue
-            final_sql = rewrite_eq_to_ilike_on_text_cols(
-                enforce_limit(verdict.sql, max_rows=settings.default_row_limit)
+            # Re-apply AFTER the validator: Gate C re-renders through sqlglot,
+            # which converts INTERVAL '7 days' back into INTERVAL '7' DAYS.
+            final_sql = fix_pg_dialect_slips(
+                rewrite_eq_to_ilike_on_text_cols(
+                    enforce_limit(verdict.sql, max_rows=settings.default_row_limit)
+                )
             )
         else:
             verdict = validate_mysql_sql(sql, input.tenant_id)

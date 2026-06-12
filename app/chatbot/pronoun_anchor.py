@@ -68,7 +68,14 @@ _NEW_ENTITY_RX = re.compile(
 _SEMANTIC_BAIL_RX = re.compile(
     r"\b(inactive|active|removed|dropped|gone|missing|new|changed|added|"
     r"since|before|after|between|growth|grew|declin\w*|compar\w*|trend\w*)\b"
-    r"|\b(past|last|previous|next)\s+\d*\s*(day|days|week|weeks|month|months|year|years)\b",
+    r"|\b(past|last|previous|next)\s+\d*\s*(day|days|week|weeks|month|months|year|years)\b"
+    # Explicit calendar references — month names, 4-digit years, ISO dates.
+    # Anchor templates reuse the prior WHERE verbatim; they cannot re-window
+    # to "feb 2026", so these must go to the LLM.
+    r"|\b(jan(uary)?|feb(ruary)?|mar(ch)?|apr(il)?|may|jun(e)?|jul(y)?|"
+    r"aug(ust)?|sep(tember)?|oct(ober)?|nov(ember)?|dec(ember)?)\b"
+    r"|\b(19|20)\d{2}\b"
+    r"|\b\d{4}-\d{2}(-\d{2})?\b",
     re.I,
 )
 

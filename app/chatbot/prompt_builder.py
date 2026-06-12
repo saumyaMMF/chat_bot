@@ -24,6 +24,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -654,6 +655,18 @@ async def build_messages(
     # any other example.
     if history:
         recent = list(history)[-5:]
+        # Drop turns that are the CURRENT question re-asked with different
+        # numbers ("...past 30 days" vs "...past 300 days"). The 3B model
+        # weights an in-history Q→SQL pair above retrieved examples, so a
+        # stale precedent gets parroted with the old window. Removing it
+        # lets the freshly retrieved example win.
+        def _norm(s: str) -> str:
+            return re.sub(r"\s+", " ", re.sub(r"[\d,.!?'\"]+", " ", s.lower())).strip()
+        cur_norm = _norm(question)
+        recent = [
+            t for t in recent
+            if _norm(getattr(t, "question", "") or "") != cur_norm
+        ]
         if recent:
             messages.append(ChatMessage(
                 role="user",

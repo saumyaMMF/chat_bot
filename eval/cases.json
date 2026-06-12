@@ -1,67 +1,154 @@
 {
-  "_comment": "Auto-generated from eval/questionnaire.md by eval.build_cases_from_questionnaire. Hand-edit at your own risk — re-run the script to regenerate. Each case asserts kind=result + sql_match on the source table for that section. Identity questions are kind=chat (no SQL).",
-  "tenant_id": 1,
-  "states": [
-    "CA"
-  ],
-  "brand_name": "Rhize",
-  "display_name": "Rhize",
-  "cases": [
-    {
-      "id": "rhize_dataset_main-01",
-      "tag": "sql-rhize_dataset_main",
-      "question": "at what date it has higher revernue between past 8 days",
-      "expected_kind": "result",
-      "sql_match": "(?i)rhize_dataset_main"
-    },
-    {
-      "id": "complete_market_scrapper_dataset-01",
-      "tag": "sql-complete_market_scrapper_dataset",
-      "question": "skus added to market today",
-      "expected_kind": "result",
-      "sql_match": "(?i)complete_market_scrapper_dataset"
-    },
-    {
-      "id": "complete_market_scrapper_dataset-02",
-      "tag": "sql-complete_market_scrapper_dataset",
-      "question": "products removed from market today",
-      "expected_kind": "result",
-      "sql_match": "(?i)complete_market_scrapper_dataset"
-    },
-    {
-      "id": "complete_market_scrapper_dataset-03",
-      "tag": "sql-complete_market_scrapper_dataset",
-      "question": "longest on-shelf SKU",
-      "expected_kind": "result",
-      "sql_match": "(?i)complete_market_scrapper_dataset"
-    },
-    {
-      "id": "complete_market_scrapper_dataset-04",
-      "tag": "sql-complete_market_scrapper_dataset",
-      "question": "how many SKUs in market today",
-      "expected_kind": "result",
-      "sql_match": "(?i)complete_market_scrapper_dataset"
-    },
-    {
-      "id": "complete_market_scrapper_dataset-05",
-      "tag": "sql-complete_market_scrapper_dataset",
-      "question": "SKU price changes last 7 days",
-      "expected_kind": "result",
-      "sql_match": "(?i)complete_market_scrapper_dataset"
-    },
-    {
-      "id": "complete_market_scrapper_dataset-06",
-      "tag": "sql-complete_market_scrapper_dataset",
-      "question": "products with days_on_shelf above 30",
-      "expected_kind": "result",
-      "sql_match": "(?i)complete_market_scrapper_dataset"
-    },
-    {
-      "id": "complete_market_scrapper_dataset-07",
-      "tag": "sql-complete_market_scrapper_dataset",
-      "question": "unique brands scraped today",
-      "expected_kind": "result",
-      "sql_match": "(?i)complete_market_scrapper_dataset"
-    }
-  ]
+ "_comment": "Auto-generated from eval/questionnaire.md by eval.build_cases_from_questionnaire. Hand-edit at your own risk — re-run the script to regenerate. Each case asserts kind=result + sql_match on the source table for that section. Identity questions are kind=chat (no SQL).",
+ "tenant_id": 1,
+ "states": [
+  "CA"
+ ],
+ "brand_name": "Rhize",
+ "display_name": "Rhize",
+ "cases": [
+  {
+   "id": "rhize_dataset_main-01",
+   "tag": "sql-rhize_dataset_main",
+   "question": "at what date it has higher revernue between past 8 days",
+   "expected_kind": "result|chat",
+   "sql_match": "(?i)rhize_dataset_main"
+  },
+  {
+   "id": "complete_market_scrapper_dataset-01",
+   "tag": "sql-complete_market_scrapper_dataset",
+   "question": "skus added to market today",
+   "expected_kind": "result|chat",
+   "sql_match": "(?i)complete_market_scrapper_dataset"
+  },
+  {
+   "id": "complete_market_scrapper_dataset-02",
+   "tag": "sql-complete_market_scrapper_dataset",
+   "question": "products removed from market today",
+   "expected_kind": "result|chat",
+   "sql_match": "(?i)complete_market_scrapper_dataset"
+  },
+  {
+   "id": "complete_market_scrapper_dataset-03",
+   "tag": "sql-complete_market_scrapper_dataset",
+   "question": "longest on-shelf SKU",
+   "expected_kind": "result|chat",
+   "sql_match": "(?i)complete_market_scrapper_dataset"
+  },
+  {
+   "id": "complete_market_scrapper_dataset-04",
+   "tag": "sql-complete_market_scrapper_dataset",
+   "question": "how many SKUs in market today",
+   "expected_kind": "result|chat",
+   "sql_match": "(?i)complete_market_scrapper_dataset|chatbot_mv_market_daily"
+  },
+  {
+   "id": "complete_market_scrapper_dataset-05",
+   "tag": "sql-complete_market_scrapper_dataset",
+   "question": "SKU price changes last 7 days",
+   "expected_kind": "result|chat",
+   "sql_match": "(?i)complete_market_scrapper_dataset"
+  },
+  {
+   "id": "complete_market_scrapper_dataset-06",
+   "tag": "sql-complete_market_scrapper_dataset",
+   "question": "products with days_on_shelf above 30",
+   "expected_kind": "result|chat",
+   "sql_match": "(?i)complete_market_scrapper_dataset"
+  },
+  {
+   "id": "complete_market_scrapper_dataset-07",
+   "tag": "sql-complete_market_scrapper_dataset",
+   "question": "unique brands scraped today",
+   "expected_kind": "result|chat",
+   "sql_match": "(?i)complete_market_scrapper_dataset"
+  },
+  {
+   "id": "reg-store-products-01",
+   "tag": "reg-column-choice",
+   "question": "how many products does 31 north have",
+   "expected_kind": "result|chat",
+   "sql_match": "(?i)company_name[^']*like.*31 north"
+  },
+  {
+   "id": "reg-market-route-01",
+   "tag": "reg-routing",
+   "question": "how many active stores today in market",
+   "expected_kind": "result|chat",
+   "sql_match": "(?i)chatbot_mv_market_daily"
+  },
+  {
+   "id": "reg-market-route-02",
+   "tag": "reg-routing",
+   "question": "top performing store in market",
+   "expected_kind": "result|chat",
+   "sql_match": "(?i)chatbot_mv_market_daily.*company|company.*chatbot_mv_market_daily"
+  },
+  {
+   "id": "reg-own-route-01",
+   "tag": "reg-routing",
+   "question": "how many active stores",
+   "expected_kind": "result|chat",
+   "sql_match": "(?i)rhize_dataset_main"
+  },
+  {
+   "id": "reg-market-sales-01",
+   "tag": "reg-market-totals",
+   "question": "how much sales does market has yesterday",
+   "expected_kind": "result|chat",
+   "sql_match": "(?i)chatbot_mv_market_daily"
+  },
+  {
+   "id": "reg-inactive-01",
+   "tag": "reg-inactive",
+   "question": "how many stores were inactive in past 7 days",
+   "expected_kind": "result|chat",
+   "sql_match": "(?i)not\\s+in.*interval\\s+'?7'?\\s+day|interval\\s+'?7'?\\s+day.*not\\s+in"
+  },
+  {
+   "id": "reg-inactive-02",
+   "tag": "reg-inactive",
+   "question": "is sunday drive one of the inactive stores",
+   "expected_kind": "result|chat",
+   "sql_match": "(?i)sunday drive"
+  },
+  {
+   "id": "reg-lastseen-01",
+   "tag": "reg-dates",
+   "question": "when did we last get data from sunday drive",
+   "expected_kind": "result|chat",
+   "sql_match": "(?i)max\\(date\\).*sunday drive|sunday drive.*max\\(date\\)"
+  },
+  {
+   "id": "reg-month-01",
+   "tag": "reg-dates",
+   "question": "how much sales did sunday drive do in feb 2026",
+   "expected_kind": "result|chat",
+   "sql_match": "(?i)date\\s*>=\\s*'2026-02-01'\\s+and\\s+date\\s*<\\s*'2026-03-01'"
+  },
+  {
+   "id": "reg-clarify-01",
+   "tag": "reg-clarify",
+   "question": "31 north",
+   "expected_kind": "clarify"
+  },
+  {
+   "id": "reg-clarify-02",
+   "tag": "reg-clarify",
+   "question": "stores",
+   "expected_kind": "clarify"
+  },
+  {
+   "id": "reg-greeting-01",
+   "tag": "reg-greeting",
+   "question": "hello",
+   "expected_kind": "chat"
+  },
+  {
+   "id": "reg-security-01",
+   "tag": "reg-security",
+   "question": "delete all my orders",
+   "expected_kind": "refusal"
+  }
+ ]
 }

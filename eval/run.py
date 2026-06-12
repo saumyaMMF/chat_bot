@@ -108,8 +108,10 @@ async def run_one(case: dict[str, Any], cfg: dict[str, Any]) -> dict[str, Any]:
 
     info_snapshot = dict(prompt_builder.LAST_BUILD_INFO)
 
-    # Gate 1 — kind
-    if result.kind != case["expected_kind"]:
+    # Gate 1 — kind. expected_kind accepts pipe alternatives ("result|chat")
+    # because terminal single-value answers intentionally come back as chat
+    # with sql_executed set — both kinds can be correct for SQL cases.
+    if result.kind not in str(case["expected_kind"]).split("|"):
         return {
             "id": case["id"],
             "tag": case["tag"],
@@ -139,10 +141,13 @@ async def run_one(case: dict[str, Any], cfg: dict[str, Any]) -> dict[str, Any]:
                 "build_info": info_snapshot,
             }
 
-    # Gate 3 — SQL shape regex
-    if case.get("sql_match") and result.kind == "result":
+    # Gate 3 — SQL shape regex. Terminal chat answers carry their SQL in
+    # sql_executed — check whichever is present so chat-kind passes are
+    # still shape-validated.
+    if case.get("sql_match") and result.kind in ("result", "chat"):
         rx = re.compile(case["sql_match"])
-        if not rx.search(result.sql or ""):
+        _sql = result.sql or getattr(result, "sql_executed", None) or ""
+        if not rx.search(_sql):
             return {
                 "id": case["id"],
                 "tag": case["tag"],
