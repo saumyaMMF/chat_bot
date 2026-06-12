@@ -45,6 +45,8 @@ def _prompt_hash(question: str, body: str) -> str:
 
 
 def _expected_kind(ex: dict) -> str:
+    if (ex.get("sql") or "").lstrip().upper().startswith("CLARIFY:"):
+        return "clarify"
     if ex.get("sql"):
         return "result"
     if ex.get("refusal"):

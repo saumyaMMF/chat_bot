@@ -149,6 +149,71 @@ def _redact_sql_literals(sql: str) -> str:
     return _SQL_LITERAL_RX.sub("'?'", sql)
 
 
+def _engine_of_table(table: str) -> str:
+    """Tag a table name with its engine. rhize_* lives on MySQL; everything
+    else (chatbot_*, complete_market_*, market_*) lives on Postgres. Loose
+    by design — the routing pack is the authoritative source elsewhere; this
+    helper is only used to filter retry hints so the model is not pushed into
+    the route that just got rejected."""
+    t = (table or "").lower()
+    if t.startswith("rhize_"):
+        return "mysql"
+    return "pg"
+
+
+_ISOLATION_COLS = frozenset({"tenantid", "tenant_id", "state"})
+
+
+def strip_isolation_filters(sql: str) -> str:
+    """Remove `tenantid=N`, `tenant_id=N`, `state='X'` predicates from WHERE.
+    The prompt forbids them; Gate B (RLS / AST-injected predicate) is the
+    real boundary. 3B models still write them, which used to burn a retry
+    on guard rejection. Stripping is safer than rejection: the predicate
+    would have been redundant with isolation anyway.
+    """
+    if not sql:
+        return sql
+    try:
+        from sqlglot import exp, parse_one
+        tree = parse_one(sql)
+    except Exception:
+        return sql
+
+    def _is_isolation_eq(node) -> bool:  # type: ignore[no-untyped-def]
+        if not isinstance(node, exp.EQ):
+            return False
+        left = node.this
+        if not isinstance(left, exp.Column):
+            return False
+        return (left.name or "").lower() in _ISOLATION_COLS
+
+    def _transform(node):  # type: ignore[no-untyped-def]
+        if not isinstance(node, exp.Where):
+            return node
+        cond = node.this
+        # WHERE may be a single EQ or a tree of AND/ORs. Recursively drop EQs
+        # that match isolation cols. If everything drops, remove WHERE entirely.
+        def _prune(n):  # type: ignore[no-untyped-def]
+            if isinstance(n, exp.And):
+                left = _prune(n.this)
+                right = _prune(n.expression)
+                if left is None:
+                    return right
+                if right is None:
+                    return left
+                return exp.And(this=left, expression=right)
+            if _is_isolation_eq(n):
+                return None
+            return n
+        pruned = _prune(cond)
+        if pruned is None:
+            return None  # drop WHERE entirely
+        return exp.Where(this=pruned)
+
+    transformed = tree.transform(_transform)
+    return transformed.sql()
+
+
 _SQL_FENCE_RX = re.compile(r"```(?:sql)?\s*([\s\S]*?)```", re.I)
 _CHAT_PREFIX_RX = re.compile(r"^CHAT:\s*([\s\S]*)", re.I)
 _REFUSE_PREFIX_RX = re.compile(r"REFUSE:\s*([\s\S]*)", re.I)
@@ -353,6 +418,43 @@ _ENTITY_STOPWORDS = frozenset({
     "which", "what", "who", "where", "when", "how", "why",
     "is", "are", "was", "were", "be", "been", "has", "have", "had",
 })
+
+
+# Intent markers: any of these in the message means the user expressed WHAT
+# they want, so the bare-entity clarify gate must not fire. Includes question
+# words, metric nouns, verbs, and table-ish nouns. Kept deliberately broad —
+# a false negative here just means one clarify prompt too few, while a false
+# positive would block a legitimate question behind a clarify.
+_INTENT_WORDS_RX = re.compile(
+    r"\b(how|what|which|who|whose|when|where|why|do|does|did|is|are|was|were|"
+    r"can|could|should|would|will|count|many|much|top|best|worst|show|list|"
+    r"give|get|find|search|compare|total|sum|average|avg|min|max|trend|share|"
+    r"revenue|sales?|sold|sell|price|prices|pricing|cost|costs|unit|units|"
+    r"stock|quantity|qty|inventory|product|products|brand|brands|store|stores|"
+    r"company|companies|categor\w*|order|orders|carry|carrying|have|has|had|"
+    r"doing|performance|performing|vs|versus|against)\b",
+    re.I,
+)
+
+
+def _detect_bare_entity(question: str) -> str | None:
+    """Return the entity text when the message is a bare entity name with no
+    expressed intent ("31 north", "tea house"), else None. Conservative:
+    short messages only, no intent word, no digits-only strings."""
+    text = question.strip().strip(" ?!.\"'")
+    if not text:
+        return None
+    words = re.findall(r"[A-Za-z0-9']+", text)
+    if not words or len(words) > 5:
+        return None
+    if _INTENT_WORDS_RX.search(text):
+        return None
+    # All-numeric ("420") or single stopword — nothing to clarify about.
+    if all(w.isdigit() for w in words):
+        return None
+    if len(words) == 1 and words[0].lower() in _ENTITY_STOPWORDS:
+        return None
+    return text
 
 
 @dataclass
@@ -605,6 +707,27 @@ async def run_chat(input: ChatInput) -> ChatResult:
     if identity:
         return _log(ChatResult(kind="chat", message=identity), "identity")
 
+    # Bare-entity clarify gate. A message like "31 north" or "tea house"
+    # names an entity but carries no intent (no verb, no metric, no
+    # question word). Sending it to the LLM produces garbage: the 3B model
+    # either guesses a column or parrots the previous answer from session
+    # history. Ask the user what they want instead — deterministic, no LLM.
+    bare = _detect_bare_entity(question)
+    if bare:
+        return _log(
+            ChatResult(
+                kind="clarify",
+                message=f'What would you like to know about "{bare}"?',
+                options=[
+                    ClarifyOption(kind="PRODUCTS", value=f"how many products does {bare} have"),
+                    ClarifyOption(kind="UNITS", value=f"live units of {bare}"),
+                    ClarifyOption(kind="STORES", value=f"how many companies have {bare}"),
+                    ClarifyOption(kind="MARKET", value=f"how is {bare} doing in the market"),
+                ],
+            ),
+            "bare-entity-clarify",
+        )
+
     # "how many companies have X" / "stores carrying X" — distinct companies
     # on latest date with on-shelf qty for entity X. Same routing logic as
     # qty-of-entity but COUNT(DISTINCT Company_Name) instead of group-by.
@@ -645,9 +768,9 @@ async def run_chat(input: ChatInput) -> ChatResult:
                         ChatResult(
                             kind="chat" if terminal else "result",
                             message=ans,
-                            sql=None if terminal else final_sql,
-                            rows=[] if terminal else clean,
-                            row_count=0 if terminal else len(clean),
+                            sql=final_sql,
+                            rows=clean,
+                            row_count=len(clean),
                         ),
                         "companies-with-entity",
                         engine="mysql",
@@ -698,9 +821,9 @@ async def run_chat(input: ChatInput) -> ChatResult:
                         ChatResult(
                             kind="chat" if terminal else "result",
                             message=ans,
-                            sql=None if terminal else final_sql,
-                            rows=[] if terminal else clean,
-                            row_count=0 if terminal else len(clean),
+                            sql=final_sql,
+                            rows=clean,
+                            row_count=len(clean),
                         ),
                         "qty-of-entity",
                         engine="mysql",
@@ -760,9 +883,9 @@ async def run_chat(input: ChatInput) -> ChatResult:
                     ChatResult(
                         kind="chat" if terminal else "result",
                         message=ans,
-                        sql=None if terminal else final_sql,
-                        rows=[] if terminal else clean,
-                        row_count=0 if terminal else len(clean),
+                        sql=final_sql,
+                        rows=clean,
+                        row_count=len(clean),
                     ),
                     "unit-of-entity",
                     engine="mysql",
@@ -815,9 +938,9 @@ async def run_chat(input: ChatInput) -> ChatResult:
                 ChatResult(
                     kind="chat" if terminal else "result",
                     message=ans,
-                    sql=None if terminal else final_sql,
-                    rows=[] if terminal else clean,
-                    row_count=0 if terminal else len(clean),
+                    sql=final_sql,
+                    rows=clean,
+                    row_count=len(clean),
                 ),
                 "pronoun-anchor",
                 engine=engine,
@@ -859,9 +982,9 @@ async def run_chat(input: ChatInput) -> ChatResult:
                     ChatResult(
                         kind="chat" if terminal else "result",
                         message=ans,
-                        sql=None if terminal else final_sql,
-                        rows=[] if terminal else clean,
-                        row_count=0 if terminal else len(clean),
+                        sql=final_sql,
+                        rows=clean,
+                        row_count=len(clean),
                     ),
                     "disambig",
                     engine="pg",
@@ -970,9 +1093,9 @@ async def run_chat(input: ChatInput) -> ChatResult:
                     ChatResult(
                         kind="chat" if terminal else "result",
                         message=ans,
-                        sql=None if terminal else final_sql,
-                        rows=[] if terminal else clean,
-                        row_count=0 if terminal else len(clean),
+                        sql=final_sql,
+                        rows=clean,
+                        row_count=len(clean),
                     ),
                     f"cache:{hit.id}",
                     engine=engine,
@@ -1078,6 +1201,11 @@ async def run_chat(input: ChatInput) -> ChatResult:
             messages.append(build_retry_message(sql, last_error))
             continue
 
+        # Strip tenant/state isolation predicates before validation. Prompt
+        # forbids them; Gate B is the real boundary. Avoids burning a retry
+        # on guard rejection when the model writes them anyway.
+        sql = strip_isolation_filters(sql)
+
         if route.engine == "pg":
             verdict = validate_sql(sql)
             if not verdict.ok:
@@ -1125,19 +1253,38 @@ async def run_chat(input: ChatInput) -> ChatResult:
                         tables_in_play.add(name)
             except Exception:
                 pass
+            # Engine-aware hint filter: drop suggestions that point to the
+            # OTHER engine's tables. Pushing a MySQL-routed retry toward a
+            # Postgres column (or vice-versa) deadlocks the model — the
+            # route guard already rejected that direction once. Keep only
+            # hints on the SAME engine as `route.engine`. Also drop the
+            # cross-engine columns from `col_check.reason`.
+            same_engine_suggestions: dict[str, list[str]] = {}
             for bad, hints in (col_check.suggestions or {}).items():
-                for h in hints:
+                kept = [h for h in hints if _engine_of_table(h.split(".", 1)[0]) == route.engine]
+                same_engine_suggestions[bad] = kept
+                for h in kept:
                     tables_in_play.add(h.split(".", 1)[0])
             schema_hint_lines: list[str] = []
             for t in sorted(tables_in_play):
                 cols = real_columns_for(t)
                 if cols:
                     schema_hint_lines.append(f"{t}: {', '.join(cols)}")
-            schema_hint = ("\nReal columns:\n" + "\n".join(schema_hint_lines)) if schema_hint_lines else ""
+            schema_hint = ("\nReal columns on this engine:\n" + "\n".join(schema_hint_lines)) if schema_hint_lines else ""
+            # Rebuild reason from filtered suggestions so the model isn't told
+            # "try chatbot_mv_market_daily.brand" after PG was already rejected.
+            reason_lines = []
+            for c in sorted(same_engine_suggestions.keys()):
+                hints = same_engine_suggestions[c]
+                if hints:
+                    reason_lines.append(f"`{c}` does not exist on the in-scope tables (try: {', '.join(hints)})")
+                else:
+                    reason_lines.append(f"`{c}` does not exist on any same-engine table — pick a different column from the schema list below")
+            engine_reason = "Unknown column(s): " + "; ".join(reason_lines) if reason_lines else col_check.reason
             messages.append(ChatMessage(role="assistant", content=final_sql))
             messages.append(build_retry_message(
                 final_sql,
-                f"{col_check.reason}{schema_hint}",
+                f"{engine_reason}{schema_hint}",
             ))
             continue
 
@@ -1195,9 +1342,9 @@ async def run_chat(input: ChatInput) -> ChatResult:
             ChatResult(
                 kind="chat" if terminal else "result",
                 message=ans,
-                sql=None if terminal else final_sql,
-                rows=[] if terminal else clean,
-                row_count=0 if terminal else len(clean),
+                sql=final_sql,
+                rows=clean,
+                row_count=len(clean),
             ),
             "none",
             engine=route.engine,

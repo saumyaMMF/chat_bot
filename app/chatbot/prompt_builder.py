@@ -659,24 +659,24 @@ async def build_messages(
                 role="user",
                 content="### Recent conversation (for context — resolve pronouns like 'it', 'them', 'that' against the named entities below):",
             ))
-            redact_rows = settings.redact_pii
             for turn in recent:
                 q = getattr(turn, "question", None) or ""
-                ans = getattr(turn, "answer", None) or ""
                 sql = getattr(turn, "sql", None) or ""
                 if not q.strip():
                     continue
                 messages.append(ChatMessage(role="user", content=q.strip()))
-                # Redact mode: SQL is safe to ship (no row data — only the
-                # query the model itself wrote). The NL `answer` is rendered
-                # from executed rows and may carry customer/brand text — drop
-                # it. Keep a stub so the assistant turn still exists for
-                # pronoun anchoring.
+                # SQL is safe to ship (no row data — only the query the model
+                # itself wrote).
                 if sql:
                     messages.append(ChatMessage(role="assistant", content=sql.strip()))
-                elif ans:
-                    msg = "(prior result)" if redact_rows else ans.strip()
-                    messages.append(ChatMessage(role="assistant", content=msg))
+                else:
+                    # NL answers ("Product count: 0") are NEVER injected: the
+                    # history block mirrors the few-shot format, so a 3B model
+                    # treats a prose answer as the expected output shape and
+                    # parrots it verbatim for unrelated questions. A neutral
+                    # stub keeps the turn pair intact for pronoun anchoring
+                    # without giving the model prose to copy.
+                    messages.append(ChatMessage(role="assistant", content="(answered)"))
 
     messages.append(ChatMessage(role="user", content=question))
     return messages

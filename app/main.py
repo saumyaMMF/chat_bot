@@ -183,9 +183,24 @@ def _sanitize_history_text(value: str, *, field: str, max_len: int) -> str:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Self-warmup on boot: same work as POST /warmup (embed model, snapshot
+    # loads, LLM prime) but without waiting for a login to trigger it. Runs
+    # as a background task so the server accepts requests immediately;
+    # first question after a restart no longer pays the ~22s cold tax.
+    warm_task = asyncio.create_task(_boot_warmup())
     yield
+    warm_task.cancel()
     await close_pool()
     await close_pool_mysql()
+
+
+async def _boot_warmup() -> None:
+    try:
+        result = await warmup()
+        logging.getLogger("warmup").info(
+            "[warmup] boot warmup done: %s", result)
+    except Exception as exc:  # never crash boot over a warmup failure
+        logging.getLogger("warmup").warning("[warmup] boot warmup failed: %s", exc)
 
 
 # In-house sliding-window rate limiter — no deps, single-process. Keyed by

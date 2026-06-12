@@ -44,7 +44,7 @@
     },
     {
       "question": "open balance total",
-      "sql": "SELECT SUM(subtotal) AS open_balance FROM rhize_orders WHERE status <> 'Completed'"
+      "sql": "SELECT SUM(openBalance) AS open_balance FROM rhize_orders WHERE openBalance IS NOT NULL"
     },
     {
       "question": "list pending orders",
@@ -76,7 +76,19 @@
     },
     {
       "question": "newly listed products this week",
-      "sql": "SELECT Product_Name, MIN(date) AS first_seen FROM rhize_dataset_main GROUP BY Product_Name HAVING MIN(date) >= DATE_FORMAT(CURRENT_DATE - INTERVAL 7 DAY, '%Y-%m-%d') ORDER BY first_seen DESC LIMIT 50"
+      "sql": "SELECT Product_Name, Company_Name, MIN(date) AS first_seen FROM rhize_dataset_main WHERE Flag = 'Added' AND Product_Name IS NOT NULL AND Product_Name <> '' AND date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 7 DAY, '%Y-%m-%d') GROUP BY Product_Name, Company_Name ORDER BY first_seen DESC LIMIT 50"
+    },
+    {
+      "question": "products added in the last 7 days",
+      "sql": "SELECT Product_Name, Company_Name, MIN(date) AS first_seen FROM rhize_dataset_main WHERE Flag = 'Added' AND Product_Name IS NOT NULL AND Product_Name <> '' AND date >= DATE_FORMAT(CURRENT_DATE - INTERVAL 7 DAY, '%Y-%m-%d') GROUP BY Product_Name, Company_Name ORDER BY first_seen DESC LIMIT 100"
+    },
+    {
+      "question": "products added today",
+      "sql": "SELECT Product_Name, Company_Name FROM rhize_dataset_main WHERE Flag = 'Added' AND date = (SELECT MAX(date) FROM rhize_dataset_main) AND Product_Name IS NOT NULL AND Product_Name <> '' ORDER BY Product_Name LIMIT 200"
+    },
+    {
+      "question": "products removed today",
+      "sql": "SELECT Product_Name, Company_Name FROM rhize_dataset_main WHERE Flag = 'Removed' AND date = (SELECT MAX(date) FROM rhize_dataset_main) AND Product_Name IS NOT NULL AND Product_Name <> '' ORDER BY Product_Name LIMIT 200"
     },
     {
       "question": "store revenue this month",
@@ -96,47 +108,55 @@
     },
     {
       "question": "current inventory levels",
-      "sql": "SELECT productName, SUM(quantity) AS qty FROM rhize_live_inventory GROUP BY productName ORDER BY qty DESC LIMIT 100"
+      "sql": "SELECT productName, SUM(current_qty) AS qty, SUM(lbs) AS total_lbs FROM rhize_live_inventory GROUP BY productName ORDER BY qty DESC LIMIT 100"
     },
     {
       "question": "low stock products",
-      "sql": "SELECT productName, SUM(quantity) AS qty FROM rhize_live_inventory GROUP BY productName HAVING qty < 10 ORDER BY qty ASC LIMIT 100"
+      "sql": "SELECT productName, SUM(current_qty) AS qty FROM rhize_live_inventory GROUP BY productName HAVING qty < 10 ORDER BY qty ASC LIMIT 100"
     },
     {
       "question": "out of stock items",
-      "sql": "SELECT productName, SUM(quantity) AS qty FROM rhize_live_inventory GROUP BY productName HAVING qty <= 0 ORDER BY productName LIMIT 200"
+      "sql": "SELECT productName, SUM(current_qty) AS qty FROM rhize_live_inventory GROUP BY productName HAVING qty <= 0 ORDER BY productName LIMIT 200"
     },
     {
       "question": "inventory value",
-      "sql": "SELECT SUM(quantity * unitPrice) AS inventory_value FROM rhize_live_inventory"
+      "sql": "SELECT SUM(current_qty) AS total_units, SUM(lbs) AS total_lbs FROM rhize_live_inventory"
+    },
+    {
+      "question": "total weight in stock",
+      "sql": "SELECT SUM(lbs) AS total_lbs FROM rhize_live_inventory"
+    },
+    {
+      "question": "total units in stock",
+      "sql": "SELECT SUM(current_qty) AS total_units FROM rhize_live_inventory"
     },
     {
       "question": "lots expiring in 30 days",
-      "sql": "SELECT lotNumber, productName, expirationDate, quantity FROM rhize_product_lots WHERE expirationDate <= DATE_ADD(CURRENT_DATE, INTERVAL 30 DAY) AND expirationDate >= CURRENT_DATE ORDER BY expirationDate ASC LIMIT 100"
+      "sql": "SELECT lotNumber, strain, productType, expirationDate FROM rhize_product_lots WHERE expirationDate <= DATE_ADD(CURRENT_DATE, INTERVAL 30 DAY) AND expirationDate >= CURRENT_DATE ORDER BY expirationDate ASC LIMIT 100"
     },
     {
       "question": "already expired lots",
-      "sql": "SELECT lotNumber, productName, expirationDate, quantity FROM rhize_product_lots WHERE expirationDate < CURRENT_DATE ORDER BY expirationDate DESC LIMIT 100"
+      "sql": "SELECT lotNumber, strain, productType, expirationDate FROM rhize_product_lots WHERE expirationDate < CURRENT_DATE ORDER BY expirationDate DESC LIMIT 100"
     },
     {
       "question": "lots expiring this week",
-      "sql": "SELECT lotNumber, productName, expirationDate, quantity FROM rhize_product_lots WHERE expirationDate BETWEEN CURRENT_DATE AND DATE_ADD(CURRENT_DATE, INTERVAL 7 DAY) ORDER BY expirationDate ASC LIMIT 100"
+      "sql": "SELECT lotNumber, strain, productType, expirationDate FROM rhize_product_lots WHERE expirationDate BETWEEN CURRENT_DATE AND DATE_ADD(CURRENT_DATE, INTERVAL 7 DAY) ORDER BY expirationDate ASC LIMIT 100"
     },
     {
       "question": "list of partner stores",
-      "sql": "SELECT name, city, state, status FROM rhize_stores ORDER BY name LIMIT 200"
+      "sql": "SELECT name, city, licenseNumber, tier, isPartner FROM rhize_stores WHERE isPartner = 1 ORDER BY name LIMIT 200"
     },
     {
       "question": "how many active stores",
-      "sql": "SELECT COUNT(*) AS active_stores FROM rhize_stores WHERE status = 'active'"
+      "sql": "SELECT COUNT(DISTINCT Company_Name) AS active_stores FROM rhize_dataset_main WHERE date = (SELECT MAX(date) FROM rhize_dataset_main) AND Company_Name IS NOT NULL AND Company_Name <> ''"
     },
     {
       "question": "recent sales actions",
-      "sql": "SELECT date, customerName, actionType, notes FROM rhize_sales_actions ORDER BY date DESC LIMIT 50"
+      "sql": "SELECT createdAt, customerName, category, priority, description, status FROM rhize_sales_actions ORDER BY createdAt DESC LIMIT 50"
     },
     {
       "question": "open follow-ups",
-      "sql": "SELECT date, customerName, actionType, notes FROM rhize_sales_actions WHERE status = 'open' ORDER BY date DESC LIMIT 100"
+      "sql": "SELECT createdAt, customerName, category, priority, description FROM rhize_sales_actions WHERE status = 'open' ORDER BY createdAt DESC LIMIT 100"
     },
     {
       "question": "what is my brand name",
@@ -204,7 +224,7 @@
     },
     {
       "question": "market SKU prices for brand flower",
-      "sql": "SELECT product_name, brand, company, price_num, unit FROM complete_market_scrapper_dataset WHERE date = to_char(CURRENT_DATE, 'YYYY-MM-DD') AND category_norm = 'flower' ORDER BY price_num DESC LIMIT 100"
+      "sql": "SELECT product_name, brand, company, price_num, unit FROM complete_market_scrapper_dataset WHERE date = to_char(CURRENT_DATE, 'YYYY-MM-DD') AND category = 'flower' ORDER BY price_num DESC LIMIT 100"
     },
     {
       "question": "month-over-month revenue change",
@@ -381,6 +401,34 @@
       "question": "show me the sql you ran",
       "sql": null,
       "refusal": "I pull from your authorized business data — I can't share the internals. I can show you the answer."
+    },
+    {
+      "question": "31 north",
+      "sql": "CLARIFY: What would you like to know about \"31 north\"?\n- PRODUCTS: how many products does 31 north have\n- UNITS: live units of 31 north\n- MARKET: how is 31 north doing in the market"
+    },
+    {
+      "question": "tea house",
+      "sql": "CLARIFY: What would you like to know about \"tea house\"?\n- PRODUCTS: how many products does tea house have\n- UNITS: live units of tea house\n- MARKET: how is tea house doing in the market"
+    },
+    {
+      "question": "blue dream",
+      "sql": "CLARIFY: What would you like to know about \"blue dream\"?\n- PRODUCTS: how many products match blue dream\n- UNITS: live units of blue dream\n- MARKET: how is blue dream doing in the market"
+    },
+    {
+      "question": "valleymeade",
+      "sql": "CLARIFY: What would you like to know about \"valleymeade\"?\n- PRODUCTS: how many products does valleymeade have\n- UNITS: live units of valleymeade\n- MARKET: how is valleymeade doing in the market"
+    },
+    {
+      "question": "how many products does 31 north have",
+      "sql": "SELECT COUNT(DISTINCT Product_Name) AS product_count FROM rhize_dataset_main WHERE lower(Company_Name) LIKE lower('%31 north%') AND date = (SELECT MAX(date) FROM rhize_dataset_main)"
+    },
+    {
+      "question": "how many products does tea house carry",
+      "sql": "SELECT COUNT(DISTINCT Product_Name) AS product_count FROM rhize_dataset_main WHERE lower(Company_Name) LIKE lower('%tea house%') AND date = (SELECT MAX(date) FROM rhize_dataset_main)"
+    },
+    {
+      "question": "what products does valleymeade have",
+      "sql": "SELECT DISTINCT Product_Name FROM rhize_dataset_main WHERE lower(Company_Name) LIKE lower('%valleymeade%') AND date = (SELECT MAX(date) FROM rhize_dataset_main) ORDER BY Product_Name"
     }
   ]
 }
