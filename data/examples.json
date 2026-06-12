@@ -441,6 +441,18 @@
     {
       "question": "store with highest revenue in market this month",
       "sql": "SELECT company AS store, SUM(revenue) AS total_revenue FROM chatbot_mv_market_daily WHERE date >= date_trunc('month', (SELECT MAX(date) FROM chatbot_mv_market_daily)) GROUP BY company ORDER BY total_revenue DESC LIMIT 5"
+    },
+    {
+      "question": "how much sales does market has yesterday",
+      "sql": "SELECT SUM(revenue) AS total_revenue FROM chatbot_mv_market_daily WHERE date = (SELECT MAX(date) FROM chatbot_mv_market_daily) - INTERVAL '1 day'"
+    },
+    {
+      "question": "total market sales yesterday",
+      "sql": "SELECT SUM(revenue) AS total_revenue FROM chatbot_mv_market_daily WHERE date = (SELECT MAX(date) FROM chatbot_mv_market_daily) - INTERVAL '1 day'"
+    },
+    {
+      "question": "market revenue today",
+      "sql": "SELECT SUM(revenue) AS total_revenue FROM chatbot_mv_market_daily WHERE date = (SELECT MAX(date) FROM chatbot_mv_market_daily)"
     }
   ]
 }
