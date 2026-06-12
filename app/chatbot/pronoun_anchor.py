@@ -61,6 +61,17 @@ _NEW_ENTITY_RX = re.compile(
     re.I,
 )
 
+# Semantic qualifiers the anchor templates cannot express — state changes
+# ("inactive", "removed") and time windows ("past 7 days"). A COUNT/list
+# pivot over the prior WHERE would silently answer a different question;
+# bail to the LLM path instead.
+_SEMANTIC_BAIL_RX = re.compile(
+    r"\b(inactive|active|removed|dropped|gone|missing|new|changed|added|"
+    r"since|before|after|between|growth|grew|declin\w*|compar\w*|trend\w*)\b"
+    r"|\b(past|last|previous|next)\s+\d*\s*(day|days|week|weeks|month|months|year|years)\b",
+    re.I,
+)
+
 
 @dataclass(frozen=True)
 class AnchorResult:
@@ -172,6 +183,8 @@ def try_pronoun_anchor(question: str, history) -> AnchorResult | None:
         flags=re.I,
     )
     if _NEW_ENTITY_RX.search(deanaphor):
+        return None
+    if _SEMANTIC_BAIL_RX.search(question):
         return None
 
     anchor = _last_anchorable_sql(history)

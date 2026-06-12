@@ -444,7 +444,11 @@ async def chat(req: ChatRequest) -> ChatResponse:
             rows=result.rows,
         )
     if result.kind == "chat":
-        return ChatResponse(ok=True, chat=True, message=result.message)
+        # Ship the executed SQL even for terminal chat answers: the client
+        # stores it in history, and the pronoun-anchor fast-path needs it to
+        # bind "of them" follow-ups to THIS turn instead of an older one.
+        return ChatResponse(ok=True, chat=True, message=result.message,
+                            sql=result.sql_executed or result.sql)
     if result.kind == "refusal":
         return ChatResponse(ok=False, refused=True, message=result.message)
     if result.kind == "clarify":
