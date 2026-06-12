@@ -45,6 +45,10 @@ class Settings(BaseSettings):
     # ── Retrieval ─────────────────────────────────────────────────────────────
     top_k: int = Field(default=4, alias="CHATBOT_TOP_K")
     row_limit: int = Field(default=500, alias="CHATBOT_ROW_LIMIT")
+    # Appended as LIMIT when the SQL carries none. Small on purpose: a
+    # question without an explicit range ("show stores") wants a glance,
+    # not a 500-row dump. SQL with its own LIMIT is left untouched.
+    default_row_limit: int = Field(default=10, alias="CHATBOT_DEFAULT_ROW_LIMIT")
     statement_timeout_ms: int = Field(default=5_000, alias="CHATBOT_STATEMENT_TIMEOUT_MS")
 
     embed_model: str = Field(default="nomic-embed-text", alias="CHATBOT_EMBED_MODEL")

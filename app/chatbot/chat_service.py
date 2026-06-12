@@ -754,7 +754,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
                 verdict = validate_mysql_sql(comp_sql, input.tenant_id)
                 if verdict.ok:
                     final_sql = rewrite_eq_to_ilike_on_text_cols(
-                        enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
+                        enforce_limit_mysql(verdict.sql, max_rows=settings.default_row_limit)
                     )
                     log.info("[chat] companies-with-entity fast-path: entity=<redacted>")
                     res = await run_readonly_mysql(
@@ -807,7 +807,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
                 verdict = validate_mysql_sql(qty_sql, input.tenant_id)
                 if verdict.ok:
                     final_sql = rewrite_eq_to_ilike_on_text_cols(
-                        enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
+                        enforce_limit_mysql(verdict.sql, max_rows=settings.default_row_limit)
                     )
                     log.info("[chat] qty-of-entity fast-path: entity=<redacted>")
                     res = await run_readonly_mysql(
@@ -869,7 +869,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
             verdict = validate_mysql_sql(unit_sql, input.tenant_id)
             if verdict.ok:
                 final_sql = rewrite_eq_to_ilike_on_text_cols(
-                    enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
+                    enforce_limit_mysql(verdict.sql, max_rows=settings.default_row_limit)
                 )
                 log.info("[chat] unit-of-entity fast-path: entity=<redacted>")
                 res = await run_readonly_mysql(
@@ -904,7 +904,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
                 verdict = validate_mysql_sql(anchor.sql, input.tenant_id)
                 if verdict.ok:
                     final_sql = rewrite_eq_to_ilike_on_text_cols(
-                        enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
+                        enforce_limit_mysql(verdict.sql, max_rows=settings.default_row_limit)
                     )
                     res = await run_readonly_mysql(
                         final_sql,
@@ -917,7 +917,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
                 verdict = validate_sql(anchor.sql)
                 if verdict.ok:
                     final_sql = rewrite_eq_to_ilike_on_text_cols(
-                        enforce_limit(verdict.sql, max_rows=settings.row_limit)
+                        enforce_limit(verdict.sql, max_rows=settings.default_row_limit)
                     )
                     res = await run_readonly(
                         final_sql,
@@ -961,7 +961,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
         verdict = validate_sql(sql_template)
         if verdict.ok:
             final_sql = rewrite_eq_to_ilike_on_text_cols(
-                enforce_limit(verdict.sql, max_rows=settings.row_limit)
+                enforce_limit(verdict.sql, max_rows=settings.default_row_limit)
             )
             log.info("[chat] fast-path (%s=<redacted>): %s",
                      entity.column,
@@ -1063,7 +1063,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
                     if not verdict.ok:
                         raise RuntimeError(f"cached SQL rejected: {verdict.reason}")
                     final_sql = rewrite_eq_to_ilike_on_text_cols(
-                        enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
+                        enforce_limit_mysql(verdict.sql, max_rows=settings.default_row_limit)
                     )
                     result = await run_readonly_mysql(
                         final_sql,
@@ -1075,7 +1075,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
                     if not verdict.ok:
                         raise RuntimeError(f"cached SQL rejected: {verdict.reason}")
                     final_sql = rewrite_eq_to_ilike_on_text_cols(
-                        enforce_limit(verdict.sql, max_rows=settings.row_limit)
+                        enforce_limit(verdict.sql, max_rows=settings.default_row_limit)
                     )
                     result = await run_readonly(
                         final_sql,
@@ -1215,7 +1215,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
                 messages.append(build_retry_message(sql, f"Rejected by safety check: {verdict.reason}"))
                 continue
             final_sql = rewrite_eq_to_ilike_on_text_cols(
-                enforce_limit(verdict.sql, max_rows=settings.row_limit)
+                enforce_limit(verdict.sql, max_rows=settings.default_row_limit)
             )
         else:
             verdict = validate_mysql_sql(sql, input.tenant_id)
@@ -1226,7 +1226,7 @@ async def run_chat(input: ChatInput) -> ChatResult:
                 messages.append(build_retry_message(sql, f"Rejected by safety check: {verdict.reason}"))
                 continue
             final_sql = rewrite_eq_to_ilike_on_text_cols(
-                enforce_limit_mysql(verdict.sql, max_rows=settings.row_limit)
+                enforce_limit_mysql(verdict.sql, max_rows=settings.default_row_limit)
             )
 
         # Column existence pre-check — catches hallucinated cols before the
