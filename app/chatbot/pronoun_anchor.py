@@ -26,7 +26,7 @@ log = logging.getLogger(__name__)
 
 # Sentence must contain at least one of these pronouns / vague refs, and
 # must NOT name any new entity-type keyword on its own.
-_PRONOUN_RX = re.compile(r"\b(them|those|these|it|that one|that)\b", re.I)
+_PRONOUN_RX = re.compile(r"\b(them|those|these|it|that one|this one|that)\b", re.I)
 
 # Words that strongly imply the user just wants the list of the prior
 # entity. "name(s)", "show", "list", "give", "display" → SELECT name path.
@@ -205,6 +205,16 @@ def try_pronoun_anchor(question: str, history) -> AnchorResult | None:
 
     out_dialect = "mysql" if dialect == "mysql" else "postgres"
 
+    # Re-parse with the detected dialect. Dialect-less parse + dialect-ed
+    # regen corrupts constructs like INTERVAL 7 DAY into
+    # INTERVAL (INTERVAL '7' DAY) DAY, which the DB then rejects.
+    try:
+        tree = parse_one(prev_sql, read=out_dialect)
+    except Exception:
+        return None
+    if not isinstance(tree, exp.Select):
+        return None
+
     # COUNT intent: "how many of them" → SELECT COUNT(*) FROM same WHERE same
     if _COUNT_INTENT_RX.search(question):
         cloned = tree.copy()
@@ -226,7 +236,17 @@ def try_pronoun_anchor(question: str, history) -> AnchorResult | None:
     # qty/revenue intent on its own also implies list — "quantity of these"
     # means "list the entities with their quantity".
     if _LIST_INTENT_RX.search(question) or qty_intent or revenue_intent:
-        cols = _pick_list_columns(tree, qty_intent=qty_intent, revenue_intent=revenue_intent)
+        # When the prior turn was an aggregate over a specific dimension
+        # (COUNT(DISTINCT Company_Name)), "name them" means THAT column —
+        # not the table's generic list projection. Reuse it.
+        prior_dims = [
+            c.name for e in tree.expressions for c in e.find_all(exp.Column)
+            if c.name and not qty_intent and not revenue_intent
+        ]
+        if prior_dims and any(isinstance(a, exp.AggFunc) for e in tree.expressions for a in e.find_all(exp.AggFunc)):
+            cols = list(dict.fromkeys(prior_dims))
+        else:
+            cols = _pick_list_columns(tree, qty_intent=qty_intent, revenue_intent=revenue_intent)
         select_expr_list = [
             exp.column(c) if c != "*" else exp.Star()
             for c in cols
