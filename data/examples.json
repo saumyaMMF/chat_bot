@@ -501,6 +501,22 @@
     {
       "question": "does tea house have data in past 60 days",
       "sql": "SELECT CASE WHEN COUNT(*) > 0 THEN 'yes' ELSE 'no' END AS has_data, MAX(date) AS latest_date_in_window FROM rhize_dataset_main WHERE LOWER(Company_Name) LIKE LOWER('%tea house%') AND date >= DATE_SUB((SELECT MAX(date) FROM rhize_dataset_main), INTERVAL 60 DAY)"
+    },
+    {
+      "question": "how much sales did sunday drive do on feb 18",
+      "sql": "SELECT SUM(CAST(REGEXP_REPLACE(Revenue,'[^0-9.]','') AS DECIMAL(12,2))) AS total_sales FROM rhize_dataset_main WHERE LOWER(Company_Name) LIKE LOWER('%sunday drive%') AND date = (SELECT MAX(date) FROM rhize_dataset_main WHERE DATE_FORMAT(date, '%m-%d') = '02-18')"
+    },
+    {
+      "question": "revenue of tea house on march 5",
+      "sql": "SELECT SUM(CAST(REGEXP_REPLACE(Revenue,'[^0-9.]','') AS DECIMAL(12,2))) AS total_sales FROM rhize_dataset_main WHERE LOWER(Company_Name) LIKE LOWER('%tea house%') AND date = (SELECT MAX(date) FROM rhize_dataset_main WHERE DATE_FORMAT(date, '%m-%d') = '03-05')"
+    },
+    {
+      "question": "how much sales did sunday drive do in feb 2026",
+      "sql": "SELECT SUM(CAST(REGEXP_REPLACE(Revenue,'[^0-9.]','') AS DECIMAL(12,2))) AS total_sales FROM rhize_dataset_main WHERE LOWER(Company_Name) LIKE LOWER('%sunday drive%') AND date >= '2026-02-01' AND date < '2026-03-01'"
+    },
+    {
+      "question": "tea house revenue in march 2026",
+      "sql": "SELECT SUM(CAST(REGEXP_REPLACE(Revenue,'[^0-9.]','') AS DECIMAL(12,2))) AS total_sales FROM rhize_dataset_main WHERE LOWER(Company_Name) LIKE LOWER('%tea house%') AND date >= '2026-03-01' AND date < '2026-04-01'"
     }
   ]
 }
