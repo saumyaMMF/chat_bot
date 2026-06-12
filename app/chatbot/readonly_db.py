@@ -124,7 +124,22 @@ async def run_readonly(sql: str, ctx: RunContext) -> RunResult:
             )
 
             records = await conn.fetch(sql)
-            rows = [dict(r) for r in records]
+            import datetime as _dt
+            from decimal import Decimal as _Decimal
+            def _coerce(v):
+                if isinstance(v, _Decimal):
+                    return float(v)
+                # Midnight datetimes / plain dates → 'YYYY-MM-DD'; real
+                # timestamps keep minute precision. Avoids the noisy
+                # '2026-06-02T00:00:00' rendering in chat answers.
+                if isinstance(v, _dt.datetime):
+                    if v.hour == v.minute == v.second == 0:
+                        return v.strftime("%Y-%m-%d")
+                    return v.strftime("%Y-%m-%d %H:%M")
+                if isinstance(v, _dt.date):
+                    return v.isoformat()
+                return v
+            rows = [{k: _coerce(v) for k, v in dict(r).items()} for r in records]
             return RunResult(rows=rows, row_count=len(rows))
         finally:
             # Read-only path — always discard.

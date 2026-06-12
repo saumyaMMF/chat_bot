@@ -204,12 +204,24 @@ async def run_readonly_mysql(sql: str, ctx: RunMysqlContext = RunMysqlContext())
                 # and chart axes. Coerce to float here; precision loss for
                 # money/qty at this app's scale is irrelevant (< 1e15).
                 from decimal import Decimal as _Decimal
+                import datetime as _dt
+                def _coerce(v):
+                    if isinstance(v, _Decimal):
+                        return float(v)
+                    # Dates render as '2026-06-02T00:00:00' through the JSON
+                    # encoder — noisy in chat answers. Midnight datetimes and
+                    # plain dates become 'YYYY-MM-DD'; real timestamps keep
+                    # minute precision.
+                    if isinstance(v, _dt.datetime):
+                        if v.hour == v.minute == v.second == 0:
+                            return v.strftime("%Y-%m-%d")
+                        return v.strftime("%Y-%m-%d %H:%M")
+                    if isinstance(v, _dt.date):
+                        return v.isoformat()
+                    return v
                 clean: list[dict] = []
                 for r in raw_rows:
-                    out: dict = {}
-                    for k, v in r.items():
-                        out[k] = float(v) if isinstance(v, _Decimal) else v
-                    clean.append(out)
+                    clean.append({k: _coerce(v) for k, v in r.items()})
                 return RunMysqlResult(rows=clean, row_count=len(clean))
             finally:
                 try:
